@@ -1,0 +1,15 @@
+input#speed {
+    width: 600px;
+}
+
+#control canvas:hover {
+    background: gray;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
