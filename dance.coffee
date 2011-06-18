@@ -1,3 +1,9 @@
+# TODO
+# - canvas使わないようにする
+# - 軌道を■とかにする
+# - YouTube再生できるようにする
+# - ぼたんを押すとパートが増える
+
 circle = (ctx, x, y, r, fill) ->
   ctx.beginPath()
   ctx.arc(x, y, r, 0, Math.PI*2, true);
