@@ -1,103 +1,147 @@
-var Part, circle;
+var Note, Part, Stage;
 var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-circle = function(ctx, x, y, r, fill) {
-  ctx.beginPath();
-  ctx.arc(x, y, r, 0, Math.PI * 2, true);
-  ctx.closePath();
-  ctx.stroke();
-  if (fill) {
-    return ctx.fill();
-  }
-};
-Part = (function() {
-  function Part(canvas, sample, radius) {
-    this.canvas = canvas;
-    this.sample = sample;
-    this.radius = radius;
-    this.ctx = this.canvas.getContext('2d');
-    this.notes = [];
-    this.center_x = this.canvas.width / 2;
-    this.center_y = this.canvas.height / 2;
+Stage = (function() {
+  function Stage(container) {
+    this.container = container;
+    this.parts = [];
+    this.radius = 0;
     this.position = 0.0;
-    this.setupElement();
+    this.loopCount = 0;
+    this.last = Date.now();
+    setInterval(__bind(function() {
+      return this.observe();
+    }, this), 100);
   }
-  Part.prototype.setupElement = function() {
-    var ctx, element;
-    element = $('<canvas>');
-    element.attr({
-      width: this.radius / 3,
-      height: this.radius / 3
-    });
-    $('#control').append(element);
-    ctx = element[0].getContext('2d');
-    circle(ctx, this.radius / 6, this.radius / 6, this.radius / 10, true);
-    return element.click(__bind(function() {
-      return this.push(-this.position, true);
+  Stage.prototype.addPart = function(callback) {
+    var button, part;
+    this.radius += 100;
+    part = new Part;
+    part.callback = callback;
+    part.radius = this.radius;
+    this.parts.push(part);
+    button = $('<button>OK</button>');
+    $('#control').append(button);
+    button.click(__bind(function() {
+      part.addNote(this.position);
+      return console.log(part);
     }, this));
+    return part;
   };
-  Part.prototype.html909 = new HTML909();
-  Part.prototype.play = function() {
-    return this.html909.play(this.sample);
+  Stage.prototype.observe = function() {
+    var bpm, now, part, _i, _len, _ref;
+    bpm = +$('input#speed').val();
+    now = Date.now();
+    this.position += bpm / 60.0 * (now - this.last) / 1000 * Math.PI * 0.5;
+    if (this.position > Math.PI * 2.0) {
+      this.position -= Math.PI * 2.0;
+      this.loopCount++;
+    }
+    if (this.position < 0.0) {
+      this.position += Math.PI * 2.0;
+      this.loopCount++;
+    }
+    _ref = this.parts;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      part = _ref[_i];
+      part.observe(this.loopCount, this.position);
+    }
+    this.plot();
+    return this.last = now;
   };
-  Part.prototype.push = function(position, mute) {
-    return this.notes.push({
-      position: position,
-      hit: !mute
-    });
+  Stage.prototype.plot = function() {
+    var elem, note, part, stage, stageHeight, stageWidth, _i, _len, _ref, _results;
+    stage = $('#stage');
+    stageWidth = stage.width();
+    stageHeight = stage.height();
+    stage.empty();
+    _ref = this.parts;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      part = _ref[_i];
+      _results.push((function() {
+        var _j, _len2, _ref2, _results2;
+        _ref2 = part.notes;
+        _results2 = [];
+        for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+          note = _ref2[_j];
+          elem = $('<img>');
+          elem.attr({
+            src: note.playing ? 'bucho.png' : 'ossan.png'
+          });
+          elem.css({
+            position: 'absolute',
+            left: Math.sin(this.position - note.position) * part.radius + stageWidth / 2,
+            top: -Math.cos(this.position - note.position) * part.radius + stageHeight / 2
+          });
+          _results2.push(stage.append(elem));
+        }
+        return _results2;
+      }).call(this));
+    }
+    return _results;
   };
-  Part.prototype.step = function(position) {
-    var note, x, y, _i, _len, _ref, _results;
-    this.position = position;
+  return Stage;
+})();
+Part = (function() {
+  function Part() {
+    this.notes = [];
+  }
+  Part.prototype.observe = function(loopCount, position) {
+    var note, _i, _len, _ref, _results;
     _ref = this.notes;
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       note = _ref[_i];
-      x = this.getX(position + note.position);
-      y = this.getY(position + note.position);
-      circle(this.ctx, x, y, this.radius / 10, false);
-      _results.push(x > this.center_x && !note.hit ? (note.hit = true, this.play(), circle(this.ctx, x, y, this.radius / 4, true)) : x < this.center_x && note.hit ? note.hit = false : void 0);
+      _results.push(note.observe(loopCount, position));
     }
     return _results;
   };
-  Part.prototype.getX = function(position) {
-    return this.center_x + Math.sin(position) * this.radius;
+  Part.prototype.play = function(note) {
+    note.started();
+    return this.callback().next(function() {
+      return note.ended();
+    });
   };
-  Part.prototype.getY = function(position) {
-    return this.center_y - Math.cos(position) * this.radius;
+  Part.prototype.addNote = function(position) {
+    return this.notes.push(new Note(this, position));
   };
   return Part;
 })();
+Note = (function() {
+  function Note(part, position) {
+    this.part = part;
+    this.position = position;
+    this.playing = false;
+    this.lastLoop = 0;
+  }
+  Note.prototype.observe = function(count, position) {
+    if (count > this.lastLoop && position > this.position && !this.playing) {
+      this.part.play(this);
+      return this.lastLoop = count;
+    }
+  };
+  Note.prototype.started = function() {
+    return this.playing = true;
+  };
+  Note.prototype.ended = function() {
+    return this.playing = false;
+  };
+  return Note;
+})();
 $(function() {
-  var canvas, ctx, height, hh, kick, last, parts, position, rim, width;
-  canvas = $('canvas')[0];
-  width = canvas.width;
-  height = canvas.height;
-  ctx = canvas.getContext('2d');
-  parts = [];
-  kick = new Part(canvas, 'BT0A0A7.WAV', 240);
-  kick.push(Math.PI * 0.0);
-  parts.push(kick);
-  hh = new Part(canvas, 'HHCD2.WAV', 140);
-  parts.push(hh);
-  rim = new Part(canvas, 'HANDCLP1.WAV', 50);
-  parts.push(rim);
-  position = 0.0;
-  last = Date.now();
-  return window.setInterval(function() {
-    var bpm, now, part, _i, _len, _results;
-    ctx.clearRect(0, 0, width, height);
-    bpm = +$('input#speed').val();
-    now = Date.now();
-    position += bpm / 60.0 * (now - last) / 1000 * Math.PI * 0.5;
-    last = now;
-    if (position > Math.PI * 2.0) {
-      position -= Math.PI * 2.0;
-    }
-    _results = [];
-    for (_i = 0, _len = parts.length; _i < _len; _i++) {
-      part = parts[_i];
-      _results.push(part.step(position));
-    }
-    return _results;
-  }, 50);
+  var part, stage;
+  stage = new Stage($('#stage'));
+  part = stage.addPart(function() {
+    return Beep.playPulse(220, 100);
+  });
+  part.addNote(0.0);
+  part.addNote(Math.PI * 1.0);
+  part = stage.addPart(function() {
+    return Beep.playPulse(2000, 200, 0.7, 0.3);
+  });
+  part.addNote(Math.PI * 0.75);
+  part = stage.addPart(function() {
+    return Beep.playBrownNoise(5, 100, 0.5);
+  });
+  return part.addNote(Math.PI * 1.75);
 });

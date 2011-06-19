@@ -8,13 +8,65 @@ Beep =
     volume ?= 0.7
     samplingRate = 44100
     samples = []
-    requiredLength = Math.floor(samplingRate * time)
+    requiredLength = Math.floor(samplingRate * time * 0.001)
     freq = hz * 2.0 * Math.PI / samplingRate
 
     phase = 0.0
     for i in [0..requiredLength]
       samples.push Math.sin(phase) * 10000 * volume
       phase += freq
+
+    this.playSamples(samples)
+
+  playPulse: (hz, time, rate, volume) ->
+    rate ?= 0.5
+    volume ?= 0.7
+    samplingRate = 44100
+    samples = []
+    requiredLength = Math.floor(samplingRate * time * 0.001)
+    changeAt = Math.floor(samplingRate / hz);
+    value = 0.5
+
+    for i in [0..requiredLength]
+      if value > 0
+        value *= -1.0 if i % Math.floor(changeAt * rate) == 0
+      else
+        value *= -1.0 if i % changeAt == 0
+      samples.push value * 10000 * volume
+
+    this.playSamples(samples)
+
+  playWhiteNoise: (changeAt, time, volume) ->
+    changeAt ?= 1
+    change = 1 if change < 1
+    volume ?= 0.7
+    samplingRate = 44100
+    samples = []
+    requiredLength = Math.floor(samplingRate * time * 0.001)
+    get = ->
+      Math.random() * 2 - 1.0
+    value = get()
+
+    for i in [0..requiredLength]
+      value = get() if (i % changeAt) == 0
+      samples.push value * 10000 * volume
+
+    this.playSamples(samples)
+
+  playBrownNoise: (changeAt, time, volume) ->
+    changeAt ?= 1
+    change = 1 if change < 1
+    volume ?= 0.7
+    samplingRate = 44100
+    samples = []
+    requiredLength = Math.floor(samplingRate * time * 0.001)
+    value = 0.0
+
+    for i in [0..requiredLength]
+      value += (Math.random() - 0.5) if (i % changeAt) == 0
+      value = 1.0 if value > 1.0
+      value = -1.0 if value < -1.0
+      samples.push value * 10000 * volume
 
     this.playSamples(samples)
 
@@ -54,6 +106,7 @@ Beep =
     "data:audio/wav;base64," + Base64.encode(wavefile)
 
   _playURL: (url) ->
+    deferred = new Deferred()
     $audio = $('<audio>').attr
       src: url
     $('body').append($audio)
@@ -61,10 +114,11 @@ Beep =
       this.play()
     $audio.bind 'ended', ->
       $(this).remove()
+      deferred.call()
 
+    deferred
 
-$ ->
-
+gomi = ->
   setInterval ->
     hz = 100
     for i in [0..Math.floor(Math.random()*8)]
@@ -83,3 +137,16 @@ $ ->
 
     new HTML909().play if Math.random() > 0.7 then 'BT0A0A7.WAV' else 'HANDCLP1.WAV'
   , 4000
+
+
+
+$ ->
+  # Beep.playBrownNoise(1, 1000)
+  # setInterval ->
+  #   Beep.playPulse(Math.random() * 3000, 100, Math.random())
+  # , 100
+  # setInterval ->
+  #   Beep.playSin(Math.random() * 3000, 100)
+  # , 100
+
+

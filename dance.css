@@ -7,7 +7,12 @@ input#speed {
     cursor: pointer;
 }
 
-
+#stage {
+    width: 780px;
+    height: 780px;
+    position: relative;
+    background: url('mandara.jpg')
+}
 
 
 

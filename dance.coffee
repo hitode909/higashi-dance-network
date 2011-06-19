@@ -4,95 +4,111 @@
 # - YouTube再生できるようにする
 # - ぼたんを押すとパートが増える
 
-circle = (ctx, x, y, r, fill) ->
-  ctx.beginPath()
-  ctx.arc(x, y, r, 0, Math.PI*2, true);
-  ctx.closePath()
-  ctx.stroke()
-  ctx.fill() if fill
+class Stage
+  constructor: (@container) ->
+    @parts = []
+    @radius = 0
+    @position = 0.0
+    @loopCount = 0
+    @last = Date.now()
+
+    setInterval =>
+      this.observe()
+    ,100
+
+  addPart: (callback) ->
+    @radius += 100
+    part = new Part
+    part.callback = callback
+    part.radius = @radius
+    @parts.push(part)
+    button = $('<button>OK</button>')
+    $('#control').append(button)
+    button.click =>
+      part.addNote(@position)
+      console.log part
+    part
+
+  observe: ->
+    bpm = +$('input#speed').val()
+    now = Date.now()
+    @position += bpm / 60.0 * (now - @last) / 1000 * Math.PI * 0.5
+
+    if @position > Math.PI * 2.0
+      @position -= Math.PI * 2.0
+      @loopCount++
+
+    if @position < 0.0
+      @position += Math.PI * 2.0
+      @loopCount++
+
+    for part in @parts
+      part.observe(@loopCount, @position)
+    this.plot()
+    @last = now
+
+  plot: ->
+    stage = $('#stage')
+    stageWidth = stage.width()
+    stageHeight = stage.height()
+    stage.empty()
+    for part in @parts
+      for note in part.notes
+        elem = $('<img>')
+        elem.attr
+          src: if note.playing then 'bucho.png' else 'ossan.png'
+        elem.css
+          position: 'absolute'
+          left: Math.sin(@position - note.position) * part.radius + stageWidth / 2
+          top: - Math.cos(@position - note.position) * part.radius + stageHeight / 2
+        stage.append(elem)
 
 class Part
-  constructor: (@canvas, @sample, @radius) ->
-    @ctx = @canvas.getContext('2d')
+  constructor: ->
     @notes = []
-    @center_x = @canvas.width / 2
-    @center_y = @canvas.height / 2
-    @position = 0.0
-    this.setupElement()
 
-  setupElement: () ->
-    element = $('<canvas>')
-    element.attr
-      width: @radius / 3
-      height: @radius / 3
-    $('#control').append(element)
-    ctx = element[0].getContext('2d')
-    circle(ctx, @radius/6, @radius/6, @radius/10, true)
-
-    element.click =>
-      this.push(-@position, true)
-
-  html909: new HTML909()
-
-  play: ()->
-    this.html909.play(@sample)
-
-  push: (position, mute) ->
-    @notes.push
-      position: position
-      hit: !mute
-
- # position: 0 ~ 2pi
-  step: (position) ->
-    @position = position
+  observe: (loopCount, position) ->
     for note in @notes
-      x = this.getX(position + note.position)
-      y = this.getY(position + note.position)
-      circle(@ctx, x, y, @radius / 10, false)
-      if x > @center_x && !note.hit
-        note.hit = true
-        this.play()
-        circle(@ctx, x, y, @radius / 4, true)
-      else if x < @center_x && note.hit
-        note.hit = false
+      note.observe(loopCount, position)
 
-  getX: (position) ->
-    @center_x + Math.sin(position) * @radius
-  getY: (position) ->
-    @center_y - Math.cos(position) * @radius
+  play: (note)->
+    note.started()
+    @callback().next ->
+      note.ended()
+
+  addNote: (position) ->
+    @notes.push(new Note(this, position))
+
+class Note
+  constructor: (@part, @position) ->
+    @playing = false
+    @lastLoop = 0
+
+  observe: (count, position) ->
+    if count > @lastLoop && position > @position && ! @playing
+      @part.play(this)
+      @lastLoop = count
+
+
+  started: ->
+    @playing = true
+
+  ended: ->
+    @playing = false
 
 
 $ ->
-  canvas = $('canvas')[0]
-  width = canvas.width
-  height = canvas.height
-  ctx = canvas.getContext('2d')
-  parts = []
+  stage = new Stage($('#stage'))
+  part = stage.addPart ->
+    Beep.playPulse(220, 100)
+  part.addNote(0.0)
+  part.addNote(Math.PI * 1.0)
 
-  kick = new Part(canvas, 'BT0A0A7.WAV', 240)
-  kick.push(Math.PI * 0.0)
-  # kick.push(Math.PI * 0.5)
-  # kick.push(Math.PI * 1.0)
-  # kick.push(Math.PI * 1.5)
-  parts.push(kick)
+  part = stage.addPart ->
+    Beep.playPulse(2000, 200, 0.7, 0.3)
+  part.addNote(Math.PI * 0.75)
 
-  hh = new Part(canvas, 'HHCD2.WAV', 140)
-  parts.push(hh)
+  part = stage.addPart ->
+    Beep.playBrownNoise(5, 100, 0.5)
+  part.addNote(Math.PI * 1.75)
 
-  rim = new Part(canvas, 'HANDCLP1.WAV', 50)
-  parts.push(rim)
-
-  position = 0.0
-
-  last = Date.now()
-
-  window.setInterval ->
-      ctx.clearRect(0, 0, width, height)
-      bpm = +$('input#speed').val()
-      now = Date.now()
-      position += bpm / 60.0 * (now - last) / 1000 * Math.PI * 0.5
-      last = now
-      position -= Math.PI * 2.0 if position > Math.PI * 2.0
-      for part in parts
-        part.step(position)
-    ,50
