@@ -14,15 +14,15 @@ class Stage
 
     setInterval =>
       this.observe()
-    ,100
+    ,50
 
   addPart: (callback) ->
-    @radius += 100
+    @radius += 50
     part = new Part
     part.callback = callback
     part.radius = @radius
     @parts.push(part)
-    button = $('<button>OK</button>')
+    button = $("<button>+ #{ @radius }</button>")
     $('#control').append(button)
     button.click =>
       part.addNote(@position)
@@ -58,8 +58,8 @@ class Stage
           src: if note.playing then 'bucho.png' else 'ossan.png'
         elem.css
           position: 'absolute'
-          left: Math.sin(@position - note.position) * part.radius + stageWidth / 2
-          top: - Math.cos(@position - note.position) * part.radius + stageHeight / 2
+          left: Math.sin(@position - note.position) * part.radius + stageWidth / 2 - 30
+          top: - Math.cos(@position - note.position) * part.radius + stageHeight / 2 - 30
         stage.append(elem)
 
 class Part
@@ -95,35 +95,48 @@ class Note
   ended: ->
     @playing = false
 
-
 $ ->
   stage = new Stage($('#stage'))
-  note1 =
-      type: 'pulse'
-      hz: Math.random() * 8000
-      rate: Math.random()
-      time: 250
-  part = stage.addPart ->
-    Beep.play note1
-  part.addNote(0.0)
-  part.addNote(Math.PI * 1.0)
 
-  note2 =
+  $('button#add-a').click ->
+    note1 =
       type: 'pulse'
       hz: Math.random() * 4000
-      time: 250
+      time: 400 * Math.random()
       rate: Math.random()
 
-  part = stage.addPart ->
-    Beep.play note2
-  part.addNote(Math.PI * 0.75)
+    part1 = stage.addPart ->
+      Beep.play note1
 
-  note3 = [
-      {type: 'pulse', hz: Math.random() * 4000, time: 50, rate: Math.random()},
-      {type: 'pulse', hz: Math.random() * 4000, time: 50, rate: Math.random()},
-      {type: 'pulse', hz: Math.random() * 4000, time: 50, rate: Math.random()},
-    ]
-  part = stage.addPart ->
-    Beep.play note3
-  part.addNote(Math.PI * 1.75)
+    part1.addNote(stage.position)
 
+
+  $('button#add-b').click ->
+    note2 = [
+      {type: 'pulse', hz: Math.random() * 4000, time: 100 * Math.random(), rate: Math.random()},
+      {type: 'pulse', hz: Math.random() * 4000, time: 100 * Math.random(), rate: Math.random()},
+      {type: 'pulse', hz: Math.random() * 4000, time: 100 * Math.random(), rate: Math.random()},
+      ]
+
+    part2 = stage.addPart ->
+      Beep.play note2
+
+    part2.addNote(stage.position)
+
+  $('button#add-c').click ->
+    note3 = {type: 'whiteNoise', time: 400 * Math.random()}
+
+    part3 = stage.addPart ->
+      Beep.play note3
+
+    part3.addNote(stage.position)
+
+  $('button#add-d').click ->
+    note4 = {type: 'brownNoise', time: 400 * Math.random()}
+
+    part4 = stage.addPart ->
+      Beep.play note4
+
+    part4.addNote(stage.position)
+
+  $('button#add-a').click()

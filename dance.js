@@ -10,16 +10,16 @@ Stage = (function() {
     this.last = Date.now();
     setInterval(__bind(function() {
       return this.observe();
-    }, this), 100);
+    }, this), 50);
   }
   Stage.prototype.addPart = function(callback) {
     var button, part;
-    this.radius += 100;
+    this.radius += 50;
     part = new Part;
     part.callback = callback;
     part.radius = this.radius;
     this.parts.push(part);
-    button = $('<button>OK</button>');
+    button = $("<button>+ " + this.radius + "</button>");
     $('#control').append(button);
     button.click(__bind(function() {
       return part.addNote(this.position);
@@ -69,8 +69,8 @@ Stage = (function() {
           });
           elem.css({
             position: 'absolute',
-            left: Math.sin(this.position - note.position) * part.radius + stageWidth / 2,
-            top: -Math.cos(this.position - note.position) * part.radius + stageHeight / 2
+            left: Math.sin(this.position - note.position) * part.radius + stageWidth / 2 - 30,
+            top: -Math.cos(this.position - note.position) * part.radius + stageHeight / 2 - 30
           });
           _results2.push(stage.append(elem));
         }
@@ -128,49 +128,67 @@ Note = (function() {
   return Note;
 })();
 $(function() {
-  var note1, note2, note3, part, stage;
+  var stage;
   stage = new Stage($('#stage'));
-  note1 = {
-    type: 'pulse',
-    hz: Math.random() * 8000,
-    rate: Math.random(),
-    time: 250
-  };
-  part = stage.addPart(function() {
-    return Beep.play(note1);
-  });
-  part.addNote(0.0);
-  part.addNote(Math.PI * 1.0);
-  note2 = {
-    type: 'pulse',
-    hz: Math.random() * 4000,
-    time: 250,
-    rate: Math.random()
-  };
-  part = stage.addPart(function() {
-    return Beep.play(note2);
-  });
-  part.addNote(Math.PI * 0.75);
-  note3 = [
-    {
+  $('button#add-a').click(function() {
+    var note1, part1;
+    note1 = {
       type: 'pulse',
       hz: Math.random() * 4000,
-      time: 50,
+      time: 400 * Math.random(),
       rate: Math.random()
-    }, {
-      type: 'pulse',
-      hz: Math.random() * 4000,
-      time: 50,
-      rate: Math.random()
-    }, {
-      type: 'pulse',
-      hz: Math.random() * 4000,
-      time: 50,
-      rate: Math.random()
-    }
-  ];
-  part = stage.addPart(function() {
-    return Beep.play(note3);
+    };
+    part1 = stage.addPart(function() {
+      return Beep.play(note1);
+    });
+    return part1.addNote(stage.position);
   });
-  return part.addNote(Math.PI * 1.75);
+  $('button#add-b').click(function() {
+    var note2, part2;
+    note2 = [
+      {
+        type: 'pulse',
+        hz: Math.random() * 4000,
+        time: 100 * Math.random(),
+        rate: Math.random()
+      }, {
+        type: 'pulse',
+        hz: Math.random() * 4000,
+        time: 100 * Math.random(),
+        rate: Math.random()
+      }, {
+        type: 'pulse',
+        hz: Math.random() * 4000,
+        time: 100 * Math.random(),
+        rate: Math.random()
+      }
+    ];
+    part2 = stage.addPart(function() {
+      return Beep.play(note2);
+    });
+    return part2.addNote(stage.position);
+  });
+  $('button#add-c').click(function() {
+    var note3, part3;
+    note3 = {
+      type: 'whiteNoise',
+      time: 400 * Math.random()
+    };
+    part3 = stage.addPart(function() {
+      return Beep.play(note3);
+    });
+    return part3.addNote(stage.position);
+  });
+  $('button#add-d').click(function() {
+    var note4, part4;
+    note4 = {
+      type: 'brownNoise',
+      time: 400 * Math.random()
+    };
+    part4 = stage.addPart(function() {
+      return Beep.play(note4);
+    });
+    return part4.addNote(stage.position);
+  });
+  return $('button#add-a').click();
 });
