@@ -5,7 +5,7 @@ Stage = (function() {
     this.container = container;
     this.parts = [];
     this.radius = 0;
-    this.position = 0.0;
+    this.position = Math.PI * 3.0;
     this.loopCount = 0;
     this.last = Date.now();
     this.bpm = 120.0;
@@ -32,10 +32,10 @@ Stage = (function() {
     this.bpm = +$('input#speed').val();
     now = Date.now();
     this.position += this.bpm / 60.0 * (now - this.last) / 1000 * Math.PI * 0.5;
-    if (this.position > Math.PI * 2.0) {
+    if (this.position > Math.PI * 4.0) {
       this.position -= Math.PI * 2.0;
     }
-    if (this.position < 0.0) {
+    if (this.position < Math.PI * 2.0) {
       this.position += Math.PI * 2.0;
     }
     _ref = this.parts;
@@ -86,16 +86,24 @@ Stage = (function() {
 Part = (function() {
   function Part() {
     this.notes = [];
+    this.lastPosition = 0.0;
   }
   Part.prototype.observe = function(position, bpm) {
-    var note, _i, _len, _ref, _results;
+    var note, offset, position_offset, _i, _len, _ref;
+    offset = 0.0;
+    if (bpm > 0 && position < this.lastPosition) {
+      offset = Math.PI * 2;
+    }
+    if (bpm < 0 && position > this.lastPosition) {
+      offset = -Math.PI * 2;
+    }
+    position_offset = position + offset;
     _ref = this.notes;
-    _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       note = _ref[_i];
-      _results.push(note.observe(position, bpm));
+      note.observe(position_offset, this.lastPosition);
     }
-    return _results;
+    return this.lastPosition = position;
   };
   Part.prototype.play = function(note) {
     note.started();
@@ -113,23 +121,15 @@ Note = (function() {
     this.part = part;
     this.position = position;
     this.playing = false;
-    this.lastPosition = 0.0;
   }
-  Note.prototype.observe = function(position, bpm) {
-    var a, b, offset;
-    offset = 0.0;
-    if (bpm > 0 && position < this.lastPosition) {
-      offset = Math.PI * 2;
-    }
-    if (bpm < 0 && position > this.lastPosition) {
-      offset = -Math.PI * 2;
-    }
-    a = this.position - (position + offset);
-    b = this.position - this.lastPosition;
+  Note.prototype.observe = function(position, lastPosition) {
+    var a, b;
+    a = this.position - position;
+    b = this.position - lastPosition;
+    console.log([a, b]);
     if (a * b <= 0) {
-      this.part.play(this);
+      return this.part.play(this);
     }
-    return this.lastPosition = position;
   };
   Note.prototype.started = function() {
     return this.playing = true;
@@ -202,7 +202,5 @@ $(function() {
     });
     return part4.addNote(stage.position);
   });
-  return setTimeout(function() {
-    return $('button#add-a').click();
-  }, 1000);
+  return $('button#add-a').click();
 });

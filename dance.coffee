@@ -1,14 +1,12 @@
 # TODO
-# - canvas使わないようにする
 # - 軌道を■とかにする
 # - YouTube再生できるようにする
-# - ぼたんを押すとパートが増える
 
 class Stage
   constructor: (@container) ->
     @parts = []
     @radius = 0
-    @position = 0.0
+    @position = Math.PI * 3.0
     @loopCount = 0
     @last = Date.now()
     @bpm = 120.0
@@ -34,10 +32,10 @@ class Stage
     now = Date.now()
     @position += @bpm / 60.0 * (now - @last) / 1000 * Math.PI * 0.5
 
-    if @position > Math.PI * 2.0
+    if @position > Math.PI * 4.0
       @position -= Math.PI * 2.0
 
-    if @position < 0.0
+    if @position < Math.PI * 2.0
       @position += Math.PI * 2.0
 
     for part in @parts
@@ -67,10 +65,20 @@ class Stage
 class Part
   constructor: ->
     @notes = []
+    @lastPosition = 0.0
 
   observe: (position, bpm) ->
+    offset = 0.0
+    if bpm > 0 && position < @lastPosition
+      offset = Math.PI * 2
+    if bpm < 0 && position > @lastPosition
+      offset = -Math.PI * 2
+
+    position_offset = position + offset
     for note in @notes
-      note.observe(position, bpm)
+      note.observe(position_offset, @lastPosition)
+
+    @lastPosition = position
 
   play: (note)->
     note.started()
@@ -83,20 +91,13 @@ class Part
 class Note
   constructor: (@part, @position) ->
     @playing = false
-    @lastPosition = 0.0
 
-  observe: (position, bpm) ->
-    offset = 0.0
-    if bpm > 0 && position < @lastPosition
-      offset = Math.PI * 2
-    if bpm < 0 && position > @lastPosition
-      offset = -Math.PI * 2
-    a = @position - (position + offset)
-    b = @position - @lastPosition
+  observe: (position, lastPosition) ->
+    a = @position - position
+    b = @position - lastPosition
+    console.log [a, b]
     if a * b <= 0
       @part.play(this)
-
-    @lastPosition = position
 
   started: ->
     @playing = true
@@ -148,6 +149,4 @@ $ ->
 
     part4.addNote(stage.position)
 
-  setTimeout ->
-    $('button#add-a').click()
-  ,1000
+  $('button#add-a').click()
