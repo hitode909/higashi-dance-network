@@ -1,11 +1,29 @@
 Beep =
+  play: (args) ->
+    samples = []
+    if $.isArray(args)
+      $.each args, (i, v) =>
+        samples = samples.concat(this.getSamples(v))
+    else
+      samples = samples.concat(this.getSamples(args))
+
+    this.playSamples(samples)
+
+  getSamples: (args) ->
+    type = args.type || 'sin'
+    type = type[0].toUpperCase() + type[1..-1]
+    method = "get#{ type }Samples"
+    this[method](args)
+
   playSamples: (samples) ->
     signals = this._samplesToSignals(samples)
     url = this._convertSignalsToURL(signals)
     this._playURL(url)
 
-  playSin: (hz, time, volume) ->
-    volume ?= 0.7
+  getSinSamples: (args) ->
+    hz = args.hz || 440
+    time = args.time || 500
+    volume = args.volume || 0.7
     samplingRate = 44100
     samples = []
     requiredLength = Math.floor(samplingRate * time * 0.001)
@@ -16,11 +34,13 @@ Beep =
       samples.push Math.sin(phase) * 10000 * volume
       phase += freq
 
-    this.playSamples(samples)
+    samples
 
-  playPulse: (hz, time, rate, volume) ->
-    rate ?= 0.5
-    volume ?= 0.7
+  getPulseSamples: (args) ->
+    hz = args.hz || 440
+    time = args.time || 500
+    volume = args.volume || 0.7
+    rate = args.rate || 0.5
     samplingRate = 44100
     samples = []
     requiredLength = Math.floor(samplingRate * time * 0.001)
@@ -34,10 +54,25 @@ Beep =
         value *= -1.0 if i % changeAt == 0
       samples.push value * 10000 * volume
 
-    this.playSamples(samples)
+    samples
 
-  playWhiteNoise: (changeAt, time, volume) ->
-    changeAt ?= 1
+  getMuteSamples: (args) ->
+    time = args.time || 500
+    samplingRate = 44100
+    samples = []
+    requiredLength = Math.floor(samplingRate * time * 0.001)
+
+    for i in [0..requiredLength]
+      samples.push(0.0)
+
+    samples
+
+  getWhiteNoiseSamples: (args) ->
+    time = args.time || 500
+    volume = args.volume || 0.7
+    rate = args.rate || 1.0
+    changeAt = 1.0 / rate
+
     change = 1 if change < 1
     volume ?= 0.7
     samplingRate = 44100
@@ -51,10 +86,14 @@ Beep =
       value = get() if (i % changeAt) == 0
       samples.push value * 10000 * volume
 
-    this.playSamples(samples)
+    samples
 
-  playBrownNoise: (changeAt, time, volume) ->
-    changeAt ?= 1
+  getBrownNoiseSamples: (args) ->
+    time = args.time || 500
+    volume = args.volume || 0.7
+    rate = args.rate || 1.0
+    changeAt = 1.0 / rate
+
     change = 1 if change < 1
     volume ?= 0.7
     samplingRate = 44100
@@ -68,7 +107,7 @@ Beep =
       value = -1.0 if value < -1.0
       samples.push value * 10000 * volume
 
-    this.playSamples(samples)
+    samples
 
   _samplesToSignals: (samples) ->
     signals = ''

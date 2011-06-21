@@ -22,8 +22,7 @@ Stage = (function() {
     button = $('<button>OK</button>');
     $('#control').append(button);
     button.click(__bind(function() {
-      part.addNote(this.position);
-      return console.log(part);
+      return part.addNote(this.position);
     }, this));
     return part;
   };
@@ -129,19 +128,49 @@ Note = (function() {
   return Note;
 })();
 $(function() {
-  var part, stage;
+  var note1, note2, note3, part, stage;
   stage = new Stage($('#stage'));
+  note1 = {
+    type: 'pulse',
+    hz: Math.random() * 8000,
+    rate: Math.random(),
+    time: 250
+  };
   part = stage.addPart(function() {
-    return Beep.playPulse(220, 100);
+    return Beep.play(note1);
   });
   part.addNote(0.0);
   part.addNote(Math.PI * 1.0);
+  note2 = {
+    type: 'pulse',
+    hz: Math.random() * 4000,
+    time: 250,
+    rate: Math.random()
+  };
   part = stage.addPart(function() {
-    return Beep.playPulse(2000, 200, 0.7, 0.3);
+    return Beep.play(note2);
   });
   part.addNote(Math.PI * 0.75);
+  note3 = [
+    {
+      type: 'pulse',
+      hz: Math.random() * 4000,
+      time: 50,
+      rate: Math.random()
+    }, {
+      type: 'pulse',
+      hz: Math.random() * 4000,
+      time: 50,
+      rate: Math.random()
+    }, {
+      type: 'pulse',
+      hz: Math.random() * 4000,
+      time: 50,
+      rate: Math.random()
+    }
+  ];
   part = stage.addPart(function() {
-    return Beep.playBrownNoise(5, 100, 0.5);
+    return Beep.play(note3);
   });
   return part.addNote(Math.PI * 1.75);
 });

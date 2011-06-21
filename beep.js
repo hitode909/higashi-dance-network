@@ -1,18 +1,36 @@
 var Beep, gomi;
+var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 Beep = {
+  play: function(args) {
+    var samples;
+    samples = [];
+    if ($.isArray(args)) {
+      $.each(args, __bind(function(i, v) {
+        return samples = samples.concat(this.getSamples(v));
+      }, this));
+    } else {
+      samples = samples.concat(this.getSamples(args));
+    }
+    return this.playSamples(samples);
+  },
+  getSamples: function(args) {
+    var method, type;
+    type = args.type || 'sin';
+    type = type[0].toUpperCase() + type.slice(1);
+    method = "get" + type + "Samples";
+    return this[method](args);
+  },
   playSamples: function(samples) {
     var signals, url;
     signals = this._samplesToSignals(samples);
     url = this._convertSignalsToURL(signals);
     return this._playURL(url);
   },
-  playSin: function(hz, time, volume) {
-    var freq, i, phase, requiredLength, samples, samplingRate;
-        if (volume != null) {
-      volume;
-    } else {
-      volume = 0.7;
-    };
+  getSinSamples: function(args) {
+    var freq, hz, i, phase, requiredLength, samples, samplingRate, time, volume;
+    hz = args.hz || 440;
+    time = args.time || 500;
+    volume = args.volume || 0.7;
     samplingRate = 44100;
     samples = [];
     requiredLength = Math.floor(samplingRate * time * 0.001);
@@ -22,20 +40,14 @@ Beep = {
       samples.push(Math.sin(phase) * 10000 * volume);
       phase += freq;
     }
-    return this.playSamples(samples);
+    return samples;
   },
-  playPulse: function(hz, time, rate, volume) {
-    var changeAt, i, requiredLength, samples, samplingRate, value;
-        if (rate != null) {
-      rate;
-    } else {
-      rate = 0.5;
-    };
-        if (volume != null) {
-      volume;
-    } else {
-      volume = 0.7;
-    };
+  getPulseSamples: function(args) {
+    var changeAt, hz, i, rate, requiredLength, samples, samplingRate, time, value, volume;
+    hz = args.hz || 440;
+    time = args.time || 500;
+    volume = args.volume || 0.7;
+    rate = args.rate || 0.5;
     samplingRate = 44100;
     samples = [];
     requiredLength = Math.floor(samplingRate * time * 0.001);
@@ -53,15 +65,25 @@ Beep = {
       }
       samples.push(value * 10000 * volume);
     }
-    return this.playSamples(samples);
+    return samples;
   },
-  playWhiteNoise: function(changeAt, time, volume) {
-    var change, get, i, requiredLength, samples, samplingRate, value;
-        if (changeAt != null) {
-      changeAt;
-    } else {
-      changeAt = 1;
-    };
+  getMuteSamples: function(args) {
+    var i, requiredLength, samples, samplingRate, time;
+    time = args.time || 500;
+    samplingRate = 44100;
+    samples = [];
+    requiredLength = Math.floor(samplingRate * time * 0.001);
+    for (i = 0; 0 <= requiredLength ? i <= requiredLength : i >= requiredLength; 0 <= requiredLength ? i++ : i--) {
+      samples.push(0.0);
+    }
+    return samples;
+  },
+  getWhiteNoiseSamples: function(args) {
+    var change, changeAt, get, i, rate, requiredLength, samples, samplingRate, time, value, volume;
+    time = args.time || 500;
+    volume = args.volume || 0.7;
+    rate = args.rate || 1.0;
+    changeAt = 1.0 / rate;
     if (change < 1) {
       change = 1;
     }
@@ -83,15 +105,14 @@ Beep = {
       }
       samples.push(value * 10000 * volume);
     }
-    return this.playSamples(samples);
+    return samples;
   },
-  playBrownNoise: function(changeAt, time, volume) {
-    var change, i, requiredLength, samples, samplingRate, value;
-        if (changeAt != null) {
-      changeAt;
-    } else {
-      changeAt = 1;
-    };
+  getBrownNoiseSamples: function(args) {
+    var change, changeAt, i, rate, requiredLength, samples, samplingRate, time, value, volume;
+    time = args.time || 500;
+    volume = args.volume || 0.7;
+    rate = args.rate || 1.0;
+    changeAt = 1.0 / rate;
     if (change < 1) {
       change = 1;
     }
@@ -116,7 +137,7 @@ Beep = {
       }
       samples.push(value * 10000 * volume);
     }
-    return this.playSamples(samples);
+    return samples;
   },
   _samplesToSignals: function(samples) {
     var i, signals, _i, _len;

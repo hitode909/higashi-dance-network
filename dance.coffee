@@ -26,7 +26,6 @@ class Stage
     $('#control').append(button)
     button.click =>
       part.addNote(@position)
-      console.log part
     part
 
   observe: ->
@@ -99,16 +98,32 @@ class Note
 
 $ ->
   stage = new Stage($('#stage'))
+  note1 =
+      type: 'pulse'
+      hz: Math.random() * 8000
+      rate: Math.random()
+      time: 250
   part = stage.addPart ->
-    Beep.playPulse(220, 100)
+    Beep.play note1
   part.addNote(0.0)
   part.addNote(Math.PI * 1.0)
 
-  part = stage.addPart ->
-    Beep.playPulse(2000, 200, 0.7, 0.3)
-  part.addNote(Math.PI * 0.75)
+  note2 =
+      type: 'pulse'
+      hz: Math.random() * 4000
+      time: 250
+      rate: Math.random()
 
   part = stage.addPart ->
-    Beep.playBrownNoise(5, 100, 0.5)
+    Beep.play note2
+  part.addNote(Math.PI * 0.75)
+
+  note3 = [
+      {type: 'pulse', hz: Math.random() * 4000, time: 50, rate: Math.random()},
+      {type: 'pulse', hz: Math.random() * 4000, time: 50, rate: Math.random()},
+      {type: 'pulse', hz: Math.random() * 4000, time: 50, rate: Math.random()},
+    ]
+  part = stage.addPart ->
+    Beep.play note3
   part.addNote(Math.PI * 1.75)
 
