@@ -8,6 +8,7 @@ Stage = (function() {
     this.position = 0.0;
     this.loopCount = 0;
     this.last = Date.now();
+    this.bpm = 120.0;
     setInterval(__bind(function() {
       return this.observe();
     }, this), 50);
@@ -27,32 +28,29 @@ Stage = (function() {
     return part;
   };
   Stage.prototype.observe = function() {
-    var bpm, now, part, _i, _len, _ref;
-    bpm = +$('input#speed').val();
+    var now, part, _i, _len, _ref;
+    this.bpm = +$('input#speed').val();
     now = Date.now();
-    this.position += bpm / 60.0 * (now - this.last) / 1000 * Math.PI * 0.5;
+    this.position += this.bpm / 60.0 * (now - this.last) / 1000 * Math.PI * 0.5;
     if (this.position > Math.PI * 2.0) {
       this.position -= Math.PI * 2.0;
-      this.loopCount++;
     }
     if (this.position < 0.0) {
       this.position += Math.PI * 2.0;
-      this.loopCount++;
     }
     _ref = this.parts;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       part = _ref[_i];
-      part.observe(this.loopCount, this.position);
+      part.observe(this.position, this.bpm);
     }
     this.plot();
     return this.last = now;
   };
   Stage.prototype.plot = function() {
-    var elem, note, part, stage, stageHeight, stageWidth, _i, _len, _ref, _results;
+    var note, part, stage, stageHeight, stageWidth, _i, _len, _ref, _results;
     stage = $('#stage');
     stageWidth = stage.width();
     stageHeight = stage.height();
-    stage.empty();
     _ref = this.parts;
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -63,16 +61,20 @@ Stage = (function() {
         _results2 = [];
         for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
           note = _ref2[_j];
-          elem = $('<img>');
-          elem.attr({
-            src: note.playing ? 'bucho.png' : 'ossan.png'
-          });
-          elem.css({
-            position: 'absolute',
+          if (!note.elem) {
+            note.elem = $('<img>');
+            note.elem.css({
+              position: 'absolute'
+            });
+            stage.append(note.elem);
+          }
+          note.elem.css({
             left: Math.sin(this.position - note.position) * part.radius + stageWidth / 2 - 30,
             top: -Math.cos(this.position - note.position) * part.radius + stageHeight / 2 - 30
           });
-          _results2.push(stage.append(elem));
+          _results2.push(note.elem.attr({
+            src: note.playing ? 'bucho.png' : 'ossan.png'
+          }));
         }
         return _results2;
       }).call(this));
@@ -85,13 +87,13 @@ Part = (function() {
   function Part() {
     this.notes = [];
   }
-  Part.prototype.observe = function(loopCount, position) {
+  Part.prototype.observe = function(position, bpm) {
     var note, _i, _len, _ref, _results;
     _ref = this.notes;
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       note = _ref[_i];
-      _results.push(note.observe(loopCount, position));
+      _results.push(note.observe(position, bpm));
     }
     return _results;
   };
@@ -111,13 +113,23 @@ Note = (function() {
     this.part = part;
     this.position = position;
     this.playing = false;
-    this.lastLoop = 0;
+    this.lastPosition = 0.0;
   }
-  Note.prototype.observe = function(count, position) {
-    if (count > this.lastLoop && position > this.position && !this.playing) {
-      this.part.play(this);
-      return this.lastLoop = count;
+  Note.prototype.observe = function(position, bpm) {
+    var a, b, offset;
+    offset = 0.0;
+    if (bpm > 0 && position < this.lastPosition) {
+      offset = Math.PI * 2;
     }
+    if (bpm < 0 && position > this.lastPosition) {
+      offset = -Math.PI * 2;
+    }
+    a = this.position - (position + offset);
+    b = this.position - this.lastPosition;
+    if (a * b <= 0) {
+      this.part.play(this);
+    }
+    return this.lastPosition = position;
   };
   Note.prototype.started = function() {
     return this.playing = true;
@@ -141,7 +153,7 @@ $(function() {
     part1 = stage.addPart(function() {
       return Beep.play(note1);
     });
-    return part1.addNote(stage.position);
+    return part1.addNote(stage.position * (stage.bpm > 0 ? 1 : -1));
   });
   $('button#add-b').click(function() {
     var note2, part2;
@@ -190,5 +202,7 @@ $(function() {
     });
     return part4.addNote(stage.position);
   });
-  return $('button#add-a').click();
+  return setTimeout(function() {
+    return $('button#add-a').click();
+  }, 1000);
 });

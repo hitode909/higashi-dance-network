@@ -11,6 +11,7 @@ class Stage
     @position = 0.0
     @loopCount = 0
     @last = Date.now()
+    @bpm = 120.0
 
     setInterval =>
       this.observe()
@@ -29,20 +30,18 @@ class Stage
     part
 
   observe: ->
-    bpm = +$('input#speed').val()
+    @bpm = +$('input#speed').val()
     now = Date.now()
-    @position += bpm / 60.0 * (now - @last) / 1000 * Math.PI * 0.5
+    @position += @bpm / 60.0 * (now - @last) / 1000 * Math.PI * 0.5
 
     if @position > Math.PI * 2.0
       @position -= Math.PI * 2.0
-      @loopCount++
 
     if @position < 0.0
       @position += Math.PI * 2.0
-      @loopCount++
 
     for part in @parts
-      part.observe(@loopCount, @position)
+      part.observe(@position, @bpm)
     this.plot()
     @last = now
 
@@ -50,25 +49,28 @@ class Stage
     stage = $('#stage')
     stageWidth = stage.width()
     stageHeight = stage.height()
-    stage.empty()
     for part in @parts
       for note in part.notes
-        elem = $('<img>')
-        elem.attr
-          src: if note.playing then 'bucho.png' else 'ossan.png'
-        elem.css
-          position: 'absolute'
+        unless note.elem
+          note.elem = $('<img>')
+          note.elem.css
+            position: 'absolute'
+          stage.append(note.elem)
+
+        note.elem.css
           left: Math.sin(@position - note.position) * part.radius + stageWidth / 2 - 30
           top: - Math.cos(@position - note.position) * part.radius + stageHeight / 2 - 30
-        stage.append(elem)
+        note.elem.attr
+          src: if note.playing then 'bucho.png' else 'ossan.png'
+
 
 class Part
   constructor: ->
     @notes = []
 
-  observe: (loopCount, position) ->
+  observe: (position, bpm) ->
     for note in @notes
-      note.observe(loopCount, position)
+      note.observe(position, bpm)
 
   play: (note)->
     note.started()
@@ -81,13 +83,20 @@ class Part
 class Note
   constructor: (@part, @position) ->
     @playing = false
-    @lastLoop = 0
+    @lastPosition = 0.0
 
-  observe: (count, position) ->
-    if count > @lastLoop && position > @position && ! @playing
+  observe: (position, bpm) ->
+    offset = 0.0
+    if bpm > 0 && position < @lastPosition
+      offset = Math.PI * 2
+    if bpm < 0 && position > @lastPosition
+      offset = -Math.PI * 2
+    a = @position - (position + offset)
+    b = @position - @lastPosition
+    if a * b <= 0
       @part.play(this)
-      @lastLoop = count
 
+    @lastPosition = position
 
   started: ->
     @playing = true
@@ -108,7 +117,7 @@ $ ->
     part1 = stage.addPart ->
       Beep.play note1
 
-    part1.addNote(stage.position)
+    part1.addNote(stage.position * (if stage.bpm > 0 then 1 else -1))
 
 
   $('button#add-b').click ->
@@ -139,4 +148,6 @@ $ ->
 
     part4.addNote(stage.position)
 
-  $('button#add-a').click()
+  setTimeout ->
+    $('button#add-a').click()
+  ,1000
