@@ -126,7 +126,6 @@ Note = (function() {
     var a, b;
     a = this.position - position;
     b = this.position - lastPosition;
-    console.log([a, b]);
     if (a * b <= 0) {
       return this.part.play(this);
     }

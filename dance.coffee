@@ -95,7 +95,6 @@ class Note
   observe: (position, lastPosition) ->
     a = @position - position
     b = @position - lastPosition
-    console.log [a, b]
     if a * b <= 0
       @part.play(this)
 
