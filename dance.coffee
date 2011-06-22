@@ -1,6 +1,17 @@
 # TODO
 # - 軌道を■とかにする
 # - YouTube再生できるようにする
+# 
+
+window.requestAnimationFrame = (->
+  window.requestAnimationFrame		||
+  window.webkitRequestAnimationFrame	||
+  window.mozRequestAnimationFrame		||
+  window.oRequestAnimationFrame		||
+  window.msRequestAnimationFrame		||
+  (callback, element) ->
+    window.setTimeout ->callback, 1000 / 60
+)()
 
 class Stage
   constructor: (@container) ->
@@ -11,9 +22,10 @@ class Stage
     @last = Date.now()
     @bpm = 120.0
 
-    setInterval =>
-      this.observe()
-    ,50
+    animationLoop = ->
+        this.observe()
+        window.requestAnimationFrame(animationLoop)
+    animationLoop()
 
   addPart: (callback) ->
     @radius += 50
