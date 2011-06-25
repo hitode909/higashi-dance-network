@@ -48,6 +48,7 @@ Stage = (function() {
     this.loopCount = 0;
     this.last = Date.now();
     this.bpm = 120.0;
+    this.partRadius = 60;
     animationLoop = __bind(function() {
       this.observe();
       return window.requestAnimationFrame(animationLoop);
@@ -56,12 +57,15 @@ Stage = (function() {
   }
   Stage.prototype.addPart = function(callback) {
     var button, part;
-    this.radius += 70;
+    this.radius += this.partRadius;
     part = new Part;
     part.callback = callback;
     part.radius = this.radius;
     this.parts.push(part);
     button = $("<button>+ " + this.radius + "</button>");
+    button.attr({
+      'data-radius': this.radius
+    });
     $('#control').append(button);
     button.click(__bind(function() {
       return part.addNote(this.position);
@@ -69,7 +73,7 @@ Stage = (function() {
     return part;
   };
   Stage.prototype.observe = function() {
-    var now, part, _i, _len, _ref;
+    var kills, now, part, _i, _j, _len, _len2, _ref;
     now = Date.now();
     this.position += this.bpm / 60.0 * (now - this.last) / 1000 * Math.PI * 0.5;
     if (this.position > Math.PI * 4.0) {
@@ -78,12 +82,21 @@ Stage = (function() {
     if (this.position < Math.PI * 2.0) {
       this.position += Math.PI * 2.0;
     }
+    kills = [];
     _ref = this.parts;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       part = _ref[_i];
       part.observe(this.position, this.bpm);
+      if (part.rate() < 0.1) {
+        kills.push(part);
+      }
     }
     this.plot();
+    for (_j = 0, _len2 = kills.length; _j < _len2; _j++) {
+      part = kills[_j];
+      this.killPart(part);
+      this.radius -= this.partRadius;
+    }
     return this.last = now;
   };
   Stage.prototype.plot = function() {
@@ -124,6 +137,12 @@ Stage = (function() {
       }).call(this));
     }
     return _results;
+  };
+  Stage.prototype.killPart = function(part) {
+    this.parts = $.grep(this.parts, function(v) {
+      return v.radius !== part.radius;
+    });
+    return part.kill();
   };
   return Stage;
 })();
@@ -167,6 +186,17 @@ Part = (function() {
   };
   Part.prototype.addNote = function(position) {
     return this.notes.push(new Note(this, position));
+  };
+  Part.prototype.kill = function() {
+    var note, _i, _len, _ref, _results;
+    $("button[data-radius='" + this.radius + "']").remove();
+    _ref = this.notes;
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      note = _ref[_i];
+      _results.push(note.elem.remove());
+    }
+    return _results;
   };
   return Part;
 })();

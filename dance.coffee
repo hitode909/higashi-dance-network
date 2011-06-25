@@ -35,6 +35,7 @@ class Stage
     @loopCount = 0
     @last = Date.now()
     @bpm = 120.0
+    @partRadius = 60
 
     animationLoop = =>
         this.observe()
@@ -42,12 +43,14 @@ class Stage
     animationLoop()
 
   addPart: (callback) ->
-    @radius += 60
+    @radius += @partRadius
     part = new Part
     part.callback = callback
     part.radius = @radius
     @parts.push(part)
     button = $("<button>+ #{ @radius }</button>")
+    button.attr
+      'data-radius': @radius
     $('#control').append(button)
     button.click =>
       part.addNote(@position)
@@ -63,9 +66,17 @@ class Stage
     if @position < Math.PI * 2.0
       @position += Math.PI * 2.0
 
+    kills = []
+
     for part in @parts
       part.observe(@position, @bpm)
+      kills.push(part) if part.rate() < 0.1
     this.plot()
+
+    for part in kills
+      this.killPart(part)
+      @radius -= @partRadius
+
     @last = now
 
   plot: ->
@@ -92,6 +103,11 @@ class Stage
         note.elem.attr
           src: if note.playing then 'ossan2.png' else 'ossan1.png'
 
+  killPart: (part) ->
+    @parts = $.grep @parts, (v) ->
+      v.radius != part.radius
+
+    part.kill()
 
 class Part
   constructor: ->
@@ -125,6 +141,11 @@ class Part
 
   addNote: (position) ->
     @notes.push(new Note(this, position))
+
+  kill: ->
+    $("button[data-radius='#{ @radius }']").remove()
+    for note in @notes
+      note.elem.remove()
 
 class Note
   constructor: (@part, @position) ->
