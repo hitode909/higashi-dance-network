@@ -1,7 +1,46 @@
-var Note, Part, Stage;
+var Dial, Note, Part, Stage;
 var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+window.requestAnimationFrame = (function() {
+  return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback, element) {
+    return window.setTimeout(function() {
+      return callback;
+    }, 1000 / 60);
+  };
+})();
+Dial = function(container, callback) {
+  var center, last;
+  last = null;
+  center = {
+    left: $(container).position().left + $(container).width() / 2,
+    top: $(container).position().top + $(container).height() / 2
+  };
+  return $(container).mousemove($.throttle(100, function(event) {
+    var diff, rad, x, y;
+    x = event.offsetX - center.left;
+    y = event.offsetY - center.top;
+    rad = Math.atan(y / x);
+    if (x < 0) {
+      rad += Math.PI;
+    }
+        if (last != null) {
+      last;
+    } else {
+      last = rad;
+    };
+    diff = rad - last;
+    if (diff < -Math.PI) {
+      diff += Math.PI * 2;
+    }
+    if (diff > Math.PI) {
+      diff -= Math.PI * 2;
+    }
+    callback(diff);
+    return last = rad;
+  }));
+};
 Stage = (function() {
   function Stage(container) {
+    var animationLoop;
     this.container = container;
     this.parts = [];
     this.radius = 0;
@@ -9,9 +48,11 @@ Stage = (function() {
     this.loopCount = 0;
     this.last = Date.now();
     this.bpm = 120.0;
-    setInterval(__bind(function() {
-      return this.observe();
-    }, this), 50);
+    animationLoop = __bind(function() {
+      this.observe();
+      return window.requestAnimationFrame(animationLoop);
+    }, this);
+    animationLoop();
   }
   Stage.prototype.addPart = function(callback) {
     var button, part;
@@ -29,7 +70,6 @@ Stage = (function() {
   };
   Stage.prototype.observe = function() {
     var now, part, _i, _len, _ref;
-    this.bpm = +$('input#speed').val();
     now = Date.now();
     this.position += this.bpm / 60.0 * (now - this.last) / 1000 * Math.PI * 0.5;
     if (this.position > Math.PI * 4.0) {
@@ -201,5 +241,14 @@ $(function() {
     });
     return part4.addNote(stage.position);
   });
-  return $('button#add-a').click();
+  $('button#add-a').click();
+  Deferred.wait(1).next(function() {
+    return Dial($('#stage'), function(diff) {
+      stage.bpm += diff * 4;
+      return $('input#speed').val(stage.bpm);
+    });
+  });
+  return $('input#speed').change(function() {
+    return stage.bpm = +$(this).val();
+  });
 });

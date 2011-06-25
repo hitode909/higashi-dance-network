@@ -1,8 +1,3 @@
-# TODO
-# - 軌道を■とかにする
-# - YouTube再生できるようにする
-# 
-
 window.requestAnimationFrame = (->
   window.requestAnimationFrame		||
   window.webkitRequestAnimationFrame	||
@@ -10,8 +5,27 @@ window.requestAnimationFrame = (->
   window.oRequestAnimationFrame		||
   window.msRequestAnimationFrame		||
   (callback, element) ->
-    window.setTimeout ->callback, 1000 / 60
+    window.setTimeout ->
+      callback
+    , 1000 / 60
 )()
+
+Dial = (container, callback) ->
+  last = null
+  center =
+    left: $(container).position().left + $(container).width() / 2
+    top:  $(container).position().top  + $(container).height() / 2
+  $(container).mousemove $.throttle 100, (event) ->
+    x = event.offsetX - center.left
+    y = event.offsetY - center.top
+    rad = Math.atan(y / x)
+    rad += Math.PI if x < 0
+    last ?= rad
+    diff = rad - last
+    diff += Math.PI * 2 if diff < -Math.PI
+    diff -= Math.PI * 2 if diff > Math.PI
+    callback(diff)
+    last = rad
 
 class Stage
   constructor: (@container) ->
@@ -22,7 +36,7 @@ class Stage
     @last = Date.now()
     @bpm = 120.0
 
-    animationLoop = ->
+    animationLoop = =>
         this.observe()
         window.requestAnimationFrame(animationLoop)
     animationLoop()
@@ -40,7 +54,6 @@ class Stage
     part
 
   observe: ->
-    @bpm = +$('input#speed').val()
     now = Date.now()
     @position += @bpm / 60.0 * (now - @last) / 1000 * Math.PI * 0.5
 
@@ -161,3 +174,12 @@ $ ->
     part4.addNote(stage.position)
 
   $('button#add-a').click()
+
+  Deferred.wait(1).next ->
+    Dial $('#stage'), (diff) ->
+      stage.bpm += diff * 4
+      $('input#speed').val(stage.bpm)
+
+  $('input#speed').change ->
+    stage.bpm = +$(this).val()
+
