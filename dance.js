@@ -56,7 +56,7 @@ Stage = (function() {
   }
   Stage.prototype.addPart = function(callback) {
     var button, part;
-    this.radius += 60;
+    this.radius += 70;
     part = new Part;
     part.callback = callback;
     part.radius = this.radius;
@@ -87,7 +87,7 @@ Stage = (function() {
     return this.last = now;
   };
   Stage.prototype.plot = function() {
-    var note, offset, part, stage, stageHeight, stageWidth, _i, _len, _ref, _results;
+    var img_size, note, part, rate, stage, stageHeight, stageWidth, _i, _len, _ref, _results;
     stage = $('#stage');
     stageWidth = stage.width();
     stageHeight = stage.height();
@@ -95,6 +95,7 @@ Stage = (function() {
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       part = _ref[_i];
+      rate = part.rate();
       _results.push((function() {
         var _j, _len2, _ref2, _results2;
         _ref2 = part.notes;
@@ -108,10 +109,12 @@ Stage = (function() {
             });
             stage.append(note.elem);
           }
-          offset = note.playing ? 50 : 30;
+          img_size = note.playing ? 100 : 60;
           note.elem.css({
-            left: Math.sin(this.position - note.position) * part.radius + stageWidth / 2 - offset,
-            top: -Math.cos(this.position - note.position) * part.radius + stageHeight / 2 - offset
+            left: (Math.sin(this.position - note.position) * part.radius - img_size * 0.5) * rate + stageWidth / 2,
+            top: (-Math.cos(this.position - note.position) * part.radius - img_size * 0.5) * rate + stageHeight / 2,
+            width: img_size * rate,
+            opacity: rate
           });
           _results2.push(note.elem.attr({
             src: note.playing ? 'ossan2.png' : 'ossan1.png'
@@ -128,7 +131,17 @@ Part = (function() {
   function Part() {
     this.notes = [];
     this.lastPosition = 0.0;
+    this.birth = Date.now();
   }
+  Part.prototype.rate = function() {
+    var age, rate;
+    age = Date.now() - this.birth;
+    rate = (60000.0 - age) / 60000.0;
+    if (rate < 0.0) {
+      rate = 0.0;
+    }
+    return rate;
+  };
   Part.prototype.observe = function(position, bpm) {
     var note, offset, position_offset, _i, _len, _ref;
     offset = 0.0;
@@ -148,7 +161,7 @@ Part = (function() {
   };
   Part.prototype.play = function(note) {
     note.started();
-    return this.callback().next(function() {
+    return this.callback(this.rate()).next(function() {
       return note.ended();
     });
   };
@@ -190,7 +203,8 @@ $(function() {
       time: 400 * Math.random(),
       rate: Math.random()
     };
-    part1 = stage.addPart(function() {
+    part1 = stage.addPart(function(volume) {
+      note1.volume = volume;
       return Beep.play(note1);
     });
     return part1.addNote(stage.position * (stage.bpm > 0 ? 1 : -1));
@@ -215,7 +229,8 @@ $(function() {
         rate: Math.random()
       }
     ];
-    part2 = stage.addPart(function() {
+    part2 = stage.addPart(function(volume) {
+      note2.volume = volume;
       return Beep.play(note2);
     });
     return part2.addNote(stage.position);
@@ -226,7 +241,8 @@ $(function() {
       type: 'whiteNoise',
       time: 400 * Math.random() * Math.random()
     };
-    part3 = stage.addPart(function() {
+    part3 = stage.addPart(function(volume) {
+      note3.volume = volume;
       return Beep.play(note3);
     });
     return part3.addNote(stage.position);
@@ -237,7 +253,8 @@ $(function() {
       type: 'brownNoise',
       time: 400 * Math.random() * Math.random()
     };
-    part4 = stage.addPart(function() {
+    part4 = stage.addPart(function(volume) {
+      note4.volume = volume;
       return Beep.play(note4);
     });
     return part4.addNote(stage.position);
