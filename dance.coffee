@@ -42,7 +42,7 @@ class Stage
     animationLoop()
 
   addPart: (callback) ->
-    @radius += 50
+    @radius += 60
     part = new Part
     part.callback = callback
     part.radius = @radius
@@ -80,11 +80,14 @@ class Stage
             position: 'absolute'
           stage.append(note.elem)
 
+        offset = if note.playing then 50 else 30
+
         note.elem.css
-          left: Math.sin(@position - note.position) * part.radius + stageWidth / 2 - 30
-          top: - Math.cos(@position - note.position) * part.radius + stageHeight / 2 - 30
+          left: Math.sin(@position - note.position) * part.radius + stageWidth / 2 - offset
+          top: - Math.cos(@position - note.position) * part.radius + stageHeight / 2 - offset
+
         note.elem.attr
-          src: if note.playing then 'bucho.png' else 'ossan.png'
+          src: if note.playing then 'ossan2.png' else 'ossan1.png'
 
 
 class Part
@@ -158,7 +161,7 @@ $ ->
     part2.addNote(stage.position)
 
   $('button#add-c').click ->
-    note3 = {type: 'whiteNoise', time: 400 * Math.random()}
+    note3 = {type: 'whiteNoise', time: 400 * Math.random() * Math.random()}
 
     part3 = stage.addPart ->
       Beep.play note3
@@ -166,7 +169,7 @@ $ ->
     part3.addNote(stage.position)
 
   $('button#add-d').click ->
-    note4 = {type: 'brownNoise', time: 400 * Math.random()}
+    note4 = {type: 'brownNoise', time: 400 * Math.random() * Math.random()}
 
     part4 = stage.addPart ->
       Beep.play note4
