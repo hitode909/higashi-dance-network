@@ -115,8 +115,7 @@ Stage = (function() {
         height: part.getImageRadius() * 2 + part.getRadius() * 2,
         left: stageWidth / 2 - part.getRadius() - part.getImageRadius(),
         top: stageHeight / 2 - part.getRadius() - part.getImageRadius(),
-        'z-index': parseInt(stageWidth / 2 - part.getRadius()),
-        opacity: part.getRate()
+        'z-index': parseInt(stageWidth / 2 - part.getRadius())
       });
       rate = part.getRate();
       _results.push((function() {
@@ -135,8 +134,7 @@ Stage = (function() {
             left: (Math.sin(this.position - note.position) * part.getRadius()) - part.getImageRadius() + stageWidth / 2,
             top: (-Math.cos(this.position - note.position) * part.getRadius()) - part.getImageRadius() + stageHeight / 2,
             width: part.getImageRadius() * 2,
-            height: part.getImageRadius() * 2,
-            opacity: rate
+            height: part.getImageRadius() * 2
           });
           _results2.push(note.elem.attr({
             src: note.playing ? 'ossan2.png' : 'ossan1.png'
@@ -156,12 +154,9 @@ Stage = (function() {
   Stage.prototype.getPartAtDistance = function(distance) {
     var got, part, _fn, _i, _len, _ref;
     got = null;
-    if (this.parts.length > 0 && distance < this.parts[0].getRadius()) {
-      got = this.parts[0];
-    }
-    _ref = this.parts;
+    _ref = this.parts.reverse();
     _fn = function(part) {
-      if (part.getRadius() + part.getImageRadius() > distance && part.getRadius() - part.getImageRadius() < distance) {
+      if (part.getRadius() + part.getImageRadius() > distance) {
         return got = part;
       }
     };
@@ -169,6 +164,7 @@ Stage = (function() {
       part = _ref[_i];
       _fn(part);
     }
+    this.parts.reverse();
     return got;
   };
   Stage.prototype.actionAtDistance = function(distance) {

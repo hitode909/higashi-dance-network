@@ -92,7 +92,7 @@ class Stage
           left: stageWidth  / 2 - part.getRadius() - part.getImageRadius()
           top:  stageHeight / 2 - part.getRadius() - part.getImageRadius()
           'z-index': parseInt(stageWidth  / 2 - part.getRadius())
-          opacity: part.getRate()
+          # opacity: part.getRate()
 
       rate = part.getRate()
       for note in part.notes
@@ -108,7 +108,7 @@ class Stage
           top: (-Math.cos(@position - note.position) * part.getRadius()) - part.getImageRadius() + stageHeight / 2
           width: part.getImageRadius() * 2
           height: part.getImageRadius() * 2
-          opacity: rate
+          # opacity: rate
 
         note.elem.attr
           src: if note.playing then 'ossan2.png' else 'ossan1.png'
@@ -121,11 +121,11 @@ class Stage
 
   getPartAtDistance: (distance) ->
     got = null
-    got = @parts[0] if @parts.length > 0 && distance < @parts[0].getRadius()
-    for part in @parts
+    for part in @parts.reverse()
       do (part) ->
-        if part.getRadius() + part.getImageRadius() > distance && part.getRadius() - part.getImageRadius() < distance
+        if part.getRadius() + part.getImageRadius() > distance
           got = part
+    @parts.reverse()
     got
 
   actionAtDistance: (distance) ->
