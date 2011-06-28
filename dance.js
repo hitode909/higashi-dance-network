@@ -44,7 +44,6 @@ Stage = (function() {
     var animationLoop;
     this.container = container;
     this.parts = [];
-    this.radius = 0;
     this.position = Math.PI * 3.0;
     this.loopCount = 0;
     this.last = Date.now();
@@ -57,20 +56,16 @@ Stage = (function() {
     animationLoop();
   }
   Stage.prototype.addPart = function(callback) {
-    var button, part;
-    this.radius += this.partRadius;
+    var part, radius;
+    radius = 0;
+    if (this.parts.length > 0) {
+      radius += this.parts[this.parts.length - 1].getRadius();
+    }
+    radius += this.partRadius;
     part = new Part;
     part.callback = callback;
-    part.radius = this.radius;
+    part.radius = radius;
     this.parts.push(part);
-    button = $("<button>+ " + this.radius + "</button>");
-    button.attr({
-      'data-radius': this.radius
-    });
-    $('#control').append(button);
-    button.click(__bind(function() {
-      return part.addNote(this.position);
-    }, this));
     return part;
   };
   Stage.prototype.observe = function() {
@@ -88,7 +83,7 @@ Stage = (function() {
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       part = _ref[_i];
       part.observe(this.position, this.bpm);
-      if (part.rate() < 0.1) {
+      if (part.getRate() < 0.1) {
         kills.push(part);
       }
     }
@@ -96,7 +91,6 @@ Stage = (function() {
     for (_j = 0, _len2 = kills.length; _j < _len2; _j++) {
       part = kills[_j];
       this.killPart(part);
-      this.radius -= this.partRadius;
     }
     return this.last = now;
   };
@@ -109,7 +103,7 @@ Stage = (function() {
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       part = _ref[_i];
-      rate = part.rate();
+      rate = part.getRate();
       _results.push((function() {
         var _j, _len2, _ref2, _results2;
         _ref2 = part.notes;
@@ -150,7 +144,7 @@ Stage = (function() {
     got = null;
     _ref = this.parts;
     _fn = function(part) {
-      if (part.radius + Part.prototype.ImageRadius > distance) {
+      if (part.getRadius() + part.getImageRadius() > distance && part.getRadius() - part.getImageRadius() < distance) {
         return got = part;
       }
     };
@@ -186,7 +180,7 @@ Part = (function() {
     this.birth = Date.now();
   }
   Part.prototype.ImageRadius = 50;
-  Part.prototype.rate = function() {
+  Part.prototype.getRate = function() {
     var age, rate;
     age = Date.now() - this.birth;
     rate = (60000.0 - age) / 60000.0;
@@ -194,6 +188,12 @@ Part = (function() {
       rate = 0.0;
     }
     return rate;
+  };
+  Part.prototype.getRadius = function() {
+    return this.radius * this.getRate();
+  };
+  Part.prototype.getImageRadius = function() {
+    return Part.prototype.ImageRadius * this.getRate();
   };
   Part.prototype.observe = function(position, bpm) {
     var note, offset, position_offset, _i, _len, _ref;
@@ -214,7 +214,7 @@ Part = (function() {
   };
   Part.prototype.play = function(note) {
     note.started();
-    return this.callback(this.rate()).next(function() {
+    return this.callback(this.getRate()).next(function() {
       return note.ended();
     });
   };
@@ -223,7 +223,6 @@ Part = (function() {
   };
   Part.prototype.kill = function() {
     var note, _i, _len, _ref, _results;
-    $("button[data-radius='" + this.radius + "']").remove();
     _ref = this.notes;
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {

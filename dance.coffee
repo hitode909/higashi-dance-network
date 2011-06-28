@@ -31,7 +31,6 @@ Dial = (container, callback) ->
 class Stage
   constructor: (@container) ->
     @parts = []
-    @radius = 0
     @position = Math.PI * 3.0
     @loopCount = 0
     @last = Date.now()
@@ -44,17 +43,14 @@ class Stage
     animationLoop()
 
   addPart: (callback) ->
-    @radius += @partRadius
+    radius = 0
+    if @parts.length > 0
+      radius += @parts[@parts.length-1].getRadius()
+    radius += @partRadius
     part = new Part
     part.callback = callback
-    part.radius = @radius
+    part.radius = radius
     @parts.push(part)
-    button = $("<button>+ #{ @radius }</button>")
-    button.attr
-      'data-radius': @radius
-    $('#control').append(button)
-    button.click =>
-      part.addNote(@position)
     part
 
   observe: ->
@@ -71,12 +67,11 @@ class Stage
 
     for part in @parts
       part.observe(@position, @bpm)
-      kills.push(part) if part.rate() < 0.1
+      kills.push(part) if part.getRate() < 0.1
     this.plot()
 
     for part in kills
       this.killPart(part)
-      @radius -= @partRadius
 
     @last = now
 
@@ -85,7 +80,7 @@ class Stage
     stageWidth = stage.width()
     stageHeight = stage.height()
     for part in @parts
-      rate = part.rate()
+      rate = part.getRate()
       for note in part.notes
         unless note.elem
           note.elem = $('<img>')
@@ -114,7 +109,7 @@ class Stage
     got = null
     for part in @parts
       do (part) ->
-        if part.radius + Part.prototype.ImageRadius > distance
+        if part.getRadius() + part.getImageRadius() > distance && part.getRadius() - part.getImageRadius() < distance
           got = part
     got
 
@@ -141,11 +136,17 @@ class Part
 
   ImageRadius: 50,
 
-  rate: ->
+  getRate: ->
     age = (Date.now() - @birth)
     rate = (60000.0 - age) / 60000.0
     rate = 0.0 if rate < 0.0
     rate
+
+  getRadius: ->
+    @radius * this.getRate()
+
+  getImageRadius: ->
+    Part.prototype.ImageRadius * this.getRate()
 
   observe: (position, bpm) ->
     offset = 0.0
@@ -162,14 +163,13 @@ class Part
 
   play: (note)->
     note.started()
-    @callback(this.rate()).next ->
+    @callback(this.getRate()).next ->
       note.ended()
 
   addNote: (position) ->
     @notes.push(new Note(this, position))
 
   kill: ->
-    $("button[data-radius='#{ @radius }']").remove()
     for note in @notes
       note.elem.remove()
 
