@@ -328,7 +328,7 @@ $(function() {
       return stage.hoveringPartId = part ? part.radius : null;
     });
   });
-  return $('#stage').click(function(event) {
+  $('#stage').click(function(event) {
     var center, container, distance, x, y;
     container = $('#stage');
     center = {
@@ -339,5 +339,8 @@ $(function() {
     y = event.pageY - center.top;
     distance = Math.sqrt(x * x + y * y);
     return stage.actionAtDistance(distance);
+  });
+  return Deferred.wait(1).next(function() {
+    return $('#stage').click();
   });
 });

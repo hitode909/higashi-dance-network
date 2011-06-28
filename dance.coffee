@@ -247,3 +247,6 @@ $ ->
     distance = Math.sqrt(x * x + y * y)
     stage.actionAtDistance(distance)
 
+
+  Deferred.wait(1).next ->
+    $('#stage').click()
