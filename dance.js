@@ -164,6 +164,38 @@ Stage = (function() {
         time: 400 * Math.random(),
         rate: Math.random()
       };
+      if (Math.random() < 0.2) {
+        note = [
+          {
+            type: 'pulse',
+            hz: Math.random() * 4000,
+            time: 100 * Math.random(),
+            rate: Math.random()
+          }, {
+            type: 'pulse',
+            hz: Math.random() * 4000,
+            time: 100 * Math.random(),
+            rate: Math.random()
+          }, {
+            type: 'pulse',
+            hz: Math.random() * 4000,
+            time: 100 * Math.random(),
+            rate: Math.random()
+          }
+        ];
+      }
+      if (Math.random() < 0.1) {
+        note = {
+          type: 'whiteNoise',
+          time: 400 * Math.random() * Math.random()
+        };
+      }
+      if (Math.random() < 0.1) {
+        note = {
+          type: 'brownNoise',
+          time: 400 * Math.random() * Math.random()
+        };
+      }
       part = this.addPart(function(volume) {
         note.volume = volume;
         return Beep.play(note);
@@ -258,71 +290,6 @@ Note = (function() {
 $(function() {
   var stage;
   stage = new Stage($('#stage'));
-  $('button#add-a').click(function() {
-    var note, part;
-    note = {
-      type: 'pulse',
-      hz: Math.random() * 4000,
-      time: 400 * Math.random(),
-      rate: Math.random()
-    };
-    part = stage.addPart(function(volume) {
-      note.volume = volume;
-      return Beep.play(note);
-    });
-    return part.addNote(stage.position * (stage.bpm > 0 ? 1 : -1));
-  });
-  $('button#add-b').click(function() {
-    var note, part;
-    note = [
-      {
-        type: 'pulse',
-        hz: Math.random() * 4000,
-        time: 100 * Math.random(),
-        rate: Math.random()
-      }, {
-        type: 'pulse',
-        hz: Math.random() * 4000,
-        time: 100 * Math.random(),
-        rate: Math.random()
-      }, {
-        type: 'pulse',
-        hz: Math.random() * 4000,
-        time: 100 * Math.random(),
-        rate: Math.random()
-      }
-    ];
-    part = stage.addPart(function(volume) {
-      note.volume = volume;
-      return Beep.play(note);
-    });
-    return part.addNote(stage.position);
-  });
-  $('button#add-c').click(function() {
-    var note, part;
-    note = {
-      type: 'whiteNoise',
-      time: 400 * Math.random() * Math.random()
-    };
-    part = stage.addPart(function(volume) {
-      note.volume = volume;
-      return Beep.play(note);
-    });
-    return part.addNote(stage.position);
-  });
-  $('button#add-d').click(function() {
-    var note, part;
-    note = {
-      type: 'brownNoise',
-      time: 400 * Math.random() * Math.random()
-    };
-    part = stage.addPart(function(volume) {
-      note.volume = volume;
-      return Beep.play(note);
-    });
-    return part.addNote(stage.position);
-  });
-  $('button#add-a').click();
   Deferred.wait(1).next(function() {
     return Dial($('#stage'), function(diff, distance) {
       stage.bpm += diff * 4;
