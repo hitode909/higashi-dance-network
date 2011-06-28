@@ -115,7 +115,10 @@ Stage = (function() {
         height: part.getImageRadius() * 2 + part.getRadius() * 2,
         left: stageWidth / 2 - part.getRadius() - part.getImageRadius(),
         top: stageHeight / 2 - part.getRadius() - part.getImageRadius(),
-        'z-index': parseInt(stageWidth / 2 - part.getRadius())
+        'z-index': parseInt(stageWidth / 2 - part.getRadius()) + 5000
+      });
+      part.elem.attr({
+        src: part.radius === this.hoveringPartId ? 'ossan2.png' : 'ossan1.png'
       });
       rate = part.getRate();
       _results.push((function() {
@@ -319,7 +322,10 @@ $(function() {
   stage = new Stage($('#stage'));
   Deferred.wait(1).next(function() {
     return Dial($('#stage'), function(diff, distance) {
-      return stage.bpm += diff * 8;
+      var part;
+      stage.bpm += diff * 8;
+      part = stage.getPartAtDistance(distance);
+      return stage.hoveringPartId = part ? part.radius : null;
     });
   });
   return $('#stage').click(function(event) {

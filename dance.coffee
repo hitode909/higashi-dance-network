@@ -37,8 +37,8 @@ class Stage
     @bpm = 120.0
 
     animationLoop = =>
-        this.observe()
-        window.requestAnimationFrame(animationLoop)
+      this.observe()
+      window.requestAnimationFrame(animationLoop)
     animationLoop()
 
   addPart: (callback) ->
@@ -87,12 +87,14 @@ class Stage
         stage.append(part.elem)
 
       part.elem.css
-          width: part.getImageRadius() * 2 + part.getRadius() * 2
-          height: part.getImageRadius() * 2 + part.getRadius() * 2
-          left: stageWidth  / 2 - part.getRadius() - part.getImageRadius()
-          top:  stageHeight / 2 - part.getRadius() - part.getImageRadius()
-          'z-index': parseInt(stageWidth  / 2 - part.getRadius())
-          # opacity: part.getRate()
+        width: part.getImageRadius() * 2 + part.getRadius() * 2
+        height: part.getImageRadius() * 2 + part.getRadius() * 2
+        left: stageWidth  / 2 - part.getRadius() - part.getImageRadius()
+        top:  stageHeight / 2 - part.getRadius() - part.getImageRadius()
+        'z-index': parseInt(stageWidth  / 2 - part.getRadius()) + 5000
+      part.elem.attr
+        src: if part.radius == this.hoveringPartId then 'ossan2.png' else 'ossan1.png'
+
 
       rate = part.getRate()
       for note in part.notes
@@ -108,7 +110,6 @@ class Stage
           top: (-Math.cos(@position - note.position) * part.getRadius()) - part.getImageRadius() + stageHeight / 2
           width: part.getImageRadius() * 2
           height: part.getImageRadius() * 2
-          # opacity: rate
 
         note.elem.attr
           src: if note.playing then 'ossan2.png' else 'ossan1.png'
@@ -233,6 +234,8 @@ $ ->
   Deferred.wait(1).next ->
     Dial $('#stage'), (diff, distance) ->
       stage.bpm += diff * 8
+      part = stage.getPartAtDistance(distance)
+      stage.hoveringPartId = if part then part.radius else null
 
   $('#stage').click (event) ->
     container = $('#stage')
@@ -243,3 +246,4 @@ $ ->
     y = event.pageY - center.top
     distance = Math.sqrt(x * x + y * y)
     stage.actionAtDistance(distance)
+
