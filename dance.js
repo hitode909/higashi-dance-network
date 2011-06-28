@@ -226,22 +226,22 @@ $(function() {
   var stage;
   stage = new Stage($('#stage'));
   $('button#add-a').click(function() {
-    var note1, part1;
-    note1 = {
+    var note, part;
+    note = {
       type: 'pulse',
       hz: Math.random() * 4000,
       time: 400 * Math.random(),
       rate: Math.random()
     };
-    part1 = stage.addPart(function(volume) {
-      note1.volume = volume;
-      return Beep.play(note1);
+    part = stage.addPart(function(volume) {
+      note.volume = volume;
+      return Beep.play(note);
     });
-    return part1.addNote(stage.position * (stage.bpm > 0 ? 1 : -1));
+    return part.addNote(stage.position * (stage.bpm > 0 ? 1 : -1));
   });
   $('button#add-b').click(function() {
-    var note2, part2;
-    note2 = [
+    var note, part;
+    note = [
       {
         type: 'pulse',
         hz: Math.random() * 4000,
@@ -259,35 +259,35 @@ $(function() {
         rate: Math.random()
       }
     ];
-    part2 = stage.addPart(function(volume) {
-      note2.volume = volume;
-      return Beep.play(note2);
+    part = stage.addPart(function(volume) {
+      note.volume = volume;
+      return Beep.play(note);
     });
-    return part2.addNote(stage.position);
+    return part.addNote(stage.position);
   });
   $('button#add-c').click(function() {
-    var note3, part3;
-    note3 = {
+    var note, part;
+    note = {
       type: 'whiteNoise',
       time: 400 * Math.random() * Math.random()
     };
-    part3 = stage.addPart(function(volume) {
-      note3.volume = volume;
-      return Beep.play(note3);
+    part = stage.addPart(function(volume) {
+      note.volume = volume;
+      return Beep.play(note);
     });
-    return part3.addNote(stage.position);
+    return part.addNote(stage.position);
   });
   $('button#add-d').click(function() {
-    var note4, part4;
-    note4 = {
+    var note, part;
+    note = {
       type: 'brownNoise',
       time: 400 * Math.random() * Math.random()
     };
-    part4 = stage.addPart(function(volume) {
-      note4.volume = volume;
-      return Beep.play(note4);
+    part = stage.addPart(function(volume) {
+      note.volume = volume;
+      return Beep.play(note);
     });
-    return part4.addNote(stage.position);
+    return part.addNote(stage.position);
   });
   $('button#add-a').click();
   Deferred.wait(1).next(function() {

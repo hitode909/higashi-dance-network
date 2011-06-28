@@ -167,49 +167,49 @@ $ ->
   stage = new Stage($('#stage'))
 
   $('button#add-a').click ->
-    note1 =
+    note =
       type: 'pulse'
       hz: Math.random() * 4000
       time: 400 * Math.random()
       rate: Math.random()
 
-    part1 = stage.addPart (volume) ->
-      note1.volume = volume
-      Beep.play note1
+    part = stage.addPart (volume) ->
+      note.volume = volume
+      Beep.play note
 
-    part1.addNote(stage.position * (if stage.bpm > 0 then 1 else -1))
+    part.addNote(stage.position * (if stage.bpm > 0 then 1 else -1))
 
 
   $('button#add-b').click ->
-    note2 = [
+    note = [
       {type: 'pulse', hz: Math.random() * 4000, time: 100 * Math.random(), rate: Math.random()},
       {type: 'pulse', hz: Math.random() * 4000, time: 100 * Math.random(), rate: Math.random()},
       {type: 'pulse', hz: Math.random() * 4000, time: 100 * Math.random(), rate: Math.random()},
       ]
 
-    part2 = stage.addPart (volume) ->
-      note2.volume = volume
-      Beep.play note2
+    part = stage.addPart (volume) ->
+      note.volume = volume
+      Beep.play note
 
-    part2.addNote(stage.position)
+    part.addNote(stage.position)
 
   $('button#add-c').click ->
-    note3 = {type: 'whiteNoise', time: 400 * Math.random() * Math.random()}
+    note = {type: 'whiteNoise', time: 400 * Math.random() * Math.random()}
 
-    part3 = stage.addPart (volume)->
-      note3.volume = volume
-      Beep.play note3
+    part = stage.addPart (volume)->
+      note.volume = volume
+      Beep.play note
 
-    part3.addNote(stage.position)
+    part.addNote(stage.position)
 
   $('button#add-d').click ->
-    note4 = {type: 'brownNoise', time: 400 * Math.random() * Math.random()}
+    note = {type: 'brownNoise', time: 400 * Math.random() * Math.random()}
 
-    part4 = stage.addPart (volume) ->
-      note4.volume = volume
-      Beep.play note4
+    part = stage.addPart (volume) ->
+      note.volume = volume
+      Beep.play note
 
-    part4.addNote(stage.position)
+    part.addNote(stage.position)
 
   $('button#add-a').click()
 
