@@ -15,9 +15,10 @@ Dial = function(container, callback) {
     top: $(container).position().top + $(container).height() / 2
   };
   return $(container).mousemove($.throttle(100, function(event) {
-    var diff, rad, x, y;
-    x = event.offsetX - center.left;
-    y = event.offsetY - center.top;
+    var diff, distance, rad, x, y;
+    x = event.pageX - center.left;
+    y = event.pageY - center.top;
+    distance = Math.sqrt(x * x + y * y);
     rad = Math.atan(y / x);
     if (x < 0) {
       rad += Math.PI;
@@ -34,7 +35,7 @@ Dial = function(container, callback) {
     if (diff > Math.PI) {
       diff -= Math.PI * 2;
     }
-    callback(diff);
+    callback(diff, distance);
     return last = rad;
   }));
 };
@@ -48,7 +49,7 @@ Stage = (function() {
     this.loopCount = 0;
     this.last = Date.now();
     this.bpm = 120.0;
-    this.partRadius = 60;
+    this.partRadius = 50;
     animationLoop = __bind(function() {
       this.observe();
       return window.requestAnimationFrame(animationLoop);
@@ -144,6 +145,38 @@ Stage = (function() {
     });
     return part.kill();
   };
+  Stage.prototype.getPartAtDistance = function(distance) {
+    var got, part, _fn, _i, _len, _ref;
+    got = null;
+    _ref = this.parts;
+    _fn = function(part) {
+      if (part.radius + Part.prototype.ImageRadius > distance) {
+        return got = part;
+      }
+    };
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      part = _ref[_i];
+      _fn(part);
+    }
+    return got;
+  };
+  Stage.prototype.actionAtDistance = function(distance) {
+    var note, part;
+    part = this.getPartAtDistance(distance);
+    if (!part) {
+      note = {
+        type: 'pulse',
+        hz: Math.random() * 4000,
+        time: 400 * Math.random(),
+        rate: Math.random()
+      };
+      part = this.addPart(function(volume) {
+        note.volume = volume;
+        return Beep.play(note);
+      });
+    }
+    return part.addNote(this.position * (this.bpm > 0 ? 1 : -1));
+  };
   return Stage;
 })();
 Part = (function() {
@@ -152,6 +185,7 @@ Part = (function() {
     this.lastPosition = 0.0;
     this.birth = Date.now();
   }
+  Part.prototype.ImageRadius = 50;
   Part.prototype.rate = function() {
     var age, rate;
     age = Date.now() - this.birth;
@@ -291,12 +325,24 @@ $(function() {
   });
   $('button#add-a').click();
   Deferred.wait(1).next(function() {
-    return Dial($('#stage'), function(diff) {
+    return Dial($('#stage'), function(diff, distance) {
       stage.bpm += diff * 4;
       return $('input#speed').val(stage.bpm);
     });
   });
-  return $('input#speed').change(function() {
+  $('input#speed').change(function() {
     return stage.bpm = +$(this).val();
+  });
+  return $('#stage').click(function(event) {
+    var center, container, distance, x, y;
+    container = $('#stage');
+    center = {
+      left: container.position().left + container.width() / 2,
+      top: container.position().top + container.height() / 2
+    };
+    x = event.pageX - center.left;
+    y = event.pageY - center.top;
+    distance = Math.sqrt(x * x + y * y);
+    return stage.actionAtDistance(distance);
   });
 });

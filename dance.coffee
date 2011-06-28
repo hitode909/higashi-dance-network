@@ -16,15 +16,16 @@ Dial = (container, callback) ->
     left: $(container).position().left + $(container).width() / 2
     top:  $(container).position().top  + $(container).height() / 2
   $(container).mousemove $.throttle 100, (event) ->
-    x = event.offsetX - center.left
-    y = event.offsetY - center.top
+    x = event.pageX - center.left
+    y = event.pageY - center.top
+    distance = Math.sqrt(x * x + y * y)
     rad = Math.atan(y / x)
     rad += Math.PI if x < 0
     last ?= rad
     diff = rad - last
     diff += Math.PI * 2 if diff < -Math.PI
     diff -= Math.PI * 2 if diff > Math.PI
-    callback(diff)
+    callback(diff, distance)
     last = rad
 
 class Stage
@@ -35,7 +36,7 @@ class Stage
     @loopCount = 0
     @last = Date.now()
     @bpm = 120.0
-    @partRadius = 60
+    @partRadius = 50
 
     animationLoop = =>
         this.observe()
@@ -109,11 +110,36 @@ class Stage
 
     part.kill()
 
+  getPartAtDistance: (distance) ->
+    got = null
+    for part in @parts
+      do (part) ->
+        if part.radius + Part.prototype.ImageRadius > distance
+          got = part
+    got
+
+  actionAtDistance: (distance) ->
+    part = this.getPartAtDistance(distance)
+    unless part
+      note =
+        type: 'pulse'
+        hz: Math.random() * 4000
+        time: 400 * Math.random()
+        rate: Math.random()
+
+      part = this.addPart (volume) ->
+        note.volume = volume
+        Beep.play note
+
+    part.addNote(this.position * (if this.bpm > 0 then 1 else -1))
+
 class Part
   constructor: ->
     @notes = []
     @lastPosition = 0.0
     @birth = Date.now()
+
+  ImageRadius: 50,
 
   rate: ->
     age = (Date.now() - @birth)
@@ -214,10 +240,20 @@ $ ->
   $('button#add-a').click()
 
   Deferred.wait(1).next ->
-    Dial $('#stage'), (diff) ->
+    Dial $('#stage'), (diff, distance) ->
       stage.bpm += diff * 4
       $('input#speed').val(stage.bpm)
 
   $('input#speed').change ->
     stage.bpm = +$(this).val()
 
+
+  $('#stage').click (event) ->
+    container = $('#stage')
+    center =
+      left: container.position().left + container.width() / 2
+      top:  container.position().top  + container.height() / 2
+    x = event.pageX - center.left
+    y = event.pageY - center.top
+    distance = Math.sqrt(x * x + y * y)
+    stage.actionAtDistance(distance)
