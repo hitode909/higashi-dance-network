@@ -56,10 +56,10 @@ class Stage
     now = Date.now()
     @position += @bpm / 60.0 * (now - @last) / 1000 * Math.PI * 0.5
 
-    if @position > Math.PI * 4.0
+    while @position > Math.PI * 4.0
       @position -= Math.PI * 2.0
 
-    if @position < Math.PI * 2.0
+    while @position < Math.PI * 2.0
       @position += Math.PI * 2.0
 
     kills = []
@@ -154,7 +154,9 @@ class Stage
         note.volume = volume
         Beep.play note
 
-    part.addNote(this.position * (if this.bpm > 0 then 1 else -1))
+    pos = this.position
+#    pos *= -1 if this.bpm < 0.0
+    part.addNote(pos)
 
 class Part
   constructor: ->
@@ -190,12 +192,15 @@ class Part
     @lastPosition = position
 
   play: (note)->
+    return if note.playing
     note.started()
     @callback(this.getRate()).next ->
       note.ended()
 
   addNote: (position) ->
-    @notes.push(new Note(this, position))
+    note = new Note(this, position)
+    @notes.push(note)
+    this.play(note)
 
   kill: ->
     @elem.remove()
@@ -205,6 +210,11 @@ class Part
 class Note
   constructor: (@part, @position) ->
     @playing = false
+    while @position > Math.PI * 4.0
+      @position -= Math.PI * 2.0
+
+    while @position < Math.PI * 2.0
+      @position += Math.PI * 2.0
 
   observe: (position, lastPosition) ->
     a = @position - position

@@ -71,10 +71,10 @@ Stage = (function() {
     var kills, now, part, _i, _j, _len, _len2, _ref;
     now = Date.now();
     this.position += this.bpm / 60.0 * (now - this.last) / 1000 * Math.PI * 0.5;
-    if (this.position > Math.PI * 4.0) {
+    while (this.position > Math.PI * 4.0) {
       this.position -= Math.PI * 2.0;
     }
-    if (this.position < Math.PI * 2.0) {
+    while (this.position < Math.PI * 2.0) {
       this.position += Math.PI * 2.0;
     }
     kills = [];
@@ -168,7 +168,7 @@ Stage = (function() {
     return got;
   };
   Stage.prototype.actionAtDistance = function(distance) {
-    var note, part;
+    var note, part, pos;
     part = this.getPartAtDistance(distance);
     if (!part) {
       note = {
@@ -214,7 +214,8 @@ Stage = (function() {
         return Beep.play(note);
       });
     }
-    return part.addNote(this.position * (this.bpm > 0 ? 1 : -1));
+    pos = this.position;
+    return part.addNote(pos);
   };
   return Stage;
 })();
@@ -258,13 +259,19 @@ Part = (function() {
     return this.lastPosition = position;
   };
   Part.prototype.play = function(note) {
+    if (note.playing) {
+      return;
+    }
     note.started();
     return this.callback(this.getRate()).next(function() {
       return note.ended();
     });
   };
   Part.prototype.addNote = function(position) {
-    return this.notes.push(new Note(this, position));
+    var note;
+    note = new Note(this, position);
+    this.notes.push(note);
+    return this.play(note);
   };
   Part.prototype.kill = function() {
     var note, _i, _len, _ref, _results;
@@ -284,6 +291,12 @@ Note = (function() {
     this.part = part;
     this.position = position;
     this.playing = false;
+    while (this.position > Math.PI * 4.0) {
+      this.position -= Math.PI * 2.0;
+    }
+    while (this.position < Math.PI * 2.0) {
+      this.position += Math.PI * 2.0;
+    }
   }
   Note.prototype.observe = function(position, lastPosition) {
     var a, b;
