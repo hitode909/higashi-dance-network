@@ -58,9 +58,9 @@ Stage = (function() {
     var part, radius;
     radius = 0;
     if (this.parts.length > 0) {
-      radius += this.parts[this.parts.length - 1].getRadius();
+      radius += this.parts[this.parts.length - 1].getRadius() + this.parts[this.parts.length - 1].getImageRadius();
     }
-    radius += Part.prototype.ImageRadius * 2;
+    radius += Part.prototype.ImageRadius;
     part = new Part;
     part.callback = callback;
     part.radius = radius;

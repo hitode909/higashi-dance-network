@@ -44,8 +44,8 @@ class Stage
   addPart: (callback) ->
     radius = 0
     if @parts.length > 0
-      radius += @parts[@parts.length-1].getRadius()
-    radius += Part.prototype.ImageRadius * 2
+      radius += @parts[@parts.length-1].getRadius() + @parts[@parts.length-1].getImageRadius()
+    radius += Part.prototype.ImageRadius
     part = new Part
     part.callback = callback
     part.radius = radius
