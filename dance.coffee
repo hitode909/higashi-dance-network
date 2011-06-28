@@ -35,7 +35,6 @@ class Stage
     @loopCount = 0
     @last = Date.now()
     @bpm = 120.0
-    @partRadius = 50
 
     animationLoop = =>
         this.observe()
@@ -46,7 +45,7 @@ class Stage
     radius = 0
     if @parts.length > 0
       radius += @parts[@parts.length-1].getRadius()
-    radius += @partRadius
+    radius += Part.prototype.ImageRadius * 2
     part = new Part
     part.callback = callback
     part.radius = radius
@@ -80,20 +79,35 @@ class Stage
     stageWidth = stage.width()
     stageHeight = stage.height()
     for part in @parts
+      unless part.elem
+        part.elem = $('<img>')
+        part.elem.attr
+          src: 'ossan1.png'
+        part.elem.addClass 'part'
+        stage.append(part.elem)
+
+      part.elem.css
+          width: part.getImageRadius() * 2 + part.getRadius() * 2
+          height: part.getImageRadius() * 2 + part.getRadius() * 2
+          left: stageWidth  / 2 - part.getRadius() - part.getImageRadius()
+          top:  stageHeight / 2 - part.getRadius() - part.getImageRadius()
+          'z-index': parseInt(stageWidth  / 2 - part.getRadius())
+          opacity: part.getRate()
+
       rate = part.getRate()
       for note in part.notes
         unless note.elem
           note.elem = $('<img>')
-          note.elem.css
-            position: 'absolute'
+          note.elem.addClass 'note'
           stage.append(note.elem)
 
         img_size = if note.playing then 100 else 60
 
         note.elem.css
-          left: (Math.sin(@position - note.position) * part.radius - img_size * 0.5) * rate + stageWidth  / 2
-          top: (-Math.cos(@position - note.position) * part.radius - img_size * 0.5) * rate + stageHeight / 2
-          width: img_size * rate
+          left: (Math.sin(@position - note.position) * part.getRadius()) - part.getImageRadius() + stageWidth  / 2
+          top: (-Math.cos(@position - note.position) * part.getRadius()) - part.getImageRadius() + stageHeight / 2
+          width: part.getImageRadius() * 2
+          height: part.getImageRadius() * 2
           opacity: rate
 
         note.elem.attr
@@ -107,6 +121,7 @@ class Stage
 
   getPartAtDistance: (distance) ->
     got = null
+    got = @parts[0] if @parts.length > 0 && distance < @parts[0].getRadius()
     for part in @parts
       do (part) ->
         if part.getRadius() + part.getImageRadius() > distance && part.getRadius() - part.getImageRadius() < distance
@@ -183,6 +198,7 @@ class Part
     @notes.push(new Note(this, position))
 
   kill: ->
+    @elem.remove()
     for note in @notes
       note.elem.remove()
 

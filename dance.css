@@ -8,12 +8,21 @@ input#speed {
 }
 
 #stage {
-    width: 780px;
-    height: 780px;
+    width: 700px;
+    height: 700px;
     position: relative;
-    background: url('mandara.jpg')
+    /* background: url('mandara.jpg') */
 }
 
 button {
     font-size: 40px;
+}
+
+img.note {
+    z-index: 1000;
+    position: absolute;
+}
+
+img.part {
+    position: absolute;
 }

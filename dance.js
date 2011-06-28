@@ -48,7 +48,6 @@ Stage = (function() {
     this.loopCount = 0;
     this.last = Date.now();
     this.bpm = 120.0;
-    this.partRadius = 50;
     animationLoop = __bind(function() {
       this.observe();
       return window.requestAnimationFrame(animationLoop);
@@ -61,7 +60,7 @@ Stage = (function() {
     if (this.parts.length > 0) {
       radius += this.parts[this.parts.length - 1].getRadius();
     }
-    radius += this.partRadius;
+    radius += Part.prototype.ImageRadius * 2;
     part = new Part;
     part.callback = callback;
     part.radius = radius;
@@ -103,6 +102,22 @@ Stage = (function() {
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       part = _ref[_i];
+      if (!part.elem) {
+        part.elem = $('<img>');
+        part.elem.attr({
+          src: 'ossan1.png'
+        });
+        part.elem.addClass('part');
+        stage.append(part.elem);
+      }
+      part.elem.css({
+        width: part.getImageRadius() * 2 + part.getRadius() * 2,
+        height: part.getImageRadius() * 2 + part.getRadius() * 2,
+        left: stageWidth / 2 - part.getRadius() - part.getImageRadius(),
+        top: stageHeight / 2 - part.getRadius() - part.getImageRadius(),
+        'z-index': parseInt(stageWidth / 2 - part.getRadius()),
+        opacity: part.getRate()
+      });
       rate = part.getRate();
       _results.push((function() {
         var _j, _len2, _ref2, _results2;
@@ -112,16 +127,15 @@ Stage = (function() {
           note = _ref2[_j];
           if (!note.elem) {
             note.elem = $('<img>');
-            note.elem.css({
-              position: 'absolute'
-            });
+            note.elem.addClass('note');
             stage.append(note.elem);
           }
           img_size = note.playing ? 100 : 60;
           note.elem.css({
-            left: (Math.sin(this.position - note.position) * part.radius - img_size * 0.5) * rate + stageWidth / 2,
-            top: (-Math.cos(this.position - note.position) * part.radius - img_size * 0.5) * rate + stageHeight / 2,
-            width: img_size * rate,
+            left: (Math.sin(this.position - note.position) * part.getRadius()) - part.getImageRadius() + stageWidth / 2,
+            top: (-Math.cos(this.position - note.position) * part.getRadius()) - part.getImageRadius() + stageHeight / 2,
+            width: part.getImageRadius() * 2,
+            height: part.getImageRadius() * 2,
             opacity: rate
           });
           _results2.push(note.elem.attr({
@@ -142,6 +156,9 @@ Stage = (function() {
   Stage.prototype.getPartAtDistance = function(distance) {
     var got, part, _fn, _i, _len, _ref;
     got = null;
+    if (this.parts.length > 0 && distance < this.parts[0].getRadius()) {
+      got = this.parts[0];
+    }
     _ref = this.parts;
     _fn = function(part) {
       if (part.getRadius() + part.getImageRadius() > distance && part.getRadius() - part.getImageRadius() < distance) {
@@ -255,6 +272,7 @@ Part = (function() {
   };
   Part.prototype.kill = function() {
     var note, _i, _len, _ref, _results;
+    this.elem.remove();
     _ref = this.notes;
     _results = [];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
