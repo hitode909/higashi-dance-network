@@ -155,7 +155,6 @@ class Stage
         Beep.play note
 
     pos = this.position
-#    pos *= -1 if this.bpm < 0.0
     part.addNote(pos)
 
 class Part
