@@ -292,12 +292,8 @@ $(function() {
   stage = new Stage($('#stage'));
   Deferred.wait(1).next(function() {
     return Dial($('#stage'), function(diff, distance) {
-      stage.bpm += diff * 4;
-      return $('input#speed').val(stage.bpm);
+      return stage.bpm += diff * 8;
     });
-  });
-  $('input#speed').change(function() {
-    return stage.bpm = +$(this).val();
   });
   return $('#stage').click(function(event) {
     var center, container, distance, x, y;

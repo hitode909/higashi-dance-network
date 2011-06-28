@@ -207,12 +207,7 @@ $ ->
 
   Deferred.wait(1).next ->
     Dial $('#stage'), (diff, distance) ->
-      stage.bpm += diff * 4
-      $('input#speed').val(stage.bpm)
-
-  $('input#speed').change ->
-    stage.bpm = +$(this).val()
-
+      stage.bpm += diff * 8
 
   $('#stage').click (event) ->
     container = $('#stage')
