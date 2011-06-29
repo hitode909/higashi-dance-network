@@ -35,6 +35,7 @@ class Stage
     @loopCount = 0
     @last = Date.now()
     @bpm = 120.0
+    @fps = 0
 
     animationLoop = =>
       this.observe()
@@ -53,6 +54,7 @@ class Stage
     part
 
   observe: ->
+    @fps++
     now = Date.now()
     @position += @bpm / 60.0 * (now - @last) / 1000 * Math.PI * 0.5
 
@@ -230,6 +232,11 @@ class Note
 
 $ ->
   stage = new Stage($('#stage'))
+
+  setInterval ->
+    $('#fps').text(stage.fps)
+    stage.fps = 0
+  ,1000
 
   Deferred.wait(1).next ->
     Dial $('#stage'), (diff, distance) ->

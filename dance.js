@@ -48,6 +48,7 @@ Stage = (function() {
     this.loopCount = 0;
     this.last = Date.now();
     this.bpm = 120.0;
+    this.fps = 0;
     animationLoop = __bind(function() {
       this.observe();
       return window.requestAnimationFrame(animationLoop);
@@ -69,6 +70,7 @@ Stage = (function() {
   };
   Stage.prototype.observe = function() {
     var kills, now, part, _i, _j, _len, _len2, _ref;
+    this.fps++;
     now = Date.now();
     this.position += this.bpm / 60.0 * (now - this.last) / 1000 * Math.PI * 0.5;
     while (this.position > Math.PI * 4.0) {
@@ -320,6 +322,10 @@ Note = (function() {
 $(function() {
   var stage;
   stage = new Stage($('#stage'));
+  setInterval(function() {
+    $('#fps').text(stage.fps);
+    return stage.fps = 0;
+  }, 1000);
   Deferred.wait(1).next(function() {
     return Dial($('#stage'), function(diff, distance) {
       var part;
