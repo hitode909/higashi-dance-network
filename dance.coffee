@@ -240,7 +240,7 @@ $ ->
 
   Deferred.wait(1).next ->
     Dial $('#stage'), (diff, distance) ->
-      stage.bpm += diff * 8
+      stage.bpm += diff * 32
       part = stage.getPartAtDistance(distance)
       stage.hoveringPartId = if part then part.radius else null
 
@@ -253,7 +253,3 @@ $ ->
     y = event.pageY - center.top
     distance = Math.sqrt(x * x + y * y)
     stage.actionAtDistance(distance)
-
-
-  Deferred.wait(1).next ->
-    $('#stage').click()

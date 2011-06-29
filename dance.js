@@ -329,12 +329,12 @@ $(function() {
   Deferred.wait(1).next(function() {
     return Dial($('#stage'), function(diff, distance) {
       var part;
-      stage.bpm += diff * 8;
+      stage.bpm += diff * 32;
       part = stage.getPartAtDistance(distance);
       return stage.hoveringPartId = part ? part.radius : null;
     });
   });
-  $('#stage').click(function(event) {
+  return $('#stage').click(function(event) {
     var center, container, distance, x, y;
     container = $('#stage');
     center = {
@@ -345,8 +345,5 @@ $(function() {
     y = event.pageY - center.top;
     distance = Math.sqrt(x * x + y * y);
     return stage.actionAtDistance(distance);
-  });
-  return Deferred.wait(1).next(function() {
-    return $('#stage').click();
   });
 });

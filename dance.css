@@ -39,7 +39,7 @@ img#center {
     height: 100px;
     z-index: 12000;
 
-    -webkit-animation-duration: 20s;
+    -webkit-animation-duration: 2s;
     -webkit-animation-timing-function: linear;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-name: rotate;
