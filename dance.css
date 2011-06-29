@@ -22,3 +22,31 @@ img.note {
 img.part {
     position: absolute;
 }
+
+
+@-webkit-keyframes rotate {
+	0% { -webkit-transform: rotate(0); }
+	100% { -webkit-transform: rotate(360deg); }
+}
+
+img#center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -50px;
+    margin-top: -50px;
+    width: 100px;
+    height: 100px;
+    z-index: 12000;
+
+    -webkit-animation-duration: 20s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-name: rotate;
+
+}
+
+img#bg {
+    width: 100%;
+    height: 100%;
+}

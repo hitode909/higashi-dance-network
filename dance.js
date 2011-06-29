@@ -56,7 +56,7 @@ Stage = (function() {
   }
   Stage.prototype.addPart = function(callback) {
     var part, radius;
-    radius = 0;
+    radius = 50;
     if (this.parts.length > 0) {
       radius += this.parts[this.parts.length - 1].getRadius() + this.parts[this.parts.length - 1].getImageRadius();
     }

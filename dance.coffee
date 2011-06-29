@@ -42,7 +42,7 @@ class Stage
     animationLoop()
 
   addPart: (callback) ->
-    radius = 0
+    radius = 50
     if @parts.length > 0
       radius += @parts[@parts.length-1].getRadius() + @parts[@parts.length-1].getImageRadius()
     radius += Part.prototype.ImageRadius
