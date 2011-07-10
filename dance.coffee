@@ -43,9 +43,9 @@ class Stage
     animationLoop()
 
   addPart: (callback) ->
-    radius = 50
+    radius = 250
     if @parts.length > 0
-      radius += @parts[@parts.length-1].getRadius() + @parts[@parts.length-1].getImageRadius()
+      radius += @parts[@parts.length-1].getImageRadius() * 2
     radius += Part.prototype.ImageRadius
     part = new Part
     part.callback = callback
@@ -166,7 +166,7 @@ class Part
     @lastPosition = 0.0
     @birth = Date.now()
 
-  ImageRadius: 50,
+  ImageRadius: 30,
 
   getRate: ->
     age = (Date.now() - @birth)

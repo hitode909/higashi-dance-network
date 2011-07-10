@@ -33,17 +33,16 @@ img#center {
     position: absolute;
     left: 50%;
     top: 50%;
-    margin-left: -50px;
-    margin-top: -50px;
-    width: 100px;
-    height: 100px;
+    margin-left: -175px;
+    margin-top: -175px;
+    width: 350px;
+    height: 350px;
     z-index: 12000;
 
-    -webkit-animation-duration: 2s;
-    -webkit-animation-timing-function: linear;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-name: rotate;
-
+    /* -webkit-animation-duration: 2s; */
+    /* -webkit-animation-timing-function: linear; */
+    /* -webkit-animation-iteration-count: infinite; */
+    /* -webkit-animation-name: rotate; */
 }
 
 img#bg {
