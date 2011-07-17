@@ -57,11 +57,13 @@ Stage = (function() {
   }
   Stage.prototype.addPart = function(callback) {
     var part, radius;
-    radius = 250;
+    radius = 0;
     if (this.parts.length > 0) {
-      radius += this.parts[this.parts.length - 1].getImageRadius() * 2;
+      radius = this.parts[this.parts.length - 1].getRadius() + this.parts[this.parts.length - 1].getImageRadius() * 2;
     }
-    radius += Part.prototype.ImageRadius;
+    if (radius < 220) {
+      radius = 220;
+    }
     part = new Part;
     part.callback = callback;
     part.radius = radius;
@@ -230,7 +232,7 @@ Part = (function() {
     this.lastPosition = 0.0;
     this.birth = Date.now();
   }
-  Part.prototype.ImageRadius = 30;
+  Part.prototype.ImageRadius = 40;
   Part.prototype.getRate = function() {
     var age, rate;
     age = Date.now() - this.birth;
