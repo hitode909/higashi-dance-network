@@ -36,6 +36,7 @@ class Stage
     @last = Date.now()
     @bpm = 120.0
     @fps = 0
+    @minRadius = 175
 
     animationLoop = =>
       this.observe()
@@ -46,7 +47,7 @@ class Stage
     radius = 0
     if @parts.length > 0
       radius = @parts[@parts.length-1].getRadius() + @parts[@parts.length-1].getImageRadius()*2
-    radius = 220 if radius < 220
+    radius = @minRadius + Part.prototype.ImageRadius if radius < @minRadius
     part = new Part
     part.callback = callback
     part.radius = radius
@@ -68,7 +69,7 @@ class Stage
 
     for part in @parts
       part.observe(@position, @bpm)
-      kills.push(part) if part.getRate() < 0.1
+      kills.push(part) if part.getRadius() + part.getImageRadius() * 2 < @minRadius
     this.plot()
 
     for part in kills
@@ -84,7 +85,7 @@ class Stage
       unless part.elem
         part.elem = $('<img>')
         part.elem.attr
-          src: 'ossan1.png'
+          src: 'ossan_center.png'
         part.elem.addClass 'part'
         stage.append(part.elem)
 
@@ -95,8 +96,7 @@ class Stage
         top:  stageHeight / 2 - part.getRadius() - part.getImageRadius()
         'z-index': parseInt(stageWidth  / 2 - part.getRadius()) + 5000
       part.elem.attr
-        src: if part.radius == this.hoveringPartId then 'ossan2.png' else 'ossan1.png'
-
+        src: if part.radius == this.hoveringPartId then 'ossan1.png' else 'ossan_center.png'
 
       rate = part.getRate()
       for note in part.notes
@@ -166,11 +166,12 @@ class Part
     @lastPosition = 0.0
     @birth = Date.now()
 
-  ImageRadius: 40,
+  ImageRadius: 30,
 
   getRate: ->
+    limit = @radius * 500
     age = (Date.now() - @birth)
-    rate = (60000.0 - age) / 60000.0
+    rate = (limit - age) / limit
     rate = 0.0 if rate < 0.0
     rate
 

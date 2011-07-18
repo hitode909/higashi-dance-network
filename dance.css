@@ -21,6 +21,11 @@ img.note {
 
 img.part {
     position: absolute;
+
+    /* -webkit-animation-duration: 60s; */
+    /* -webkit-animation-timing-function: linear; */
+    /* -webkit-animation-iteration-count: infinite; */
+    /* -webkit-animation-name: rotate; */
 }
 
 
@@ -39,28 +44,26 @@ img#center {
     height: 350px;
     z-index: 12000;
 
-    -webkit-animation-duration: 60s;
-    -webkit-animation-timing-function: linear;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-name: rotate;
+    /* -webkit-animation-duration: 60s; */
+    /* -webkit-animation-timing-function: linear; */
+    /* -webkit-animation-iteration-count: infinite; */
+    /* -webkit-animation-name: rotate; */
 }
 
-img#bg-top {
+img#bg-right {
     position: absolute;
     top: 0%;
     left: 50%;
     width: 50%;
-    height: 50%;
-    -webkit-box-reflect: left;
+    height: 100%;
 }
 
-img#bg-bottom {
+img#bg-left {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 0%;
+    left: 0%;
     width: 50%;
-    height: 50%;
-    -webkit-box-reflect: left;
+    height: 100%;
 }
 
 #fps {

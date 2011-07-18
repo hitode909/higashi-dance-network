@@ -49,6 +49,7 @@ Stage = (function() {
     this.last = Date.now();
     this.bpm = 120.0;
     this.fps = 0;
+    this.minRadius = 175;
     animationLoop = __bind(function() {
       this.observe();
       return window.requestAnimationFrame(animationLoop);
@@ -61,8 +62,8 @@ Stage = (function() {
     if (this.parts.length > 0) {
       radius = this.parts[this.parts.length - 1].getRadius() + this.parts[this.parts.length - 1].getImageRadius() * 2;
     }
-    if (radius < 220) {
-      radius = 220;
+    if (radius < this.minRadius) {
+      radius = this.minRadius + Part.prototype.ImageRadius;
     }
     part = new Part;
     part.callback = callback;
@@ -86,7 +87,7 @@ Stage = (function() {
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       part = _ref[_i];
       part.observe(this.position, this.bpm);
-      if (part.getRate() < 0.1) {
+      if (part.getRadius() + part.getImageRadius() * 2 < this.minRadius) {
         kills.push(part);
       }
     }
@@ -109,7 +110,7 @@ Stage = (function() {
       if (!part.elem) {
         part.elem = $('<img>');
         part.elem.attr({
-          src: 'ossan1.png'
+          src: 'ossan_center.png'
         });
         part.elem.addClass('part');
         stage.append(part.elem);
@@ -122,7 +123,7 @@ Stage = (function() {
         'z-index': parseInt(stageWidth / 2 - part.getRadius()) + 5000
       });
       part.elem.attr({
-        src: part.radius === this.hoveringPartId ? 'ossan2.png' : 'ossan1.png'
+        src: part.radius === this.hoveringPartId ? 'ossan1.png' : 'ossan_center.png'
       });
       rate = part.getRate();
       _results.push((function() {
@@ -232,11 +233,12 @@ Part = (function() {
     this.lastPosition = 0.0;
     this.birth = Date.now();
   }
-  Part.prototype.ImageRadius = 40;
+  Part.prototype.ImageRadius = 30;
   Part.prototype.getRate = function() {
-    var age, rate;
+    var age, limit, rate;
+    limit = this.radius * 500;
     age = Date.now() - this.birth;
-    rate = (60000.0 - age) / 60000.0;
+    rate = (limit - age) / limit;
     if (rate < 0.0) {
       rate = 0.0;
     }
