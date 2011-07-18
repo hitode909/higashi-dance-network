@@ -272,7 +272,7 @@ Part = (function() {
       return;
     }
     note.started();
-    return this.callback(this.getRate()).next(function() {
+    return this.callback(Math.pow(this.getRate(), 3)).next(function() {
       return note.ended();
     });
   };

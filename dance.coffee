@@ -197,7 +197,7 @@ class Part
   play: (note)->
     return if note.playing
     note.started()
-    @callback(this.getRate()).next ->
+    @callback(Math.pow(this.getRate(), 3)).next ->
       note.ended()
 
   addNote: (position) ->
