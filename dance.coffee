@@ -258,7 +258,7 @@ $ ->
   playYona = ->
     yonaList = [0, 2, 5, 7, 9, 12];
     get = ->
-        {type: 'sin', hz: 440 * Math.pow(Math.pow(2, 1/12),yonaList[Math.floor(Math.random()*yonaList.length)]), time: Math.abs(60000 / stage.bpm) }
+        {type: 'sin', hz: 880 * Math.pow(Math.pow(2, 1/12),yonaList[Math.floor(Math.random()*yonaList.length)]), time: Math.abs(60000 / stage.bpm) * (if Math.random() > 0.7 then 1 else (if Math.random() > 0.5 then 0.5 else 2.0))}
     Beep.play([get(), get(), get(), get()]).next ->
       playYona();
 

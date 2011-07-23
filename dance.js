@@ -356,8 +356,8 @@ $(function() {
     get = function() {
       return {
         type: 'sin',
-        hz: 440 * Math.pow(Math.pow(2, 1 / 12), yonaList[Math.floor(Math.random() * yonaList.length)]),
-        time: Math.abs(60000 / stage.bpm)
+        hz: 880 * Math.pow(Math.pow(2, 1 / 12), yonaList[Math.floor(Math.random() * yonaList.length)]),
+        time: Math.abs(60000 / stage.bpm) * (Math.random() > 0.7 ? 1 : (Math.random() > 0.5 ? 0.5 : 2.0))
       };
     };
     return Beep.play([get(), get(), get(), get()]).next(function() {
