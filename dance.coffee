@@ -254,3 +254,12 @@ $ ->
     y = event.pageY - center.top
     distance = Math.sqrt(x * x + y * y)
     stage.actionAtDistance(distance)
+
+  playYona = ->
+    yonaList = [0, 2, 5, 7, 9, 12];
+    get = ->
+        {type: 'sin', hz: 440 * Math.pow(Math.pow(2, 1/12),yonaList[Math.floor(Math.random()*yonaList.length)]), time: Math.abs(60000 / stage.bpm) }
+    Beep.play([get(), get(), get(), get()]).next ->
+      playYona();
+
+  playYona();

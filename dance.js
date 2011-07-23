@@ -324,7 +324,7 @@ Note = (function() {
   return Note;
 })();
 $(function() {
-  var stage;
+  var playYona, stage;
   stage = new Stage($('#stage'));
   setInterval(function() {
     $('#fps').text(stage.fps);
@@ -338,7 +338,7 @@ $(function() {
       return stage.hoveringPartId = part ? part.radius : null;
     });
   });
-  return $('#stage').click(function(event) {
+  $('#stage').click(function(event) {
     var center, container, distance, x, y;
     container = $('#stage');
     center = {
@@ -350,4 +350,19 @@ $(function() {
     distance = Math.sqrt(x * x + y * y);
     return stage.actionAtDistance(distance);
   });
+  playYona = function() {
+    var get, yonaList;
+    yonaList = [0, 2, 5, 7, 9, 12];
+    get = function() {
+      return {
+        type: 'sin',
+        hz: 440 * Math.pow(Math.pow(2, 1 / 12), yonaList[Math.floor(Math.random() * yonaList.length)]),
+        time: Math.abs(60000 / stage.bpm)
+      };
+    };
+    return Beep.play([get(), get(), get(), get()]).next(function() {
+      return playYona();
+    });
+  };
+  return playYona();
 });
