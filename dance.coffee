@@ -255,11 +255,16 @@ $ ->
     distance = Math.sqrt(x * x + y * y)
     stage.actionAtDistance(distance)
 
-  playYona = ->
-    yonaList = [0, 2, 5, 7, 9, 12];
-    get = ->
-        {type: 'sin', hz: 880 * Math.pow(Math.pow(2, 1/12),yonaList[Math.floor(Math.random()*yonaList.length)]), time: Math.abs(60000 / stage.bpm) * (if Math.random() > 0.7 then 1 else (if Math.random() > 0.5 then 0.5 else 2.0))}
-    Beep.play([get(), get(), get(), get()]).next ->
-      playYona();
+  yonaList = [0, 2, 5, 7, 9, 12]
+  getNote = (base) ->
+    type: 'sin'
+    hz: base * Math.pow(Math.pow(2, 1/12), yonaList[Math.floor(Math.random()*yonaList.length)])
+    release: 0.9999
 
-  playYona();
+  playYona = (base) ->
+    Beep.play(getNote(base))
+    Deferred.wait(Math.abs(120 / stage.bpm) * (if Math.random() > 0.6 then 1 else (if Math.random() > 0.5 then 0.5 else 2.0))).next ->
+      playYona(base);
+
+  playYona(330);
+  playYona(110);

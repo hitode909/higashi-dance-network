@@ -22,7 +22,9 @@ Beep =
 
   getSinSamples: (args) ->
     hz = args.hz || 440
+    release = args.release
     time = args.time || 500
+    time = 4000 if release
     volume = args.volume || 0.7
     samplingRate = 44100
     samples = []
@@ -32,13 +34,17 @@ Beep =
     phase = 0.0
     for i in [0..requiredLength]
       samples.push Math.sin(phase) * 10000 * volume
+      volume *= release if release
       phase += freq
+      break if volume < 0.005
 
     samples
 
   getPulseSamples: (args) ->
     hz = args.hz || 440
+    release = args.release
     time = args.time || 500
+    time = 4000 if release
     volume = args.volume || 0.7
     rate = args.rate || 0.5
     samplingRate = 44100
@@ -53,7 +59,8 @@ Beep =
       else
         value *= -1.0 if i % changeAt == 0
       samples.push value * 10000 * volume
-
+      volume *= release if release
+      break if volume < 0.005
     samples
 
   getMuteSamples: (args) ->

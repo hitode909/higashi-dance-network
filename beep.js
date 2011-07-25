@@ -27,9 +27,13 @@ Beep = {
     return this._playURL(url);
   },
   getSinSamples: function(args) {
-    var freq, hz, i, phase, requiredLength, samples, samplingRate, time, volume;
+    var freq, hz, i, phase, release, requiredLength, samples, samplingRate, time, volume;
     hz = args.hz || 440;
+    release = args.release;
     time = args.time || 500;
+    if (release) {
+      time = 4000;
+    }
     volume = args.volume || 0.7;
     samplingRate = 44100;
     samples = [];
@@ -38,14 +42,24 @@ Beep = {
     phase = 0.0;
     for (i = 0; 0 <= requiredLength ? i <= requiredLength : i >= requiredLength; 0 <= requiredLength ? i++ : i--) {
       samples.push(Math.sin(phase) * 10000 * volume);
+      if (release) {
+        volume *= release;
+      }
       phase += freq;
+      if (volume < 0.005) {
+        break;
+      }
     }
     return samples;
   },
   getPulseSamples: function(args) {
-    var changeAt, hz, i, rate, requiredLength, samples, samplingRate, time, value, volume;
+    var changeAt, hz, i, rate, release, requiredLength, samples, samplingRate, time, value, volume;
     hz = args.hz || 440;
+    release = args.release;
     time = args.time || 500;
+    if (release) {
+      time = 4000;
+    }
     volume = args.volume || 0.7;
     rate = args.rate || 0.5;
     samplingRate = 44100;
@@ -64,6 +78,12 @@ Beep = {
         }
       }
       samples.push(value * 10000 * volume);
+      if (release) {
+        volume *= release;
+      }
+      if (volume < 0.005) {
+        break;
+      }
     }
     return samples;
   },

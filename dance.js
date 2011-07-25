@@ -324,7 +324,7 @@ Note = (function() {
   return Note;
 })();
 $(function() {
-  var playYona, stage;
+  var getNote, playYona, stage, yonaList;
   stage = new Stage($('#stage'));
   setInterval(function() {
     $('#fps').text(stage.fps);
@@ -350,19 +350,20 @@ $(function() {
     distance = Math.sqrt(x * x + y * y);
     return stage.actionAtDistance(distance);
   });
-  playYona = function() {
-    var get, yonaList;
-    yonaList = [0, 2, 5, 7, 9, 12];
-    get = function() {
-      return {
-        type: 'sin',
-        hz: 880 * Math.pow(Math.pow(2, 1 / 12), yonaList[Math.floor(Math.random() * yonaList.length)]),
-        time: Math.abs(60000 / stage.bpm) * (Math.random() > 0.7 ? 1 : (Math.random() > 0.5 ? 0.5 : 2.0))
-      };
+  yonaList = [0, 2, 5, 7, 9, 12];
+  getNote = function(base) {
+    return {
+      type: 'sin',
+      hz: base * Math.pow(Math.pow(2, 1 / 12), yonaList[Math.floor(Math.random() * yonaList.length)]),
+      release: 0.9999
     };
-    return Beep.play([get(), get(), get(), get()]).next(function() {
-      return playYona();
+  };
+  playYona = function(base) {
+    Beep.play(getNote(base));
+    return Deferred.wait(Math.abs(120 / stage.bpm) * (Math.random() > 0.6 ? 1 : (Math.random() > 0.5 ? 0.5 : 2.0))).next(function() {
+      return playYona(base);
     });
   };
-  return playYona();
+  playYona(330);
+  return playYona(110);
 });
