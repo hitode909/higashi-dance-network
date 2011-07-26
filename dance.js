@@ -1,4 +1,4 @@
-var Dial, Note, Part, Stage;
+var Dial, Dog, Note, Part, Stage;
 var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 window.requestAnimationFrame = (function() {
   return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback, element) {
@@ -323,8 +323,30 @@ Note = (function() {
   };
   return Note;
 })();
+Dog = (function() {
+  function Dog(element) {
+    this.element = element;
+    this.f = 0.0;
+  }
+  Dog.prototype.observe = function() {
+    var opacity;
+    opacity = Math.sin(this.f += Math.random() / 20) * 0.5 + 0.5;
+    this.element.css({
+      opacity: opacity
+    });
+    if (opacity < 0.01) {
+      return this.element.css({
+        width: "" + (Math.random() * 100) + "%",
+        height: "" + (Math.random() * 100) + "%",
+        left: "" + (Math.random() * 100) + "%",
+        top: "" + (Math.random() * 100) + "%"
+      });
+    }
+  };
+  return Dog;
+})();
 $(function() {
-  var getNote, playYona, stage, yonaList;
+  var animationLoop, attack_img, dog1, dog2, dog_img, getNote, playYona, put_youtube, stage, yonaList;
   stage = new Stage($('#stage'));
   setInterval(function() {
     $('#fps').text(stage.fps);
@@ -365,5 +387,46 @@ $(function() {
     });
   };
   playYona(330);
-  return playYona(110);
+  playYona(110);
+  dog_img = $('<img>').attr({
+    src: 'dog.jpg'
+  }).css({
+    position: 'absolute',
+    'z-index': 13000
+  });
+  $('body').append(dog_img);
+  attack_img = $('<img>').attr({
+    src: 'attack.jpg'
+  }).css({
+    position: 'absolute',
+    'z-index': 13001
+  });
+  $('body').append(attack_img);
+  dog1 = new Dog(dog_img);
+  dog2 = new Dog(attack_img);
+  animationLoop = function() {
+    dog1.observe();
+    dog2.observe();
+    return window.requestAnimationFrame(animationLoop);
+  };
+  animationLoop();
+  put_youtube = function() {
+    var youtube;
+    youtube = $("<iframe width='400' height='300' src='http://www.youtube.com/embed/lniVx_pFM_A?fs=1&autoplay=1&loop=1' frameborder='0' allowFullScreen=''></iframe>");
+    youtube.css({
+      position: 'absolute',
+      'z-index': 14000,
+      width: 400,
+      height: 300,
+      left: '40%',
+      top: '40%'
+    });
+    $('body').append(youtube);
+    return Deferred.wait(10).next(function() {
+      return youtube.remove();
+    });
+  };
+  return setInterval(function() {
+    return put_youtube();
+  }, 30 * 1000);
 });
