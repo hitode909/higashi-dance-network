@@ -39,7 +39,7 @@ class Stage
     @last = Date.now()
     @bpm = 120.0
     @fps = 0
-    @minRadius = 175
+    @minRadius = 200
 
     animationLoop = =>
       this.observe()
@@ -313,7 +313,6 @@ $ ->
     centerImages = ['ossan_center.png', 'ossan_center_2.png', 'ossan_center.png', 'ossan_center_3.png']
 
     change = ->
-      console.log index
       centerElement.attr('src': centerImages[index])
       index = (index + 1) % centerImages.length
       Deferred.wait(Math.abs(120 / stage.bpm) * 0.25).next ->

@@ -52,7 +52,7 @@ Stage = (function() {
     this.last = Date.now();
     this.bpm = 120.0;
     this.fps = 0;
-    this.minRadius = 175;
+    this.minRadius = 200;
     animationLoop = __bind(function() {
       this.observe();
       return window.requestAnimationFrame(animationLoop);
@@ -414,7 +414,6 @@ $(function() {
     index = 0;
     centerImages = ['ossan_center.png', 'ossan_center_2.png', 'ossan_center.png', 'ossan_center_3.png'];
     change = function() {
-      console.log(index);
       centerElement.attr({
         'src': centerImages[index]
       });
