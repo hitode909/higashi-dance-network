@@ -48,7 +48,8 @@ Stage = (function() {
     this.container = container;
     this.parts = [];
     this.position = Math.PI * 3.0;
-    this.totalPosition = this.position;
+    this.totalPosition = 0.0;
+    this.ageFrom = this.parseAgeFrom();
     this.loopCount = 0;
     this.last = Date.now();
     this.bpm = 120.0;
@@ -237,11 +238,20 @@ Stage = (function() {
   };
   Stage.prototype.getAge = function() {
     var age;
-    age = this.totalPosition % 80;
+    age = this.ageFrom + this.totalPosition;
+    age = age % 80;
     if (age < 0) {
       age += 80;
     }
     return age;
+  };
+  Stage.prototype.parseAgeFrom = function() {
+    var match;
+    match = location.hash.match(/\d+/);
+    if (!match) {
+      return 0;
+    }
+    return parseInt(match, 10);
   };
   Stage.prototype.getAgeKey = function(age) {
     var i, index, keys, _ref;

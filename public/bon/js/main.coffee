@@ -35,7 +35,8 @@ class Stage
   constructor: (@container) ->
     @parts = []
     @position = Math.PI * 3.0
-    @totalPosition = @position
+    @totalPosition = 0.0
+    @ageFrom = @parseAgeFrom()
     @loopCount = 0
     @last = Date.now()
     @bpm = 120.0
@@ -170,9 +171,15 @@ class Stage
     part.addNote(pos)
 
   getAge: ->
-    age = @totalPosition % 80
+    age = @ageFrom + @totalPosition
+    age = age % 80
     age += 80 if age < 0
     age
+
+  parseAgeFrom: ->
+    match = location.hash.match(/\d+/)
+    return 0 unless match
+    parseInt(match, 10)
 
   getAgeKey: (age) ->
     # TODO 間隔は一定にする？
