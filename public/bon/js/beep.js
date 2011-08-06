@@ -1,4 +1,4 @@
-var Beep, gomi;
+var Beep;
 var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 Beep = {
   play: function(args) {
@@ -204,25 +204,3 @@ Beep = {
     return deferred;
   }
 };
-gomi = function() {
-  return setInterval(function() {
-    var hz, i, _ref, _ref2, _ref3;
-    hz = 100;
-    for (i = 0, _ref = Math.floor(Math.random() * 8); 0 <= _ref ? i <= _ref : i >= _ref; 0 <= _ref ? i++ : i--) {
-      hz += 10;
-    }
-    Beep.playSin(hz, 4);
-    hz = 400;
-    for (i = 0, _ref2 = Math.floor(Math.random() * 8); 0 <= _ref2 ? i <= _ref2 : i >= _ref2; 0 <= _ref2 ? i++ : i--) {
-      hz += 40;
-    }
-    Beep.playSin(hz, 4);
-    hz = 1000;
-    for (i = 0, _ref3 = Math.floor(Math.random() * 8); 0 <= _ref3 ? i <= _ref3 : i >= _ref3; 0 <= _ref3 ? i++ : i--) {
-      hz += 100;
-    }
-    Beep.playSin(hz, 4);
-    return new HTML909().play(Math.random() > 0.7 ? 'BT0A0A7.WAV' : 'HANDCLP1.WAV');
-  }, 4000);
-};
-$(function() {});

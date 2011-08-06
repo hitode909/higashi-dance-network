@@ -163,36 +163,3 @@ Beep =
       deferred.call()
 
     deferred
-
-gomi = ->
-  setInterval ->
-    hz = 100
-    for i in [0..Math.floor(Math.random()*8)]
-      hz += 10
-    Beep.playSin hz, 4
-
-    hz = 400
-    for i in [0..Math.floor(Math.random()*8)]
-      hz += 40
-    Beep.playSin hz, 4
-
-    hz = 1000
-    for i in [0..Math.floor(Math.random()*8)]
-      hz += 100
-    Beep.playSin hz, 4
-
-    new HTML909().play if Math.random() > 0.7 then 'BT0A0A7.WAV' else 'HANDCLP1.WAV'
-  , 4000
-
-
-
-$ ->
-  # Beep.playBrownNoise(1, 1000)
-  # setInterval ->
-  #   Beep.playPulse(Math.random() * 3000, 100, Math.random())
-  # , 100
-  # setInterval ->
-  #   Beep.playSin(Math.random() * 3000, 100)
-  # , 100
-
-
