@@ -166,6 +166,9 @@ Stage = (function() {
   Stage.prototype.getPartAtDistance = function(distance) {
     var got, part, _fn, _i, _len, _ref;
     got = null;
+    if (distance < this.minRadius) {
+      return null;
+    }
     _ref = this.parts.reverse();
     _fn = function(part) {
       if (part.getRadius() + part.getImageRadius() > distance) {
@@ -181,6 +184,9 @@ Stage = (function() {
   };
   Stage.prototype.actionAtDistance = function(distance) {
     var note, part, pos;
+    if (distance < this.minRadius) {
+      return;
+    }
     part = this.getPartAtDistance(distance);
     if (!part) {
       note = {

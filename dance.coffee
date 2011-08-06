@@ -131,6 +131,7 @@ class Stage
 
   getPartAtDistance: (distance) ->
     got = null
+    return null if distance < @minRadius
     for part in @parts.reverse()
       do (part) ->
         if part.getRadius() + part.getImageRadius() > distance
@@ -139,6 +140,7 @@ class Stage
     got
 
   actionAtDistance: (distance) ->
+    return if distance < @minRadius #ignore click on center items
     part = this.getPartAtDistance(distance)
     unless part
       note =
