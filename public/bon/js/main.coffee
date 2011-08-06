@@ -42,6 +42,7 @@ class Stage
     @bpm = 120.0
     @fps = 0
     @minRadius = 200
+    @partIndex = 0
 
     animationLoop = =>
       this.observe()
@@ -91,10 +92,12 @@ class Stage
     stageHeight = stage.height()
     for part in @parts
       unless part.elem
-        bgs = ['images/maru2.svg']
+        bgs = ['images/maru1.svg', 'images/maru2.svg', 'images/maru3.svg', 'images/maru4.svg']
+        @partIndex++
+        @partIndex = 0 if @partIndex >= bgs.length
         part.elem = $('<img>')
         part.elem.attr
-          src: selectRandom(bgs)
+          src: bgs[@partIndex]
         part.elem.addClass 'part'
         stage.append(part.elem)
 
@@ -325,21 +328,28 @@ $ ->
     distance = Math.sqrt(x * x + y * y)
     stage.actionAtDistance(distance)
 
-  showCenterItems = ->
+  setupShowCenterItems = ->
     mainItem = $('#center-items .center-main-item')
     items = $('#center-items .center-item')
     selectedItem = mainItem
+    waitMain = 25
+    waitLink = 5
 
-    setInterval ->
+    change = ->
       selectedItem.fadeOut('slow')
       if selectedItem.hasClass('center-main-item')
         selectedItem = $(selectRandom(items))
       else
         selectedItem = mainItem
       selectedItem.fadeIn('slow')
-    ,3000
 
-  showCenterItems()
+      Deferred.wait(if selectedItem.hasClass('center-main-item') then waitMain else waitLink).next ->
+        change()
+
+    Deferred.wait(waitMain).next ->
+      change()
+
+  setupShowCenterItems()
 
   setupYona = ->
     yonaList = [0, 2, 5, 7, 9, 12]

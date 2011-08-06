@@ -55,6 +55,7 @@ Stage = (function() {
     this.bpm = 120.0;
     this.fps = 0;
     this.minRadius = 200;
+    this.partIndex = 0;
     animationLoop = __bind(function() {
       this.observe();
       return window.requestAnimationFrame(animationLoop);
@@ -116,10 +117,14 @@ Stage = (function() {
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       part = _ref[_i];
       if (!part.elem) {
-        bgs = ['images/maru2.svg'];
+        bgs = ['images/maru1.svg', 'images/maru2.svg', 'images/maru3.svg', 'images/maru4.svg'];
+        this.partIndex++;
+        if (this.partIndex >= bgs.length) {
+          this.partIndex = 0;
+        }
         part.elem = $('<img>');
         part.elem.attr({
-          src: selectRandom(bgs)
+          src: bgs[this.partIndex]
         });
         part.elem.addClass('part');
         stage.append(part.elem);
@@ -408,7 +413,7 @@ Dog = (function() {
   return Dog;
 })();
 $(function() {
-  var setupCenterDance, setupDog, setupYona, setupYoutube, showCenterItems, stage;
+  var setupCenterDance, setupDog, setupShowCenterItems, setupYona, setupYoutube, stage;
   stage = new Stage($('#stage'));
   setInterval(function() {
     $('#fps').text(stage.fps);
@@ -441,22 +446,30 @@ $(function() {
     distance = Math.sqrt(x * x + y * y);
     return stage.actionAtDistance(distance);
   });
-  showCenterItems = function() {
-    var items, mainItem, selectedItem;
+  setupShowCenterItems = function() {
+    var change, items, mainItem, selectedItem, waitLink, waitMain;
     mainItem = $('#center-items .center-main-item');
     items = $('#center-items .center-item');
     selectedItem = mainItem;
-    return setInterval(function() {
+    waitMain = 25;
+    waitLink = 5;
+    change = function() {
       selectedItem.fadeOut('slow');
       if (selectedItem.hasClass('center-main-item')) {
         selectedItem = $(selectRandom(items));
       } else {
         selectedItem = mainItem;
       }
-      return selectedItem.fadeIn('slow');
-    }, 3000);
+      selectedItem.fadeIn('slow');
+      return Deferred.wait(selectedItem.hasClass('center-main-item') ? waitMain : waitLink).next(function() {
+        return change();
+      });
+    };
+    return Deferred.wait(waitMain).next(function() {
+      return change();
+    });
   };
-  showCenterItems();
+  setupShowCenterItems();
   setupYona = function() {
     var getNote, playYona, yonaList;
     yonaList = [0, 2, 5, 7, 9, 12];
