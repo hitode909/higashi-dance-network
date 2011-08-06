@@ -185,9 +185,6 @@ Stage = (function() {
   };
   Stage.prototype.actionAtDistance = function(distance) {
     var note, part, pos;
-    if (distance < this.minRadius) {
-      return;
-    }
     part = this.getPartAtDistance(distance);
     if (!part) {
       note = {
@@ -431,6 +428,9 @@ $(function() {
   });
   $('#stage').click(function(event) {
     var center, container, distance, x, y;
+    if ($(event.target).parents('a').length > 0) {
+      return;
+    }
     container = $('#stage');
     center = {
       left: container.position().left + container.width() / 2,

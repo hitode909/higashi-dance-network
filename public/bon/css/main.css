@@ -2,10 +2,6 @@ body {
     overflow: hidden;
 }
 
-input#speed {
-    width: 600px;
-}
-
 #stage {
     width: 100%;
     height: 100%;
@@ -27,7 +23,6 @@ img.part {
     /* -webkit-animation-iteration-count: infinite; */
     /* -webkit-animation-name: rotate; */
 }
-
 
 @-webkit-keyframes rotate {
 	0% { -webkit-transform: rotate(0); }

@@ -141,7 +141,7 @@ class Stage
     got
 
   actionAtDistance: (distance) ->
-    return if distance < @minRadius #ignore click on center items
+    # return if distance < @minRadius
     part = this.getPartAtDistance(distance)
     unless part
       note =
@@ -315,6 +315,7 @@ $ ->
       stage.hoveringPartId = if part then part.radius else null
 
   $('#stage').click (event) ->
+    return if $(event.target).parents('a').length > 0
     container = $('#stage')
     center =
       left: container.position().left + container.width() / 2
