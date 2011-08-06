@@ -3,7 +3,7 @@ var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments)
 window.requestAnimationFrame = (function() {
   return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback, element) {
     return window.setTimeout(function() {
-      return callback;
+      return callback();
     }, 1000 / 60);
   };
 })();
