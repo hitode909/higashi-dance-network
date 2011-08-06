@@ -174,6 +174,20 @@ class Stage
     age += 80 if age < 0
     age
 
+  getAgeKey: (age) ->
+    # TODO 間隔は一定にする？
+    keys = [3, 10, 15, 20, 40, 70]
+    age ?= @getAge()
+    index = 0
+
+    return keys[0] if age < keys[0]
+    return keys[keys.length-1] if age >= keys[keys.length-1]
+
+    for i in [0..keys.length-1]
+      return keys[i] if keys[i] <= age and age < keys[i+1]
+
+    return keys[keys.length-1]  #wrong
+
 class Part
   constructor: ->
     @notes = []
