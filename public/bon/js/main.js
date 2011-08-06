@@ -265,6 +265,15 @@ Stage = (function() {
     }
     return keys[keys.length - 1];
   };
+  Stage.prototype.getURL = function() {
+    return location.host + location.pathname;
+  };
+  Stage.prototype.getTshirtsURL = function() {};
+  Stage.prototype.getTweetURL = function() {
+    var url;
+    url = this.getURL() + '#' + this.getAgeKey();
+    return "tweet?url=" + (encodeURIComponent(url));
+  };
   return Stage;
 })();
 Part = (function() {

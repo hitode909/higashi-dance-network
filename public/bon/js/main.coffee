@@ -188,6 +188,17 @@ class Stage
 
     return keys[keys.length-1]  #wrong
 
+  getURL: ->
+    location.host + location.pathname
+
+  getTshirtsURL: ->
+    # TシャツURLは決め打ち
+
+  getTweetURL: ->
+    # tweetは年齢含む
+    url = @getURL() + '#' + @getAgeKey()
+    "tweet?url=#{encodeURIComponent(url)}"
+
 class Part
   constructor: ->
     @notes = []
