@@ -111,7 +111,7 @@ Stage = (function() {
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       part = _ref[_i];
       if (!part.elem) {
-        bgs = ['maru2.svg', 'maru4.svg'];
+        bgs = ['maru2.svg'];
         part.elem = $('<img>');
         part.elem.attr({
           src: selectRandom(bgs)
@@ -346,7 +346,7 @@ Dog = (function() {
   return Dog;
 })();
 $(function() {
-  var setupDog, setupYona, setupYoutube, showCenterItems, stage;
+  var setupCenterDance, setupDog, setupYona, setupYoutube, showCenterItems, stage;
   stage = new Stage($('#stage'));
   setInterval(function() {
     $('#fps').text(stage.fps);
@@ -408,6 +408,24 @@ $(function() {
     return playYona(110);
   };
   setupYona();
+  setupCenterDance = function() {
+    var centerElement, centerImages, change, index;
+    centerElement = $('#center-items .center-main-item img');
+    index = 0;
+    centerImages = ['ossan_center.png', 'ossan_center_2.png', 'ossan_center.png', 'ossan_center_3.png'];
+    change = function() {
+      console.log(index);
+      centerElement.attr({
+        'src': centerImages[index]
+      });
+      index = (index + 1) % centerImages.length;
+      return Deferred.wait(Math.abs(120 / stage.bpm) * 0.25).next(function() {
+        return change();
+      });
+    };
+    return change();
+  };
+  setupCenterDance();
   setupDog = function() {
     var animationLoop, attack_img, dog1, dog2, dog_img;
     dog_img = $('<img>').attr({

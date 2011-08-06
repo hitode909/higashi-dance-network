@@ -86,7 +86,7 @@ class Stage
     stageHeight = stage.height()
     for part in @parts
       unless part.elem
-        bgs = ['maru2.svg', 'maru4.svg']
+        bgs = ['maru2.svg']
         part.elem = $('<img>')
         part.elem.attr
           src: selectRandom(bgs)
@@ -306,6 +306,21 @@ $ ->
     playYona(110)
 
   setupYona()
+
+  setupCenterDance = ->
+    centerElement = $('#center-items .center-main-item img')
+    index = 0
+    centerImages = ['ossan_center.png', 'ossan_center_2.png', 'ossan_center.png', 'ossan_center_3.png']
+
+    change = ->
+      console.log index
+      centerElement.attr('src': centerImages[index])
+      index = (index + 1) % centerImages.length
+      Deferred.wait(Math.abs(120 / stage.bpm) * 0.25).next ->
+        change()
+    change()
+
+  setupCenterDance()
 
   setupDog = ->
     dog_img = $('<img>').attr({ src: 'dog.jpg' }).css
