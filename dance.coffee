@@ -85,7 +85,7 @@ class Stage
       unless part.elem
         part.elem = $('<img>')
         part.elem.attr
-          src: 'ossan_center.png'
+          src: 'maru2.svg'
         part.elem.addClass 'part'
         stage.append(part.elem)
 
@@ -95,8 +95,8 @@ class Stage
         left: stageWidth  / 2 - part.getRadius() - part.getImageRadius()
         top:  stageHeight / 2 - part.getRadius() - part.getImageRadius()
         'z-index': parseInt(stageWidth  / 2 - part.getRadius()) + 5000
-      part.elem.attr
-        src: if part.radius == this.hoveringPartId then 'ossan1.png' else 'ossan_center.png'
+      # part.elem.attr
+      #   src: if part.radius == this.hoveringPartId then 'ossan1.png' else 'ossan_center.png'
 
       rate = part.getRate()
       for note in part.notes
@@ -271,53 +271,71 @@ $ ->
     distance = Math.sqrt(x * x + y * y)
     stage.actionAtDistance(distance)
 
-  # --------
-  yonaList = [0, 2, 5, 7, 9, 12]
-  getNote = (base) ->
-    type: 'sin'
-    hz: base * Math.pow(Math.pow(2, 1/12), yonaList[Math.floor(Math.random()*yonaList.length)])
-    release: 0.9999
+  showCenterItems = ->
+    mainItem = $('#center-items .center-main-item')
+    items = $('#center-items .center-item')
+    selectedItem = mainItem
 
-  playYona = (base) ->
-    Beep.play(getNote(base))
-    Deferred.wait(Math.abs(120 / stage.bpm) * (if Math.random() > 0.6 then 1 else (if Math.random() > 0.5 then 0.5 else 2.0))).next ->
-      playYona(base);
+    setInterval ->
+      selectedItem.fadeOut('slow')
+      if selectedItem.hasClass('center-main-item')
+        selectedItem = $(items[Math.floor(items.length * Math.random())])
+      else
+        selectedItem = mainItem
+      selectedItem.fadeIn('slow')
+    ,3000
 
-  playYona(330);
-  playYona(110);
+  showCenterItems()
 
-  # -------------------------
-  dog_img = $('<img>').attr({ src: 'dog.jpg' }).css
-    position: 'absolute'
-    'z-index': 13000
-  $('body').append(dog_img)
-  attack_img = $('<img>').attr({ src: 'attack.jpg' }).css
-    position: 'absolute'
-    'z-index': 13001
-  $('body').append(attack_img)
-  dog1 = new Dog(dog_img)
-  dog2 = new Dog(attack_img)
-  animationLoop = ->
-    dog1.observe()
-    dog2.observe()
-    window.requestAnimationFrame(animationLoop)
-  animationLoop()
+  setupYona = ->
+    yonaList = [0, 2, 5, 7, 9, 12]
+    getNote = (base) ->
+      type: 'sin'
+      hz: base * Math.pow(Math.pow(2, 1/12), yonaList[Math.floor(Math.random()*yonaList.length)])
+      release: 0.9999
 
-  # ----------------------
-  put_youtube = ->
-    youtube = $("<iframe width='400' height='300' src='http://www.youtube.com/embed/lniVx_pFM_A?fs=1&autoplay=1&loop=1' frameborder='0' allowFullScreen=''></iframe>")
-    youtube.css
+    playYona = (base) ->
+      Beep.play(getNote(base))
+      Deferred.wait(Math.abs(120 / stage.bpm) * (if Math.random() > 0.6 then 1 else (if Math.random() > 0.5 then 0.5 else 2.0))).next ->
+        playYona(base)
+
+    playYona(330)
+    playYona(110)
+
+  setupYona()
+
+  setupDog = ->
+    dog_img = $('<img>').attr({ src: 'dog.jpg' }).css
       position: 'absolute'
-      'z-index': 14000
-      width: 400
-      height: 300
-      left: '40%'
-      top: '40%'
-    $('body').append(youtube)
+      'z-index': 13000
+    $('body').append(dog_img)
+    attack_img = $('<img>').attr({ src: 'attack.jpg' }).css
+      position: 'absolute'
+      'z-index': 13001
+    $('body').append(attack_img)
+    dog1 = new Dog(dog_img)
+    dog2 = new Dog(attack_img)
+    animationLoop = ->
+      dog1.observe()
+      dog2.observe()
+      window.requestAnimationFrame(animationLoop)
+    animationLoop()
 
-    Deferred.wait(10).next ->
-      youtube.remove()
+  setupYoutube = ->
+    put_youtube = ->
+      youtube = $("<iframe width='400' height='300' src='http://www.youtube.com/embed/lniVx_pFM_A?fs=1&autoplay=1&loop=1' frameborder='0' allowFullScreen=''></iframe>")
+      youtube.css
+        position: 'absolute'
+        'z-index': 14000
+        width: 400
+        height: 300
+        left: '40%'
+        top: '40%'
+      $('body').append(youtube)
 
-  setInterval ->
-    put_youtube()
-  ,30 * 1000
+      Deferred.wait(10).next ->
+        youtube.remove()
+
+    setInterval ->
+      put_youtube()
+    ,30 * 1000
