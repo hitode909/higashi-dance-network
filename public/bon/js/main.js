@@ -278,7 +278,12 @@ Stage = (function() {
   Stage.prototype.getURL = function() {
     return location.host + location.pathname;
   };
-  Stage.prototype.getTshirtsURL = function() {};
+  Stage.prototype.getHatenaBookmarkURL = function() {
+    return "http://b.hatena.ne.jp/add?url=" + (encodeURIComponent(this.getURL()));
+  };
+  Stage.prototype.getTshirtsURL = function() {
+    return 'http://tshirts.com';
+  };
   Stage.prototype.getTweetURL = function() {
     var url;
     url = this.getURL() + '#' + this.getAgeKey();
@@ -473,11 +478,17 @@ $(function() {
   };
   setupYona();
   setupCenterDance = function() {
-    var centerElement, centerImages, change, index;
+    var buyTshirtsLink, centerElement, centerImages, change, hatenaBookmarkLink, index, tweetLink;
     centerElement = $('#center-items .center-main-item img');
     index = 0;
     centerImages = ['images/ossan_center.png', 'images/ossan_center_2.png', 'images/ossan_center.png', 'images/ossan_center_3.png'];
+    tweetLink = $('a#tweet-link');
+    hatenaBookmarkLink = $('a#hatena-bookmark-link');
+    buyTshirtsLink = $('a#buy-tshirts-link');
+    hatenaBookmarkLink.attr('href', stage.getHatenaBookmarkURL());
     change = function() {
+      tweetLink.attr('href', stage.getTweetURL());
+      buyTshirtsLink.attr('href', stage.getTshirtsURL());
       centerElement.attr({
         'src': centerImages[index]
       });

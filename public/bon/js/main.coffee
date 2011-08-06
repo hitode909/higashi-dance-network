@@ -198,8 +198,12 @@ class Stage
   getURL: ->
     location.host + location.pathname
 
+  getHatenaBookmarkURL: ->
+    "http://b.hatena.ne.jp/add?url=#{encodeURIComponent(@getURL())}"
+
   getTshirtsURL: ->
     # TシャツURLは決め打ち
+    'http://tshirts.com'
 
   getTweetURL: ->
     # tweetは年齢含む
@@ -358,7 +362,15 @@ $ ->
     index = 0
     centerImages = ['images/ossan_center.png', 'images/ossan_center_2.png', 'images/ossan_center.png', 'images/ossan_center_3.png']
 
+    tweetLink = $('a#tweet-link')
+    hatenaBookmarkLink = $('a#hatena-bookmark-link')
+    buyTshirtsLink = $('a#buy-tshirts-link')
+
+    hatenaBookmarkLink.attr('href', stage.getHatenaBookmarkURL())
+
     change = ->
+      tweetLink.attr('href', stage.getTweetURL())
+      buyTshirtsLink.attr('href', stage.getTshirtsURL())
       centerElement.attr('src': centerImages[index])
       index = (index + 1) % centerImages.length
       Deferred.wait(Math.abs(120 / stage.bpm) * 0.25).next ->
