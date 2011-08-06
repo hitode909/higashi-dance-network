@@ -367,8 +367,12 @@ $(function() {
   }, 1000);
   Deferred.wait(1).next(function() {
     return Dial($('#stage'), function(diff, distance) {
-      var part;
+      var bpmMin, part;
       stage.bpm += diff * 32;
+      bpmMin = 1.0;
+      if (Math.abs(stage.bpm) < bpmMin) {
+        stage.bpm = bpmMin * stage.bpm / Math.abs(stage.bpm);
+      }
       part = stage.getPartAtDistance(distance);
       return stage.hoveringPartId = part ? part.radius : null;
     });

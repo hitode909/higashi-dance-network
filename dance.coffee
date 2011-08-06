@@ -271,6 +271,8 @@ $ ->
   Deferred.wait(1).next ->
     Dial $('#stage'), (diff, distance) ->
       stage.bpm += diff * 32
+      bpmMin = 1.0
+      stage.bpm = bpmMin * stage.bpm / Math.abs(stage.bpm) if Math.abs(stage.bpm) < bpmMin
       part = stage.getPartAtDistance(distance)
       stage.hoveringPartId = if part then part.radius else null
 
