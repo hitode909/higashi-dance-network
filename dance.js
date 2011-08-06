@@ -48,6 +48,7 @@ Stage = (function() {
     this.container = container;
     this.parts = [];
     this.position = Math.PI * 3.0;
+    this.totalPosition = this.position;
     this.loopCount = 0;
     this.last = Date.now();
     this.bpm = 120.0;
@@ -71,14 +72,17 @@ Stage = (function() {
     part = new Part;
     part.callback = callback;
     part.radius = radius;
+    part.age = this.getAge();
     this.parts.push(part);
     return part;
   };
   Stage.prototype.observe = function() {
-    var kills, now, part, _i, _j, _len, _len2, _ref;
+    var diff, kills, now, part, _i, _j, _len, _len2, _ref;
     this.fps++;
     now = Date.now();
-    this.position += this.bpm / 60.0 * (now - this.last) / 1000 * Math.PI * 0.5;
+    diff = this.bpm / 60.0 * (now - this.last) / 1000 * Math.PI * 0.5;
+    this.position += diff;
+    this.totalPosition += diff;
     while (this.position > Math.PI * 4.0) {
       this.position -= Math.PI * 2.0;
     }
@@ -225,6 +229,14 @@ Stage = (function() {
     pos = this.position;
     return part.addNote(pos);
   };
+  Stage.prototype.getAge = function() {
+    var age;
+    age = this.totalPosition % 80;
+    if (age < 0) {
+      age += 80;
+    }
+    return age;
+  };
   return Stage;
 })();
 Part = (function() {
@@ -232,6 +244,7 @@ Part = (function() {
     this.notes = [];
     this.lastPosition = 0.0;
     this.birth = Date.now();
+    this.age = 0;
   }
   Part.prototype.ImageRadius = 30;
   Part.prototype.getRate = function() {

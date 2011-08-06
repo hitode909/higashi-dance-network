@@ -35,6 +35,7 @@ class Stage
   constructor: (@container) ->
     @parts = []
     @position = Math.PI * 3.0
+    @totalPosition = @position
     @loopCount = 0
     @last = Date.now()
     @bpm = 120.0
@@ -54,13 +55,16 @@ class Stage
     part = new Part
     part.callback = callback
     part.radius = radius
+    part.age = @getAge()
     @parts.push(part)
     part
 
   observe: ->
     @fps++
     now = Date.now()
-    @position += @bpm / 60.0 * (now - @last) / 1000 * Math.PI * 0.5
+    diff = @bpm / 60.0 * (now - @last) / 1000 * Math.PI * 0.5
+    @position += diff
+    @totalPosition += diff
 
     while @position > Math.PI * 4.0
       @position -= Math.PI * 2.0
@@ -163,11 +167,17 @@ class Stage
     pos = this.position
     part.addNote(pos)
 
+  getAge: ->
+    age = @totalPosition % 80
+    age += 80 if age < 0
+    age
+
 class Part
   constructor: ->
     @notes = []
     @lastPosition = 0.0
     @birth = Date.now()
+    @age = 0
 
   ImageRadius: 30,
 
