@@ -90,7 +90,7 @@ class Stage
     stageHeight = stage.height()
     for part in @parts
       unless part.elem
-        bgs = ['maru2.svg']
+        bgs = ['images/maru2.svg']
         part.elem = $('<img>')
         part.elem.attr
           src: selectRandom(bgs)
@@ -104,7 +104,7 @@ class Stage
         top:  stageHeight / 2 - part.getRadius() - part.getImageRadius()
         'z-index': parseInt(stageWidth  / 2 - part.getRadius()) + 5000
       # part.elem.attr
-      #   src: if part.radius == this.hoveringPartId then 'ossan1.png' else 'ossan_center.png'
+      #   src: if part.radius == this.hoveringPartId then 'images/ossan1.png' else 'images/ossan_center.png'
 
       rate = part.getRate()
       for note in part.notes
@@ -121,7 +121,7 @@ class Stage
           # height: part.getImageRadius() * 2
 
         note.elem.attr
-          src: if note.playing then 'ossan2.png' else 'ossan1.png'
+          src: if note.playing then 'images/ossan2.png' else 'images/ossan1.png'
 
   killPart: (part) ->
     @parts = $.grep @parts, (v) ->
@@ -338,7 +338,7 @@ $ ->
   setupCenterDance = ->
     centerElement = $('#center-items .center-main-item img')
     index = 0
-    centerImages = ['ossan_center.png', 'ossan_center_2.png', 'ossan_center.png', 'ossan_center_3.png']
+    centerImages = ['images/ossan_center.png', 'images/ossan_center_2.png', 'images/ossan_center.png', 'images/ossan_center_3.png']
 
     change = ->
       centerElement.attr('src': centerImages[index])

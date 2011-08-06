@@ -115,7 +115,7 @@ Stage = (function() {
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       part = _ref[_i];
       if (!part.elem) {
-        bgs = ['maru2.svg'];
+        bgs = ['images/maru2.svg'];
         part.elem = $('<img>');
         part.elem.attr({
           src: selectRandom(bgs)
@@ -149,7 +149,7 @@ Stage = (function() {
             top: (-Math.cos(this.position - note.position) * part.getRadius()) - part.getImageRadius() + stageHeight / 2
           });
           _results2.push(note.elem.attr({
-            src: note.playing ? 'ossan2.png' : 'ossan1.png'
+            src: note.playing ? 'images/ossan2.png' : 'images/ossan1.png'
           }));
         }
         return _results2;
@@ -457,7 +457,7 @@ $(function() {
     var centerElement, centerImages, change, index;
     centerElement = $('#center-items .center-main-item img');
     index = 0;
-    centerImages = ['ossan_center.png', 'ossan_center_2.png', 'ossan_center.png', 'ossan_center_3.png'];
+    centerImages = ['images/ossan_center.png', 'images/ossan_center_2.png', 'images/ossan_center.png', 'images/ossan_center_3.png'];
     change = function() {
       centerElement.attr({
         'src': centerImages[index]
