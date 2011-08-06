@@ -101,17 +101,16 @@ class Stage
       rate = part.getRate()
       for note in part.notes
         unless note.elem
-          note.elem = $('<img>')
-          note.elem.addClass 'note'
+          note.elem = $('<img>').addClass('note').css
+            width: part.getImageRadius() * 2
+            height: part.getImageRadius() * 2
           stage.append(note.elem)
-
-        img_size = if note.playing then 100 else 60
 
         note.elem.css
           left: (Math.sin(@position - note.position) * part.getRadius()) - part.getImageRadius() + stageWidth  / 2
           top: (-Math.cos(@position - note.position) * part.getRadius()) - part.getImageRadius() + stageHeight / 2
-          width: part.getImageRadius() * 2
-          height: part.getImageRadius() * 2
+          # width: part.getImageRadius() * 2
+          # height: part.getImageRadius() * 2
 
         note.elem.attr
           src: if note.playing then 'ossan2.png' else 'ossan1.png'
@@ -179,7 +178,7 @@ class Part
     @radius * this.getRate()
 
   getImageRadius: ->
-    Part.prototype.ImageRadius * this.getRate()
+    Part.prototype.ImageRadius
 
   observe: (position, bpm) ->
     offset = 0.0

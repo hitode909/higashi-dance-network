@@ -99,7 +99,7 @@ Stage = (function() {
     return this.last = now;
   };
   Stage.prototype.plot = function() {
-    var img_size, note, part, rate, stage, stageHeight, stageWidth, _i, _len, _ref, _results;
+    var note, part, rate, stage, stageHeight, stageWidth, _i, _len, _ref, _results;
     stage = $('#stage');
     stageWidth = stage.width();
     stageHeight = stage.height();
@@ -130,16 +130,15 @@ Stage = (function() {
         for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
           note = _ref2[_j];
           if (!note.elem) {
-            note.elem = $('<img>');
-            note.elem.addClass('note');
+            note.elem = $('<img>').addClass('note').css({
+              width: part.getImageRadius() * 2,
+              height: part.getImageRadius() * 2
+            });
             stage.append(note.elem);
           }
-          img_size = note.playing ? 100 : 60;
           note.elem.css({
             left: (Math.sin(this.position - note.position) * part.getRadius()) - part.getImageRadius() + stageWidth / 2,
-            top: (-Math.cos(this.position - note.position) * part.getRadius()) - part.getImageRadius() + stageHeight / 2,
-            width: part.getImageRadius() * 2,
-            height: part.getImageRadius() * 2
+            top: (-Math.cos(this.position - note.position) * part.getRadius()) - part.getImageRadius() + stageHeight / 2
           });
           _results2.push(note.elem.attr({
             src: note.playing ? 'ossan2.png' : 'ossan1.png'
@@ -245,7 +244,7 @@ Part = (function() {
     return this.radius * this.getRate();
   };
   Part.prototype.getImageRadius = function() {
-    return Part.prototype.ImageRadius * this.getRate();
+    return Part.prototype.ImageRadius;
   };
   Part.prototype.observe = function(position, bpm) {
     var note, offset, position_offset, _i, _len, _ref;
