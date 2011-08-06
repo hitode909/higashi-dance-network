@@ -28,6 +28,9 @@ Dial = (container, callback) ->
     callback(diff, distance)
     last = rad
 
+selectRandom = (list) ->
+  list[Math.floor(Math.random() * list.length)]
+
 class Stage
   constructor: (@container) ->
     @parts = []
@@ -83,9 +86,10 @@ class Stage
     stageHeight = stage.height()
     for part in @parts
       unless part.elem
+        bgs = ['maru2.svg', 'maru4.svg']
         part.elem = $('<img>')
         part.elem.attr
-          src: 'maru2.svg'
+          src: selectRandom(bgs)
         part.elem.addClass 'part'
         stage.append(part.elem)
 

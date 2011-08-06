@@ -1,4 +1,4 @@
-var Dial, Dog, Note, Part, Stage;
+var Dial, Dog, Note, Part, Stage, selectRandom;
 var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 window.requestAnimationFrame = (function() {
   return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback, element) {
@@ -38,6 +38,9 @@ Dial = function(container, callback) {
     callback(diff, distance);
     return last = rad;
   }));
+};
+selectRandom = function(list) {
+  return list[Math.floor(Math.random() * list.length)];
 };
 Stage = (function() {
   function Stage(container) {
@@ -99,7 +102,7 @@ Stage = (function() {
     return this.last = now;
   };
   Stage.prototype.plot = function() {
-    var note, part, rate, stage, stageHeight, stageWidth, _i, _len, _ref, _results;
+    var bgs, note, part, rate, stage, stageHeight, stageWidth, _i, _len, _ref, _results;
     stage = $('#stage');
     stageWidth = stage.width();
     stageHeight = stage.height();
@@ -108,9 +111,10 @@ Stage = (function() {
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       part = _ref[_i];
       if (!part.elem) {
+        bgs = ['maru2.svg', 'maru4.svg'];
         part.elem = $('<img>');
         part.elem.attr({
-          src: 'maru2.svg'
+          src: selectRandom(bgs)
         });
         part.elem.addClass('part');
         stage.append(part.elem);
