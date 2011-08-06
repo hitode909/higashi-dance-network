@@ -282,7 +282,7 @@ $ ->
     setInterval ->
       selectedItem.fadeOut('slow')
       if selectedItem.hasClass('center-main-item')
-        selectedItem = $(items[Math.floor(items.length * Math.random())])
+        selectedItem = $(selectRandom(items))
       else
         selectedItem = mainItem
       selectedItem.fadeIn('slow')
@@ -294,12 +294,12 @@ $ ->
     yonaList = [0, 2, 5, 7, 9, 12]
     getNote = (base) ->
       type: 'sin'
-      hz: base * Math.pow(Math.pow(2, 1/12), yonaList[Math.floor(Math.random()*yonaList.length)])
+      hz: base * Math.pow(Math.pow(2, 1/12), selectRandom(yonaList))
       release: 0.9999
 
     playYona = (base) ->
       Beep.play(getNote(base))
-      Deferred.wait(Math.abs(120 / stage.bpm) * (if Math.random() > 0.6 then 1 else (if Math.random() > 0.5 then 0.5 else 2.0))).next ->
+      Deferred.wait(Math.abs(120 / stage.bpm) * selectRandom([1, 1, 2, 0.5])).next ->
         playYona(base)
 
     playYona(330)

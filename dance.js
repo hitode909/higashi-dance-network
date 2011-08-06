@@ -380,7 +380,7 @@ $(function() {
     return setInterval(function() {
       selectedItem.fadeOut('slow');
       if (selectedItem.hasClass('center-main-item')) {
-        selectedItem = $(items[Math.floor(items.length * Math.random())]);
+        selectedItem = $(selectRandom(items));
       } else {
         selectedItem = mainItem;
       }
@@ -394,13 +394,13 @@ $(function() {
     getNote = function(base) {
       return {
         type: 'sin',
-        hz: base * Math.pow(Math.pow(2, 1 / 12), yonaList[Math.floor(Math.random() * yonaList.length)]),
+        hz: base * Math.pow(Math.pow(2, 1 / 12), selectRandom(yonaList)),
         release: 0.9999
       };
     };
     playYona = function(base) {
       Beep.play(getNote(base));
-      return Deferred.wait(Math.abs(120 / stage.bpm) * (Math.random() > 0.6 ? 1 : (Math.random() > 0.5 ? 0.5 : 2.0))).next(function() {
+      return Deferred.wait(Math.abs(120 / stage.bpm) * selectRandom([1, 1, 2, 0.5])).next(function() {
         return playYona(base);
       });
     };
