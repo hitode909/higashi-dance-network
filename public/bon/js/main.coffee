@@ -357,6 +357,7 @@ $ ->
       type: 'sin'
       hz: base * Math.pow(Math.pow(2, 1/12), selectRandom(yonaList))
       release: 0.9999
+      volume: 1.0
 
     playYona = (base) ->
       Beep.play(getNote(base))
@@ -364,7 +365,7 @@ $ ->
         playYona(base)
 
     playYona(330)
-    playYona(110)
+    playYona(220)
 
   setupYona()
 

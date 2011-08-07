@@ -477,7 +477,8 @@ $(function() {
       return {
         type: 'sin',
         hz: base * Math.pow(Math.pow(2, 1 / 12), selectRandom(yonaList)),
-        release: 0.9999
+        release: 0.9999,
+        volume: 1.0
       };
     };
     playYona = function(base) {
@@ -487,7 +488,7 @@ $(function() {
       });
     };
     playYona(330);
-    return playYona(110);
+    return playYona(220);
   };
   setupYona();
   setupCenterDance = function() {
