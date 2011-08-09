@@ -281,7 +281,7 @@ Stage = (function() {
     return location.protocol + "//" + location.host + location.pathname;
   };
   Stage.prototype.getHatenaBookmarkURL = function() {
-    return "http://b.hatena.ne.jp/add.confirm?url=" + (encodeURIComponent(this.getURL()));
+    return "http://b.hatena.ne.jp/entry/" + (this.getURL());
   };
   Stage.prototype.getTshirtsURL = function() {
     return 'http://tshirts.com';

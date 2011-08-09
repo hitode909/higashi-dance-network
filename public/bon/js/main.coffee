@@ -202,7 +202,7 @@ class Stage
     location.protocol + "//" + location.host + location.pathname
 
   getHatenaBookmarkURL: ->
-    "http://b.hatena.ne.jp/add.confirm?url=#{encodeURIComponent(@getURL())}"
+    "http://b.hatena.ne.jp/entry/#{@getURL()}"
 
   getTshirtsURL: ->
     # TシャツURLは決め打ち
