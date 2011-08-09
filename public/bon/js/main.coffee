@@ -199,10 +199,10 @@ class Stage
     return keys[keys.length-1]  #wrong
 
   getURL: ->
-    location.host + location.pathname
+    location.protocol + "//" + location.host + location.pathname
 
   getHatenaBookmarkURL: ->
-    "http://b.hatena.ne.jp/add?url=#{encodeURIComponent(@getURL())}"
+    "http://b.hatena.ne.jp/add.confirm?url=#{encodeURIComponent(@getURL())}"
 
   getTshirtsURL: ->
     # TシャツURLは決め打ち
@@ -211,7 +211,7 @@ class Stage
   getTweetURL: ->
     # tweetは年齢含む
     url = @getURL() + '#' + @getAgeKey()
-    "tweet?url=#{encodeURIComponent(url)}"
+    "https://twitter.com/share?source=tweetbutton&text=bon&url=#{encodeURIComponent(url)}&original_referer=#{encodeURIComponent(@getURL())}"
 
 class Part
   constructor: ->

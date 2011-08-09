@@ -278,10 +278,10 @@ Stage = (function() {
     return keys[keys.length - 1];
   };
   Stage.prototype.getURL = function() {
-    return location.host + location.pathname;
+    return location.protocol + "//" + location.host + location.pathname;
   };
   Stage.prototype.getHatenaBookmarkURL = function() {
-    return "http://b.hatena.ne.jp/add?url=" + (encodeURIComponent(this.getURL()));
+    return "http://b.hatena.ne.jp/add.confirm?url=" + (encodeURIComponent(this.getURL()));
   };
   Stage.prototype.getTshirtsURL = function() {
     return 'http://tshirts.com';
@@ -289,7 +289,7 @@ Stage = (function() {
   Stage.prototype.getTweetURL = function() {
     var url;
     url = this.getURL() + '#' + this.getAgeKey();
-    return "tweet?url=" + (encodeURIComponent(url));
+    return "https://twitter.com/share?source=tweetbutton&text=bon&url=" + (encodeURIComponent(url)) + "&original_referer=" + (encodeURIComponent(this.getURL()));
   };
   return Stage;
 })();
