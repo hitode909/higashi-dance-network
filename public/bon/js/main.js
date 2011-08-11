@@ -257,7 +257,7 @@ Stage = (function() {
   };
   Stage.prototype.getAgeKey = function(age) {
     var i, index, keys, _ref;
-    keys = [3, 10, 15, 20, 40, 70];
+    keys = [0, 10, 20, 40, 50, 60];
         if (age != null) {
       age;
     } else {
@@ -495,7 +495,14 @@ $(function() {
     var buyTshirtsLink, centerElement, centerImages, change, hatenaBookmarkLink, index, tweetLink;
     centerElement = $('#center-items .center-main-item img');
     index = 0;
-    centerImages = ['images/ossan_center.png', 'images/ossan_center_2.png', 'images/ossan_center.png', 'images/ossan_center_3.png'];
+    centerImages = {
+      0: ['images/baby_center.png', 'images/baby_left.png', 'images/baby_center.png', 'images/baby_right.png'],
+      10: ['images/jr_center.png', 'images/jr_left.png', 'images/jr_center.png', 'images/jr_right.png'],
+      20: ['images/men_center.png', 'images/men_left.png', 'images/men_center.png', 'images/men_right.png'],
+      40: ['images/40_center.png', 'images/40_left.png', 'images/40_center.png', 'images/40_right.png'],
+      50: ['images/50_center.png', 'images/50_left.png', 'images/50_center.png', 'images/50_right.png'],
+      60: ['images/senior_center.png', 'images/senior_left.png', 'images/senior_center.png', 'images/senior_right.png']
+    };
     tweetLink = $('a#tweet-link');
     hatenaBookmarkLink = $('a#hatena-bookmark-link');
     buyTshirtsLink = $('a#buy-tshirts-link');
@@ -504,9 +511,9 @@ $(function() {
       tweetLink.attr('href', stage.getTweetURL());
       buyTshirtsLink.attr('href', stage.getTshirtsURL());
       centerElement.attr({
-        'src': centerImages[index]
+        'src': centerImages[stage.getAgeKey()][index]
       });
-      index = (index + 1) % centerImages.length;
+      index = (index + 1) % centerImages[stage.getAgeKey()].length;
       return Deferred.wait(Math.abs(120 / stage.bpm) * 0.25).next(function() {
         return change();
       });

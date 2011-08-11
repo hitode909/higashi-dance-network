@@ -39,10 +39,6 @@ img.part {
     height: 400px;
     z-index: 12000;
 
-    /* -webkit-animation-duration: 60s; */
-    /* -webkit-animation-timing-function: linear; */
-    /* -webkit-animation-iteration-count: infinite; */
-    /* -webkit-animation-name: rotate; */
 }
 
 #center-items .center-element {
@@ -53,6 +49,13 @@ img.part {
     height: 100%;
     font-size: 100px;
 }
+
+/* #center-items .center-background img { */
+/*     -webkit-animation-duration: 60s; */
+/*     -webkit-animation-timing-function: linear; */
+/*     -webkit-animation-iteration-count: infinite; */
+/*     -webkit-animation-name: rotate; */
+/* } */
 
 #center-items .center-background img, #center-items .center-main-item img {
     width: 100%;
