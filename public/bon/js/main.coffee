@@ -353,6 +353,9 @@ $ ->
   setupShowCenterItems()
 
   setupYona = ->
+    index = 0
+    flowerElement = $('.hasu img')
+    flowers = ['images/hasu.png', 'images/hasu2.png']
     yonaList = [0, 2, 5, 7, 9, 12]
     getNote = (base) ->
       type: 'sin'
@@ -360,13 +363,16 @@ $ ->
       release: 0.9999
       volume: 1.0
 
-    playYona = (base) ->
-      Beep.play(getNote(base))
-      Deferred.wait(Math.abs(120 / stage.bpm) * selectRandom([1, 1, 2, 0.5])).next ->
-        playYona(base)
+    playYona =  ->
+      Beep.play(getNote(330))
+      Beep.play(getNote(220))
+      index = (index + 1) % flowers.length
+      flowerElement.attr('src': flowers[index])
 
-    playYona(330)
-    playYona(220)
+      Deferred.wait(Math.abs(120 / stage.bpm) * selectRandom([1, 1, 2, 0.5])).next ->
+        playYona()
+
+    playYona()
 
   setupYona()
 

@@ -471,7 +471,10 @@ $(function() {
   };
   setupShowCenterItems();
   setupYona = function() {
-    var getNote, playYona, yonaList;
+    var flowerElement, flowers, getNote, index, playYona, yonaList;
+    index = 0;
+    flowerElement = $('.hasu img');
+    flowers = ['images/hasu.png', 'images/hasu2.png'];
     yonaList = [0, 2, 5, 7, 9, 12];
     getNote = function(base) {
       return {
@@ -481,14 +484,18 @@ $(function() {
         volume: 1.0
       };
     };
-    playYona = function(base) {
-      Beep.play(getNote(base));
+    playYona = function() {
+      Beep.play(getNote(330));
+      Beep.play(getNote(220));
+      index = (index + 1) % flowers.length;
+      flowerElement.attr({
+        'src': flowers[index]
+      });
       return Deferred.wait(Math.abs(120 / stage.bpm) * selectRandom([1, 1, 2, 0.5])).next(function() {
-        return playYona(base);
+        return playYona();
       });
     };
-    playYona(330);
-    return playYona(220);
+    return playYona();
   };
   setupYona();
   setupCenterDance = function() {
