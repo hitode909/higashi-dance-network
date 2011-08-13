@@ -199,7 +199,7 @@ class Stage
 
   getAge: ->
     age = @ageFrom + @totalPosition
-    age = age % 80
+    age = (age / 2) % 80
     age += 80 if age < 0
     age
 

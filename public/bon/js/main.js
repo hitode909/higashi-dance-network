@@ -256,7 +256,7 @@ Stage = (function() {
   Stage.prototype.getAge = function() {
     var age;
     age = this.ageFrom + this.totalPosition;
-    age = age % 80;
+    age = (age / 2) % 80;
     if (age < 0) {
       age += 80;
     }
