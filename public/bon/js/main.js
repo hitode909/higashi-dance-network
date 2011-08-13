@@ -496,7 +496,7 @@ $(function() {
     var flowerElement, flowers, getNote, index, playYona, yonaList;
     index = 0;
     flowerElement = $('.hasu img');
-    flowers = ['images/hasu_400.png', 'images/hasu2_400.png'];
+    flowers = ['images/hasu.png', 'images/hasu2.png'];
     yonaList = [0, 2, 5, 7, 9, 12];
     getNote = function(base) {
       return {
@@ -525,11 +525,11 @@ $(function() {
     centerElement = $('#center-items .center-main-item img');
     index = 0;
     centerImages = {
-      0: ['images/0_center_400.png', 'images/0_right_400.png'],
-      10: ['images/10_center_400.png', 'images/10_right_400.png'],
-      20: ['images/20_center_400.png', 'images/20_right_400.png'],
-      50: ['images/50_center_400.png', 'images/50_right_400.png'],
-      60: ['images/60_center_400.png', 'images/60_right_400.png']
+      0: ['images/0_center.png', 'images/0_right.png'],
+      10: ['images/10_center.png', 'images/10_right.png'],
+      20: ['images/20_center.png', 'images/20_right.png'],
+      50: ['images/50_center.png', 'images/50_right.png'],
+      60: ['images/60_center.png', 'images/60_right.png']
     };
     tweetLink = $('a#tweet-link');
     hatenaBookmarkLink = $('a#hatena-bookmark-link');
