@@ -23,11 +23,9 @@ Dial = function(container, callback) {
     if (x < 0) {
       rad += Math.PI;
     }
-        if (last != null) {
-      last;
-    } else {
+    if (last == null) {
       last = rad;
-    };
+    }
     diff = rad - last;
     if (diff < -Math.PI) {
       diff += Math.PI * 2;
@@ -74,7 +72,7 @@ Stage = (function() {
     part = new Part;
     part.callback = callback;
     part.radius = radius;
-    part.age = this.getAge();
+    part.ageKey = this.getAgeKey();
     this.parts.push(part);
     return part;
   };
@@ -108,7 +106,7 @@ Stage = (function() {
     return this.last = now;
   };
   Stage.prototype.plot = function() {
-    var bgs, note, part, rate, stage, stageHeight, stageWidth, _i, _len, _ref, _results;
+    var bgs, note, part, rate, src, stage, stageHeight, stageWidth, _i, _len, _ref, _results;
     stage = $('#stage');
     stageWidth = stage.width();
     stageHeight = stage.height();
@@ -154,9 +152,8 @@ Stage = (function() {
             left: (Math.sin(this.position - note.position) * part.getRadius()) - part.getImageRadius() + stageWidth / 2,
             top: (-Math.cos(this.position - note.position) * part.getRadius()) - part.getImageRadius() + stageHeight / 2
           });
-          _results2.push(note.elem.attr({
-            src: note.playing ? 'images/ossan2.png' : 'images/ossan1.png'
-          }));
+          src = note.playing ? part.getOnImage() : part.getOffImage();
+          _results2.push(note.elem.attr('src') !== src ? note.elem.attr('src', src) : void 0);
         }
         return _results2;
       }).call(this));
@@ -258,11 +255,9 @@ Stage = (function() {
   Stage.prototype.getAgeKey = function(age) {
     var i, index, keys, _ref;
     keys = [0, 10, 20, 40, 50, 60];
-        if (age != null) {
-      age;
-    } else {
+    if (age == null) {
       age = this.getAge();
-    };
+    }
     index = 0;
     if (age < keys[0]) {
       return keys[0];
@@ -298,7 +293,7 @@ Part = (function() {
     this.notes = [];
     this.lastPosition = 0.0;
     this.birth = Date.now();
-    this.age = 0;
+    this.ageKey = 0;
   }
   Part.prototype.ImageRadius = 30;
   Part.prototype.getRate = function() {
@@ -359,6 +354,15 @@ Part = (function() {
       _results.push(note.elem.remove());
     }
     return _results;
+  };
+  Part.prototype.getOnImage = function() {
+    return this.getImageByKeys(this.ageKey, 'on');
+  };
+  Part.prototype.getOffImage = function() {
+    return this.getImageByKeys(this.ageKey, 'off');
+  };
+  Part.prototype.getImageByKeys = function(age, name) {
+    return "images/" + age + "_" + name + ".png";
   };
   return Part;
 })();
@@ -503,12 +507,12 @@ $(function() {
     centerElement = $('#center-items .center-main-item img');
     index = 0;
     centerImages = {
-      0: ['images/baby_center.png', 'images/baby_left.png', 'images/baby_center.png', 'images/baby_right.png'],
-      10: ['images/jr_center.png', 'images/jr_left.png', 'images/jr_center.png', 'images/jr_right.png'],
-      20: ['images/men_center.png', 'images/men_left.png', 'images/men_center.png', 'images/men_right.png'],
-      40: ['images/40_center.png', 'images/40_left.png', 'images/40_center.png', 'images/40_right.png'],
-      50: ['images/50_center.png', 'images/50_left.png', 'images/50_center.png', 'images/50_right.png'],
-      60: ['images/senior_center.png', 'images/senior_left.png', 'images/senior_center.png', 'images/senior_right.png']
+      0: ['images/0_center.png', 'images/0_right.png'],
+      10: ['images/10_center.png', 'images/10_right.png'],
+      20: ['images/20_center.png', 'images/20_right.png'],
+      40: ['images/40_center.png', 'images/40_right.png'],
+      50: ['images/50_center.png', 'images/50_right.png'],
+      60: ['images/60_center.png', 'images/60_right.png']
     };
     tweetLink = $('a#tweet-link');
     hatenaBookmarkLink = $('a#hatena-bookmark-link');

@@ -31,6 +31,7 @@ Dial = (container, callback) ->
 selectRandom = (list) ->
   list[Math.floor(Math.random() * list.length)]
 
+
 class Stage
   constructor: (@container) ->
     @parts = []
@@ -57,7 +58,7 @@ class Stage
     part = new Part
     part.callback = callback
     part.radius = radius
-    part.age = @getAge()
+    part.ageKey = @getAgeKey()
     @parts.push(part)
     part
 
@@ -124,8 +125,8 @@ class Stage
           # width: part.getImageRadius() * 2
           # height: part.getImageRadius() * 2
 
-        note.elem.attr
-          src: if note.playing then 'images/ossan2.png' else 'images/ossan1.png'
+        src = if note.playing then part.getOnImage() else part.getOffImage()
+        note.elem.attr('src', src) if note.elem.attr('src') != src
 
   killPart: (part) ->
     @parts = $.grep @parts, (v) ->
@@ -214,12 +215,14 @@ class Stage
     url = @getURL() + '#' + @getAgeKey()
     "https://twitter.com/share?source=tweetbutton&text=bon&url=#{encodeURIComponent(url)}&original_referer=#{encodeURIComponent(@getURL())}"
 
+
+
 class Part
   constructor: ->
     @notes = []
     @lastPosition = 0.0
     @birth = Date.now()
-    @age = 0
+    @ageKey = 0
 
   ImageRadius: 30,
 
@@ -264,6 +267,16 @@ class Part
     @elem.remove()
     for note in @notes
       note.elem.remove()
+
+  getOnImage: ->
+    this.getImageByKeys(@ageKey, 'on');
+
+  getOffImage: ->
+    this.getImageByKeys(@ageKey, 'off');
+
+  getImageByKeys: (age, name) ->
+      "images/#{age}_#{name}.png"
+
 
 class Note
   constructor: (@part, @position) ->
@@ -380,12 +393,12 @@ $ ->
     centerElement = $('#center-items .center-main-item img')
     index = 0
     centerImages = {
-      0: ['images/baby_center.png', 'images/baby_left.png', 'images/baby_center.png', 'images/baby_right.png'],
-      10: ['images/jr_center.png', 'images/jr_left.png', 'images/jr_center.png', 'images/jr_right.png'],
-      20: ['images/men_center.png', 'images/men_left.png', 'images/men_center.png', 'images/men_right.png'],
-      40: ['images/40_center.png', 'images/40_left.png', 'images/40_center.png', 'images/40_right.png'],
-      50: ['images/50_center.png', 'images/50_left.png', 'images/50_center.png', 'images/50_right.png'],
-      60: ['images/senior_center.png', 'images/senior_left.png', 'images/senior_center.png', 'images/senior_right.png'],
+      0: ['images/0_center.png', 'images/0_right.png'],
+      10: ['images/10_center.png', 'images/10_right.png'],
+      20: ['images/20_center.png', 'images/20_right.png'],
+      40: ['images/40_center.png', 'images/40_right.png'],
+      50: ['images/50_center.png', 'images/50_right.png'],
+      60: ['images/60_center.png', 'images/60_right.png'],
     }
 
     tweetLink = $('a#tweet-link')
