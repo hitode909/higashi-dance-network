@@ -428,10 +428,6 @@ Dog = (function() {
 $(function() {
   var setupCenterDance, setupDog, setupShowCenterItems, setupYona, setupYoutube, stage;
   stage = new Stage($('#stage'));
-  setInterval(function() {
-    $('#fps').text(stage.fps);
-    return stage.fps = 0;
-  }, 1000);
   Deferred.wait(1).next(function() {
     return Dial($('#stage'), function(diff, distance) {
       var bpmMin, part;
@@ -464,7 +460,7 @@ $(function() {
     mainItem = $('#center-items .center-main-item');
     items = $('#center-items .center-item');
     selectedItem = mainItem;
-    waitMain = 2;
+    waitMain = 25;
     waitLink = 5;
     change = function() {
       selectedItem.fadeOut('slow');
@@ -512,11 +508,11 @@ $(function() {
   };
   setupYona();
   setupCenterDance = function() {
-    var bookmarkElement, bookmarkImages, bookmarkIndex, buyTshirtsLink, centerElement, centerImages, centerIndex, change, hatenaBookmarkLink, tshirtsElement, tshirtsImages, tshirtsIndex, tweetImages, tweetIndex, tweetLink;
+    var bookmarkElement, bookmarkImages, bookmarkIndex, buyTshirtsLink, centerElement, centerImages, centerIndex, change, hatenaBookmarkLink, tshirtsElement, tshirtsImages, tshirtsIndex, tweetElement, tweetImages, tweetIndex, tweetLink;
     centerElement = $('#center-items .center-main-item img');
     bookmarkElement = $('#hatena-bookmark-link img');
     tshirtsElement = $('#buy-tshirts-link img');
-    tshirtsElement = $('#tweet-link img');
+    tweetElement = $('#tweet-link img');
     centerIndex = 0;
     centerImages = {
       0: ['images/0_center.png', 'images/0_right.png'],

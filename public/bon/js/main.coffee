@@ -334,10 +334,10 @@ class Dog
 $ ->
   stage = new Stage($('#stage'))
 
-  setInterval ->
-    $('#fps').text(stage.fps)
-    stage.fps = 0
-  ,1000
+  # setInterval ->
+  #   $('#fps').text(stage.fps)
+  #   stage.fps = 0
+  # ,1000
 
   Deferred.wait(1).next ->
     Dial $('#stage'), (diff, distance) ->
