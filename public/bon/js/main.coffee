@@ -312,21 +312,6 @@ class Note
   ended: ->
     @playing = false
 
-class Dog
-  constructor: (@element)->
-    @f = 0.0
-
-  observe: ->
-    opacity = Math.sin(@f += (Math.random() / 20)) * 0.5 + 0.5
-    @element.css
-      opacity: opacity
-
-    if opacity < 0.01
-      @element.css
-        width: "#{ Math.random()*100}%"
-        height: "#{ Math.random()*100}%"
-        left: "#{ Math.random()*100}%"
-        top: "#{ Math.random()*100}%"
 
 $ ->
   stage = new Stage($('#stage'))
@@ -462,39 +447,3 @@ $ ->
     change()
 
   setupCenterDance()
-
-  setupDog = ->
-    dog_img = $('<img>').attr({ src: 'dog.jpg' }).css
-      position: 'absolute'
-      'z-index': 13000
-    $('body').append(dog_img)
-    attack_img = $('<img>').attr({ src: 'attack.jpg' }).css
-      position: 'absolute'
-      'z-index': 13001
-    $('body').append(attack_img)
-    dog1 = new Dog(dog_img)
-    dog2 = new Dog(attack_img)
-    animationLoop = ->
-      dog1.observe()
-      dog2.observe()
-      window.requestAnimationFrame(animationLoop)
-    animationLoop()
-
-  setupYoutube = ->
-    put_youtube = ->
-      youtube = $("<iframe width='400' height='300' src='http://www.youtube.com/embed/lniVx_pFM_A?fs=1&autoplay=1&loop=1' frameborder='0' allowFullScreen=''></iframe>")
-      youtube.css
-        position: 'absolute'
-        'z-index': 14000
-        width: 400
-        height: 300
-        left: '40%'
-        top: '40%'
-      $('body').append(youtube)
-
-      TheDeferred.wait(10).next ->
-        youtube.remove()
-
-    setInterval ->
-      put_youtube()
-    ,30 * 1000
