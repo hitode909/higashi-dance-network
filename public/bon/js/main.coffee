@@ -197,10 +197,13 @@ class Stage
     pos = this.position
     part.addNote(pos)
 
+  getAgeMax: ->
+    80
+
   getAge: ->
     age = @ageFrom + @totalPosition
-    age = (age / 2) % 80
-    age += 80 if age < 0
+    age = (age / 2) % @getAgeMax()
+    age += @getAgeMax() if age < 0
     age
 
   parseAgeFrom: ->
@@ -209,18 +212,9 @@ class Stage
     parseInt(match, 10)
 
   getAgeKey: (age) ->
-    # TODO 間隔は一定にする？
     keys = [0, 10, 20, 50, 60]
     age ?= @getAge()
-    index = 0
-
-    return keys[0] if age < keys[0]
-    return keys[keys.length-1] if age >= keys[keys.length-1]
-
-    for i in [0..keys.length-1]
-      return keys[i] if keys[i] <= age and age < keys[i+1]
-
-    return keys[keys.length-1]  #wrong
+    keys[Math.floor((age / @getAgeMax()) * keys.length)]
 
   getURL: ->
     location.protocol + "//" + location.host + location.pathname
@@ -297,7 +291,7 @@ class Part
     this.getImageByKeys(@ageKey, 'off');
 
   getImageByKeys: (age, name) ->
-      "images/#{age}_#{name}.png"
+    "images/#{age}_#{name}.png"
 
 
 class Note

@@ -253,12 +253,15 @@ Stage = (function() {
     pos = this.position;
     return part.addNote(pos);
   };
+  Stage.prototype.getAgeMax = function() {
+    return 80;
+  };
   Stage.prototype.getAge = function() {
     var age;
     age = this.ageFrom + this.totalPosition;
-    age = (age / 2) % 80;
+    age = (age / 2) % this.getAgeMax();
     if (age < 0) {
-      age += 80;
+      age += this.getAgeMax();
     }
     return age;
   };
@@ -271,24 +274,12 @@ Stage = (function() {
     return parseInt(match, 10);
   };
   Stage.prototype.getAgeKey = function(age) {
-    var i, index, keys, _ref;
+    var keys;
     keys = [0, 10, 20, 50, 60];
     if (age == null) {
       age = this.getAge();
     }
-    index = 0;
-    if (age < keys[0]) {
-      return keys[0];
-    }
-    if (age >= keys[keys.length - 1]) {
-      return keys[keys.length - 1];
-    }
-    for (i = 0, _ref = keys.length - 1; 0 <= _ref ? i <= _ref : i >= _ref; 0 <= _ref ? i++ : i--) {
-      if (keys[i] <= age && age < keys[i + 1]) {
-        return keys[i];
-      }
-    }
-    return keys[keys.length - 1];
+    return keys[Math.floor((age / this.getAgeMax()) * keys.length)];
   };
   Stage.prototype.getURL = function() {
     return location.protocol + "//" + location.host + location.pathname;
