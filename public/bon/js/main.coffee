@@ -147,28 +147,48 @@ class Stage
   actionAtDistance: (distance) ->
     # return if distance < @minRadius
     part = this.getPartAtDistance(distance)
+
     unless part
+      ageKey = @getAgeKey()
+
       note = null
-      which = Math.random()
-      if which > 0.6
+
+      if ageKey == 0
+        tone = selectRandom([0, 2, 5, 7, 9, 12])
+        getNote = (base) ->
+          type: 'sin'
+          hz: base * Math.pow(Math.pow(2, 1/12), tone)
+          release: 0.9999
+          volume: 1.0
+        note = getNote(440)
+
+      else if ageKey == 10
         note =
           type: 'pulse'
           hz: Math.random() * 4000
           time: 400 * Math.random()
           rate: Math.random()
 
-      else if which > 0.3
+      else if ageKey == 20
+        note = {type: 'brownNoise', time: 400 * Math.random() * Math.random()}
+
+        # note = {type: 'whiteNoise', time: 400 * Math.random() * Math.random()}
+
+      else if ageKey == 50
         note = [
           {type: 'pulse', hz: Math.random() * 4000, time: 100 * Math.random(), rate: Math.random()},
           {type: 'pulse', hz: Math.random() * 4000, time: 100 * Math.random(), rate: Math.random()},
           {type: 'pulse', hz: Math.random() * 4000, time: 100 * Math.random(), rate: Math.random()},
-        ]
-
-      else if which > 0.15
-        note = {type: 'whiteNoise', time: 400 * Math.random() * Math.random()}
+          ]
 
       else
-        note = {type: 'brownNoise', time: 400 * Math.random() * Math.random()}
+        tone = selectRandom([0, 2, 5, 7, 9, 12])
+        getNote = (base) ->
+          type: 'pulse'
+          hz: base * Math.pow(Math.pow(2, 1/12), tone)
+          release: 0.9997
+          volume: 1.0
+        note = getNote(440)
 
       part = this.addPart (volume) ->
         note.volume = volume
@@ -375,7 +395,7 @@ $ ->
     getNote = (base) ->
       type: 'sin'
       hz: base * Math.pow(Math.pow(2, 1/12), selectRandom(yonaList))
-      release: 0.9999
+      release: 0.9995
       volume: 1.0
 
     playYona =  ->
