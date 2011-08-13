@@ -409,7 +409,7 @@ $ ->
     centerElement = $('#center-items .center-main-item img')
     bookmarkElement = $('#hatena-bookmark-link img')
     tshirtsElement = $('#buy-tshirts-link img')
-    tshirtsElement = $('#tweet-link img')
+    tweetElement = $('#tweet-link img')
     centerIndex = 0
     centerImages = {
       0: ['images/0_center.png', 'images/0_right.png'],
