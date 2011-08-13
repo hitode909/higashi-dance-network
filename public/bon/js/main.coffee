@@ -407,7 +407,8 @@ $ ->
 
   setupCenterDance = ->
     centerElement = $('#center-items .center-main-item img')
-    index = 0
+    bookmarkElement = $('#hatena-bookmark-link img')
+    centerIndex = 0
     centerImages = {
       0: ['images/0_center.png', 'images/0_right.png'],
       10: ['images/10_center.png', 'images/10_right.png'],
@@ -416,6 +417,12 @@ $ ->
       50: ['images/50_center.png', 'images/50_right.png'],
       60: ['images/60_center.png', 'images/60_right.png'],
     }
+
+    bookmarkImages = [
+      'images/hatena-bookmark.png'
+      'images/hatena-bookmark2.png'
+    ]
+    bookmarkIndex = 0
 
     tweetLink = $('a#tweet-link')
     hatenaBookmarkLink = $('a#hatena-bookmark-link')
@@ -426,8 +433,13 @@ $ ->
     change = ->
       tweetLink.attr('href', stage.getTweetURL())
       buyTshirtsLink.attr('href', stage.getTshirtsURL())
-      centerElement.attr('src': centerImages[stage.getAgeKey()][index])
-      index = (index + 1) % centerImages[stage.getAgeKey()].length
+
+      centerElement.attr('src': centerImages[stage.getAgeKey()][centerIndex])
+      centerIndex = (centerIndex + 1) % centerImages[stage.getAgeKey()].length
+
+      bookmarkElement.attr('src': bookmarkImages[bookmarkIndex])
+      bookmarkIndex = (bookmarkIndex + 1) % bookmarkImages.length
+
       Deferred.wait(Math.abs(120 / stage.bpm) * 0.25).next ->
         change()
     change()
