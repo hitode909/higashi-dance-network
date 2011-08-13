@@ -148,23 +148,26 @@ class Stage
     # return if distance < @minRadius
     part = this.getPartAtDistance(distance)
     unless part
-      note =
-        type: 'pulse'
-        hz: Math.random() * 4000
-        time: 400 * Math.random()
-        rate: Math.random()
+      note = null
+      which = Math.random()
+      if which > 0.6
+        note =
+          type: 'pulse'
+          hz: Math.random() * 4000
+          time: 400 * Math.random()
+          rate: Math.random()
 
-      if Math.random() < 0.2
+      else if which > 0.3
         note = [
           {type: 'pulse', hz: Math.random() * 4000, time: 100 * Math.random(), rate: Math.random()},
           {type: 'pulse', hz: Math.random() * 4000, time: 100 * Math.random(), rate: Math.random()},
           {type: 'pulse', hz: Math.random() * 4000, time: 100 * Math.random(), rate: Math.random()},
         ]
 
-      if Math.random() < 0.1
+      else if which > 0.15
         note = {type: 'whiteNoise', time: 400 * Math.random() * Math.random()}
 
-      if Math.random() < 0.1
+      else
         note = {type: 'brownNoise', time: 400 * Math.random() * Math.random()}
 
       part = this.addPart (volume) ->

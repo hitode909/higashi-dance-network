@@ -186,16 +186,19 @@ Stage = (function() {
     return got;
   };
   Stage.prototype.actionAtDistance = function(distance) {
-    var note, part, pos;
+    var note, part, pos, which;
     part = this.getPartAtDistance(distance);
     if (!part) {
-      note = {
-        type: 'pulse',
-        hz: Math.random() * 4000,
-        time: 400 * Math.random(),
-        rate: Math.random()
-      };
-      if (Math.random() < 0.2) {
+      note = null;
+      which = Math.random();
+      if (which > 0.6) {
+        note = {
+          type: 'pulse',
+          hz: Math.random() * 4000,
+          time: 400 * Math.random(),
+          rate: Math.random()
+        };
+      } else if (which > 0.3) {
         note = [
           {
             type: 'pulse',
@@ -214,14 +217,12 @@ Stage = (function() {
             rate: Math.random()
           }
         ];
-      }
-      if (Math.random() < 0.1) {
+      } else if (which > 0.15) {
         note = {
           type: 'whiteNoise',
           time: 400 * Math.random() * Math.random()
         };
-      }
-      if (Math.random() < 0.1) {
+      } else {
         note = {
           type: 'brownNoise',
           time: 400 * Math.random() * Math.random()
@@ -427,7 +428,6 @@ $(function() {
     return Dial($('#stage'), function(diff, distance) {
       var bpmMin, part;
       stage.bpm += diff * 32;
-      console.log(stage.bpm);
       bpmMin = 1.0;
       if (Math.abs(stage.bpm) < bpmMin) {
         stage.bpm = bpmMin * stage.bpm / Math.abs(stage.bpm);
