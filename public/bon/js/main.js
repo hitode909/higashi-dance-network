@@ -464,7 +464,7 @@ $(function() {
     mainItem = $('#center-items .center-main-item');
     items = $('#center-items .center-item');
     selectedItem = mainItem;
-    waitMain = 25;
+    waitMain = 2;
     waitLink = 5;
     change = function() {
       selectedItem.fadeOut('slow');
@@ -512,9 +512,12 @@ $(function() {
   };
   setupYona();
   setupCenterDance = function() {
-    var buyTshirtsLink, centerElement, centerImages, change, hatenaBookmarkLink, index, tweetLink;
+    var bookmarkElement, bookmarkImages, bookmarkIndex, buyTshirtsLink, centerElement, centerImages, centerIndex, change, hatenaBookmarkLink, tshirtsElement, tshirtsImages, tshirtsIndex, tweetImages, tweetIndex, tweetLink;
     centerElement = $('#center-items .center-main-item img');
-    index = 0;
+    bookmarkElement = $('#hatena-bookmark-link img');
+    tshirtsElement = $('#buy-tshirts-link img');
+    tshirtsElement = $('#tweet-link img');
+    centerIndex = 0;
     centerImages = {
       0: ['images/0_center.png', 'images/0_right.png'],
       10: ['images/10_center.png', 'images/10_right.png'],
@@ -522,6 +525,12 @@ $(function() {
       50: ['images/50_center.png', 'images/50_right.png'],
       60: ['images/60_center.png', 'images/60_right.png']
     };
+    bookmarkImages = ['images/hatena-bookmark1.png', 'images/hatena-bookmark2.png'];
+    bookmarkIndex = 0;
+    tshirtsImages = ['images/buy-tshirts1.png', 'images/buy-tshirts2.png'];
+    tshirtsIndex = 0;
+    tweetImages = ['images/tweet1.png', 'images/tweet2.png'];
+    tweetIndex = 0;
     tweetLink = $('a#tweet-link');
     hatenaBookmarkLink = $('a#hatena-bookmark-link');
     buyTshirtsLink = $('a#buy-tshirts-link');
@@ -530,9 +539,21 @@ $(function() {
       tweetLink.attr('href', stage.getTweetURL());
       buyTshirtsLink.attr('href', stage.getTshirtsURL());
       centerElement.attr({
-        'src': centerImages[stage.getAgeKey()][index]
+        'src': centerImages[stage.getAgeKey()][centerIndex]
       });
-      index = (index + 1) % centerImages[stage.getAgeKey()].length;
+      centerIndex = (centerIndex + 1) % centerImages[stage.getAgeKey()].length;
+      bookmarkElement.attr({
+        'src': bookmarkImages[bookmarkIndex]
+      });
+      bookmarkIndex = (bookmarkIndex + 1) % bookmarkImages.length;
+      tshirtsElement.attr({
+        'src': tshirtsImages[tshirtsIndex]
+      });
+      tshirtsIndex = (tshirtsIndex + 1) % tshirtsImages.length;
+      tweetElement.attr({
+        'src': tweetImages[tweetIndex]
+      });
+      tweetIndex = (tweetIndex + 1) % tweetImages.length;
       return Deferred.wait(Math.abs(120 / stage.bpm) * 0.25).next(function() {
         return change();
       });

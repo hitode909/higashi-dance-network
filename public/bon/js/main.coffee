@@ -408,6 +408,8 @@ $ ->
   setupCenterDance = ->
     centerElement = $('#center-items .center-main-item img')
     bookmarkElement = $('#hatena-bookmark-link img')
+    tshirtsElement = $('#buy-tshirts-link img')
+    tshirtsElement = $('#tweet-link img')
     centerIndex = 0
     centerImages = {
       0: ['images/0_center.png', 'images/0_right.png'],
@@ -419,10 +421,22 @@ $ ->
     }
 
     bookmarkImages = [
-      'images/hatena-bookmark.png'
+      'images/hatena-bookmark1.png'
       'images/hatena-bookmark2.png'
     ]
     bookmarkIndex = 0
+
+    tshirtsImages = [
+      'images/buy-tshirts1.png'
+      'images/buy-tshirts2.png'
+    ]
+    tshirtsIndex = 0
+
+    tweetImages = [
+      'images/tweet1.png'
+      'images/tweet2.png'
+    ]
+    tweetIndex = 0
 
     tweetLink = $('a#tweet-link')
     hatenaBookmarkLink = $('a#hatena-bookmark-link')
@@ -439,6 +453,12 @@ $ ->
 
       bookmarkElement.attr('src': bookmarkImages[bookmarkIndex])
       bookmarkIndex = (bookmarkIndex + 1) % bookmarkImages.length
+
+      tshirtsElement.attr('src': tshirtsImages[tshirtsIndex])
+      tshirtsIndex = (tshirtsIndex + 1) % tshirtsImages.length
+
+      tweetElement.attr('src': tweetImages[tweetIndex])
+      tweetIndex = (tweetIndex + 1) % tweetImages.length
 
       Deferred.wait(Math.abs(120 / stage.bpm) * 0.25).next ->
         change()
