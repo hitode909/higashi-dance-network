@@ -224,14 +224,11 @@ class Stage
 
   getTshirtsURL: ->
     # TシャツURLは決め打ち
-    'http://tshirts.com'
+    'http://clubt.jp/search?q=http%3A%2F%2Fhigashi-dance-network.appspot.com%2Fbon%2F'
 
   getTweetURL: ->
     # tweetは年齢含む
-    url = @getURL() + '#' + @getAgeKey()
-    "https://twitter.com/share?source=tweetbutton&text=bon&url=#{encodeURIComponent(url)}&original_referer=#{encodeURIComponent(@getURL())}"
-
-
+    "https://twitter.com/share?source=tweetbutton&text=bon&url=#{encodeURIComponent(@getURL())}&original_referer=#{encodeURIComponent(@getURL())}"
 
 class Part
   constructor: ->

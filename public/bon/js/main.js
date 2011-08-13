@@ -288,12 +288,10 @@ Stage = (function() {
     return "http://b.hatena.ne.jp/entry/" + (this.getURL());
   };
   Stage.prototype.getTshirtsURL = function() {
-    return 'http://tshirts.com';
+    return 'http://clubt.jp/search?q=http%3A%2F%2Fhigashi-dance-network.appspot.com%2Fbon%2F';
   };
   Stage.prototype.getTweetURL = function() {
-    var url;
-    url = this.getURL() + '#' + this.getAgeKey();
-    return "https://twitter.com/share?source=tweetbutton&text=bon&url=" + (encodeURIComponent(url)) + "&original_referer=" + (encodeURIComponent(this.getURL()));
+    return "https://twitter.com/share?source=tweetbutton&text=bon&url=" + (encodeURIComponent(this.getURL())) + "&original_referer=" + (encodeURIComponent(this.getURL()));
   };
   return Stage;
 })();
