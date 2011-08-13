@@ -454,7 +454,6 @@ $(function() {
       return change();
     });
   };
-  setupShowCenterItems();
   setupYona = function() {
     var flowerElement, flowers, getNote, index, playYona, yonaList;
     index = 0;

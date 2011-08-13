@@ -93,3 +93,14 @@ img#bg-left {
     color: #0f0;
     font-weight: bold;
 }
+
+#buttons {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    z-index: 13000;
+}
+
+#buttons a {
+    margin: 10px;
+}

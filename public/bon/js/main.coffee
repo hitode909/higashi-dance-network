@@ -361,7 +361,7 @@ $ ->
     TheDeferred.wait(waitMain).next ->
       change()
 
-  setupShowCenterItems()
+  # setupShowCenterItems()
 
   setupYona = ->
     index = 0
