@@ -339,7 +339,7 @@ $ ->
   #   stage.fps = 0
   # ,1000
 
-  Deferred.wait(1).next ->
+  TheDeferred.wait(1).next ->
     Dial $('#stage'), (diff, distance) ->
       stage.bpm += diff * 32
       bpmMin = 1.0
@@ -373,10 +373,10 @@ $ ->
         selectedItem = mainItem
       selectedItem.fadeIn('slow')
 
-      Deferred.wait(if selectedItem.hasClass('center-main-item') then waitMain else waitLink).next ->
+      TheDeferred.wait(if selectedItem.hasClass('center-main-item') then waitMain else waitLink).next ->
         change()
 
-    Deferred.wait(waitMain).next ->
+    TheDeferred.wait(waitMain).next ->
       change()
 
   setupShowCenterItems()
@@ -398,7 +398,7 @@ $ ->
       index = (index + 1) % flowers.length
       flowerElement.attr('src': flowers[index])
 
-      Deferred.wait(Math.abs(120 / stage.bpm) * selectRandom([1, 1, 2, 0.5])).next ->
+      TheDeferred.wait(Math.abs(120 / stage.bpm) * selectRandom([1, 1, 2, 0.5])).next ->
         playYona()
 
     playYona()
@@ -460,7 +460,7 @@ $ ->
       tweetElement.attr('src': tweetImages[tweetIndex])
       tweetIndex = (tweetIndex + 1) % tweetImages.length
 
-      Deferred.wait(Math.abs(120 / stage.bpm) * 0.25).next ->
+      TheDeferred.wait(Math.abs(120 / stage.bpm) * 0.25).next ->
         change()
     change()
 
@@ -495,7 +495,7 @@ $ ->
         top: '40%'
       $('body').append(youtube)
 
-      Deferred.wait(10).next ->
+      TheDeferred.wait(10).next ->
         youtube.remove()
 
     setInterval ->

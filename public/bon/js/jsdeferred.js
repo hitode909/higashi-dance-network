@@ -36,9 +36,9 @@
  * Create a Deferred object
  *
  * @example
- *   var d = new Deferred();
+ *   var d = new TheDeferred();
  *   // or this is shothand of above.
- *   var d = Deferred();
+ *   var d = TheDeferred();
  *
  * @example
  *   $.deferred.define();
@@ -61,22 +61,22 @@
  *
  * @constructor
  */
-function Deferred () { return (this instanceof Deferred) ? this.init() : new Deferred() }
+function TheDeferred () { return (this instanceof TheDeferred) ? this.init() : new TheDeferred() }
 /** 
  * default callback function
- * @type {function(this:Deferred, ...[*]):*} 
+ * @type {function(this:TheDeferred, ...[*]):*} 
  * @field
  */
-Deferred.ok = function (x) { return x };
+TheDeferred.ok = function (x) { return x };
 /** 
  * default errorback function
- * @type {function(this:Deferred, ...[*]):*} 
+ * @type {function(this:TheDeferred, ...[*]):*} 
  * @field
  */
-Deferred.ng = function (x) { throw  x };
-Deferred.prototype = {
+TheDeferred.ng = function (x) { throw  x };
+TheDeferred.prototype = {
 	/**
-	 * This is class magic-number of Deferred for determining identity of two instances
+	 * This is class magic-number of TheDeferred for determining identity of two instances
 	 * that are from different origins (eg. Mozilla Add-on) instead of using "instanceof".
 	 *
 	 * @const
@@ -85,22 +85,22 @@ Deferred.prototype = {
 
 	/**
 	 * @private
-	 * @return {Deferred} this
+	 * @return {TheDeferred} this
 	 */
 	init : function () {
 		this._next    = null;
 		this.callback = {
-			ok: Deferred.ok,
-			ng: Deferred.ng
+			ok: TheDeferred.ok,
+			ng: TheDeferred.ng
 		};
 		return this;
 	},
 
 	/**
-	 * Create new Deferred and sets `fun` as its callback.
+	 * Create new TheDeferred and sets `fun` as its callback.
 	 *
 	 * @example
-	 *   var d = new Deferred();
+	 *   var d = new TheDeferred();
 	 *
 	 *   d.
 	 *   next(function () {
@@ -112,19 +112,19 @@ Deferred.prototype = {
 	 *
 	 *   d.call();
 	 *
-	 * @param {function(this:Deferred, ...[*]):*} fun Callback of continuation.
-	 * @return {Deferred} next deferred
+	 * @param {function(this:TheDeferred, ...[*]):*} fun Callback of continuation.
+	 * @return {TheDeferred} next deferred
 	 */
 	next  : function (fun) { return this._post("ok", fun) },
 
 	/**
-	 * Create new Deferred and sets `fun` as its errorback.
+	 * Create new TheDeferred and sets `fun` as its errorback.
 	 * 
-	 * If `fun` not throws error but returns normal value, Deferred treats
+	 * If `fun` not throws error but returns normal value, TheDeferred treats
 	 * the given error is recovery and continue callback chain.
 	 *
 	 * @example
-	 *   var d =  new Deferred();
+	 *   var d =  new TheDeferred();
 	 *
 	 *   d.
 	 *   next(function () {
@@ -140,8 +140,8 @@ Deferred.prototype = {
 	 *
 	 *   d.call();
 	 *
-	 * @param {function(this:Deferred, ...[*]):*} fun Errorback of continuation.
-	 * @return {Deferred} next deferred
+	 * @param {function(this:TheDeferred, ...[*]):*} fun Errorback of continuation.
+	 * @return {TheDeferred} next deferred
 	 */
 	error : function (fun) { return this._post("ng", fun) },
 
@@ -150,7 +150,7 @@ Deferred.prototype = {
 	 *
 	 * @example
 	 *   function timeout100 () {
-	 *     var d = new Deferred();
+	 *     var d = new TheDeferred();
 	 *     setTimeout(function () {
 	 *        d.call('value');
 	 *     }, 100);
@@ -158,7 +158,7 @@ Deferred.prototype = {
 	 *   }
 	 *
 	 * @param {*} val Value passed to continuation.
-	 * @return {Deferred} this
+	 * @return {TheDeferred} this
 	 */
 	call  : function (val) { return this._fire("ok", val) },
 
@@ -167,7 +167,7 @@ Deferred.prototype = {
 	 * 
 	 * @example
 	 *   function http (url) {
-	 *     var d = new Deferred();
+	 *     var d = new TheDeferred();
 	 *     var x = new XMLHttpRequest();
 	 *     x.onreadystatechange = function () {
 	 *       if (x.readyState == 4) {
@@ -178,14 +178,14 @@ Deferred.prototype = {
 	 *   }
 	 *
 	 * @param {*} val Value of error.
-	 * @return {Deferred} this
+	 * @return {TheDeferred} this
 	 */
 	fail  : function (err) { return this._fire("ng", err) },
 
 	/**
 	 * Cancel receiver callback (this is only valid before invoking any callbacks)
 	 *
-	 * @return {Deferred} this
+	 * @return {TheDeferred} this
 	 */
 	cancel : function () {
 		(this.canceller || function () {})();
@@ -193,7 +193,7 @@ Deferred.prototype = {
 	},
 
 	_post : function (okng, fun) {
-		this._next =  new Deferred();
+		this._next =  new TheDeferred();
 		this._next.callback[okng] = fun;
 		return this._next;
 	},
@@ -205,9 +205,9 @@ Deferred.prototype = {
 		} catch (e) {
 			next  = "ng";
 			value = e;
-			if (Deferred.onerror) Deferred.onerror(e);
+			if (TheDeferred.onerror) TheDeferred.onerror(e);
 		}
-		if (Deferred.isDeferred(value)) {
+		if (TheDeferred.isTheDeferred(value)) {
 			value._next = this._next;
 		} else {
 			if (this._next) this._next._fire(next, value);
@@ -216,14 +216,14 @@ Deferred.prototype = {
 	}
 };
 /**
- * Returns true if an argument is Deferred.
+ * Returns true if an argument is TheDeferred.
  *
  * @function
  * @param {*} obj object to determine.
  * @return {boolean}
  */
-Deferred.isDeferred = function (obj) {
-	return !!(obj && obj._id == Deferred.prototype._id);
+TheDeferred.isTheDeferred = function (obj) {
+	return !!(obj && obj._id == TheDeferred.prototype._id);
 };
 
 /**
@@ -231,20 +231,20 @@ Deferred.isDeferred = function (obj) {
  * is called after current queue.
  *
  * @function
- * @name Deferred.next
+ * @name TheDeferred.next
  * @param {function():*} fun callback
- * @return {Deferred}
+ * @return {TheDeferred}
  */
-Deferred.next_default = function (fun) {
-	var d = new Deferred();
+TheDeferred.next_default = function (fun) {
+	var d = new TheDeferred();
 	var id = setTimeout(function () { d.call() }, 0);
 	d.canceller = function () { clearTimeout(id) };
 	if (fun) d.callback.ok = fun;
 	return d;
 };
-Deferred.next_faster_way_readystatechange = ((typeof window === 'object') && (location.protocol == "http:") && !window.opera && /\bMSIE\b/.test(navigator.userAgent)) && function (fun) {
+TheDeferred.next_faster_way_readystatechange = ((typeof window === 'object') && (location.protocol == "http:") && !window.opera && /\bMSIE\b/.test(navigator.userAgent)) && function (fun) {
 	// MSIE
-	var d = new Deferred();
+	var d = new TheDeferred();
 	var t = new Date().getTime();
 	if (t - arguments.callee._prev_timeout_called < 150) {
 		var cancel = false;
@@ -273,9 +273,9 @@ Deferred.next_faster_way_readystatechange = ((typeof window === 'object') && (lo
 	if (fun) d.callback.ok = fun;
 	return d;
 };
-Deferred.next_faster_way_Image = ((typeof window === 'object') && (typeof(Image) != "undefined") && !window.opera && document.addEventListener) && function (fun) {
+TheDeferred.next_faster_way_Image = ((typeof window === 'object') && (typeof(Image) != "undefined") && !window.opera && document.addEventListener) && function (fun) {
 	// Modern Browsers
-	var d = new Deferred();
+	var d = new TheDeferred();
 	var img = new Image();
 	var handler = function () {
 		d.canceller();
@@ -291,20 +291,20 @@ Deferred.next_faster_way_Image = ((typeof window === 'object') && (typeof(Image)
 	if (fun) d.callback.ok = fun;
 	return d;
 };
-Deferred.next_tick = (typeof process === 'object' && typeof process.nextTick === 'function') && function (fun) {
-	var d = new Deferred();
+TheDeferred.next_tick = (typeof process === 'object' && typeof process.nextTick === 'function') && function (fun) {
+	var d = new TheDeferred();
 	process.nextTick(function() { d.call() });
 	if (fun) d.callback.ok = fun;
 	return d;
 };
-Deferred.next = Deferred.next_faster_way_readystatechange ||
-                Deferred.next_faster_way_Image ||
-                Deferred.next_tick ||
-                Deferred.next_default;
+TheDeferred.next = TheDeferred.next_faster_way_readystatechange ||
+                TheDeferred.next_faster_way_Image ||
+                TheDeferred.next_tick ||
+                TheDeferred.next_default;
 
 /**
- * Construct Deferred chain with array and return its Deferred.
- * This is shorthand for construct Deferred chains.
+ * Construct TheDeferred chain with array and return its TheDeferred.
+ * This is shorthand for construct TheDeferred chains.
  *
  * @example
  *  return chain(
@@ -341,10 +341,10 @@ Deferred.next = Deferred.next_faster_way_readystatechange ||
  *  );
  *
  * @param {...[(Array.<function(*):*>|Object.<string,function(*):*>|function(*):*)]} arguments process chains
- * @return {Deferred}
+ * @return {TheDeferred}
  */
-Deferred.chain = function () {
-	var chain = Deferred.next();
+TheDeferred.chain = function () {
+	var chain = TheDeferred.next();
 	for (var i = 0, len = arguments.length; i < len; i++) (function (obj) {
 		switch (typeof obj) {
 			case "function":
@@ -359,7 +359,7 @@ Deferred.chain = function () {
 				}
 				break;
 			case "object":
-				chain = chain.next(function() { return Deferred.parallel(obj) });
+				chain = chain.next(function() { return TheDeferred.parallel(obj) });
 				break;
 			default:
 				throw "unknown type in process chains";
@@ -378,10 +378,10 @@ Deferred.chain = function () {
  *   });
  *
  * @param {number} sec second to wait
- * @return {Deferred}
+ * @return {TheDeferred}
  */
-Deferred.wait = function (n) {
-	var d = new Deferred(), t = new Date();
+TheDeferred.wait = function (n) {
+	var d = new TheDeferred(), t = new Date();
 	var id = setTimeout(function () {
 		d.call((new Date).getTime() - t.getTime());
 	}, n * 1000);
@@ -411,11 +411,11 @@ Deferred.wait = function (n) {
  *
  * @param {function(...[*]):*} fun function to call
  * @param {...*} args arguments passed to fun
- * @return {Deferred}
+ * @return {TheDeferred}
  */
-Deferred.call = function (fun) {
+TheDeferred.call = function (fun) {
 	var args = Array.prototype.slice.call(arguments, 1);
-	return Deferred.next(function () {
+	return TheDeferred.next(function () {
 		return fun.apply(this, args);
 	});
 };
@@ -445,15 +445,15 @@ Deferred.call = function (fun) {
  *       values.bar //=> bar.html data
  *   });
  *
- * @param {(Array.<Deferred>|Object.<string,Deferred>)} dl Deferreds wanted to wait
- * @return {Deferred}
- * @see Deferred.earlier
+ * @param {(Array.<TheDeferred>|Object.<string,TheDeferred>)} dl TheDeferreds wanted to wait
+ * @return {TheDeferred}
+ * @see TheDeferred.earlier
  */
-Deferred.parallel = function (dl) {
+TheDeferred.parallel = function (dl) {
 	if (arguments.length > 1) dl = Array.prototype.slice.call(arguments);
-	var ret = new Deferred(), values = {}, num = 0;
+	var ret = new TheDeferred(), values = {}, num = 0;
 	for (var i in dl) if (dl.hasOwnProperty(i)) (function (d, i) {
-		if (typeof d == "function") d = Deferred.next(d);
+		if (typeof d == "function") d = TheDeferred.next(d);
 		d.next(function (v) {
 			values[i] = v;
 			if (--num <= 0) {
@@ -469,7 +469,7 @@ Deferred.parallel = function (dl) {
 		num++;
 	})(dl[i], i);
 
-	if (!num) Deferred.next(function () { ret.call() });
+	if (!num) TheDeferred.next(function () { ret.call() });
 	ret.canceller = function () {
 		for (var i in dl) if (dl.hasOwnProperty(i)) {
 			dl[i].cancel();
@@ -482,13 +482,13 @@ Deferred.parallel = function (dl) {
  * Continue process when one deferred in `deferredlist` has completed. Others will be canceled.
  * parallel ('and' processing) <=> earlier ('or' processing)
  *
- * @param {(Array.<Deferred>|Object.<string,Deferred>)} dl Deferreds wanted to wait
- * @return {Deferred}
- * @see Deferred.parallel
+ * @param {(Array.<TheDeferred>|Object.<string,TheDeferred>)} dl TheDeferreds wanted to wait
+ * @return {TheDeferred}
+ * @see TheDeferred.parallel
  */
-Deferred.earlier = function (dl) {
+TheDeferred.earlier = function (dl) {
 	if (arguments.length > 1) dl = Array.prototype.slice.call(arguments);
-	var ret = new Deferred(), values = {}, num = 0;
+	var ret = new TheDeferred(), values = {}, num = 0;
 	for (var i in dl) if (dl.hasOwnProperty(i)) (function (d, i) {
 		d.next(function (v) {
 			values[i] = v;
@@ -504,7 +504,7 @@ Deferred.earlier = function (dl) {
 		num++;
 	})(dl[i], i);
 
-	if (!num) Deferred.next(function () { ret.call() });
+	if (!num) TheDeferred.next(function () { ret.call() });
 	ret.canceller = function () {
 		for (var i in dl) if (dl.hasOwnProperty(i)) {
 			dl[i].cancel();
@@ -536,9 +536,9 @@ Deferred.earlier = function (dl) {
  *
  * @param {(number|{begin:number, end:number, step:number})} n loop definition
  * @param {function(number):*} fun loop function
- * @return {Deferred}
+ * @return {TheDeferred}
  */
-Deferred.loop = function (n, fun) {
+TheDeferred.loop = function (n, fun) {
 	var o = {
 		begin : n.begin || 0,
 		end   : (typeof n.end == "number") ? n.end : n - 1,
@@ -547,7 +547,7 @@ Deferred.loop = function (n, fun) {
 		prev  : null
 	};
 	var ret, step = o.step;
-	return Deferred.next(function () {
+	return TheDeferred.next(function () {
 		function _loop (i) {
 			if (i <= o.end) {
 				if ((i + step) > o.end) {
@@ -556,19 +556,19 @@ Deferred.loop = function (n, fun) {
 				}
 				o.prev = ret;
 				ret = fun.call(this, i, o);
-				if (Deferred.isDeferred(ret)) {
+				if (TheDeferred.isTheDeferred(ret)) {
 					return ret.next(function (r) {
 						ret = r;
-						return Deferred.call(_loop, i + step);
+						return TheDeferred.call(_loop, i + step);
 					});
 				} else {
-					return Deferred.call(_loop, i + step);
+					return TheDeferred.call(_loop, i + step);
 				}
 			} else {
 				return ret;
 			}
 		}
-		return (o.begin <= o.end) ? Deferred.call(_loop, o.begin) : null;
+		return (o.begin <= o.end) ? TheDeferred.call(_loop, o.begin) : null;
 	});
 };
 
@@ -577,7 +577,7 @@ Deferred.loop = function (n, fun) {
  * Loop `n` times with `fun`.
  * This function automatically returns UI-control to browser, if the loop spends over 20msec.
  * This is useful for huge loop not to block browser UI.
- * This function can't wait a deferred returned by loop function, compared with Deferred.loop.
+ * This function can't wait a deferred returned by loop function, compared with TheDeferred.loop.
  *
  * @example
  *   repeat(10, function (i) {
@@ -586,39 +586,39 @@ Deferred.loop = function (n, fun) {
  *
  * @param {number} n loop count
  * @param {function(number)} fun loop function
- * @return {Deferred}
+ * @return {TheDeferred}
  */
-Deferred.repeat = function (n, fun) {
+TheDeferred.repeat = function (n, fun) {
 	var i = 0, end = {}, ret = null;
-	return Deferred.next(function () {
+	return TheDeferred.next(function () {
 		var t = (new Date()).getTime();
 		do {
 			if (i >= n) return null;
 			ret = fun(i++);
 		} while ((new Date()).getTime() - t < 20);
-		return Deferred.call(arguments.callee);
+		return TheDeferred.call(arguments.callee);
 	});
 };
 
 /**
- * Register `fun` to Deferred prototype for method chain.
+ * Register `fun` to TheDeferred prototype for method chain.
  *
  * @example
- *   // Deferred.register("loop", loop);
+ *   // TheDeferred.register("loop", loop);
  *
- *   // Global Deferred function
+ *   // Global TheDeferred function
  *   loop(10, function (n) {
  *       print(n);
  *   }).
- *   // Registered Deferred.prototype.loop
+ *   // Registered TheDeferred.prototype.loop
  *   loop(10, function (n) {
  *       print(n);
  *   });
  *
  * @param {string} name name of method
- * @param {function(*):Deferred} fun actual function of method
+ * @param {function(*):TheDeferred} fun actual function of method
  */
-Deferred.register = function (name, fun) {
+TheDeferred.register = function (name, fun) {
 	this.prototype[name] = function () {
 		var a = arguments;
 		return this.next(function () {
@@ -627,29 +627,29 @@ Deferred.register = function (name, fun) {
 	};
 };
 
-Deferred.register("loop", Deferred.loop);
-Deferred.register("wait", Deferred.wait);
+TheDeferred.register("loop", TheDeferred.loop);
+TheDeferred.register("wait", TheDeferred.wait);
 
 /**
- * Connect a function with Deferred.  That is, transform a function
- * that takes a callback into one that returns a Deferred object.
+ * Connect a function with TheDeferred.  That is, transform a function
+ * that takes a callback into one that returns a TheDeferred object.
  *
  * @example
- *   var timeout = Deferred.connect(setTimeout, { target: window, ok: 0 });
+ *   var timeout = TheDeferred.connect(setTimeout, { target: window, ok: 0 });
  *   timeout(1).next(function () {
  *       alert('after 1 sec');
  *   });
  *
- *   var timeout = Deferred.connect(window, "setTimeout");
+ *   var timeout = TheDeferred.connect(window, "setTimeout");
  *   timeout(1).next(function () {
  *       alert('after 1 sec');
  *   });
  *
  * @param {(function(...[*]):*|*)} funo target function or object
  * @param {({ok:number, ng:number, target:*}|string)} options options or method name of object in arguments[0]
- * @return {function(...[*]):Deferred}
+ * @return {function(...[*]):TheDeferred}
  */
-Deferred.connect = function (funo, options) {
+TheDeferred.connect = function (funo, options) {
 	var target, func, obj;
 	if (typeof arguments[1] == "string") {
 		target = arguments[0];
@@ -666,7 +666,7 @@ Deferred.connect = function (funo, options) {
 	var errorbackArgIndex = obj.ng;
 
 	return function () {
-		var d = new Deferred().next(function (args) {
+		var d = new TheDeferred().next(function (args) {
 			var next = this._next.callback.ok;
 			this._next.callback.ok = function () {
 				return next.apply(this, args.args);
@@ -677,31 +677,31 @@ Deferred.connect = function (funo, options) {
 		if (!(isFinite(callbackArgIndex) && callbackArgIndex !== null)) {
 			callbackArgIndex = args.length;
 		}
-		var callback = function () { d.call(new Deferred.Arguments(arguments)) };
+		var callback = function () { d.call(new TheDeferred.Arguments(arguments)) };
 		args.splice(callbackArgIndex, 0, callback);
 		if (isFinite(errorbackArgIndex) && errorbackArgIndex !== null) {
 			var errorback = function () { d.fail(arguments) };
 			args.splice(errorbackArgIndex, 0, errorback);
 		}
-		Deferred.next(function () { func.apply(target, args) });
+		TheDeferred.next(function () { func.apply(target, args) });
 		return d;
 	}
 };
 /**
- * Used for Deferred.connect to allow to pass multiple values to next.
+ * Used for TheDeferred.connect to allow to pass multiple values to next.
  *
  * @private
  * @constructor
  * @param {Array.<*>} args
- * @see Deferred.connect
+ * @see TheDeferred.connect
  */
-Deferred.Arguments = function (args) { this.args = Array.prototype.slice.call(args, 0) };
+TheDeferred.Arguments = function (args) { this.args = Array.prototype.slice.call(args, 0) };
 
 /**
- * Try func (returns Deferred) till it finish without exceptions.
+ * Try func (returns TheDeferred) till it finish without exceptions.
  *
  * @example
- *   Deferred.retry(3, function () {
+ *   TheDeferred.retry(3, function () {
  *       return http.get(...);
  *   }).
  *   next(function (res) {
@@ -712,17 +712,17 @@ Deferred.Arguments = function (args) { this.args = Array.prototype.slice.call(ar
  *   });
  *
  * @param {number} retryCount
- * @param {function(number):Deferred} funcDeferred
+ * @param {function(number):TheDeferred} funcTheDeferred
  * @param {{wait:number}} options
- * @return {Deferred}
+ * @return {TheDeferred}
  */
-Deferred.retry = function (retryCount, funcDeferred, options) {
+TheDeferred.retry = function (retryCount, funcTheDeferred, options) {
 	if (!options) options = {};
 
 	var wait = options.wait || 0;
-	var d = new Deferred();
+	var d = new TheDeferred();
 	var retry = function () {
-		var m = funcDeferred(retryCount);
+		var m = funcTheDeferred(retryCount);
 		m.
 			next(function (mes) {
 				d.call(mes);
@@ -742,24 +742,24 @@ Deferred.retry = function (retryCount, funcDeferred, options) {
 /**
  * default export methods
  *
- * @see Deferred.define
+ * @see TheDeferred.define
  */
-Deferred.methods = ["parallel", "wait", "next", "call", "loop", "repeat", "chain"];
+TheDeferred.methods = ["parallel", "wait", "next", "call", "loop", "repeat", "chain"];
 /**
  * export functions to obj.
  * @param {Object} obj
- * @param {Array.<string>=} list (default Deferred.methods)
- * @return {function():Deferred} The Deferred constructor function
+ * @param {Array.<string>=} list (default TheDeferred.methods)
+ * @return {function():TheDeferred} The TheDeferred constructor function
  */
-Deferred.define = function (obj, list) {
-	if (!list) list = Deferred.methods;
+TheDeferred.define = function (obj, list) {
+	if (!list) list = TheDeferred.methods;
 	if (!obj)  obj  = (function getGlobal () { return this })();
 	for (var i = 0; i < list.length; i++) {
 		var n = list[i];
-		obj[n] = Deferred[n];
+		obj[n] = TheDeferred[n];
 	}
-	return Deferred;
+	return TheDeferred;
 };
 
-this.Deferred = Deferred;
+this.TheDeferred = TheDeferred;
 

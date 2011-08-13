@@ -107,11 +107,9 @@ Beep = {
     if (change < 1) {
       change = 1;
     }
-        if (volume != null) {
-      volume;
-    } else {
+    if (volume == null) {
       volume = 0.7;
-    };
+    }
     samplingRate = 44100;
     samples = [];
     requiredLength = Math.floor(samplingRate * time * 0.001);
@@ -136,11 +134,9 @@ Beep = {
     if (change < 1) {
       change = 1;
     }
-        if (volume != null) {
-      volume;
-    } else {
+    if (volume == null) {
       volume = 0.7;
-    };
+    }
     samplingRate = 44100;
     samples = [];
     requiredLength = Math.floor(samplingRate * time * 0.001);
@@ -189,7 +185,7 @@ Beep = {
   },
   _playURL: function(url) {
     var $audio, deferred;
-    deferred = new Deferred();
+    deferred = new TheDeferred();
     $audio = $('<audio>').attr({
       src: url
     });

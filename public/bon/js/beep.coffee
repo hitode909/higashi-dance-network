@@ -152,7 +152,7 @@ Beep =
     "data:audio/wav;base64," + Base64.encode(wavefile)
 
   _playURL: (url) ->
-    deferred = new Deferred()
+    deferred = new TheDeferred()
     $audio = $('<audio>').attr
       src: url
     $('body').append($audio)

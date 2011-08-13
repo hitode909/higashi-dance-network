@@ -428,7 +428,7 @@ Dog = (function() {
 $(function() {
   var setupCenterDance, setupDog, setupShowCenterItems, setupYona, setupYoutube, stage;
   stage = new Stage($('#stage'));
-  Deferred.wait(1).next(function() {
+  TheDeferred.wait(1).next(function() {
     return Dial($('#stage'), function(diff, distance) {
       var bpmMin, part;
       stage.bpm += diff * 32;
@@ -470,11 +470,11 @@ $(function() {
         selectedItem = mainItem;
       }
       selectedItem.fadeIn('slow');
-      return Deferred.wait(selectedItem.hasClass('center-main-item') ? waitMain : waitLink).next(function() {
+      return TheDeferred.wait(selectedItem.hasClass('center-main-item') ? waitMain : waitLink).next(function() {
         return change();
       });
     };
-    return Deferred.wait(waitMain).next(function() {
+    return TheDeferred.wait(waitMain).next(function() {
       return change();
     });
   };
@@ -500,7 +500,7 @@ $(function() {
       flowerElement.attr({
         'src': flowers[index]
       });
-      return Deferred.wait(Math.abs(120 / stage.bpm) * selectRandom([1, 1, 2, 0.5])).next(function() {
+      return TheDeferred.wait(Math.abs(120 / stage.bpm) * selectRandom([1, 1, 2, 0.5])).next(function() {
         return playYona();
       });
     };
@@ -550,7 +550,7 @@ $(function() {
         'src': tweetImages[tweetIndex]
       });
       tweetIndex = (tweetIndex + 1) % tweetImages.length;
-      return Deferred.wait(Math.abs(120 / stage.bpm) * 0.25).next(function() {
+      return TheDeferred.wait(Math.abs(120 / stage.bpm) * 0.25).next(function() {
         return change();
       });
     };
@@ -596,7 +596,7 @@ $(function() {
         top: '40%'
       });
       $('body').append(youtube);
-      return Deferred.wait(10).next(function() {
+      return TheDeferred.wait(10).next(function() {
         return youtube.remove();
       });
     };
