@@ -12,6 +12,9 @@ handlers:
   upload: public/favicon.ico
   mime_type: image/x-icon
 
+- url: /proxy/.*
+  script: proxy/proxy.py
+
 - url: (.*)/
   static_files: public\1/index.html
   upload: public(.*)/index.html
