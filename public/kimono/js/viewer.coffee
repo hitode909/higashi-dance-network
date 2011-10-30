@@ -46,7 +46,7 @@ class Viewer
   printWeather: ->
     $('#indicator').show()
     selected = $('select#city-selector option:selected')
-    city_code = +selected.val()
+    city_code = selected.val()
     city_name = selected.text()
     city = @kimono.getCityByCityCode(city_code)
 

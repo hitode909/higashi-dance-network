@@ -49,7 +49,7 @@ Viewer = (function() {
     var city, city_code, city_name, selected;
     $('#indicator').show();
     selected = $('select#city-selector option:selected');
-    city_code = +selected.val();
+    city_code = selected.val();
     city_name = selected.text();
     city = this.kimono.getCityByCityCode(city_code);
     return this.kimono.getWeatherReportForCity(city, function(report) {
