@@ -10,8 +10,8 @@ data.each_line.to_a[1..-1].each{ |line|
 
   res[state_code.to_i] ||= []
   res[state_code.to_i] << {
-    code: code.to_i,
-    state_code: state_code.to_i,
+    code: code,
+    state_code: state_code,
     is_primary: is_primary == "1",
     state_name: state_name,
     area_name: area_name,
