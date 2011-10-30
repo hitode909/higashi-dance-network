@@ -6,17 +6,24 @@ Viewer = (function() {
   Viewer.prototype.setup = function() {
     this.setupCityChanger();
     this.setupEvents();
-    return this.printWeather();
+    return this.checkCurrentPositionIfNeeded();
   };
   Viewer.prototype.setupCityChanger = function() {
-    var current_state_code, found, select, self;
+    var found, label, lat_state_code, select, self;
     self = this;
-    current_state_code = this.kimono.getCurrentStateCode();
+    lat_state_code = self.kimono.getLastCityCode();
     found = false;
     select = $('<select>').attr({
       name: 'city',
       id: 'city-selector'
     });
+    label = $('<option>').attr({
+      name: 'city',
+      value: -1,
+      disabled: 'disabled'
+    });
+    label.text('地域を選択');
+    select.append(label);
     this.kimono.eachCity(function(city) {
       var option;
       option = $('<option>').attr({
@@ -24,11 +31,10 @@ Viewer = (function() {
         value: city.code
       });
       option.text(city.state_name + " " + city.area_name);
-      if (!found && city.state_code === current_state_code && city.is_primary) {
+      if (!found && city.code === lat_state_code) {
         option.attr({
-          selected: 'selected'
+          selected: true
         });
-        self.defaultCity = option;
         found = true;
       }
       return select.append(option);
@@ -42,7 +48,30 @@ Viewer = (function() {
       return self.printWeather();
     });
     return $('#reset-city').click(function() {
-      return self.selectDefaultCity();
+      return self.getCurrentPositionAndPrint();
+    });
+  };
+  Viewer.prototype.checkCurrentPositionIfNeeded = function() {
+    var city_code;
+    city_code = $('select#city-selector').val();
+    if (city_code === "-1") {
+      return this.getCurrentPositionAndPrint();
+    } else {
+      return this.printWeather();
+    }
+  };
+  Viewer.prototype.getCurrentPositionAndPrint = function() {
+    var self;
+    self = this;
+    return self.kimono.getCurrentStateCode(function(state_code) {
+      var city, city_code, option;
+      city = self.kimono.getDefaultCityForState(state_code);
+      city_code = city.code;
+      option = $("option[value=" + city_code + "]");
+      option.attr({
+        selected: 'selected'
+      });
+      return self.printWeather();
     });
   };
   Viewer.prototype.printWeather = function() {
@@ -52,6 +81,7 @@ Viewer = (function() {
     city_code = selected.val();
     city_name = selected.text();
     city = this.kimono.getCityByCityCode(city_code);
+    this.kimono.setLastCityCode(city_code);
     return this.kimono.getWeatherReportForCity(city, function(report) {
       $('#indicator').hide();
       $('#result #area').text(city_name);
@@ -60,12 +90,6 @@ Viewer = (function() {
       $('#result #max-temp').text(report.daily.maxTemp);
       return $('#result #min-temp').text(report.daily.minTemp);
     });
-  };
-  Viewer.prototype.selectDefaultCity = function() {
-    this.defaultCity.attr({
-      selected: 'selected'
-    });
-    return this.printWeather();
   };
   return Viewer;
 })();

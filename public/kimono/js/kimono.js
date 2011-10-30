@@ -1,7 +1,57 @@
 var Kimono;
 Kimono = (function() {
   function Kimono() {}
-  Kimono.prototype.getCurrentStateCode = function() {
+  Kimono.prototype.getLastCityCode = function() {
+    return localStorage.city_code;
+  };
+  Kimono.prototype.setLastCityCode = function(city_code) {
+    return localStorage.city_code = city_code;
+  };
+  Kimono.prototype.getCurrentStateCode = function(callback) {
+    var self;
+    self = this;
+    if (self.statusCodeCache) {
+      callback(self.statusCodeCache);
+      return;
+    }
+    return navigator.geolocation.getCurrentPosition(function(position) {
+      var lat, lon;
+      lat = position.coords.latitude;
+      lon = position.coords.longitude;
+      return self.getStatusCodeFromLatLon(lat, lon, callback);
+    }, function(error) {
+      return alert('error');
+    });
+  };
+  Kimono.prototype.getStatusCodeFromLatLon = function(lat, lon, callback) {
+    var self;
+    self = this;
+    return $.ajax({
+      type: 'GET',
+      url: "http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder",
+      data: {
+        lat: lat,
+        lon: lon,
+        output: 'json',
+        appid: self.YAHOO_APPLICATION_ID
+      },
+      dataType: 'JSONP',
+      success: function(res) {
+        var code;
+        try {
+          code = res.Feature[0].Property.AddressElement[0].Code;
+        } catch (error) {
+          code = self.getCurrentStateCodeFromIP();
+        }
+        self.statusCodeCache = code;
+        return callback(code);
+      },
+      error: function() {
+        return alert('error');
+      }
+    });
+  };
+  Kimono.prototype.getCurrentStateCodeFromIP = function() {
     return SURFPOINT.getPrefCode();
   };
   Kimono.prototype.eachCity = function(callback) {
@@ -9,16 +59,6 @@ Kimono = (function() {
       return _.each(cities, function(city) {
         return callback(city);
       });
-    });
-  };
-  Kimono.prototype.getDefaultCityForState = function(state_code) {
-    var cities;
-    if (state_code == null) {
-      state_code = this.getCurrentStateCode();
-    }
-    cities = this.STATE_CODES[state_code];
-    return _.find(cities, function(city) {
-      return city.is_primary;
     });
   };
   Kimono.prototype.getCityByCityCode = function(city_code) {
@@ -30,6 +70,16 @@ Kimono = (function() {
       }
     });
     return found;
+  };
+  Kimono.prototype.getDefaultCityForState = function(state_code) {
+    var cities;
+    if (state_code == null) {
+      state_code = this.getCurrentStateCode();
+    }
+    cities = this.STATE_CODES[state_code];
+    return _.find(cities, function(city) {
+      return city.is_primary;
+    });
   };
   Kimono.prototype._ajaxByProxy = function(url, callback) {
     return $.get("/proxy/" + (encodeURIComponent(url)), callback);
@@ -54,8 +104,10 @@ Kimono = (function() {
       });
     });
   };
+  Kimono.prototype.STATUS_CODE_TOKYO = "13";
   Kimono.prototype.TENKI_SERVER_ID = 'w002';
   Kimono.prototype.TENKI_USER_ID = 'c43a005f71747c2dab7ffa9c3c392ba6386bb5c2';
+  Kimono.prototype.YAHOO_APPLICATION_ID = 'J17Tyuixg65goAW301d5vBkBWtO9gLQsJnC0Y7OyJJk96wumaSU2U3odNwj5PdIU1A--';
   Kimono.prototype.STATE_CODES = {
     "1": [
       {

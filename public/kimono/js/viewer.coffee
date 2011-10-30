@@ -4,16 +4,25 @@ class Viewer
   setup: ->
     this.setupCityChanger()
     this.setupEvents()
-    this.printWeather()
+    this.checkCurrentPositionIfNeeded()
 
   setupCityChanger: ->
     self = this
-    current_state_code = @kimono.getCurrentStateCode()
+    lat_state_code = self.kimono.getLastCityCode()
     found = false
 
     select = $('<select>').attr
       name: 'city'
       id: 'city-selector'
+
+    label = $('<option>').attr
+      name: 'city'
+      value: -1
+      disabled: 'disabled'
+
+    label.text('地域を選択')
+
+    select.append label
 
     @kimono.eachCity (city) ->
       option = $('<option>').attr
@@ -21,10 +30,9 @@ class Viewer
         value: city.code
       option.text city.state_name + " " + city.area_name
 
-      if ! found && city.state_code == current_state_code && city.is_primary
+      if ! found && city.code == lat_state_code
         option.attr
-          selected: 'selected'
-        self.defaultCity = option
+          selected: true
 
         found = true
 
@@ -38,7 +46,27 @@ class Viewer
       self.printWeather()
 
     $('#reset-city').click ->
-      self.selectDefaultCity()
+      self.getCurrentPositionAndPrint()
+
+  checkCurrentPositionIfNeeded: ->
+    city_code = $('select#city-selector').val()
+
+    if city_code == "-1"           # 地域を選択 = -1
+      this.getCurrentPositionAndPrint()
+    else
+      this.printWeather()
+
+  getCurrentPositionAndPrint: ->
+    self = this
+    self.kimono.getCurrentStateCode (state_code) ->
+      city = self.kimono.getDefaultCityForState state_code
+      city_code = city.code
+
+      option = $("option[value=#{city_code}]")
+      option.attr
+        selected: 'selected'
+
+      self.printWeather()
 
   # ----- actions -----
 
@@ -49,6 +77,7 @@ class Viewer
     city_code = selected.val()
     city_name = selected.text()
     city = @kimono.getCityByCityCode(city_code)
+    @kimono.setLastCityCode(city_code)
 
     @kimono.getWeatherReportForCity city, (report) ->
       $('#indicator').hide()
@@ -57,9 +86,3 @@ class Viewer
       $('#result #description').text report.daily.wDescription
       $('#result #max-temp').text report.daily.maxTemp
       $('#result #min-temp').text report.daily.minTemp
-
-  selectDefaultCity: ->
-    @defaultCity.attr
-          selected: 'selected'
-
-    this.printWeather()
