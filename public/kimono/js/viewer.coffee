@@ -44,11 +44,12 @@ class Viewer
 
 
   printWeather: ->
+    $('#indicator').show()
     city_code = +$('select#city-selector').val()
     city = @kimono.getCityByCityCode(city_code)
 
     @kimono.getWeatherReportForCity city, (report) ->
-
+      $('#indicator').hide()
       $('#result #date').text report.daily.date
       $('#result #description').text report.daily.wDescription
       $('#result #max-temp').text report.daily.maxTemp

@@ -47,9 +47,11 @@ Viewer = (function() {
   };
   Viewer.prototype.printWeather = function() {
     var city, city_code;
+    $('#indicator').show();
     city_code = +$('select#city-selector').val();
     city = this.kimono.getCityByCityCode(city_code);
     return this.kimono.getWeatherReportForCity(city, function(report) {
+      $('#indicator').hide();
       $('#result #date').text(report.daily.date);
       $('#result #description').text(report.daily.wDescription);
       $('#result #max-temp').text(report.daily.maxTemp);
