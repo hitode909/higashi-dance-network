@@ -46,12 +46,15 @@ Viewer = (function() {
     });
   };
   Viewer.prototype.printWeather = function() {
-    var city, city_code;
+    var city, city_code, city_name, selected;
     $('#indicator').show();
-    city_code = +$('select#city-selector').val();
+    selected = $('select#city-selector option:selected');
+    city_code = +selected.val();
+    city_name = selected.text();
     city = this.kimono.getCityByCityCode(city_code);
     return this.kimono.getWeatherReportForCity(city, function(report) {
       $('#indicator').hide();
+      $('#result #area').text(city_name);
       $('#result #date').text(report.daily.date);
       $('#result #description').text(report.daily.wDescription);
       $('#result #max-temp').text(report.daily.maxTemp);

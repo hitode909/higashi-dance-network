@@ -45,11 +45,14 @@ class Viewer
 
   printWeather: ->
     $('#indicator').show()
-    city_code = +$('select#city-selector').val()
+    selected = $('select#city-selector option:selected')
+    city_code = +selected.val()
+    city_name = selected.text()
     city = @kimono.getCityByCityCode(city_code)
 
     @kimono.getWeatherReportForCity city, (report) ->
       $('#indicator').hide()
+      $('#result #area').text city_name
       $('#result #date').text report.daily.date
       $('#result #description').text report.daily.wDescription
       $('#result #max-temp').text report.daily.maxTemp
