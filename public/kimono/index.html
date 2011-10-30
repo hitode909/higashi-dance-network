@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>kimono</title>
+    <script language="javascript" type="text/javascript" defer src="js/jquery-1.6.1.min.js"></script>
+    <script language="javascript" type="text/javascript" defer src="js/underscore-min.js"></script>
+    <script language="javascript" type="text/javascript" defer src="http://api.docodoco.jp/v3/docodoco?key=COrXLcEMzxNvkfi6pcNtYCZGp9SwZshWiinu4RZDfEiewM7rlXIKFRHwVW9kPJxa" charset="utf-8"></script>
+    <script language="javascript" type="text/javascript" defer src="js/kimono.js"></script>
+    <script language="javascript" type="text/javascript" defer src="js/viewer.js"></script>
+    <script language="javascript" type="text/javascript" defer src="js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/reset.css" />
+    <link rel="stylesheet" type="text/css" href="css/text.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+  </head>
+  <body>
+    <div id="city-selector-container">
+    </div>
+    <div id="reset-city-container">
+      <button id="reset-city">
+        現在位置に設定
+      </button>
+    </div>
+    <div id="result">
+      <div>
+        <span>日付</span>
+        <span id="date"></span>
+      </div>
+      <div>
+        <span>天気</span>
+        <span id="description"></span>
+      </div>
+      <div>
+        <span>最高気温</span>
+        <span id="max-temp"></span>
+      </div>
+      <div>
+        <span>最低気温</span>
+        <span id="min-temp"></span>
+      </div>
+    </div>
+  </body>
+</html>
