@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>kimono</title>
 
-    <meta name="viewport" content="width=640px, user-scalable=no">
+    <meta name="viewport" content="width=320px, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
     <script language="javascript" type="text/javascript" defer src="js/jquery-1.6.1.min.js"></script>
@@ -16,40 +16,47 @@
 
     <link rel="stylesheet" type="text/css" href="css/reset.css" />
     <link rel="stylesheet" type="text/css" href="css/text.css" />
-    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <link rel="stylesheet" type="text/css" href="css/common.css" />
+    <link rel="stylesheet" type="text/css" href="css/mobile.css" media="only screen and (max-device-width: 480px)" >
+    <link rel="stylesheet" type="text/css" href="css/pc.css" media="only screen and (min-device-width: 481px)" >
 
   </head>
   <body>
-    <div id="city-selector-container">
-    </div>
-    <div id="reset-city-container">
-      <button id="reset-city">
-        現在位置に設定
-      </button>
-    </div>
-    <div id="indicator">
-      通信中です
-    </div>
-    <div id="result">
-      <div>
-        <span>地域</span>
-        <span id="area"></span>
+    <div id="container">
+      <div id="city-selector-container">
+      </div>
+      <div id="reset-city-container">
+        <button id="reset-city">
+          現在位置に設定
+        </button>
+      </div>
+      <div id="indicator">
+        通信中です
+      </div>
+      <div id="result">
+        <div>
+          <span>地域</span>
+          <span id="area"></span>
+        </div>
+        <div>
+          <span>日付</span>
+          <span id="date"></span>
+        </div>
+        <div>
+          <span>天気</span>
+          <span id="description"></span>
+        </div>
+        <div>
+          <span>最高気温</span>
+          <span id="max-temp"></span>
+        </div>
+        <div>
+          <span>最低気温</span>
+          <span id="min-temp"></span>
+        </div>
       </div>
       <div>
-        <span>日付</span>
-        <span id="date"></span>
-      </div>
-      <div>
-        <span>天気</span>
-        <span id="description"></span>
-      </div>
-      <div>
-        <span>最高気温</span>
-        <span id="max-temp"></span>
-      </div>
-      <div>
-        <span>最低気温</span>
-        <span id="min-temp"></span>
+        <img src="images/a.jpg" style="width: 320px; height:240px;"/>
       </div>
     </div>
   </body>
