@@ -23,6 +23,7 @@
   </head>
   <body>
     <div id="container">
+      <h1>天気予報です</h1>
       <div id="city-selector-container">
       </div>
       <div id="reset-city-container">
@@ -55,8 +56,45 @@
           <span id="min-temp"></span>
         </div>
       </div>
+      <h2>画像テスト</h2>
       <div>
         <img src="images/a.jpg" style="width: 320px; height:240px;"/>
+      </div>
+      <h2>ツイートテスト</h2>
+      <div>
+        <a target="_blank" href="https://twitter.com/share?url=http%3A%2F%2Fhigashi-dance-network.appspot.com%2Fbon%2F&text=3%E6%9E%9A%E3%81%A7%E3%81%99%20%23%E9%87%8D%E3%81%AD%E7%9D%80%20%23%E9%87%8D%E3%81%AD%E7%9D%80%E4%BA%AC%E9%83%BD">重ね着をツイートする</a>
+      </div>
+      <div>
+<script src="http://widgets.twimg.com/j/2/widget.js"></script>
+<script>
+new TWTR.Widget({
+  version: 2,
+  type: 'search',
+  search: '京都',
+  interval: 30000,
+  title: '',
+  subject: '',
+  width: 320,
+  height: 480,
+  theme: {
+    shell: {
+      background: '#98c6d1',
+      color: '#3c576e'
+    },
+    tweets: {
+      background: '#ffffff',
+      color: '#424242',
+      links: '#436a94'
+    }
+  },
+  features: {
+    scrollbar: false,
+    loop: false,
+    live: true,
+    behavior: 'all'
+  }
+}).render().start();
+</script>
       </div>
     </div>
   </body>
