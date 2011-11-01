@@ -7,6 +7,12 @@ Weather = (function() {
   Weather.prototype.setLastCityCode = function(city_code) {
     return localStorage.city_code = city_code;
   };
+  Weather.prototype.getLastPageId = function() {
+    return localStorage.last_page_id || 'weather-page';
+  };
+  Weather.prototype.setLastPageId = function(last_page_id) {
+    return localStorage.last_page_id = last_page_id;
+  };
   Weather.prototype.getCurrentStateCode = function(callback) {
     var self;
     self = this;

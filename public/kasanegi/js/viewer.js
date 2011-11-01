@@ -6,6 +6,7 @@ Viewer = (function() {
   Viewer.prototype.setup = function() {
     this.setupCityChanger();
     this.setupEvents();
+    this.selectFirstPage();
     return this.checkCurrentPositionIfNeeded();
   };
   Viewer.prototype.setupCityChanger = function() {
@@ -41,14 +42,24 @@ Viewer = (function() {
     });
     return $('#city-selector-container').append(select);
   };
+  Viewer.prototype.selectFirstPage = function() {
+    var page_id;
+    page_id = this.weather.getLastPageId();
+    return this.selectPage(page_id, true);
+  };
   Viewer.prototype.setupEvents = function() {
     var self;
     self = this;
     $('select#city-selector').change(function() {
       return self.printWeather();
     });
-    return $('#reset-city').click(function() {
+    $('#reset-city').click(function() {
       return self.getCurrentPositionAndPrint();
+    });
+    return $('.page-changer').click(function() {
+      var target_id;
+      target_id = $(this).attr('data-target-id');
+      return self.selectPage(target_id);
     });
   };
   Viewer.prototype.checkCurrentPositionIfNeeded = function() {
@@ -92,17 +103,27 @@ Viewer = (function() {
       return $('#result #min-temp').text(report.daily.minTemp);
     });
     state_name = city_name.split(/\s+/)[0];
-    state_name = state_name.slice(0, state_name.length - 1);
-    this.appendWidget(state_name);
-    return this.setTweetLink(state_name);
+    return state_name = state_name.slice(0, state_name.length - 1);
   };
-  Viewer.prototype.appendWidget = function(state_name) {
-    $('#widget-container').empty();
+  Viewer.prototype.setupSharePage = function() {
+    this.appendTwitterWidget();
+    return this.setShareLink();
+  };
+  Viewer.prototype.destroySharePage = function() {
+    return this.removeTwitterWidget();
+  };
+  Viewer.prototype.removeTwitterWidget = function() {
+    return $('#widget-container').empty();
+  };
+  Viewer.prototype.appendTwitterWidget = function() {
+    var self;
+    self = this;
+    this.removeTwitterWidget();
     return new TWTR.Widget({
     id: 'widget-container',
     version: 2,
     type: 'search',
-    search: state_name,
+    search: self.HASHTAG,
     interval: 30000,
     title: state_name,
     subject: '',
@@ -127,14 +148,41 @@ Viewer = (function() {
     }
   }).render().start();;
   };
-  Viewer.prototype.setTweetLink = function(state_name) {
+  Viewer.prototype.setTweetLink = function(message, hashtag) {
     var share_url, text, url;
-    url = "http://higashi-dance-network.appspot.com/bon/";
-    text = "盆のご案内です #盆 #盆" + state_name;
+    if (message == null) {
+      message = "3枚です";
+    }
+    if (hashtag == null) {
+      hashtag = this.HASHTAG;
+    }
+    url = this.SERVICE_URL;
+    text = "" + message + " " + hashtag;
     share_url = "https://twitter.com/share?url=" + (encodeURIComponent(url)) + "&text=" + (encodeURIComponent(text));
     return $("a#share-tweet").attr({
       href: share_url
     });
   };
+  Viewer.prototype.selectPage = function(target_id, force) {
+    var target_page;
+    if (!force && target_id === this.weather.getLastPageId) {
+      return;
+    }
+    target_page = $(document.body).find("#" + target_id);
+    if (target_page.length === 0) {
+      throw "invalid page target id (" + target_id + ")";
+    }
+    this.weather.setLastPageId(target_id);
+    $('.page').hide();
+    target_page.show();
+    if (target_id === "share-page") {
+      this.setupSharePage();
+    } else {
+      this.destroySharePage();
+    }
+    return console.log('selected');
+  };
+  Viewer.prototype.HASHTAG = "#重ね着";
+  Viewer.prototype.SERVICE_URL = "http://higashi-dance-network.appspot.com/bon/";
   return Viewer;
 })();

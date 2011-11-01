@@ -4,6 +4,7 @@ class Viewer
   setup: ->
     this.setupCityChanger()
     this.setupEvents()
+    this.selectFirstPage()
     this.checkCurrentPositionIfNeeded()
 
   setupCityChanger: ->
@@ -40,6 +41,10 @@ class Viewer
 
     $('#city-selector-container').append(select)
 
+  selectFirstPage: ->
+    page_id = @weather.getLastPageId()
+    this.selectPage(page_id, true)
+
   setupEvents: ->
     self = this
     $('select#city-selector').change ->
@@ -47,6 +52,10 @@ class Viewer
 
     $('#reset-city').click ->
       self.getCurrentPositionAndPrint()
+
+    $('.page-changer').click ->
+      target_id = $(this).attr('data-target-id')
+      self.selectPage(target_id)
 
   checkCurrentPositionIfNeeded: ->
     city_code = $('select#city-selector').val()
@@ -89,17 +98,29 @@ class Viewer
       $('#result #min-temp').text report.daily.minTemp
 
     state_name = city_name.split(/\s+/)[0]
-    state_name = state_name.slice(0, state_name.length - 1)
-    this.appendWidget(state_name)
-    this.setTweetLink(state_name)
+    state_name = state_name.slice(0, state_name.length - 1) # remove "県"
 
-  appendWidget: (state_name) ->
+  setupSharePage: ->
+    this.appendTwitterWidget()
+    this.setShareLink()
+
+  destroySharePage: ->
+    this.removeTwitterWidget()
+
+
+  removeTwitterWidget: ->
     $('#widget-container').empty()
+
+  appendTwitterWidget: () ->
+    self = this
+    this.removeTwitterWidget()
+
+    # javascript
     `new TWTR.Widget({
     id: 'widget-container',
     version: 2,
     type: 'search',
-    search: state_name,
+    search: self.HASHTAG,
     interval: 30000,
     title: state_name,
     subject: '',
@@ -124,16 +145,38 @@ class Viewer
     }
   }).render().start();`
 
-  setTweetLink: (state_name) ->
-    url = "http://higashi-dance-network.appspot.com/bon/"
-    text = "盆のご案内です #盆 #盆#{state_name}"
+  setTweetLink: (message, hashtag) ->
+    message ?= "3枚です"
+    hashtag ?= this.HASHTAG
+    url = this.SERVICE_URL
+    text = "#{message} #{hashtag}"
     share_url = "https://twitter.com/share?url=#{encodeURIComponent(url)}&text=#{encodeURIComponent(text)}"
     $("a#share-tweet").attr
       href: share_url
 
+  selectPage: (target_id, force) ->
+    if !force && target_id == @weather.getLastPageId
+      # do nothing
+      return
 
+    target_page = $(document.body).find("#" + target_id)
+    if target_page.length == 0
+      throw "invalid page target id (#{target_id})"
 
+    @weather.setLastPageId(target_id)
 
+    $('.page').hide()
+    target_page.show()
 
+    if target_id == "share-page"
+      this.setupSharePage()
+    else
+      this.destroySharePage()
+
+    console.log('selected')
+
+  # ----- constants -----
+  HASHTAG: "#重ね着"
+  SERVICE_URL: "http://higashi-dance-network.appspot.com/bon/"
 
 
