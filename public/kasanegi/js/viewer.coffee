@@ -1,5 +1,5 @@
 class Viewer
-  constructor: (@kimono) ->
+  constructor: (@weather) ->
 
   setup: ->
     this.setupCityChanger()
@@ -8,7 +8,7 @@ class Viewer
 
   setupCityChanger: ->
     self = this
-    lat_state_code = self.kimono.getLastCityCode()
+    lat_state_code = self.weather.getLastCityCode()
     found = false
 
     select = $('<select>').attr
@@ -24,7 +24,7 @@ class Viewer
 
     select.append label
 
-    @kimono.eachCity (city) ->
+    @weather.eachCity (city) ->
       option = $('<option>').attr
         name: 'city'
         value: city.code
@@ -59,8 +59,8 @@ class Viewer
 
   getCurrentPositionAndPrint: ->
     self = this
-    self.kimono.getCurrentStateCode (state_code) ->
-      city = self.kimono.getDefaultCityForState state_code
+    self.weather.getCurrentStateCode (state_code) ->
+      city = self.weather.getDefaultCityForState state_code
       city_code = city.code
 
       option = $("option[value=#{city_code}]")
@@ -77,10 +77,10 @@ class Viewer
     selected = $('select#city-selector option:selected')
     city_code = selected.val()
     city_name = selected.text()
-    city = @kimono.getCityByCityCode(city_code)
-    @kimono.setLastCityCode(city_code)
+    city = @weather.getCityByCityCode(city_code)
+    @weather.setLastCityCode(city_code)
 
-    @kimono.getWeatherReportForCity city, (report) ->
+    @weather.getWeatherReportForCity city, (report) ->
       $('#indicator').hide()
       $('#result #area').text city_name
       $('#result #date').text report.daily.date

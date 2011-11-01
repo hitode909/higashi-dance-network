@@ -1,7 +1,7 @@
 # state_code = 25 滋賀とか
 # city_code = 1200 天気API用
 
-class Kimono
+class Weather
   constructor: ->
 
   getLastCityCode: ->

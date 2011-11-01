@@ -1,8 +1,8 @@
 $ ->
 
-  kimono = new Kimono
+  weather = new Weather
 
-  viewer = new Viewer(kimono)
+  viewer = new Viewer(weather)
 
   viewer.setup()
 

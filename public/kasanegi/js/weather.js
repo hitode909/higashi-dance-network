@@ -1,13 +1,13 @@
-var Kimono;
-Kimono = (function() {
-  function Kimono() {}
-  Kimono.prototype.getLastCityCode = function() {
+var Weather;
+Weather = (function() {
+  function Weather() {}
+  Weather.prototype.getLastCityCode = function() {
     return localStorage.city_code;
   };
-  Kimono.prototype.setLastCityCode = function(city_code) {
+  Weather.prototype.setLastCityCode = function(city_code) {
     return localStorage.city_code = city_code;
   };
-  Kimono.prototype.getCurrentStateCode = function(callback) {
+  Weather.prototype.getCurrentStateCode = function(callback) {
     var self;
     self = this;
     if (self.statusCodeCache) {
@@ -23,7 +23,7 @@ Kimono = (function() {
       return alert('error');
     });
   };
-  Kimono.prototype.getStatusCodeFromLatLon = function(lat, lon, callback) {
+  Weather.prototype.getStatusCodeFromLatLon = function(lat, lon, callback) {
     var self;
     self = this;
     return $.ajax({
@@ -51,17 +51,17 @@ Kimono = (function() {
       }
     });
   };
-  Kimono.prototype.getCurrentStateCodeFromIP = function() {
+  Weather.prototype.getCurrentStateCodeFromIP = function() {
     return SURFPOINT.getPrefCode();
   };
-  Kimono.prototype.eachCity = function(callback) {
+  Weather.prototype.eachCity = function(callback) {
     return _.each(this.STATE_CODES, function(cities, state_code) {
       return _.each(cities, function(city) {
         return callback(city);
       });
     });
   };
-  Kimono.prototype.getCityByCityCode = function(city_code) {
+  Weather.prototype.getCityByCityCode = function(city_code) {
     var found;
     found = null;
     this.eachCity(function(city) {
@@ -71,7 +71,7 @@ Kimono = (function() {
     });
     return found;
   };
-  Kimono.prototype.getDefaultCityForState = function(state_code) {
+  Weather.prototype.getDefaultCityForState = function(state_code) {
     var cities;
     if (state_code == null) {
       state_code = this.getCurrentStateCode();
@@ -81,10 +81,10 @@ Kimono = (function() {
       return city.is_primary;
     });
   };
-  Kimono.prototype._ajaxByProxy = function(url, callback) {
+  Weather.prototype._ajaxByProxy = function(url, callback) {
     return $.get("/proxy/" + (encodeURIComponent(url)), callback);
   };
-  Kimono.prototype.getWeatherReportForCity = function(city, callback) {
+  Weather.prototype.getWeatherReportForCity = function(city, callback) {
     var city_code, self;
     city_code = city.code;
     self = this;
@@ -104,11 +104,11 @@ Kimono = (function() {
       });
     });
   };
-  Kimono.prototype.STATUS_CODE_TOKYO = "13";
-  Kimono.prototype.TENKI_SERVER_ID = 'w002';
-  Kimono.prototype.TENKI_USER_ID = 'c43a005f71747c2dab7ffa9c3c392ba6386bb5c2';
-  Kimono.prototype.YAHOO_APPLICATION_ID = 'J17Tyuixg65goAW301d5vBkBWtO9gLQsJnC0Y7OyJJk96wumaSU2U3odNwj5PdIU1A--';
-  Kimono.prototype.STATE_CODES = {
+  Weather.prototype.STATUS_CODE_TOKYO = "13";
+  Weather.prototype.TENKI_SERVER_ID = 'w002';
+  Weather.prototype.TENKI_USER_ID = 'c43a005f71747c2dab7ffa9c3c392ba6386bb5c2';
+  Weather.prototype.YAHOO_APPLICATION_ID = 'J17Tyuixg65goAW301d5vBkBWtO9gLQsJnC0Y7OyJJk96wumaSU2U3odNwj5PdIU1A--';
+  Weather.prototype.STATE_CODES = {
     "1": [
       {
         "code": "1100",
@@ -1245,5 +1245,5 @@ Kimono = (function() {
       }
     ]
   };
-  return Kimono;
+  return Weather;
 })();

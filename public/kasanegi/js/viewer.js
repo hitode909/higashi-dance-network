@@ -1,7 +1,7 @@
 var Viewer;
 Viewer = (function() {
-  function Viewer(kimono) {
-    this.kimono = kimono;
+  function Viewer(weather) {
+    this.weather = weather;
   }
   Viewer.prototype.setup = function() {
     this.setupCityChanger();
@@ -11,7 +11,7 @@ Viewer = (function() {
   Viewer.prototype.setupCityChanger = function() {
     var found, label, lat_state_code, select, self;
     self = this;
-    lat_state_code = self.kimono.getLastCityCode();
+    lat_state_code = self.weather.getLastCityCode();
     found = false;
     select = $('<select>').attr({
       name: 'city',
@@ -24,7 +24,7 @@ Viewer = (function() {
     });
     label.text('地域を選択');
     select.append(label);
-    this.kimono.eachCity(function(city) {
+    this.weather.eachCity(function(city) {
       var option;
       option = $('<option>').attr({
         name: 'city',
@@ -64,9 +64,9 @@ Viewer = (function() {
   Viewer.prototype.getCurrentPositionAndPrint = function() {
     var self;
     self = this;
-    return self.kimono.getCurrentStateCode(function(state_code) {
+    return self.weather.getCurrentStateCode(function(state_code) {
       var city, city_code, option;
-      city = self.kimono.getDefaultCityForState(state_code);
+      city = self.weather.getDefaultCityForState(state_code);
       city_code = city.code;
       option = $("option[value=" + city_code + "]");
       option.attr({
@@ -81,9 +81,9 @@ Viewer = (function() {
     selected = $('select#city-selector option:selected');
     city_code = selected.val();
     city_name = selected.text();
-    city = this.kimono.getCityByCityCode(city_code);
-    this.kimono.setLastCityCode(city_code);
-    this.kimono.getWeatherReportForCity(city, function(report) {
+    city = this.weather.getCityByCityCode(city_code);
+    this.weather.setLastCityCode(city_code);
+    this.weather.getWeatherReportForCity(city, function(report) {
       $('#indicator').hide();
       $('#result #area').text(city_name);
       $('#result #date').text(report.daily.date);
