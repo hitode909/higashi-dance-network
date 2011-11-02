@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>kimono</title>
+    <title>重ね着</title>
 
     <meta name="viewport" content="width=320px, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -27,6 +27,21 @@
 
       <h1>重ね着</h1>
       <hr></hr>
+
+      <div id="page-changer-container">
+        <button class="page-changer" data-target-id="weather-page">
+          天気予報
+        </button>
+        <button class="page-changer" data-target-id="share-page">
+          共有
+        </button>
+        <button class="page-changer" data-target-id="guide-page">
+          ガイド
+        </button>
+      </div>
+
+      <hr></hr>
+
       <div class="page" id="weather-page">
         <h2>重ね着</h2>
         <div id="city-selector-container">
@@ -131,19 +146,6 @@
         </p>
       </div>
 
-      <hr></hr>
-
-      <div id="page-changer-container">
-        <button class="page-changer" data-target-id="weather-page">
-          天気予報
-        </button>
-        <button class="page-changer" data-target-id="share-page">
-          共有
-        </button>
-        <button class="page-changer" data-target-id="guide-page">
-          ガイド
-        </button>
-      </div>
     </div>
   </body>
 </html>
