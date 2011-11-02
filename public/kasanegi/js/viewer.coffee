@@ -92,13 +92,10 @@ class Viewer
     @weather.getWeatherReportForCity city, (report) ->
       $('#indicator').hide()
       $('#result #area').text city_name
-      $('#result #date').text report.daily.date
-      $('#result #description').text report.daily.wDescription
-      $('#result #max-temp').text report.daily.maxTemp
-      $('#result #min-temp').text report.daily.minTemp
-
-    state_name = city_name.split(/\s+/)[0]
-    state_name = state_name.slice(0, state_name.length - 1) # remove "県"
+      $('#result #date').text report.date
+      $('#result #description').text report.description
+      $('#result #max-temp').text report.max
+      $('#result #min-temp').text report.min
 
   setupSharePage: ->
     this.appendTwitterWidget()

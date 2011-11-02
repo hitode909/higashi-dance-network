@@ -91,12 +91,28 @@ Weather = (function() {
     return $.get("/proxy/" + (encodeURIComponent(url)), callback);
   };
   Weather.prototype.getWeatherReportForCity = function(city, callback) {
-    var city_code, self;
+    var city_code, res, self;
+    if (false) {
+      res = {
+        date: '2011-11-02',
+        description: '雲り',
+        min: 11,
+        max: 24
+      };
+      callback(res);
+      return;
+    }
     city_code = city.code;
     self = this;
     return self._ajaxByProxy("http://" + self.TENKI_SERVER_ID + ".tenkiapi.jp/" + self.TENKI_USER_ID + "/daily/" + city_code + "_01.json", function(today) {
       if (today.daily.minTemp && today.daily.maxTemp) {
-        callback(today);
+        res = {
+          date: today.daily.date,
+          description: today.daily.wDescription,
+          min: today.dailyminTemp,
+          max: today.dailymaxTemp
+        };
+        callback(res);
         return;
       }
       return self._ajaxByProxy("http://" + self.TENKI_SERVER_ID + ".tenkiapi.jp/" + self.TENKI_USER_ID + "/daily/" + city_code + "_02.json", function(tomorrow) {
@@ -106,7 +122,13 @@ Weather = (function() {
         if (tomorrow.daily.maxTemp) {
           today.daily.maxTemp = tomorrow.daily.maxTemp;
         }
-        callback(today);
+        res = {
+          date: today.daily.date,
+          description: today.daily.wDescription,
+          min: today.dailyminTemp,
+          max: today.dailymaxTemp
+        };
+        return callback(res);
       });
     });
   };

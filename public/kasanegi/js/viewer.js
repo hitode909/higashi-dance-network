@@ -87,23 +87,21 @@ Viewer = (function() {
     });
   };
   Viewer.prototype.printWeather = function() {
-    var city, city_code, city_name, selected, state_name;
+    var city, city_code, city_name, selected;
     $('#indicator').show();
     selected = $('select#city-selector option:selected');
     city_code = selected.val();
     city_name = selected.text();
     city = this.weather.getCityByCityCode(city_code);
     this.weather.setLastCityCode(city_code);
-    this.weather.getWeatherReportForCity(city, function(report) {
+    return this.weather.getWeatherReportForCity(city, function(report) {
       $('#indicator').hide();
       $('#result #area').text(city_name);
-      $('#result #date').text(report.daily.date);
-      $('#result #description').text(report.daily.wDescription);
-      $('#result #max-temp').text(report.daily.maxTemp);
-      return $('#result #min-temp').text(report.daily.minTemp);
+      $('#result #date').text(report.date);
+      $('#result #description').text(report.description);
+      $('#result #max-temp').text(report.max);
+      return $('#result #min-temp').text(report.min);
     });
-    state_name = city_name.split(/\s+/)[0];
-    return state_name = state_name.slice(0, state_name.length - 1);
   };
   Viewer.prototype.setupSharePage = function() {
     this.appendTwitterWidget();

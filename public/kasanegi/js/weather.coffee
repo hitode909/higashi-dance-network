@@ -79,12 +79,29 @@ class Weather
   _ajaxByProxy: (url, callback) ->
     $.get "/proxy/#{encodeURIComponent(url)}", callback
 
+  # return: { date description min max }
   getWeatherReportForCity:  (city, callback) ->
+
+    if false  # for debug
+      res =
+        date: '2011-11-02'
+        description: '雲り'
+        min: 11
+        max: 24
+      callback res
+      return
+
+    # ---------------------------------
     city_code = city.code
     self = this
     self._ajaxByProxy "http://#{self.TENKI_SERVER_ID}.tenkiapi.jp/#{self.TENKI_USER_ID}/daily/#{city_code}_01.json", (today) ->
       if today.daily.minTemp && today.daily.maxTemp
-        callback today
+        res =
+          date: today.daily.date
+          description: today.daily.wDescription
+          min: today.dailyminTemp
+          max: today.dailymaxTemp
+        callback res
         return
 
       # when minTemp is empty, get tomorrow and merge results
@@ -93,8 +110,13 @@ class Weather
           today.daily.minTemp = tomorrow.daily.minTemp
         if tomorrow.daily.maxTemp
           today.daily.maxTemp = tomorrow.daily.maxTemp
-        callback today
-        return
+
+        res =
+          date: today.daily.date
+          description: today.daily.wDescription
+          min: today.dailyminTemp
+          max: today.dailymaxTemp
+        callback res
 
 # ------------------------------------------------------------------------------------
 
