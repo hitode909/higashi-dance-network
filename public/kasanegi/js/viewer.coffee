@@ -40,7 +40,7 @@ class Viewer
 
       select.append option
 
-    $('#city-selector-container').append(select)
+    $('#city-selector-container').prepend(select)
 
   selectFirstPage: ->
     page_id = @weather.getLastPageId()

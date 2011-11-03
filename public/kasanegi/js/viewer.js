@@ -41,7 +41,7 @@ Viewer = (function() {
       }
       return select.append(option);
     });
-    return $('#city-selector-container').append(select);
+    return $('#city-selector-container').prepend(select);
   };
   Viewer.prototype.selectFirstPage = function() {
     var page_id;

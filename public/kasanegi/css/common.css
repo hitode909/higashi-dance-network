@@ -39,6 +39,11 @@
     display: none;
 }
 
+/* report page, city selector */
+
+select#city-selector {
+    width: 180px;
+}
 
 /* report page, result */
 
