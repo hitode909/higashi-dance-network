@@ -47,15 +47,15 @@
           通信中です
         </div>
         <div id="result">
+          <div id="area"></div>
           <div>
-            <span id="area"></span>
-          </div>
-          <div>
-            <span id="date"></span>
-          </div>
-          <div>
-            <span id="description"></span>
-            <span id="weather-icons"></span>
+            <div class="float" id="date"></div>
+            <div class="float">
+              <span id="description"></span>
+              <span id="weather-icons"></span>
+            </div>
+            <div class="clear">
+            </div>
           </div>
 
           <div id="images">
@@ -110,10 +110,41 @@
         </div>
 
         <div id="guide">
-        <h2>重ね着について</h2>
-        <p>
-          地域を選ぶと，その日の天気にあった服装をおすすめします．
-        </p>
+          <h2>重ね着について</h2>
+          <p>
+            地域を選ぶと，その日の天気にあった服装をおすすめします．
+          </p>
+          <p>
+            重ね着をtwitterで共有することができます．
+          </p>
+
+          <p>
+            重ね着では以下のAPIを利用しています．
+          </p>
+
+          <div class="apis">
+            <div class="api">
+              <a href="http://tenkiapi.jp/" class="tenki-logo">
+                <img src="images/tenki_logo.gif">
+                <br/>
+                WEB services by tenkiapi.jp
+              </a>
+            </div>
+
+            <div class="api">
+              <!-- Begin Yahoo! JAPAN Web Services Attribution Snippet -->
+              <a href="http://developer.yahoo.co.jp/about">
+                <img src="http://i.yimg.jp/images/yjdn/yjdn_attbtn1_125_17.gif" title="Webサービス by Yahoo! JAPAN" alt="Web Services by Yahoo! JAPAN" width="125" height="17" border="0" style="margin:15px 15px 15px 15px"></a>
+              <!-- End Yahoo! JAPAN Web Services Attribution Snippet -->
+            </div>
+
+            <div class="api">
+              <a href="http://www.docodoco.jp/">
+                <img src="images/docodoco_logo.gif">
+              </a>
+            </div>
+          </div>
+
         </div>
 
       </div>
