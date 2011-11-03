@@ -106,29 +106,30 @@ Weather = (function() {
     self = this;
     return self._ajaxByProxy("http://" + self.TENKI_SERVER_ID + ".tenkiapi.jp/" + self.TENKI_USER_ID + "/daily/" + city_code + "_01.json", function(today) {
       if (today.daily.minTemp && today.daily.maxTemp) {
-        res = {
+        callback({
           date: today.daily.date,
           description: today.daily.wDescription,
-          min: today.dailyminTemp,
-          max: today.dailymaxTemp
-        };
-        callback(res);
+          min: today.daily.minTemp,
+          max: today.daily.maxTemp
+        });
         return;
       }
       return self._ajaxByProxy("http://" + self.TENKI_SERVER_ID + ".tenkiapi.jp/" + self.TENKI_USER_ID + "/daily/" + city_code + "_02.json", function(tomorrow) {
+        if (!(today.daily.minTemp || today.daily.maxTemp)) {
+          today.daily.date = tomorrow.daily.date;
+        }
         if (tomorrow.daily.minTemp) {
           today.daily.minTemp = tomorrow.daily.minTemp;
         }
         if (tomorrow.daily.maxTemp) {
           today.daily.maxTemp = tomorrow.daily.maxTemp;
         }
-        res = {
+        return callback({
           date: today.daily.date,
           description: today.daily.wDescription,
-          min: today.dailyminTemp,
-          max: today.dailymaxTemp
-        };
-        return callback(res);
+          min: today.daily.minTemp,
+          max: today.daily.maxTemp
+        });
       });
     });
   };

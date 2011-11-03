@@ -96,27 +96,28 @@ class Weather
     self = this
     self._ajaxByProxy "http://#{self.TENKI_SERVER_ID}.tenkiapi.jp/#{self.TENKI_USER_ID}/daily/#{city_code}_01.json", (today) ->
       if today.daily.minTemp && today.daily.maxTemp
-        res =
+        callback
           date: today.daily.date
           description: today.daily.wDescription
-          min: today.dailyminTemp
-          max: today.dailymaxTemp
-        callback res
+          min: today.daily.minTemp
+          max: today.daily.maxTemp
         return
 
       # when minTemp is empty, get tomorrow and merge results
       self._ajaxByProxy "http://#{self.TENKI_SERVER_ID}.tenkiapi.jp/#{self.TENKI_USER_ID}/daily/#{city_code}_02.json", (tomorrow) ->
+        unless today.daily.minTemp or today.daily.maxTemp
+          today.daily.date = tomorrow.daily.date
+
         if tomorrow.daily.minTemp
           today.daily.minTemp = tomorrow.daily.minTemp
         if tomorrow.daily.maxTemp
           today.daily.maxTemp = tomorrow.daily.maxTemp
 
-        res =
+        callback
           date: today.daily.date
           description: today.daily.wDescription
-          min: today.dailyminTemp
-          max: today.dailymaxTemp
-        callback res
+          min: today.daily.minTemp
+          max: today.daily.maxTemp
 
 # ------------------------------------------------------------------------------------
 
