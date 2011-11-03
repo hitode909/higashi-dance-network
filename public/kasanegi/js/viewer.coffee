@@ -4,9 +4,9 @@ class Viewer
   setup: ->
     this.setupCityChanger()
     this.setupEvents()
-    this.selectFirstPage()
     this.checkCurrentPositionIfNeeded()
-    this.setShareLink()
+    this.setTweetLink()
+    this.appendTwitterWidget()
 
   setupCityChanger: ->
     self = this
@@ -42,10 +42,6 @@ class Viewer
 
     $('#city-selector-container').prepend(select)
 
-  selectFirstPage: ->
-    page_id = @weather.getLastPageId()
-    this.selectPage(page_id, true)
-
   setupEvents: ->
     self = this
     $('select#city-selector').change ->
@@ -53,12 +49,6 @@ class Viewer
 
     $('#reset-city').click ->
       self.getCurrentPositionAndPrint()
-
-    $('.page-changer').click ->
-      target_id = $(this).attr('href')
-      target_id = target_id.replace(/^\#/, '')
-      self.selectPage(target_id)
-      return false
 
   checkCurrentPositionIfNeeded: ->
     city_code = $('select#city-selector').val()
@@ -161,7 +151,7 @@ class Viewer
     interval: 30000,
     title: self.HASHTAG,
     subject: '',
-    width: 320,
+    width: 310,
     height: 480,
     theme: {
       shell: {
@@ -190,27 +180,6 @@ class Viewer
     share_url = "https://twitter.com/share?url=#{encodeURIComponent(url)}&text=#{encodeURIComponent(text)}"
     $("a#share-tweet").attr
       href: share_url
-
-  selectPage: (target_id, force) ->
-    if !force && target_id == @weather.getLastPageId
-      # do nothing
-      return
-
-    this.setPageButton(target_id)
-
-    target_page = $(document.body).find("#" + target_id)
-    if target_page.length == 0
-      throw "invalid page target id (#{target_id})"
-
-    @weather.setLastPageId(target_id)
-
-    $('.page').hide()
-    target_page.show()
-
-    if target_id == "share-page"
-      this.setupSharePage()
-    else
-      this.destroySharePage()
 
   setPageButton: (target_id) ->
     $(".page-changer.selected").removeClass("selected")

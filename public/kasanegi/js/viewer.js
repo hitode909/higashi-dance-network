@@ -6,9 +6,9 @@ Viewer = (function() {
   Viewer.prototype.setup = function() {
     this.setupCityChanger();
     this.setupEvents();
-    this.selectFirstPage();
     this.checkCurrentPositionIfNeeded();
-    return this.setShareLink();
+    this.setTweetLink();
+    return this.appendTwitterWidget();
   };
   Viewer.prototype.setupCityChanger = function() {
     var found, label, lat_state_code, select, self;
@@ -43,26 +43,14 @@ Viewer = (function() {
     });
     return $('#city-selector-container').prepend(select);
   };
-  Viewer.prototype.selectFirstPage = function() {
-    var page_id;
-    page_id = this.weather.getLastPageId();
-    return this.selectPage(page_id, true);
-  };
   Viewer.prototype.setupEvents = function() {
     var self;
     self = this;
     $('select#city-selector').change(function() {
       return self.printWeather();
     });
-    $('#reset-city').click(function() {
+    return $('#reset-city').click(function() {
       return self.getCurrentPositionAndPrint();
-    });
-    return $('.page-changer').click(function() {
-      var target_id;
-      target_id = $(this).attr('href');
-      target_id = target_id.replace(/^\#/, '');
-      self.selectPage(target_id);
-      return false;
     });
   };
   Viewer.prototype.checkCurrentPositionIfNeeded = function() {
@@ -164,7 +152,7 @@ Viewer = (function() {
     interval: 30000,
     title: self.HASHTAG,
     subject: '',
-    width: 320,
+    width: 310,
     height: 480,
     theme: {
       shell: {
@@ -199,25 +187,6 @@ Viewer = (function() {
     return $("a#share-tweet").attr({
       href: share_url
     });
-  };
-  Viewer.prototype.selectPage = function(target_id, force) {
-    var target_page;
-    if (!force && target_id === this.weather.getLastPageId) {
-      return;
-    }
-    this.setPageButton(target_id);
-    target_page = $(document.body).find("#" + target_id);
-    if (target_page.length === 0) {
-      throw "invalid page target id (" + target_id + ")";
-    }
-    this.weather.setLastPageId(target_id);
-    $('.page').hide();
-    target_page.show();
-    if (target_id === "share-page") {
-      return this.setupSharePage();
-    } else {
-      return this.destroySharePage();
-    }
   };
   Viewer.prototype.setPageButton = function(target_id) {
     $(".page-changer.selected").removeClass("selected");

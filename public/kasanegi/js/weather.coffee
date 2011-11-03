@@ -10,12 +10,6 @@ class Weather
   setLastCityCode: (city_code)->
     localStorage.city_code = city_code
 
-  getLastPageId: ->
-    localStorage.last_page_id || 'weather-page'
-
-  setLastPageId: (last_page_id)->
-    localStorage.last_page_id = last_page_id
-
   getCurrentStateCode: (callback) ->
     self = this
 

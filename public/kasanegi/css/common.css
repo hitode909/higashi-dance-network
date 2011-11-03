@@ -6,52 +6,90 @@
     display: none;
 }
 
-/* page-changer */
-#page-changer-container {
-    background: white;
-}
-.page-changer {
-    float: left;
-}
-.page-changer.selected {
-    opacity: 0.8;
-}
+/* title */
 
-.page-changer:hover {
-    opacity: 0.9;
-}
-#weather-page-selector img{
-    width: 200px;
-    height: 40px;
-}
-#share-page-selector img{
-    width: 60px;
-    height: 40px;
-}
-#guide-page-selector img {
-    width: 60px;
-    height: 40px;
+#title img {
+    width: 320px;
+    height: 50px;
 }
 
 /* page */
 
 .page {
-    display: none;
+    margin: 5px;
 }
 
-/* report page, city selector */
+/* city selector */
+#city-selector-container {
+    margin-top: 20px;
+}
 
 select#city-selector {
     width: 180px;
 }
 
-/* report page, result */
+/* weather result */
 
+/* weather result image */
 .day {
     float: left;
+    width: 155px;
+}
+
+.day .wear-image img {
+    width: 155px;
+    height: 240px;
 }
 
 #weather-icons img {
     width: 16px;
     height: 16px;
+}
+
+.wear-icons img {
+    width: 31px;
+    height: 31px;
+}
+
+/* weather result comment */
+
+#comment {
+    margin-top: 20px;
+    margin-left: 5px;
+    margin-left: 5px;
+    border-radius: 5px;
+    padding: 5px;
+    min-height: 80px;
+    line-height: 1.5;
+}
+
+/* share button*/
+
+#share-tweet-container {
+    margin-top: 40px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 120%;
+}
+#share-tweet {
+    display: block;
+    border: 1px solid #333;
+    text-decoration: none;
+    text-alicn: center;
+    color: #333;
+    padding: 2px;
+    border-radius: 4px;
+}
+
+/* tweets */
+
+#widget-container {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    min-height: 480px;
+}
+
+/* guide */
+#guide {
+    margin-top: 20px;
 }
