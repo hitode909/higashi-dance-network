@@ -6,7 +6,9 @@
 
     <meta name="viewport" content="width=320px, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- ↓ 半透明うっとおしい -->
+    <!-- <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> -->
 
     <!-- 57x57 -->
     <!-- <link rel="apple-touch-icon" href="images/icon.png" /> -->
@@ -32,15 +34,9 @@
   <body>
     <div id="wrapper">
       <div id="page-changer-container">
-        <button class="page-changer" data-target-id="weather-page">
-          重ね着
-        </button>
-        <button class="page-changer" data-target-id="share-page">
-          みんなの重ね着
-        </button>
-        <button class="page-changer" data-target-id="guide-page">
-          ヘルプ
-        </button>
+        <a class="page-changer" id="weather-page-selector" href="#weather-page" title="重ね着"><img src="images/a.jpg"></a><a class="page-changer" id="share-page-selector" href="#share-page" title="共有"><img src="images/a.jpg"></a><a class="page-changer" id="guide-page-selector" href="#guide-page" title="ガイド"><img src="images/a.jpg"></a>
+        <div class="clear">
+        </div>
       </div>
 
       <hr></hr>

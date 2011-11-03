@@ -59,8 +59,10 @@ Viewer = (function() {
     });
     return $('.page-changer').click(function() {
       var target_id;
-      target_id = $(this).attr('data-target-id');
-      return self.selectPage(target_id);
+      target_id = $(this).attr('href');
+      target_id = target_id.replace(/^\#/, '');
+      self.selectPage(target_id);
+      return false;
     });
   };
   Viewer.prototype.checkCurrentPositionIfNeeded = function() {
@@ -109,6 +111,7 @@ Viewer = (function() {
   Viewer.prototype.printWeatherIcons = function(text) {
     var container, matched;
     container = $('#weather-icons');
+    container.empty();
     matched = text.match(/(晴|雷雨|雨|雷|曇|霧|)/g);
     return _.each(matched, function(code) {
       var image_path, rule;
@@ -125,7 +128,7 @@ Viewer = (function() {
         return;
       }
       return $('<img>').attr({
-        src: image_path,
+        src: 'images/a.jpg',
         title: code
       }).appendTo(container);
     });
@@ -192,6 +195,7 @@ Viewer = (function() {
     if (!force && target_id === this.weather.getLastPageId) {
       return;
     }
+    this.setPageButton(target_id);
     target_page = $(document.body).find("#" + target_id);
     if (target_page.length === 0) {
       throw "invalid page target id (" + target_id + ")";
@@ -204,6 +208,10 @@ Viewer = (function() {
     } else {
       return this.destroySharePage();
     }
+  };
+  Viewer.prototype.setPageButton = function(target_id) {
+    $(".page-changer.selected").removeClass("selected");
+    return $("#" + target_id + "-selector").addClass("selected");
   };
   Viewer.prototype.HASHTAG = "#重ね着";
   Viewer.prototype.SERVICE_URL = "http://higashi-dance-network.appspot.com/bon/";

@@ -6,10 +6,47 @@
     display: none;
 }
 
+/* page-changer */
+#page-changer-container {
+    background: white;
+}
+.page-changer {
+    float: left;
+}
+.page-changer.selected {
+    opacity: 0.8;
+}
+
+.page-changer:hover {
+    opacity: 0.9;
+}
+#weather-page-selector img{
+    width: 200px;
+    height: 40px;
+}
+#share-page-selector img{
+    width: 60px;
+    height: 40px;
+}
+#guide-page-selector img {
+    width: 60px;
+    height: 40px;
+}
+
+/* page */
+
 .page {
     display: none;
 }
 
+
+/* report page, result */
+
 .day {
     float: left;
+}
+
+#weather-icons img {
+    width: 16px;
+    height: 16px;
 }

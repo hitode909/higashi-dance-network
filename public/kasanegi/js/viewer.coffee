@@ -55,8 +55,10 @@ class Viewer
       self.getCurrentPositionAndPrint()
 
     $('.page-changer').click ->
-      target_id = $(this).attr('data-target-id')
+      target_id = $(this).attr('href')
+      target_id = target_id.replace(/^\#/, '')
       self.selectPage(target_id)
+      return false
 
   checkCurrentPositionIfNeeded: ->
     city_code = $('select#city-selector').val()
@@ -103,6 +105,8 @@ class Viewer
   printWeatherIcons: (text) ->
     container = $('#weather-icons')
 
+    container.empty()
+
     matched = text.match(/(晴|雷雨|雨|雷|曇|霧|)/g)
 
     _.each matched, (code) ->
@@ -118,7 +122,7 @@ class Viewer
       return unless image_path
 
       $('<img>').attr
-        src: image_path
+        src: 'images/a.jpg' # image_path
         title: code
       .appendTo container
 
@@ -180,6 +184,8 @@ class Viewer
       # do nothing
       return
 
+    this.setPageButton(target_id)
+
     target_page = $(document.body).find("#" + target_id)
     if target_page.length == 0
       throw "invalid page target id (#{target_id})"
@@ -193,6 +199,10 @@ class Viewer
       this.setupSharePage()
     else
       this.destroySharePage()
+
+  setPageButton: (target_id) ->
+    $(".page-changer.selected").removeClass("selected")
+    $("##{target_id}-selector").addClass("selected")
 
   # ----- constants -----
   HASHTAG: "#重ね着"
