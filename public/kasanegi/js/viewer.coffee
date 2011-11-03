@@ -6,6 +6,7 @@ class Viewer
     this.setupEvents()
     this.selectFirstPage()
     this.checkCurrentPositionIfNeeded()
+    this.setShareLink()
 
   setupCityChanger: ->
     self = this
@@ -82,6 +83,7 @@ class Viewer
 
 
   printWeather: ->
+    self = this
     $('#indicator').show()
     selected = $('select#city-selector option:selected')
     city_code = selected.val()
@@ -96,10 +98,32 @@ class Viewer
       $('#result #description').text report.description
       $('#result #max-temp').text report.max
       $('#result #min-temp').text report.min
+      self.printWeatherIcons(report.description)
+
+  printWeatherIcons: (text) ->
+    container = $('#weather-icons')
+
+    matched = text.match(/(晴|雷雨|雨|雷|曇|霧|)/g)
+
+    _.each matched, (code) ->
+      rule =
+        晴: 'images/icon-sun.png'
+        雨: 'images/icon-rain.png'
+        雷: 'images/icon-thunder.png'
+        曇: 'images/icon-cloud.png'
+        霧: 'images/icon-mist.png'
+        雷雨: 'images/icon-thunder-rain.png'
+
+      image_path = rule[code]
+      return unless image_path
+
+      $('<img>').attr
+        src: image_path
+        title: code
+      .appendTo container
 
   setupSharePage: ->
     this.appendTwitterWidget()
-    this.setShareLink()
 
   destroySharePage: ->
     this.removeTwitterWidget()
@@ -169,8 +193,6 @@ class Viewer
       this.setupSharePage()
     else
       this.destroySharePage()
-
-    console.log('selected')
 
   # ----- constants -----
   HASHTAG: "#重ね着"

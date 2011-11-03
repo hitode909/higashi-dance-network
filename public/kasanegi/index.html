@@ -6,6 +6,13 @@
 
     <meta name="viewport" content="width=320px, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- 57x57 -->
+    <!-- <link rel="apple-touch-icon" href="images/icon.png" /> -->
+
+    <!-- 57x57 -->
+    <!-- <link rel="apple-touch-startup-image" href="images/icon.png" /> -->
 
     <script language="javascript" type="text/javascript" defer src="js/jquery-1.6.1.min.js"></script>
     <script language="javascript" type="text/javascript" defer src="js/underscore-min.js"></script>
@@ -24,19 +31,15 @@
   </head>
   <body>
     <div id="wrapper">
-
-      <h1>重ね着</h1>
-      <hr></hr>
-
       <div id="page-changer-container">
         <button class="page-changer" data-target-id="weather-page">
-          天気予報
+          重ね着
         </button>
         <button class="page-changer" data-target-id="share-page">
-          共有
+          みんなの重ね着
         </button>
         <button class="page-changer" data-target-id="guide-page">
-          ガイド
+          ヘルプ
         </button>
       </div>
 
@@ -66,27 +69,41 @@
           <div>
             <span>天気</span>
             <span id="description"></span>
+            <span id="weather-icons"></span>
           </div>
-          <div>
-            <span>最高気温</span>
-            <span id="max-temp"></span>
+
+          <div id="images">
+
+            <div class="day">
+              <div>
+                <span>最高気温</span>
+                <span id="max-temp"></span>
+              </div>
+              <img src="images/a.jpg" style="width: 160px; height:240px;"/>
+            </div>
+
+            <div class="day">
+              <div>
+                <span>最低気温</span>
+                <span id="min-temp"></span>
+              </div>
+              <img src="images/a.jpg" style="width: 160px; height:240px;"/>
+            </div>
+
+            <div class="clear">
+            </div>
           </div>
-          <div>
-            <span>最低気温</span>
-            <span id="min-temp"></span>
-          </div>
+
         </div>
-        <h2>画像</h2>
+
         <div>
-          <img src="images/a.jpg" style="width: 320px; height:240px;"/>
+          <a target="_blank" id="share-tweet" href="https://twitter.com/share?url=http%3A%2F%2Fhigashi-dance-network.appspot.com%2Fbon%2F&text=3%E6%9E%9A%E3%81%A7%E3%81%99%20%23%E9%87%8D%E3%81%AD%E7%9D%80%20%23%E9%87%8D%E3%81%AD%E7%9D%80%E4%BA%AC%E9%83%BD">重ね着をツイートする</a>
         </div>
+
       </div>
 
       <div class="page" id="share-page">
         <h2>共有</h2>
-        <div>
-          <a target="_blank" id="share-tweet" href="https://twitter.com/share?url=http%3A%2F%2Fhigashi-dance-network.appspot.com%2Fbon%2F&text=3%E6%9E%9A%E3%81%A7%E3%81%99%20%23%E9%87%8D%E3%81%AD%E7%9D%80%20%23%E9%87%8D%E3%81%AD%E7%9D%80%E4%BA%AC%E9%83%BD">重ね着をツイートする</a>
-        </div>
         <div id="widget-container">
         </div>
       </div>

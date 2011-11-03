@@ -1,7 +1,15 @@
+.clear {
+    clear: both;
+}
+
 #indicator {
     display: none;
 }
 
 .page {
     display: none;
+}
+
+.day {
+    float: left;
 }

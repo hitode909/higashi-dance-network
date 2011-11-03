@@ -7,7 +7,8 @@ Viewer = (function() {
     this.setupCityChanger();
     this.setupEvents();
     this.selectFirstPage();
-    return this.checkCurrentPositionIfNeeded();
+    this.checkCurrentPositionIfNeeded();
+    return this.setShareLink();
   };
   Viewer.prototype.setupCityChanger = function() {
     var found, label, lat_state_code, select, self;
@@ -87,7 +88,8 @@ Viewer = (function() {
     });
   };
   Viewer.prototype.printWeather = function() {
-    var city, city_code, city_name, selected;
+    var city, city_code, city_name, selected, self;
+    self = this;
     $('#indicator').show();
     selected = $('select#city-selector option:selected');
     city_code = selected.val();
@@ -100,12 +102,36 @@ Viewer = (function() {
       $('#result #date').text(report.date);
       $('#result #description').text(report.description);
       $('#result #max-temp').text(report.max);
-      return $('#result #min-temp').text(report.min);
+      $('#result #min-temp').text(report.min);
+      return self.printWeatherIcons(report.description);
+    });
+  };
+  Viewer.prototype.printWeatherIcons = function(text) {
+    var container, matched;
+    container = $('#weather-icons');
+    matched = text.match(/(晴|雷雨|雨|雷|曇|霧|)/g);
+    return _.each(matched, function(code) {
+      var image_path, rule;
+      rule = {
+        晴: 'images/icon-sun.png',
+        雨: 'images/icon-rain.png',
+        雷: 'images/icon-thunder.png',
+        曇: 'images/icon-cloud.png',
+        霧: 'images/icon-mist.png',
+        雷雨: 'images/icon-thunder-rain.png'
+      };
+      image_path = rule[code];
+      if (!image_path) {
+        return;
+      }
+      return $('<img>').attr({
+        src: image_path,
+        title: code
+      }).appendTo(container);
     });
   };
   Viewer.prototype.setupSharePage = function() {
-    this.appendTwitterWidget();
-    return this.setShareLink();
+    return this.appendTwitterWidget();
   };
   Viewer.prototype.destroySharePage = function() {
     return this.removeTwitterWidget();
@@ -163,7 +189,6 @@ Viewer = (function() {
   };
   Viewer.prototype.selectPage = function(target_id, force) {
     var target_page;
-    console.log('select');
     if (!force && target_id === this.weather.getLastPageId) {
       return;
     }
@@ -175,13 +200,10 @@ Viewer = (function() {
     $('.page').hide();
     target_page.show();
     if (target_id === "share-page") {
-      console.log('share');
-      this.setupSharePage();
+      return this.setupSharePage();
     } else {
-      console.log('destroy');
-      this.destroySharePage();
+      return this.destroySharePage();
     }
-    return console.log('selected');
   };
   Viewer.prototype.HASHTAG = "#重ね着";
   Viewer.prototype.SERVICE_URL = "http://higashi-dance-network.appspot.com/bon/";
