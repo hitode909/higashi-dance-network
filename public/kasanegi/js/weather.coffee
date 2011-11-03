@@ -17,12 +17,16 @@ class Weather
       callback(self.statusCodeCache)
       return
 
+    if SURFPOINT && !(navigator && navigator.geolocation)
+      callback(SURFPOINT.getPrefCode())
+      return
+
     navigator.geolocation.getCurrentPosition (position) ->
       lat = position.coords.latitude
       lon = position.coords.longitude
       self.getStatusCodeFromLatLon(lat, lon, callback)
     , (error) ->
-      alert('error')
+      alert('位置情報を取得できませんでした')
 
   getStatusCodeFromLatLon: (lat, lon, callback) ->
     self = this

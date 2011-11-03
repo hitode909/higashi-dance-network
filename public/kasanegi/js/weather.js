@@ -14,13 +14,17 @@ Weather = (function() {
       callback(self.statusCodeCache);
       return;
     }
+    if (SURFPOINT && !(navigator && navigator.geolocation)) {
+      callback(SURFPOINT.getPrefCode());
+      return;
+    }
     return navigator.geolocation.getCurrentPosition(function(position) {
       var lat, lon;
       lat = position.coords.latitude;
       lon = position.coords.longitude;
       return self.getStatusCodeFromLatLon(lat, lon, callback);
     }, function(error) {
-      return alert('error');
+      return alert('位置情報を取得できませんでした');
     });
   };
   Weather.prototype.getStatusCodeFromLatLon = function(lat, lon, callback) {
