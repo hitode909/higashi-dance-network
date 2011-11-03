@@ -123,7 +123,7 @@ Viewer = (function() {
     type: 'search',
     search: self.HASHTAG,
     interval: 30000,
-    title: state_name,
+    title: self.HASHTAG,
     subject: '',
     width: 320,
     height: 480,
@@ -163,6 +163,7 @@ Viewer = (function() {
   };
   Viewer.prototype.selectPage = function(target_id, force) {
     var target_page;
+    console.log('select');
     if (!force && target_id === this.weather.getLastPageId) {
       return;
     }
@@ -174,8 +175,10 @@ Viewer = (function() {
     $('.page').hide();
     target_page.show();
     if (target_id === "share-page") {
+      console.log('share');
       this.setupSharePage();
     } else {
+      console.log('destroy');
       this.destroySharePage();
     }
     return console.log('selected');

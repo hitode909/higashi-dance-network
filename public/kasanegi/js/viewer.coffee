@@ -119,7 +119,7 @@ class Viewer
     type: 'search',
     search: self.HASHTAG,
     interval: 30000,
-    title: state_name,
+    title: self.HASHTAG,
     subject: '',
     width: 320,
     height: 480,
