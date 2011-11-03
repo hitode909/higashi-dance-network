@@ -101,12 +101,22 @@ Viewer = (function() {
     return this.weather.getWeatherReportForCity(city, function(report) {
       $('#indicator').hide();
       $('#result #area').text(city_name);
-      $('#result #date').text(report.date);
+      $('#result #date').text(self.convertDate(report.date));
       $('#result #description').text(report.description);
       $('#result #max-temp').text(report.max);
       $('#result #min-temp').text(report.min);
       return self.printWeatherIcons(report.description);
     });
+  };
+  Viewer.prototype.convertDate = function(date_text) {
+    var day, fragments, month;
+    fragments = date_text.match(/(\d+)/g);
+    if (fragments.length !== 3) {
+      return date_text;
+    }
+    month = fragments[1];
+    day = fragments[2];
+    return "" + (+month) + "/" + (+day);
   };
   Viewer.prototype.printWeatherIcons = function(text) {
     var container, matched;

@@ -96,11 +96,23 @@ class Viewer
     @weather.getWeatherReportForCity city, (report) ->
       $('#indicator').hide()
       $('#result #area').text city_name
-      $('#result #date').text report.date
+      $('#result #date').text self.convertDate(report.date)
       $('#result #description').text report.description
       $('#result #max-temp').text report.max
       $('#result #min-temp').text report.min
       self.printWeatherIcons(report.description)
+
+  # 2011-11-04 -> 11/4
+  convertDate: (date_text) ->
+    fragments = date_text.match(/(\d+)/g)
+
+    if fragments.length != 3
+      return date_text
+
+    month = fragments[1]
+    day = fragments[2]
+
+    return "#{+ month}/#{+ day}"
 
   printWeatherIcons: (text) ->
     container = $('#weather-icons')
