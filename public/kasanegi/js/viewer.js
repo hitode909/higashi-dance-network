@@ -137,7 +137,8 @@ Viewer = (function() {
       $('#result #comment').text(wear_info.comment);
       self.setTweetLink("" + city_name + " " + wear_info.comment);
       self.fillDay($('#result #day-max'), wear_info.daytime);
-      return self.fillDay($('#result #day-min'), wear_info.night);
+      self.fillDay($('#result #day-min'), wear_info.night);
+      return self.checkScroll();
     });
   };
   Viewer.prototype.convertDate = function(date_text) {
@@ -297,6 +298,13 @@ Viewer = (function() {
   Viewer.prototype.setPageButton = function(target_id) {
     $(".page-changer.selected").removeClass("selected");
     return $("#" + target_id + "-selector").addClass("selected");
+  };
+  Viewer.prototype.checkScroll = function() {
+    if (navigator.appVersion.indexOf('iPhone OS ' && !window.navigator.standalone)) {
+      return setTimeout(function() {
+        return window.scrollBy(0, $('#result').position().top);
+      }, 500);
+    }
   };
   Viewer.prototype.HASHTAG = "#重ね着";
   Viewer.prototype.SERVICE_URL = "http://higashi-dance-network.appspot.com/kasanegi/";

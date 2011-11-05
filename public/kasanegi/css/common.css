@@ -35,7 +35,7 @@
 /* city selector */
 
 #city-selector-container {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 select#city-selector {
@@ -49,16 +49,17 @@ select#city-selector {
 /* weather result */
 
 #result {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 #area-container {
     position: relative;
     margin-bottom: 5px;
     height: 35px;
+    display: none;
 }
 
-#area {
+#__area {
     position: absolute;
     left: 0px;
     top: 0px;
@@ -82,10 +83,6 @@ select#city-selector {
     height: 35px;
 }
 
-#date {
-    font-size: 120%;
-}
-
 #description {
     font-size: 80%;
     color: #666;
@@ -96,7 +93,7 @@ select#city-selector {
 /* weather result image */
 
 #images {
-    margin-top: 20px;
+    margin-top: 0px;
 }
 
 .heat {

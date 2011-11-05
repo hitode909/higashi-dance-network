@@ -151,6 +151,8 @@ class Viewer
       self.fillDay $('#result #day-max'), wear_info.daytime
       self.fillDay $('#result #day-min'), wear_info.night
 
+      self.checkScroll()
+
   # 2011-11-04 -> 11/4
   convertDate: (date_text) ->
     fragments = date_text.match(/(\d+)/g)
@@ -308,6 +310,12 @@ class Viewer
   setPageButton: (target_id) ->
     $(".page-changer.selected").removeClass("selected")
     $("##{target_id}-selector").addClass("selected")
+
+  checkScroll: ->
+    if navigator.appVersion.indexOf 'iPhone OS ' and not window.navigator.standalone
+      setTimeout ->
+        window.scrollBy(0, $('#result').position().top)
+      ,500
 
   # ----- constants -----
   HASHTAG: "#重ね着"
