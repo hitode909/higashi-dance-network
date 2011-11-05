@@ -96,6 +96,16 @@ select#city-selector {
     display: none;
 }
 
+#area {
+    font-weight: bold;
+    color: #333;
+}
+
+#date {
+    color: #666;
+    font-size: 90%;
+}
+
 #area-container {
     position: relative;
     margin-bottom: 5px;
