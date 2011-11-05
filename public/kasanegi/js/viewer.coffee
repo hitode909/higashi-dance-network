@@ -213,16 +213,17 @@ class Viewer
     container.empty()
 
     text = text.replace /\(.*\)/, ''
-    matched = text.match /(晴|雷雨|雨|雷|曇|霧|)/g
+    matched = text.match /(晴|雷雨|雪|雨|雷|曇|霧|)/g
 
     _.each matched, (code) ->
       rule =
-        晴:   'images/weather-icon/sun.png'
-        雨:   'images/weather-icon/rain.png'
-        雷:   'images/weather-icon/thunder.png'
-        曇:   'images/weather-icon/cloud.png'
-        霧:   'images/weather-icon/mist.png'
-        雷雨: 'images/weather-icon/thunder-rain.png'
+        晴:   'images/weather-sunny.png'
+        雨:   'images/weather-rain.png'
+        雷:   'images/weather-thunder.png'
+        雪:   'images/weather-snow.png'
+        曇:   'images/weather-cloudy.png'
+        霧:   'images/weather-mist.png'
+        雷雨: 'images/weather-thunder-rain.png'
 
       image_path = rule[code]
       return unless image_path

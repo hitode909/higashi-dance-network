@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2011-11-05 17:35:58 +0900
+# 2011-11-05 18:25:25 +0900
 
 CACHE:
 /kasanegi/css/common.css
@@ -7,10 +7,12 @@ CACHE:
 /kasanegi/css/pc.css
 /kasanegi/css/reset.css
 /kasanegi/css/text.css
+/kasanegi/images/area-background.png
 /kasanegi/images/cardigan.png
 /kasanegi/images/coat.png
 /kasanegi/images/day.png
 /kasanegi/images/docodoco_logo.gif
+/kasanegi/images/header.png
 /kasanegi/images/icon-cardigan.png
 /kasanegi/images/icon-coat.png
 /kasanegi/images/icon-jacket.png
@@ -21,6 +23,7 @@ CACHE:
 /kasanegi/images/shirts.png
 /kasanegi/images/sweater.png
 /kasanegi/images/tenki_logo.gif
+/kasanegi/images/tweet.png
 /kasanegi/js/jquery-1.6.1.min.js
 /kasanegi/js/main.js
 /kasanegi/js/underscore-min.js
