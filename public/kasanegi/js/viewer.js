@@ -105,14 +105,17 @@ Viewer = (function() {
     });
   };
   Viewer.prototype.convertDate = function(date_text) {
-    var day, fragments, month;
+    var date, day, fragments, month, wod, year;
     fragments = date_text.match(/(\d+)/g);
     if (fragments.length !== 3) {
       return date_text;
     }
+    year = fragments[0];
     month = fragments[1];
     day = fragments[2];
-    return "" + (+month) + "月" + (+day) + "日";
+    date = new Date(+year, +month - 1, +day);
+    wod = "日月火水木金土"[date.getDay()];
+    return "" + (+month) + "月" + (+day) + "日 " + wod + "曜日";
   };
   Viewer.prototype.fillDay = function(target, wears) {
     var bg_path, icons_container, image_container, self;

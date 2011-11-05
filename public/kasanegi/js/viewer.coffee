@@ -109,10 +109,14 @@ class Viewer
     if fragments.length != 3
       return date_text
 
+    year  = fragments[0]
     month = fragments[1]
-    day = fragments[2]
+    day   = fragments[2]
 
-    return "#{+ month}月#{+ day}日"
+    date = new Date(+year, +month-1, +day) # month = 0 ~ 11
+    wod = "日月火水木金土"[date.getDay()]
+
+    return "#{+ month}月#{+ day}日 #{wod}曜日"
 
   fillDay:  (target, wears) ->
     self = this

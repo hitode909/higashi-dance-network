@@ -49,7 +49,7 @@ select#city-selector {
 }
 
 #date {
-    min-width: 80px;
+    min-width: 160px;
 }
 
 /* weather result image */
