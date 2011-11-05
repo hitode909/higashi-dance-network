@@ -2,10 +2,50 @@ class Viewer
   constructor: (@weather) ->
 
   setup: ->
-    this.setupCityChanger()
-    this.setupEvents()
-    this.checkCurrentPositionIfNeeded()
-    this.appendTwitterWidget()
+    self = this
+    self.setupCityChanger()
+    self.setupEvents()
+    self.checkCurrentPositionIfNeeded()
+    self.appendTwitterWidget()
+    self.showCitySelectorContainer()
+
+  # マニフェストキャッシュがいい感じなので使ってない
+  preloadImages: (callback) ->
+    callback()
+    return
+    images = [
+      "/kasanegi/images/cardigan.png"
+      "/kasanegi/images/coat.png"
+      "/kasanegi/images/day.png"
+      "/kasanegi/images/docodoco_logo.gif"
+      "/kasanegi/images/icon-cardigan.png"
+      "/kasanegi/images/icon-coat.png"
+      "/kasanegi/images/icon-jacket.png"
+      "/kasanegi/images/icon-shirts.png"
+      "/kasanegi/images/icon-sweater.png"
+      "/kasanegi/images/jacket.png"
+      "/kasanegi/images/night.png"
+      "/kasanegi/images/shirts.png"
+      "/kasanegi/images/sweater.png"
+      "/kasanegi/images/tenki_logo.gif"
+    ]
+    called = false
+    count = 0
+    _.each images, (src) ->
+      image = new Image
+      image.src = src
+      image.onload = ->
+        count++
+        if count == images.length
+          unless called
+            called = true
+            callback()
+
+    setTimeout ->
+      unless called
+        called = true
+        callback()
+    , 5000
 
   setupCityChanger: ->
     self = this
@@ -61,6 +101,10 @@ class Viewer
 
   getCurrentPositionAndPrint: ->
     self = this
+
+    $('#indicator').show()
+    $('#result').hide()
+
     self.weather.getCurrentStateCode (state_code) ->
       city = self.weather.getDefaultCityForState state_code
       city_code = city.code
@@ -117,7 +161,7 @@ class Viewer
     date = new Date(+year, +month-1, +day) # month = 0 ~ 11
     wod = "日月火水木金土"[date.getDay()]
 
-    return "#{+ month}月#{+ day}日 #{wod}曜日"
+    return "#{+ month}/#{+ day} (#{wod})"
 
   fillDay:  (target, wears) ->
     self = this
@@ -193,6 +237,10 @@ class Viewer
 
   removeTwitterWidget: ->
     $('#widget-container').empty()
+
+  showCitySelectorContainer: ->
+    $('#city-selector-container').show()
+
 
   appendTwitterWidget: () ->
     self = this

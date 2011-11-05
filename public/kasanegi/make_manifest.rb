@@ -13,3 +13,8 @@ puts "CACHE:"
   next if line =~ /html$/
   puts line
 }
+
+
+puts "NETWORK:"
+puts "*"
+puts

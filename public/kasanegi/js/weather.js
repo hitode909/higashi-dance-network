@@ -51,7 +51,7 @@ Weather = (function() {
         return callback(code);
       },
       error: function() {
-        return alert('error');
+        return alert('通信時にエラーが発生しました．時間をおいて試してみてください．');
       }
     });
   };
@@ -86,7 +86,14 @@ Weather = (function() {
     });
   };
   Weather.prototype._ajaxByProxy = function(url, callback) {
-    return $.get("/proxy/" + (encodeURIComponent(url)), callback);
+    return $.ajax({
+      type: 'GET',
+      url: "/proxy/" + (encodeURIComponent(url)),
+      success: callback,
+      error: function() {
+        return alert('通信時にエラーが発生しました．時間をおいて試してみてください．');
+      }
+    });
   };
   Weather.prototype.getWeatherReportForCity = function(city, callback) {
     var city_code, res, self;

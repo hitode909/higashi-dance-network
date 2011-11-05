@@ -1,4 +1,4 @@
-<!DOCTYPE html manifest="kasanegi.manifest">
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -34,7 +34,7 @@
   <body>
     <div id="wrapper">
       <div id="title">
-        <img src="images/header.png">
+        <img src="images/day.png" title="重ね着">
       </div>
 
       <div class="page">
@@ -49,12 +49,17 @@
           </div>
         </div>
         <div id="result">
-          <div id="area"></div>
-          <div>
+          <div id="area-container">
+            <div id="area-background">
+              <img src="images/night.png"/>
+            </div>
+            <div id="area"></div>
+          </div>
+          <div id="weather-container">
             <div class="float" id="date"></div>
-            <div class="float">
-              <span id="description"></span>
-              <span id="weather-icons"></span>
+            <div class="float-right">
+              <div id="weather-icons"></div>
+              <div id="description"></div>
             </div>
             <div class="clear">
             </div>
@@ -64,9 +69,7 @@
 
             <div class="day" id="day-max">
               <div class="heat">
-                <span>最高気温</span>
-                <span id="max-temp"></span>
-                <span>℃</span>
+                <span>最高気温 </span><span id="max-temp"></span><span>℃</span>
               </div>
               <div class="wear-image">
               </div>
@@ -78,9 +81,7 @@
 
             <div class="day" id="day-min">
               <div class="heat">
-                <span>最低気温</span>
-                <span id="min-temp"></span>
-                <span>℃</span>
+                <span>最低気温 </span><span id="min-temp"></span><span>℃</span>
               </div>
               <div class="wear-image">
               </div>
@@ -99,7 +100,7 @@
           </div>
 
           <div id="share-tweet-container">
-            <a target="_blank" id="share-tweet" href="https://twitter.com/share?url=http%3A%2F%2Fhigashi-dance-network.appspot.com%2Fbon%2F&text=3%E6%9E%9A%E3%81%A7%E3%81%99%20%23%E9%87%8D%E3%81%AD%E7%9D%80%20%23%E9%87%8D%E3%81%AD%E7%9D%80%E4%BA%AC%E9%83%BD">重ね着をツイートする</a>
+            <a target="_blank" id="share-tweet" href="https://twitter.com/share?url=http%3A%2F%2Fhigashi-dance-network.appspot.com%2Fbon%2F&text=3%E6%9E%9A%E3%81%A7%E3%81%99%20%23%E9%87%8D%E3%81%AD%E7%9D%80%20%23%E9%87%8D%E3%81%AD%E7%9D%80%E4%BA%AC%E9%83%BD"><img src="images/night.png" title="重ね着をツイートする"></a>
           </div>
 
           <div id="widget-container">

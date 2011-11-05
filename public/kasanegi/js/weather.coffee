@@ -48,7 +48,7 @@ class Weather
         self.statusCodeCache = code
         callback(code)
       error: ->
-        alert('error')
+        alert('通信時にエラーが発生しました．時間をおいて試してみてください．')
 
   getCurrentStateCodeFromIP: ->
     return SURFPOINT.getPrefCode()
@@ -75,7 +75,12 @@ class Weather
       city.is_primary
 
   _ajaxByProxy: (url, callback) ->
-    $.get "/proxy/#{encodeURIComponent(url)}", callback
+    $.ajax
+      type: 'GET'
+      url: "/proxy/#{encodeURIComponent(url)}"
+      success: callback
+      error: ->
+        alert('通信時にエラーが発生しました．時間をおいて試してみてください．')
 
   # return: { date description min max }
   getWeatherReportForCity:  (city, callback) ->

@@ -4,10 +4,41 @@ Viewer = (function() {
     this.weather = weather;
   }
   Viewer.prototype.setup = function() {
-    this.setupCityChanger();
-    this.setupEvents();
-    this.checkCurrentPositionIfNeeded();
-    return this.appendTwitterWidget();
+    var self;
+    self = this;
+    self.setupCityChanger();
+    self.setupEvents();
+    self.checkCurrentPositionIfNeeded();
+    self.appendTwitterWidget();
+    return self.showCitySelectorContainer();
+  };
+  Viewer.prototype.preloadImages = function(callback) {
+    var called, count, images;
+    callback();
+    return;
+    images = ["/kasanegi/images/cardigan.png", "/kasanegi/images/coat.png", "/kasanegi/images/day.png", "/kasanegi/images/docodoco_logo.gif", "/kasanegi/images/icon-cardigan.png", "/kasanegi/images/icon-coat.png", "/kasanegi/images/icon-jacket.png", "/kasanegi/images/icon-shirts.png", "/kasanegi/images/icon-sweater.png", "/kasanegi/images/jacket.png", "/kasanegi/images/night.png", "/kasanegi/images/shirts.png", "/kasanegi/images/sweater.png", "/kasanegi/images/tenki_logo.gif"];
+    called = false;
+    count = 0;
+    _.each(images, function(src) {
+      var image;
+      image = new Image;
+      image.src = src;
+      return image.onload = function() {
+        count++;
+        if (count === images.length) {
+          if (!called) {
+            called = true;
+            return callback();
+          }
+        }
+      };
+    });
+    return setTimeout(function() {
+      if (!called) {
+        called = true;
+        return callback();
+      }
+    }, 5000);
   };
   Viewer.prototype.setupCityChanger = function() {
     var found, label, lat_state_code, select, self;
@@ -66,6 +97,8 @@ Viewer = (function() {
   Viewer.prototype.getCurrentPositionAndPrint = function() {
     var self;
     self = this;
+    $('#indicator').show();
+    $('#result').hide();
     return self.weather.getCurrentStateCode(function(state_code) {
       var city, city_code, option;
       city = self.weather.getDefaultCityForState(state_code);
@@ -115,7 +148,7 @@ Viewer = (function() {
     day = fragments[2];
     date = new Date(+year, +month - 1, +day);
     wod = "日月火水木金土"[date.getDay()];
-    return "" + (+month) + "月" + (+day) + "日 " + wod + "曜日";
+    return "" + (+month) + "/" + (+day) + " (" + wod + ")";
   };
   Viewer.prototype.fillDay = function(target, wears) {
     var bg_path, icons_container, image_container, self;
@@ -190,6 +223,9 @@ Viewer = (function() {
   };
   Viewer.prototype.removeTwitterWidget = function() {
     return $('#widget-container').empty();
+  };
+  Viewer.prototype.showCitySelectorContainer = function() {
+    return $('#city-selector-container').show();
   };
   Viewer.prototype.appendTwitterWidget = function() {
     var self;
