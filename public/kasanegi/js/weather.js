@@ -14,7 +14,7 @@ Weather = (function() {
       callback(self.statusCodeCache);
       return;
     }
-    if (SURFPOINT && !(navigator && navigator.geolocation)) {
+    if (!(navigator && navigator.geolocation)) {
       callback(SURFPOINT.getPrefCode());
       return;
     }

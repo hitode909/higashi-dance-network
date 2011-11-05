@@ -8,6 +8,11 @@
 
 #indicator {
     display: none;
+    margin: 50px;
+}
+
+#indicator .message {
+    text-align: center;
 }
 
 /* title */
@@ -46,13 +51,18 @@ select#city-selector {
     min-width: 80px;
 }
 
-
-
-
 /* weather result image */
 
 #images {
     margin-top: 20px;
+}
+
+#day-max .wear-image {
+    background: url(/kasanegi/images/a.jpg);
+}
+
+#day-min .wear-image {
+    background: url(/kasanegi/images/a.jpg);
 }
 
 .day {
@@ -60,9 +70,18 @@ select#city-selector {
     width: 155px;
 }
 
+.day .wear-image {
+    position: relative;
+    width: 155px;
+    height: 240px;
+}
+
 .day .wear-image img {
     width: 155px;
     height: 240px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
 }
 
 #weather-icons img {

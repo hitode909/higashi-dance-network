@@ -58,6 +58,7 @@ Viewer = (function() {
     city_code = $('select#city-selector').val();
     if (city_code === "-1") {
       $('#indicator').show();
+      $('#result').hide();
       return this.getCurrentPositionAndPrint();
     } else {
       return this.printWeather();
@@ -81,19 +82,27 @@ Viewer = (function() {
     var city, city_code, city_name, selected, self;
     self = this;
     $('#indicator').show();
+    $('#result').hide();
     selected = $('select#city-selector option:selected');
     city_code = selected.val();
     city_name = selected.text();
     city = this.weather.getCityByCityCode(city_code);
     this.weather.setLastCityCode(city_code);
     return this.weather.getWeatherReportForCity(city, function(report) {
+      var wear_info;
       $('#indicator').hide();
+      $('#result').show();
       $('#result #area').text(city_name);
       $('#result #date').text(self.convertDate(report.date));
       $('#result #description').text(report.description);
       $('#result #max-temp').text(report.max);
       $('#result #min-temp').text(report.min);
-      return self.printWeatherIcons(report.description);
+      self.printWeatherIcons(report.description);
+      wear_info = self.getWearInformationFromMinAndMax(report.min, report.max);
+      console.log(wear_info);
+      $('#result #comment').text(wear_info.comment);
+      self.fillDay($('#result #day-max'), wear_info.daytime);
+      return self.fillDay($('#result #day-min'), wear_info.night);
     });
   };
   Viewer.prototype.convertDate = function(date_text) {
@@ -106,6 +115,32 @@ Viewer = (function() {
     day = fragments[2];
     return "" + (+month) + "/" + (+day);
   };
+  Viewer.prototype.fillDay = function(target, wears) {
+    var icons_container, image_container, self;
+    self = this;
+    image_container = target.find('.wear-image');
+    icons_container = target.find('.wear-icons');
+    icons_container.empty();
+    image_container.empty();
+    return _.each(wears, function(wear_name) {
+      $('<img>').attr({
+        src: "images/wear-icon/" + wear_name + ".png",
+        title: self.getWearName(wear_name)
+      }).appendTo(icons_container);
+      return $('<img>').attr({
+        src: "images/wear/" + wear_name + ".png",
+        title: self.getWearName(wear_name)
+      }).appendTo(image_container);
+    });
+  };
+  Viewer.prototype.getWearName = function(wear) {
+    var table;
+    table = {
+      sweater: 'セーター',
+      shirts: 'シャツ'
+    };
+    return table[wear];
+  };
   Viewer.prototype.printWeatherIcons = function(text) {
     var container, matched;
     container = $('#weather-icons');
@@ -114,19 +149,19 @@ Viewer = (function() {
     return _.each(matched, function(code) {
       var image_path, rule;
       rule = {
-        晴: 'images/icon-sun.png',
-        雨: 'images/icon-rain.png',
-        雷: 'images/icon-thunder.png',
-        曇: 'images/icon-cloud.png',
-        霧: 'images/icon-mist.png',
-        雷雨: 'images/icon-thunder-rain.png'
+        晴: 'images/weather-icon/sun.png',
+        雨: 'images/weather-icon/rain.png',
+        雷: 'images/weather-icon/thunder.png',
+        曇: 'images/weather-icon/cloud.png',
+        霧: 'images/weather-icon/mist.png',
+        雷雨: 'images/weather-icon/thunder-rain.png'
       };
       image_path = rule[code];
       if (!image_path) {
         return;
       }
       return $('<img>').attr({
-        src: 'images/a.jpg',
+        src: image_path,
         title: code
       }).appendTo(container);
     });
@@ -145,33 +180,51 @@ Viewer = (function() {
     self = this;
     this.removeTwitterWidget();
     return new TWTR.Widget({
-    id: 'widget-container',
-    version: 2,
-    type: 'search',
-    search: self.HASHTAG,
-    interval: 30000,
-    title: self.HASHTAG,
-    subject: '',
-    width: 310,
-    height: 480,
-    theme: {
-      shell: {
-        background: '#98c6d1',
-        color: '#3c576e'
+      id: 'widget-container',
+      version: 2,
+      type: 'search',
+      search: self.HASHTAG,
+      interval: 30000,
+      title: self.HASHTAG,
+      subject: '',
+      width: 310,
+      height: 480,
+      theme: {
+        shell: {
+          background: '#98c6d1',
+          color: '#3c576e'
+        },
+        tweets: {
+          background: '#ffffff',
+          color: '#424242',
+          links: '#436a94'
+        }
       },
-      tweets: {
-        background: '#ffffff',
-        color: '#424242',
-        links: '#436a94'
+      features: {
+        scrollbar: false,
+        loop: false,
+          live: true,
+        behavior: 'all',
       }
-    },
-    features: {
-      scrollbar: false,
-      loop: false,
-      live: true,
-      behavior: 'all',
-    }
-  }).render().start();;
+    }).render().start();;
+  };
+  Viewer.prototype.getWearInformationFromMinAndMax = function(min, max) {
+    var distance, getDistance, rules, selected;
+    rules = this.CLOTH_RULES;
+    selected = null;
+    distance = null;
+    getDistance = function(x1, y1, x2, y2) {
+      return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+    };
+    _.each(rules, function(rule) {
+      var distance_now;
+      distance_now = getDistance(min, rule.min, max, rule.max);
+      if (!selected || distance_now < distance) {
+        selected = rule;
+        return distance = distance_now;
+      }
+    });
+    return selected;
   };
   Viewer.prototype.setTweetLink = function(message, hashtag) {
     var share_url, text, url;
@@ -194,5 +247,19 @@ Viewer = (function() {
   };
   Viewer.prototype.HASHTAG = "#重ね着";
   Viewer.prototype.SERVICE_URL = "http://higashi-dance-network.appspot.com/bon/";
+  Viewer.prototype.CLOTH_RULES = (function() {
+    var CLOTH_SHIRTS, CLOTH_SWEATER;
+    CLOTH_SHIRTS = 'shirts';
+    CLOTH_SWEATER = 'sweater';
+    return [
+      {
+        min: 20,
+        max: 30,
+        daytime: [CLOTH_SHIRTS],
+        night: [CLOTH_SHIRTS, CLOTH_SWEATER],
+        comment: '寒いのでマフラーが必要です'
+      }
+    ];
+  })();
   return Viewer;
 })();
