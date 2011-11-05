@@ -207,7 +207,7 @@ Viewer = (function() {
         雪: 'images/weather-snow.png',
         曇: 'images/weather-cloudy.png',
         霧: 'images/weather-mist.png',
-        雷雨: 'images/weather-thunder-rain.png'
+        雷雨: 'images/weather-thunderstorm.png'
       };
       image_path = rule[code];
       if (!image_path) {

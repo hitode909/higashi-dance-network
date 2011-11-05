@@ -43,7 +43,7 @@ select#city-selector {
 }
 
 #reset-city {
-    margin-left: 4em;
+    margin-left: 1em;
 }
 
 /* weather result */
@@ -90,6 +90,7 @@ select#city-selector {
     font-size: 80%;
     color: #666;
     text-align: right;
+    margin-top: 2px;
 }
 
 /* weather result image */
@@ -131,8 +132,9 @@ select#city-selector {
 }
 
 #weather-icons img {
-    width: 32px;
-    height: 32px;
+    width: 42px;
+    height: 42px;
+    margin-left: 5px;
 }
 
 .wear-icons img {
