@@ -23,7 +23,7 @@
 
 #title img {
     width: 320px;
-    height: 50px;
+    height: 44px;
 }
 
 /* page */
@@ -51,7 +51,7 @@ select#city-selector {
 #area-container {
     position: relative;
     margin-bottom: 10px;
-    height: 50px;
+    height: 35px;
 }
 
 #area {
@@ -59,7 +59,7 @@ select#city-selector {
     left: 0px;
     top: 0px;
     width: 100%;
-    margin: 10px;
+    margin-top: 4px;
 
     font-size: 120%;
     text-align: center;
@@ -75,7 +75,7 @@ select#city-selector {
 
 #area-background img {
     width: 310px;
-    height: 50px;
+    height: 35px;
 }
 
 #weather-container {
@@ -155,12 +155,12 @@ select#city-selector {
 /* share button*/
 
 #share-tweet-container {
-    margin-top: 40px;
+    margin-top: 34px;
 }
 
 #share-tweet-container img {
     width: 310px;
-    height: 50px;
+    height: 35px;
 }
 
 
@@ -173,8 +173,14 @@ select#city-selector {
 }
 
 /* guide */
+
 #guide {
-    margin-top: 40px;
+    font-size: 90%;
+}
+
+/* guide */
+#guide-api {
+    margin-top: 60px;
 }
 
 /* apis */
