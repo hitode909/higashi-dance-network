@@ -36,7 +36,6 @@
 
 #city-selector-container {
     margin-top: 20px;
-    display: none;
 }
 
 select#city-selector {

@@ -9,8 +9,7 @@ Viewer = (function() {
     self.setupCityChanger();
     self.setupEvents();
     self.checkCurrentPositionIfNeeded();
-    self.appendTwitterWidget();
-    return self.showCitySelectorContainer();
+    return self.appendTwitterWidget();
   };
   Viewer.prototype.preloadImages = function(callback) {
     var called, count, images;
@@ -41,7 +40,7 @@ Viewer = (function() {
     }, 5000);
   };
   Viewer.prototype.setupCityChanger = function() {
-    var found, label, lat_state_code, select, self;
+    var button, found, label, lat_state_code, select, self;
     self = this;
     lat_state_code = self.weather.getLastCityCode();
     found = false;
@@ -71,7 +70,11 @@ Viewer = (function() {
       }
       return select.append(option);
     });
-    return $('#city-selector-container').prepend(select);
+    button = $("<button>").attr({
+      id: 'reset-city'
+    }).text('現在位置に設定');
+    $('#city-selector-container').append(select);
+    return $('#city-selector-container').append(button);
   };
   Viewer.prototype.setupEvents = function() {
     var self;
@@ -223,9 +226,6 @@ Viewer = (function() {
   };
   Viewer.prototype.removeTwitterWidget = function() {
     return $('#widget-container').empty();
-  };
-  Viewer.prototype.showCitySelectorContainer = function() {
-    return $('#city-selector-container').show();
   };
   Viewer.prototype.appendTwitterWidget = function() {
     var self;

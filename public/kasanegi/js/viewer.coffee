@@ -7,7 +7,6 @@ class Viewer
     self.setupEvents()
     self.checkCurrentPositionIfNeeded()
     self.appendTwitterWidget()
-    self.showCitySelectorContainer()
 
   # マニフェストキャッシュがいい感じなので使ってない
   preloadImages: (callback) ->
@@ -79,7 +78,12 @@ class Viewer
 
       select.append option
 
-    $('#city-selector-container').prepend(select)
+    button = $("<button>").attr
+      id: 'reset-city'
+    .text '現在位置に設定'
+
+    $('#city-selector-container').append(select)
+    $('#city-selector-container').append(button)
 
   setupEvents: ->
     self = this
@@ -237,10 +241,6 @@ class Viewer
 
   removeTwitterWidget: ->
     $('#widget-container').empty()
-
-  showCitySelectorContainer: ->
-    $('#city-selector-container').show()
-
 
   appendTwitterWidget: () ->
     self = this
