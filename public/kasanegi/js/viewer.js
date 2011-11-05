@@ -8,6 +8,7 @@ Viewer = (function() {
     self = this;
     self.setupCityChanger();
     self.setupEvents();
+    self.selectFirstPage();
     self.checkCurrentPositionIfNeeded();
     return self.appendTwitterWidget();
   };
@@ -38,6 +39,37 @@ Viewer = (function() {
         return callback();
       }
     }, 5000);
+  };
+  Viewer.prototype.selectFirstPage = function() {
+    var page_id;
+    if (location.hash) {
+      $(window).trigger('hashchange');
+      return;
+    }
+    page_id = this.weather.getLastPageId();
+    return this.selectPage(page_id, true);
+  };
+  Viewer.prototype.selectPage = function(target_id, force) {
+    var target_page;
+    if (!force && target_id === this.weather.getLastPageId) {
+      return;
+    }
+    this.setPageButton(target_id);
+    target_page = $(document.body).find("#" + target_id + "-page");
+    if (target_page.length === 0) {
+      target_id = 'main';
+      target_page = $(document.body).find("#" + target_id + "-page");
+    }
+    this.weather.setLastPageId(target_id);
+    $('.page').hide();
+    target_page.show();
+    if (target_id === "main") {
+      $('#help-button').show();
+      return $('#back-to-main').hide();
+    } else {
+      $('#help-button').hide();
+      return $('#back-to-main').show();
+    }
   };
   Viewer.prototype.setupCityChanger = function() {
     var button, found, label, lat_state_code, select, self;
@@ -82,20 +114,37 @@ Viewer = (function() {
     $('select#city-selector').change(function() {
       return self.printWeather();
     });
-    return $('#reset-city').click(function() {
+    $('#reset-city').click(function() {
       return self.getCurrentPositionAndPrint();
+    });
+    return $(window).bind('hashchange', function() {
+      var target_id;
+      console.log(location.hash);
+      target_id = location.hash;
+      target_id = target_id.replace(/^\#/, '');
+      return self.selectPage(target_id);
     });
   };
   Viewer.prototype.checkCurrentPositionIfNeeded = function() {
-    var city_code;
+    var city_code, self;
+    self = this;
     city_code = $('select#city-selector').val();
-    if (city_code === "-1") {
-      $('#indicator').show();
-      $('#result').hide();
-      return this.getCurrentPositionAndPrint();
+    if (+city_code === -1) {
+      return setTimeout(function() {
+        return self.printFirstTimeGuide();
+      }, 100);
     } else {
       return this.printWeather();
     }
+  };
+  Viewer.prototype.printFirstTimeGuide = function() {
+    console.log('printFirstTimeGuide');
+    $("#first-time-guide").show();
+    return $("#indicator .message").hide();
+  };
+  Viewer.prototype.hideFirstTimeGuide = function() {
+    $("#first-time-guide").hide();
+    return $("#indicator .message").show();
   };
   Viewer.prototype.getCurrentPositionAndPrint = function() {
     var self;
@@ -300,7 +349,10 @@ Viewer = (function() {
     return $("#" + target_id + "-selector").addClass("selected");
   };
   Viewer.prototype.checkScroll = function() {
-    if (navigator.appVersion.indexOf('iPhone OS ' && !window.navigator.standalone)) {
+    if (this.weather.getLastPageId() !== 'main') {
+      return;
+    }
+    if (navigator.appVersion.match(/iPhone OS/)) {
       return setTimeout(function() {
         return window.scrollBy(0, $('#result').position().top);
       }, 500);

@@ -30,16 +30,30 @@
     <link rel="stylesheet" type="text/css" href="css/mobile.css" media="only screen and (max-device-width: 480px)" >
     <link rel="stylesheet" type="text/css" href="css/pc.css" media="only screen and (min-device-width: 481px)" >
 
+    <link rel="canonical" href="http://higashi-dance-network.appspot.com/kasanegi/" />
   </head>
   <body>
     <div id="wrapper">
-      <div id="title">
-        <img src="images/header.png" title="重ね着">
+      <div id="title-container">
+        <div id="title">
+          <img src="images/header.png" title="重ね着">
+        </div>
+        <a href="#main" id="back-to-main">
+          <img src="images/back-button.png" title="戻る"/>
+        </a>
+        <a href="#help" id="help-button">
+          <img src="images/help-button.png" title="ヘルプ"/>
+        </a>
       </div>
 
-      <div class="page">
+      <div class="page" id="main-page">
 
         <div id="city-selector-container">
+        </div>
+        <div id="first-time-guide">
+          <p>
+            天気にあわせた服装をおすすめします．
+          </p>
         </div>
         <div id="indicator">
           <div class="message">
@@ -109,15 +123,17 @@
 
         </div>
 
+
+      </div> <!-- main page end -->
+
+      <div class="page" id="help-page">
         <div id="guide">
           <p>
             地域を選ぶと，天気にあった服装をおすすめします．
             <br/>
             重ね着をtwitterで共有することができます．
           </p>
-        </div>
 
-        <div id="guide-api">
           <p>
             重ね着では以下のAPIを利用しています．
           </p>
@@ -144,13 +160,11 @@
               </a>
             </div>
           </div>
-
         </div>
+      </div> <!-- help page end -->
 
-        <div id="copyright">
-          Copyright (C) 2011 higashi dance network. All Rights Reserved.
-        </div>
-
+      <div id="copyright">
+        Copyright (C) 2011 higashi dance network. All Rights Reserved.
       </div>
 
     </div>

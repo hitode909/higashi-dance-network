@@ -5,6 +5,7 @@ class Viewer
     self = this
     self.setupCityChanger()
     self.setupEvents()
+    self.selectFirstPage()
     self.checkCurrentPositionIfNeeded()
     self.appendTwitterWidget()
 
@@ -45,6 +46,37 @@ class Viewer
         called = true
         callback()
     , 5000
+
+  selectFirstPage: ->
+    if location.hash
+      $(window).trigger('hashchange')
+      return
+
+    page_id = @weather.getLastPageId()
+    this.selectPage(page_id, true)
+
+  selectPage: (target_id, force) ->
+    if !force && target_id == @weather.getLastPageId
+      # do nothing
+      return
+
+    this.setPageButton(target_id)
+    target_page = $(document.body).find("##{target_id}-page")
+    if target_page.length == 0
+      target_id = 'main'
+      target_page = $(document.body).find("##{target_id}-page")
+    @weather.setLastPageId(target_id)
+
+    $('.page').hide()
+    target_page.show()
+
+    if target_id == "main"
+      $('#help-button').show()
+      $('#back-to-main').hide()
+    else
+      $('#help-button').hide()
+      $('#back-to-main').show()
+
 
   setupCityChanger: ->
     self = this
@@ -93,15 +125,32 @@ class Viewer
     $('#reset-city').click ->
       self.getCurrentPositionAndPrint()
 
+    $(window).bind 'hashchange', ->
+      console.log location.hash
+      target_id = location.hash
+      target_id = target_id.replace(/^\#/, '')
+      self.selectPage(target_id)
+
   checkCurrentPositionIfNeeded: ->
+    self = this
     city_code = $('select#city-selector').val()
 
-    if city_code == "-1"           # 地域を選択 = -1
-      $('#indicator').show()
-      $('#result').hide()
-      this.getCurrentPositionAndPrint()
+    # 地域を選択 = -1
+    if +city_code == -1
+      setTimeout ->
+        self.printFirstTimeGuide()
+      ,100
     else
       this.printWeather()
+
+  printFirstTimeGuide: ->
+    console.log('printFirstTimeGuide')
+    $("#first-time-guide").show()
+    $("#indicator .message").hide()
+
+  hideFirstTimeGuide: ->
+    $("#first-time-guide").hide()
+    $("#indicator .message").show()
 
   getCurrentPositionAndPrint: ->
     self = this
@@ -312,7 +361,9 @@ class Viewer
     $("##{target_id}-selector").addClass("selected")
 
   checkScroll: ->
-    if navigator.appVersion.indexOf 'iPhone OS ' and not window.navigator.standalone
+    if @weather.getLastPageId() != 'main'
+      return
+    if navigator.appVersion.match(/iPhone OS/)
       setTimeout ->
         window.scrollBy(0, $('#result').position().top)
       ,500

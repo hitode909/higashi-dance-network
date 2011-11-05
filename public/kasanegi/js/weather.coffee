@@ -28,6 +28,12 @@ class Weather
     , (error) ->
       alert('位置情報を取得できませんでした')
 
+  getLastPageId: ->
+    localStorage.last_page_id || 'main'
+
+  setLastPageId: (last_page_id)->
+    localStorage.last_page_id = last_page_id
+
   getStatusCodeFromLatLon: (lat, lon, callback) ->
     self = this
     $.ajax

@@ -27,6 +27,12 @@ Weather = (function() {
       return alert('位置情報を取得できませんでした');
     });
   };
+  Weather.prototype.getLastPageId = function() {
+    return localStorage.last_page_id || 'main';
+  };
+  Weather.prototype.setLastPageId = function(last_page_id) {
+    return localStorage.last_page_id = last_page_id;
+  };
   Weather.prototype.getStatusCodeFromLatLon = function(lat, lon, callback) {
     var self;
     self = this;

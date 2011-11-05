@@ -10,6 +10,10 @@
     clear: both;
 }
 
+#wrapper {
+    background: url(/kasanegi/images/background.png);
+}
+
 #indicator {
     margin: 50px;
     height: 2000px;
@@ -21,15 +25,49 @@
 
 /* title */
 
+#title-container {
+    position: relative;
+    height: 44px;
+}
+
 #title img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
     width: 320px;
     height: 44px;
 }
+
+#back-to-main {
+    position: absolute;
+    left: 10px;
+    top:  8px;
+    cursor: pointer;
+}
+
+#back-to-main img {
+    width: 50px;
+    height: 24px;
+}
+
+#help-button {
+    position: absolute;
+    right: 10px;
+    top:  8px;
+    cursor: pointer;
+}
+
+#help-button img {
+    width: 50px;
+    height: 24px;
+}
+
 
 /* page */
 
 .page {
     margin: 5px;
+    display: none;
 }
 
 /* city selector */
@@ -46,10 +84,16 @@ select#city-selector {
     margin-left: 1em;
 }
 
+/* first time guide */
+#first-time-guide {
+    display: none;
+}
+
 /* weather result */
 
 #result {
     margin-top: 10px;
+    display: none;
 }
 
 #area-container {
