@@ -96,7 +96,6 @@ class Viewer
       self.printWeatherIcons(report.description)
 
       wear_info = self.getWearInformationFromMinAndMax(report.min, report.max)
-      console.log(wear_info)
 
       $('#result #comment').text wear_info.comment
 
@@ -122,6 +121,16 @@ class Viewer
 
     icons_container.empty()
     image_container.empty()
+
+    bg_path = null
+    if target.attr('id') == 'day-max'
+      bg_path = "images/day.png"
+    else
+      bg_path = "images/night.png"
+
+    $('<img>').attr
+      src: bg_path
+    .appendTo image_container
 
     _.each wears, (wear_name) ->
       $('<img>').attr
@@ -150,7 +159,8 @@ class Viewer
 
     container.empty()
 
-    matched = text.match(/(晴|雷雨|雨|雷|曇|霧|)/g)
+    text = text.replace /\(.*\)/, ''
+    matched = text.match /(晴|雷雨|雨|雷|曇|霧|)/g
 
     _.each matched, (code) ->
       rule =
@@ -221,7 +231,7 @@ class Viewer
     selected = null
     distance = null
 
-    getDistance = (x1, y1, x2, y2) ->
+    getDistance = (x1, x2, y1, y2) ->
       Math.sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2))
 
     _.each rules, (rule) ->
@@ -281,6 +291,31 @@ class Viewer
           CLOTH_CARDIGAN
         ]
         comment: '夜はカーディガンいります'
+      }
+      {
+        min: 11
+        max: 18
+        daytime: [
+          CLOTH_SHIRTS
+        ]
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_JACKET
+        ]
+        comment: '夜はジャケットいります'
+      }
+      {
+        min: 11
+        max: 14
+        daytime: [
+          CLOTH_SHIRTS
+          CLOTH_JACKET
+        ]
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_JACKET
+        ]
+        comment: 'ジャケットいります'
       }
       {
         min: 9

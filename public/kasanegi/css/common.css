@@ -7,8 +7,8 @@
 }
 
 #indicator {
-    display: none;
     margin: 50px;
+    height: 2000px;
 }
 
 #indicator .message {
@@ -58,16 +58,8 @@ select#city-selector {
     margin-top: 10px;
 }
 
-#day-max .wear-image {
-    background: url(/kasanegi/images/a.jpg);
-}
-
 #day-max .heat {
     color: #c44;
-}
-
-#day-min .wear-image {
-    background: url(/kasanegi/images/a.jpg);
 }
 
 #day-min .heat {

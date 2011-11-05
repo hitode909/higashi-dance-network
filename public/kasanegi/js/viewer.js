@@ -99,7 +99,6 @@ Viewer = (function() {
       $('#result #min-temp').text(report.min);
       self.printWeatherIcons(report.description);
       wear_info = self.getWearInformationFromMinAndMax(report.min, report.max);
-      console.log(wear_info);
       $('#result #comment').text(wear_info.comment);
       self.fillDay($('#result #day-max'), wear_info.daytime);
       return self.fillDay($('#result #day-min'), wear_info.night);
@@ -116,12 +115,21 @@ Viewer = (function() {
     return "" + (+month) + "月" + (+day) + "日";
   };
   Viewer.prototype.fillDay = function(target, wears) {
-    var icons_container, image_container, self;
+    var bg_path, icons_container, image_container, self;
     self = this;
     image_container = target.find('.wear-image');
     icons_container = target.find('.wear-icons');
     icons_container.empty();
     image_container.empty();
+    bg_path = null;
+    if (target.attr('id') === 'day-max') {
+      bg_path = "images/day.png";
+    } else {
+      bg_path = "images/night.png";
+    }
+    $('<img>').attr({
+      src: bg_path
+    }).appendTo(image_container);
     return _.each(wears, function(wear_name) {
       $('<img>').attr({
         src: "images/icon-" + wear_name + ".png",
@@ -149,6 +157,7 @@ Viewer = (function() {
     var container, matched;
     container = $('#weather-icons');
     container.empty();
+    text = text.replace(/\(.*\)/, '');
     matched = text.match(/(晴|雷雨|雨|雷|曇|霧|)/g);
     return _.each(matched, function(code) {
       var image_path, rule;
@@ -217,7 +226,7 @@ Viewer = (function() {
     rules = this.CLOTH_RULES;
     selected = null;
     distance = null;
-    getDistance = function(x1, y1, x2, y2) {
+    getDistance = function(x1, x2, y1, y2) {
       return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     };
     _.each(rules, function(rule) {
@@ -272,6 +281,18 @@ Viewer = (function() {
         daytime: [CLOTH_SHIRTS],
         night: [CLOTH_SHIRTS, CLOTH_CARDIGAN],
         comment: '夜はカーディガンいります'
+      }, {
+        min: 11,
+        max: 18,
+        daytime: [CLOTH_SHIRTS],
+        night: [CLOTH_SHIRTS, CLOTH_JACKET],
+        comment: '夜はジャケットいります'
+      }, {
+        min: 11,
+        max: 14,
+        daytime: [CLOTH_SHIRTS, CLOTH_JACKET],
+        night: [CLOTH_SHIRTS, CLOTH_JACKET],
+        comment: 'ジャケットいります'
       }, {
         min: 9,
         max: 13,
