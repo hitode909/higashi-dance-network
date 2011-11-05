@@ -101,6 +101,7 @@ select#city-selector {
 .wear-icons img {
     width: 31px;
     height: 31px;
+    vertical-align: center;
 }
 
 /* weather result comment */
