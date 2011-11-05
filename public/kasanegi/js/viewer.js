@@ -113,7 +113,7 @@ Viewer = (function() {
     }
     month = fragments[1];
     day = fragments[2];
-    return "" + (+month) + "/" + (+day);
+    return "" + (+month) + "月" + (+day) + "日";
   };
   Viewer.prototype.fillDay = function(target, wears) {
     var icons_container, image_container, self;
@@ -124,11 +124,11 @@ Viewer = (function() {
     image_container.empty();
     return _.each(wears, function(wear_name) {
       $('<img>').attr({
-        src: "images/wear-icon/" + wear_name + ".png",
+        src: "images/icon-" + wear_name + ".png",
         title: self.getWearName(wear_name)
       }).appendTo(icons_container);
       return $('<img>').attr({
-        src: "images/wear/" + wear_name + ".png",
+        src: "images/" + wear_name + ".png",
         title: self.getWearName(wear_name)
       }).appendTo(image_container);
     });
@@ -136,8 +136,11 @@ Viewer = (function() {
   Viewer.prototype.getWearName = function(wear) {
     var table;
     table = {
+      shirts: 'シャツ',
+      cardigan: 'カーディガン',
       sweater: 'セーター',
-      shirts: 'シャツ'
+      coat: 'コート',
+      muffler: 'マフラー'
     };
     return table[wear];
   };

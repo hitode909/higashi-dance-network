@@ -113,7 +113,7 @@ class Viewer
     month = fragments[1]
     day = fragments[2]
 
-    return "#{+ month}/#{+ day}"
+    return "#{+ month}月#{+ day}日"
 
   fillDay:  (target, wears) ->
     self = this
@@ -125,19 +125,22 @@ class Viewer
 
     _.each wears, (wear_name) ->
       $('<img>').attr
-        src: "images/wear-icon/#{wear_name}.png"
+        src: "images/icon-#{wear_name}.png"
         title: self.getWearName wear_name
       .appendTo icons_container
 
       $('<img>').attr
-        src: "images/wear/#{wear_name}.png"
+        src: "images/#{wear_name}.png"
         title: self.getWearName wear_name
       .appendTo image_container
 
   getWearName: (wear) ->
     table =
-      sweater: 'セーター'
-      shirts:  'シャツ'
+      shirts:   'シャツ'
+      cardigan: 'カーディガン'
+      sweater:  'セーター'
+      coat:     'コート'
+      muffler:  'マフラー'
 
     table[wear]
 

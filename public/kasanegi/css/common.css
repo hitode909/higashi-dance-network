@@ -45,6 +45,7 @@ select#city-selector {
 
 #area {
     font-size: 120%;
+    margin-bottom: 10px;
 }
 
 #date {
@@ -54,7 +55,7 @@ select#city-selector {
 /* weather result image */
 
 #images {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 #day-max .wear-image {
@@ -112,7 +113,7 @@ select#city-selector {
     margin-top: 40px;
     text-align: center;
     font-weight: bold;
-    font-size: 120%;
+    font-size: 110%;
 }
 #share-tweet {
     display: block;
