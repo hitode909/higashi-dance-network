@@ -139,6 +139,7 @@ Viewer = (function() {
       shirts: 'シャツ',
       cardigan: 'カーディガン',
       sweater: 'セーター',
+      jacket: 'ジャケット',
       coat: 'コート',
       muffler: 'マフラー'
     };
@@ -217,7 +218,7 @@ Viewer = (function() {
     selected = null;
     distance = null;
     getDistance = function(x1, y1, x2, y2) {
-      return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+      return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     };
     _.each(rules, function(rule) {
       var distance_now;
@@ -251,16 +252,44 @@ Viewer = (function() {
   Viewer.prototype.HASHTAG = "#重ね着";
   Viewer.prototype.SERVICE_URL = "http://higashi-dance-network.appspot.com/bon/";
   Viewer.prototype.CLOTH_RULES = (function() {
-    var CLOTH_SHIRTS, CLOTH_SWEATER;
+    var CLOTH_CARDIGAN, CLOTH_COAT, CLOTH_JACKET, CLOTH_MUFFLER, CLOTH_SHIRTS, CLOTH_SWEATER;
     CLOTH_SHIRTS = 'shirts';
+    CLOTH_CARDIGAN = 'cardigan';
     CLOTH_SWEATER = 'sweater';
+    CLOTH_JACKET = 'jacket';
+    CLOTH_COAT = 'coat';
+    CLOTH_MUFFLER = 'muffler';
     return [
       {
         min: 20,
         max: 30,
         daytime: [CLOTH_SHIRTS],
+        night: [CLOTH_SHIRTS],
+        comment: 'シャツ1枚です'
+      }, {
+        min: 18,
+        max: 22,
+        daytime: [CLOTH_SHIRTS],
+        night: [CLOTH_SHIRTS, CLOTH_CARDIGAN],
+        comment: '夜はカーディガンいります'
+      }, {
+        min: 9,
+        max: 13,
+        daytime: [CLOTH_SHIRTS, CLOTH_SWEATER],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER],
-        comment: '寒いのでマフラーが必要です'
+        comment: 'セーターいります'
+      }, {
+        min: 6,
+        max: 10,
+        daytime: [CLOTH_SHIRTS, CLOTH_CARDIGAN],
+        night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT],
+        comment: '夜はコートいります'
+      }, {
+        min: 3,
+        max: 7,
+        daytime: [CLOTH_SHIRTS, CLOTH_SWEATER],
+        night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
+        comment: '夜はコートいります'
       }
     ];
   })();

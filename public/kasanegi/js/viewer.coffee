@@ -139,6 +139,7 @@ class Viewer
       shirts:   'シャツ'
       cardigan: 'カーディガン'
       sweater:  'セーター'
+      jacket:  'ジャケット'
       coat:     'コート'
       muffler:  'マフラー'
 
@@ -221,7 +222,7 @@ class Viewer
     distance = null
 
     getDistance = (x1, y1, x2, y2) ->
-      Math.sqrt( Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
+      Math.sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2))
 
     _.each rules, (rule) ->
       distance_now = getDistance(min, rule.min, max, rule.max)
@@ -250,8 +251,12 @@ class Viewer
 
 
   CLOTH_RULES: (->
-    CLOTH_SHIRTS  = 'shirts'
-    CLOTH_SWEATER = 'sweater'
+    CLOTH_SHIRTS   = 'shirts'
+    CLOTH_CARDIGAN = 'cardigan'
+    CLOTH_SWEATER  = 'sweater'
+    CLOTH_JACKET   = 'jacket'
+    CLOTH_COAT     = 'coat'
+    CLOTH_MUFFLER  = 'muffler'
 
     return [
       {
@@ -262,9 +267,61 @@ class Viewer
         ]
         night: [
           CLOTH_SHIRTS
+        ]
+        comment: 'シャツ1枚です'
+      }
+      {
+        min: 18
+        max: 22
+        daytime: [
+          CLOTH_SHIRTS
+        ]
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+        ]
+        comment: '夜はカーディガンいります'
+      }
+      {
+        min: 9
+        max: 13
+        daytime: [
+          CLOTH_SHIRTS
           CLOTH_SWEATER
         ]
-        comment: '寒いのでマフラーが必要です'
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_SWEATER
+        ]
+        comment: 'セーターいります'
+      }
+      {
+        min: 6
+        max: 10
+        daytime: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+        ]
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+          CLOTH_COAT
+        ]
+        comment: '夜はコートいります'
+      }
+      {
+        min: 3
+        max: 7
+        daytime: [
+          CLOTH_SHIRTS
+          CLOTH_SWEATER
+        ]
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_SWEATER
+          CLOTH_COAT
+        ]
+        comment: '夜はコートいります'
       }
     ]
   )()
