@@ -62,8 +62,16 @@ select#city-selector {
     background: url(/kasanegi/images/a.jpg);
 }
 
+#day-max .heat {
+    color: #c44;
+}
+
 #day-min .wear-image {
     background: url(/kasanegi/images/a.jpg);
+}
+
+#day-min .heat {
+    color: #44c;
 }
 
 .day {
