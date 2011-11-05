@@ -5,7 +5,6 @@ class Viewer
     this.setupCityChanger()
     this.setupEvents()
     this.checkCurrentPositionIfNeeded()
-    this.setTweetLink()
     this.appendTwitterWidget()
 
   setupCityChanger: ->
@@ -98,6 +97,8 @@ class Viewer
       wear_info = self.getWearInformationFromMinAndMax(report.min, report.max)
 
       $('#result #comment').text wear_info.comment
+
+      self.setTweetLink "#{city_name} #{wear_info.comment}"
 
       self.fillDay $('#result #day-max'), wear_info.daytime
       self.fillDay $('#result #day-min'), wear_info.night
@@ -261,8 +262,7 @@ class Viewer
 
   # ----- constants -----
   HASHTAG: "#重ね着"
-  SERVICE_URL: "http://higashi-dance-network.appspot.com/bon/"
-
+  SERVICE_URL: "http://higashi-dance-network.appspot.com/kasanegi/"
 
   CLOTH_RULES: (->
     CLOTH_SHIRTS   = 'shirts'

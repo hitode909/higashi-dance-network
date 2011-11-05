@@ -7,7 +7,6 @@ Viewer = (function() {
     this.setupCityChanger();
     this.setupEvents();
     this.checkCurrentPositionIfNeeded();
-    this.setTweetLink();
     return this.appendTwitterWidget();
   };
   Viewer.prototype.setupCityChanger = function() {
@@ -100,6 +99,7 @@ Viewer = (function() {
       self.printWeatherIcons(report.description);
       wear_info = self.getWearInformationFromMinAndMax(report.min, report.max);
       $('#result #comment').text(wear_info.comment);
+      self.setTweetLink("" + city_name + " " + wear_info.comment);
       self.fillDay($('#result #day-max'), wear_info.daytime);
       return self.fillDay($('#result #day-min'), wear_info.night);
     });
@@ -262,7 +262,7 @@ Viewer = (function() {
     return $("#" + target_id + "-selector").addClass("selected");
   };
   Viewer.prototype.HASHTAG = "#重ね着";
-  Viewer.prototype.SERVICE_URL = "http://higashi-dance-network.appspot.com/bon/";
+  Viewer.prototype.SERVICE_URL = "http://higashi-dance-network.appspot.com/kasanegi/";
   Viewer.prototype.CLOTH_RULES = (function() {
     var CLOTH_CARDIGAN, CLOTH_COAT, CLOTH_JACKET, CLOTH_MUFFLER, CLOTH_SHIRTS, CLOTH_SWEATER;
     CLOTH_SHIRTS = 'shirts';
