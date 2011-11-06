@@ -593,8 +593,8 @@ class Viewer
       }
 
       {
-        min: 10
-        max: 10
+        min: 12
+        max: 12
         daytime: [
           CLOTH_SHIRTS
           CLOTH_CARDIGAN
@@ -609,7 +609,7 @@ class Viewer
       }
       {
         min: 8
-        max: 10
+        max: 12
         daytime: [
           CLOTH_SHIRTS
           CLOTH_SWEATER
@@ -624,7 +624,7 @@ class Viewer
       }
       {
         min: 5
-        max: 10
+        max: 12
         daytime: [
           CLOTH_SHIRTS
           CLOTH_SWEATER

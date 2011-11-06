@@ -264,6 +264,21 @@ select#city-selector {
     font-size: 60%;
 }
 
+/* authors */
+.authors {
+    margin-left: 100px;
+}
+
+.authors img {
+    width: 24px;
+    height: 24px;
+}
+
+.authors a {
+    color: #333;
+    text-decoration: none;
+}
+
 /* copyright */
 
 #copyright {
