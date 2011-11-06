@@ -126,10 +126,11 @@ class Viewer
       self.getCurrentPositionAndPrint()
 
     $(window).bind 'hashchange', ->
-      console.log location.hash
       target_id = location.hash
       target_id = target_id.replace(/^\#/, '')
       self.selectPage(target_id)
+      if target_id == 'clear'
+        localStorage.clear()
 
   checkCurrentPositionIfNeeded: ->
     self = this
@@ -137,16 +138,15 @@ class Viewer
 
     # 地域を選択 = -1
     if +city_code == -1
-      setTimeout ->
-        self.printFirstTimeGuide()
-      ,100
+      self.printFirstTimeGuide()
     else
       this.printWeather()
 
   printFirstTimeGuide: ->
-    console.log('printFirstTimeGuide')
-    $("#first-time-guide").show()
     $("#indicator .message").hide()
+    setTimeout ->
+      $("#first-time-guide").show()
+    ,500
 
   hideFirstTimeGuide: ->
     $("#first-time-guide").hide()

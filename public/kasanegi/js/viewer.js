@@ -119,10 +119,12 @@ Viewer = (function() {
     });
     return $(window).bind('hashchange', function() {
       var target_id;
-      console.log(location.hash);
       target_id = location.hash;
       target_id = target_id.replace(/^\#/, '');
-      return self.selectPage(target_id);
+      self.selectPage(target_id);
+      if (target_id === 'clear') {
+        return localStorage.clear();
+      }
     });
   };
   Viewer.prototype.checkCurrentPositionIfNeeded = function() {
@@ -130,17 +132,16 @@ Viewer = (function() {
     self = this;
     city_code = $('select#city-selector').val();
     if (+city_code === -1) {
-      return setTimeout(function() {
-        return self.printFirstTimeGuide();
-      }, 100);
+      return self.printFirstTimeGuide();
     } else {
       return this.printWeather();
     }
   };
   Viewer.prototype.printFirstTimeGuide = function() {
-    console.log('printFirstTimeGuide');
-    $("#first-time-guide").show();
-    return $("#indicator .message").hide();
+    $("#indicator .message").hide();
+    return setTimeout(function() {
+      return $("#first-time-guide").show();
+    }, 500);
   };
   Viewer.prototype.hideFirstTimeGuide = function() {
     $("#first-time-guide").hide();
