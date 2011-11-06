@@ -336,8 +336,14 @@ class Viewer
     selected = null
     distance = null
 
+    #       .  point 2
+    #
+    # .  point 1
     getDistance = (x1, x2, y1, y2) ->
-      Math.sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2))
+      if x1 <= x2 && y1 <= y2
+        Math.sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2))
+      else
+        100000
 
     _.each rules, (rule) ->
       distance_now = getDistance(min, rule.min, max, rule.max)
@@ -381,20 +387,33 @@ class Viewer
     CLOTH_MUFFLER  = 'muffler'
 
     return [
+      # エラー対策
       {
-        min: 20
-        max: 30
+        min: 100
+        max: 100
         daytime: [
           CLOTH_SHIRTS
         ]
         night: [
           CLOTH_SHIRTS
         ]
-        comment: 'シャツ1枚です'
+        comment: 'シャツ1枚です(とても暑い)'
+      }
+
+      {
+        min: 25
+        max: 25
+        daytime: [
+          CLOTH_SHIRTS
+        ]
+        night: [
+          CLOTH_SHIRTS
+        ]
+        comment: 'あ'
       }
       {
         min: 18
-        max: 22
+        max: 25
         daytime: [
           CLOTH_SHIRTS
         ]
@@ -402,36 +421,120 @@ class Viewer
           CLOTH_SHIRTS
           CLOTH_CARDIGAN
         ]
-        comment: '夜はカーディガンいります'
+        comment: 'あ'
       }
       {
-        min: 11
+        min: 15
+        max: 25
+        daytime: [
+          CLOTH_SHIRTS
+        ]
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_JACKET
+        ]
+        comment: 'あ'
+      }
+      {
+        min: 10
+        max: 25
+        daytime: [
+          CLOTH_SHIRTS
+        ]
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+          CLOTH_JACKET
+        ]
+        comment: 'あ'
+      }
+
+      {
+        min: 18
         max: 18
         daytime: [
           CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+        ]
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+        ]
+        comment: 'あ'
+      }
+      {
+        min: 15
+        max: 18
+        daytime: [
+          CLOTH_SHIRTS
+          CLOTH_JACKET
         ]
         night: [
           CLOTH_SHIRTS
           CLOTH_JACKET
         ]
-        comment: '夜はジャケットいります'
+        comment: 'あ'
       }
       {
-        min: 11
+        min: 10
+        max: 18
+        daytime: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+        ]
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+          CLOTH_JACKET
+        ]
+        comment: 'あ'
+      }
+      {
+        min: 7
+        max: 18
+        daytime: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+        ]
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+          CLOTH_COAT
+        ]
+        comment: 'あ'
+      }
+      {
+        min: 5
+        max: 18
+        daytime: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+        ]
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+          CLOTH_COAT
+          CLOTH_MUFFLER
+        ]
+        comment: 'あ'
+      }
+
+      {
+        min: 14
         max: 14
         daytime: [
           CLOTH_SHIRTS
-          CLOTH_JACKET
+          CLOTH_SWEATER
         ]
         night: [
           CLOTH_SHIRTS
-          CLOTH_JACKET
+          CLOTH_SWEATER
         ]
-        comment: 'ジャケットいります'
+        comment: 'あ'
       }
       {
-        min: 9
-        max: 13
+        min: 10
+        max: 14
         daytime: [
           CLOTH_SHIRTS
           CLOTH_SWEATER
@@ -439,36 +542,107 @@ class Viewer
         night: [
           CLOTH_SHIRTS
           CLOTH_SWEATER
+          CLOTH_JACKET
         ]
-        comment: 'セーターいります'
+        comment: 'あ'
       }
       {
-        min: 6
+        min: 7
+        max: 14
+        daytime: [
+          CLOTH_SHIRTS
+          CLOTH_SWEATER
+        ]
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_SWEATER
+          CLOTH_COAT
+        ]
+        comment: 'あ'
+      }
+      {
+        min: 5
+        max: 14
+        daytime: [
+          CLOTH_SHIRTS
+          CLOTH_SWEATER
+        ]
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_SWEATER
+          CLOTH_COAT
+          CLOTH_MUFFLER
+        ]
+        comment: 'あ'
+      }
+
+      {
+        min: 8
         max: 10
         daytime: [
           CLOTH_SHIRTS
-          CLOTH_CARDIGAN
+          CLOTH_SWEATER
+          CLOTH_COAT
         ]
         night: [
           CLOTH_SHIRTS
-          CLOTH_CARDIGAN
+          CLOTH_SWEATER
           CLOTH_COAT
         ]
-        comment: '夜はコートいります'
+        comment: 'あ'
       }
       {
-        min: 3
-        max: 7
+        min: 4
+        max: 10
         daytime: [
           CLOTH_SHIRTS
           CLOTH_SWEATER
+          CLOTH_COAT
         ]
         night: [
           CLOTH_SHIRTS
           CLOTH_SWEATER
           CLOTH_COAT
+          CLOTH_MUFFLER
         ]
-        comment: '夜はコートいります'
+        comment: 'あ'
       }
+
+      {
+        min: 5
+        max: 5
+        daytime: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+          CLOTH_COAT
+          CLOTH_MUFFLER
+        ]
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+          CLOTH_COAT
+          CLOTH_MUFFLER
+        ]
+        comment: 'あ'
+      }
+
+      {
+        min: 3
+        max: 3
+        daytime: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+          CLOTH_COAT
+          CLOTH_MUFFLER
+        ]
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+          CLOTH_COAT
+          CLOTH_MUFFLER
+        ]
+        comment: 'あ'
+      }
+
     ]
   )()
