@@ -462,6 +462,33 @@ class Viewer
         ]
         comment: 'あ'
       }
+      {
+        min: 7
+        max: 25
+        daytime: [
+          CLOTH_SHIRTS
+        ]
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+          CLOTH_COAT
+        ]
+        comment: 'あ'
+      }
+      {
+        min: 5
+        max: 25
+        daytime: [
+          CLOTH_SHIRTS
+        ]
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+          CLOTH_COAT
+          CLOTH_MUFFLER
+        ]
+        comment: 'あ'
+      }
 
       {
         min: 18
