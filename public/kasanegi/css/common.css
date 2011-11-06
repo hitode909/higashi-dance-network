@@ -91,6 +91,7 @@ select#city-selector {
 /* first time guide */
 #first-time-guide {
     display: none;
+    margin-top: 10px;
 }
 
 #first-time-guide .more {
@@ -99,7 +100,7 @@ select#city-selector {
 
 #first-time-guide .more a {
     font-size: 90%;
-    color: #5f9ad1;
+    color: #d42c0a;
 }
 
 /* weather result */

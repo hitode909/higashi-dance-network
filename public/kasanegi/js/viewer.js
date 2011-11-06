@@ -84,9 +84,11 @@ Viewer = (function() {
     var max, min, self, testWear;
     self = this;
     $('select#city-selector').change(function() {
+      self.hideFirstTimeGuide();
       return self.printWeather();
     });
     $('#reset-city').click(function() {
+      self.hideFirstTimeGuide();
       return self.getCurrentPositionAndPrint();
     });
     $(window).bind('hashchange', function() {

@@ -83,9 +83,11 @@ class Viewer
   setupEvents: ->
     self = this
     $('select#city-selector').change ->
+      self.hideFirstTimeGuide()
       self.printWeather()
 
     $('#reset-city').click ->
+      self.hideFirstTimeGuide()
       self.getCurrentPositionAndPrint()
 
     $(window).bind 'hashchange', ->

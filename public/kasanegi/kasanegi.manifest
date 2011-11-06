@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2011-11-05 18:25:25 +0900
+# 2011-11-06 16:00:12 +0900
 
 CACHE:
 /kasanegi/css/common.css
@@ -7,23 +7,42 @@ CACHE:
 /kasanegi/css/pc.css
 /kasanegi/css/reset.css
 /kasanegi/css/text.css
-/kasanegi/images/area-background.png
+/kasanegi/images/back-button.png
+/kasanegi/images/back.png
+/kasanegi/images/background.png
 /kasanegi/images/cardigan.png
 /kasanegi/images/coat.png
 /kasanegi/images/day.png
 /kasanegi/images/docodoco_logo.gif
+/kasanegi/images/favicon.ico
 /kasanegi/images/header.png
+/kasanegi/images/help-button.png
+/kasanegi/images/help.png
+/kasanegi/images/help1.png
+/kasanegi/images/help2.png
+/kasanegi/images/help3.png
+/kasanegi/images/home-icon.png
+/kasanegi/images/home-load.png
 /kasanegi/images/icon-cardigan.png
 /kasanegi/images/icon-coat.png
 /kasanegi/images/icon-jacket.png
+/kasanegi/images/icon-muffler.png
 /kasanegi/images/icon-shirts.png
 /kasanegi/images/icon-sweater.png
 /kasanegi/images/jacket.png
+/kasanegi/images/muffler.png
 /kasanegi/images/night.png
 /kasanegi/images/shirts.png
 /kasanegi/images/sweater.png
 /kasanegi/images/tenki_logo.gif
-/kasanegi/images/tweet.png
+/kasanegi/images/tweet-button.png
+/kasanegi/images/weather-cloudy.png
+/kasanegi/images/weather-mist.png
+/kasanegi/images/weather-rain.png
+/kasanegi/images/weather-snow.png
+/kasanegi/images/weather-sunny.png
+/kasanegi/images/weather-thunder.png
+/kasanegi/images/weather-thunderstorm.png
 /kasanegi/js/jquery-1.6.1.min.js
 /kasanegi/js/main.js
 /kasanegi/js/underscore-min.js
