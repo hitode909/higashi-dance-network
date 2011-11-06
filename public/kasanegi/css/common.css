@@ -231,7 +231,6 @@ select#city-selector {
 
 .help-button-image {
     margin-top: 20px;
-    margin-bottom: 40px;
     width: 202px;
     height: 45px;
 }
@@ -240,14 +239,14 @@ select#city-selector {
 #guide-api {
     font-size: 90%;
 
-    margin-top: 60px;
+    margin-top: 20px;
     margin-right: 20px;
     margin-left: 20px;
 }
 
 /* apis */
 .api-message {
-    margin-top: 40px;
+    margin-top: 20px;
     font-size: 80%;
 }
 .api {
