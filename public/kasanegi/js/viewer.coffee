@@ -151,6 +151,11 @@ class Viewer
     @weather.setLastCityCode(city_code)
 
     @weather.getWeatherReportForCity city, (report) ->
+
+      if report.min == "" || report.max == ""
+        alert("申し訳ございません，天気を取得できませんでした．時間をおいて試すか，ほかの地域で試してください．")
+        return
+
       $('#indicator').hide()
       $('#result').show()
       $('#result #area').text city_name
