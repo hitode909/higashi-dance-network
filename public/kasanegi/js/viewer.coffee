@@ -621,7 +621,7 @@ class Viewer
         comment: 'あ'
       }
       {
-        min: 4
+        min: 5
         max: 10
         daytime: [
           CLOTH_SHIRTS
@@ -640,24 +640,6 @@ class Viewer
       {
         min: 5
         max: 5
-        daytime: [
-          CLOTH_SHIRTS
-          CLOTH_CARDIGAN
-          CLOTH_COAT
-          CLOTH_MUFFLER
-        ]
-        night: [
-          CLOTH_SHIRTS
-          CLOTH_CARDIGAN
-          CLOTH_COAT
-          CLOTH_MUFFLER
-        ]
-        comment: 'とても寒いです'
-      }
-
-      {
-        min: 3
-        max: 3
         daytime: [
           CLOTH_SHIRTS
           CLOTH_SWEATER

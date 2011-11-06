@@ -487,7 +487,7 @@ Viewer = (function() {
         night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
         comment: 'あ'
       }, {
-        min: 4,
+        min: 5,
         max: 10,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
@@ -495,12 +495,6 @@ Viewer = (function() {
       }, {
         min: 5,
         max: 5,
-        daytime: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT, CLOTH_MUFFLER],
-        night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT, CLOTH_MUFFLER],
-        comment: 'とても寒いです'
-      }, {
-        min: 3,
-        max: 3,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
         comment: '尋常じゃなく寒いです'
