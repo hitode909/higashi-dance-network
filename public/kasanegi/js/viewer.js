@@ -288,8 +288,8 @@ Viewer = (function() {
       height: 480,
       theme: {
         shell: {
-          background: '#ccebff',
-          color: '#5f9ad1'
+          background: '#8cd5ef',
+          color: '#fff'
         },
         tweets: {
           background: '#ffffff',
@@ -352,7 +352,7 @@ Viewer = (function() {
     }
     if (navigator.appVersion.match(/iPhone OS/)) {
       return setTimeout(function() {
-        return window.scrollBy(0, $('#result').position().top);
+        return window.scrollTo(0, $('#result').position().top);
       }, 500);
     }
   };
@@ -372,121 +372,121 @@ Viewer = (function() {
         max: 100,
         daytime: [CLOTH_SHIRTS],
         night: [CLOTH_SHIRTS],
-        comment: 'シャツ1枚です(とても暑い)'
+        comment: '異常な暑さです'
       }, {
         min: 25,
         max: 25,
         daytime: [CLOTH_SHIRTS],
         night: [CLOTH_SHIRTS],
-        comment: 'あ'
+        comment: '今日は暖かくていい天気なのでシャツ一枚で大丈夫です'
       }, {
         min: 18,
         max: 25,
         daytime: [CLOTH_SHIRTS],
         night: [CLOTH_SHIRTS, CLOTH_CARDIGAN],
-        comment: 'あ'
+        comment: '昼は暑く夜はカーディガンがあればいいくらいです'
       }, {
         min: 15,
         max: 25,
         daytime: [CLOTH_SHIRTS],
         night: [CLOTH_SHIRTS, CLOTH_JACKET],
-        comment: 'あ'
+        comment: '昼は暑いのでシャツ一枚でいいです'
       }, {
         min: 10,
         max: 25,
         daytime: [CLOTH_SHIRTS],
         night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_JACKET],
-        comment: 'あ'
+        comment: '昼は暑いのでシャツ一枚でいいです'
       }, {
         min: 7,
         max: 25,
         daytime: [CLOTH_SHIRTS],
         night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT],
-        comment: 'あ'
+        comment: '昼は暑いのでシャツ一枚でいいです'
       }, {
         min: 5,
         max: 25,
         daytime: [CLOTH_SHIRTS],
         night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT, CLOTH_MUFFLER],
-        comment: 'あ'
+        comment: '昼は暑いのでシャツ一枚でいいです'
       }, {
         min: 18,
         max: 18,
         daytime: [CLOTH_SHIRTS, CLOTH_CARDIGAN],
         night: [CLOTH_SHIRTS, CLOTH_CARDIGAN],
-        comment: 'あ'
+        comment: '一日中同じくらいの気温なのでカーディガンです'
       }, {
         min: 15,
         max: 18,
         daytime: [CLOTH_SHIRTS, CLOTH_JACKET],
         night: [CLOTH_SHIRTS, CLOTH_JACKET],
-        comment: 'あ'
+        comment: '一日中同じくらいの気温なのでジャケットです'
       }, {
         min: 10,
         max: 18,
         daytime: [CLOTH_SHIRTS, CLOTH_CARDIGAN],
         night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_JACKET],
-        comment: 'あ'
+        comment: 'カーディガンにジャケットを羽織ります'
       }, {
         min: 7,
         max: 18,
         daytime: [CLOTH_SHIRTS, CLOTH_CARDIGAN],
         night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT],
-        comment: 'あ'
+        comment: 'カーディガンにコートを羽織ります'
       }, {
         min: 5,
         max: 18,
         daytime: [CLOTH_SHIRTS, CLOTH_CARDIGAN],
         night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT, CLOTH_MUFFLER],
-        comment: 'あ'
+        comment: '夜は寒いのでコートにマフラーがいいです'
       }, {
         min: 14,
         max: 14,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER],
-        comment: '温度差はあまりのでいま体感している温度で問題ないです'
+        comment: '一日セーターです'
       }, {
         min: 10,
         max: 14,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_JACKET],
-        comment: 'あ'
+        comment: 'セーターにジャケットを羽織ります'
       }, {
         min: 7,
         max: 14,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
-        comment: 'あ'
+        comment: 'もこもこセーターにコート羽織って出かけましょう'
       }, {
         min: 5,
         max: 14,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
-        comment: 'あ'
+        comment: '夜は冷え込むのでたくさん着ていきましょう'
       }, {
         min: 10,
         max: 10,
         daytime: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT],
         night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT],
-        comment: 'あ'
+        comment: '今日は一日少し寒いです'
       }, {
         min: 8,
         max: 10,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
-        comment: 'あ'
+        comment: '今日は一日寒いです'
       }, {
         min: 5,
         max: 10,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
-        comment: '夜は寒いのでマフラーが要ります，昼はコート'
+        comment: '今日は一日すごく寒いです'
       }, {
         min: 5,
         max: 5,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
-        comment: '尋常じゃなく寒いです'
+        comment: '今日は異常な寒さです風邪に気をつけましょう'
       }
     ];
   })();

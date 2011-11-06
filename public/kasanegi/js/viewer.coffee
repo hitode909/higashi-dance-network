@@ -294,8 +294,8 @@ class Viewer
       height: 480,
       theme: {
         shell: {
-          background: '#ccebff',
-          color: '#5f9ad1'
+          background: '#8cd5ef',
+          color: '#fff'
         },
         tweets: {
           background: '#ffffff',
@@ -354,7 +354,7 @@ class Viewer
       return
     if navigator.appVersion.match(/iPhone OS/)
       setTimeout ->
-        window.scrollBy(0, $('#result').position().top)
+        window.scrollTo(0, $('#result').position().top)
       ,500
 
   # ----- constants -----
@@ -380,7 +380,7 @@ class Viewer
         night: [
           CLOTH_SHIRTS
         ]
-        comment: 'シャツ1枚です(とても暑い)'
+        comment: '異常な暑さです'
       }
 
       {
@@ -392,7 +392,7 @@ class Viewer
         night: [
           CLOTH_SHIRTS
         ]
-        comment: 'あ'
+        comment: '今日は暖かくていい天気なのでシャツ一枚で大丈夫です'
       }
       {
         min: 18
@@ -404,7 +404,7 @@ class Viewer
           CLOTH_SHIRTS
           CLOTH_CARDIGAN
         ]
-        comment: 'あ'
+        comment: '昼は暑く夜はカーディガンがあればいいくらいです'
       }
       {
         min: 15
@@ -416,7 +416,7 @@ class Viewer
           CLOTH_SHIRTS
           CLOTH_JACKET
         ]
-        comment: 'あ'
+        comment: '昼は暑いのでシャツ一枚でいいです'
       }
       {
         min: 10
@@ -429,7 +429,7 @@ class Viewer
           CLOTH_CARDIGAN
           CLOTH_JACKET
         ]
-        comment: 'あ'
+        comment: '昼は暑いのでシャツ一枚でいいです'
       }
       {
         min: 7
@@ -442,7 +442,7 @@ class Viewer
           CLOTH_CARDIGAN
           CLOTH_COAT
         ]
-        comment: 'あ'
+        comment: '昼は暑いのでシャツ一枚でいいです'
       }
       {
         min: 5
@@ -456,7 +456,7 @@ class Viewer
           CLOTH_COAT
           CLOTH_MUFFLER
         ]
-        comment: 'あ'
+        comment: '昼は暑いのでシャツ一枚でいいです'
       }
 
       {
@@ -470,7 +470,7 @@ class Viewer
           CLOTH_SHIRTS
           CLOTH_CARDIGAN
         ]
-        comment: 'あ'
+        comment: '一日中同じくらいの気温なのでカーディガンです'
       }
       {
         min: 15
@@ -483,7 +483,7 @@ class Viewer
           CLOTH_SHIRTS
           CLOTH_JACKET
         ]
-        comment: 'あ'
+        comment: '一日中同じくらいの気温なのでジャケットです'
       }
       {
         min: 10
@@ -497,7 +497,7 @@ class Viewer
           CLOTH_CARDIGAN
           CLOTH_JACKET
         ]
-        comment: 'あ'
+        comment: 'カーディガンにジャケットを羽織ります'
       }
       {
         min: 7
@@ -511,7 +511,7 @@ class Viewer
           CLOTH_CARDIGAN
           CLOTH_COAT
         ]
-        comment: 'あ'
+        comment: 'カーディガンにコートを羽織ります'
       }
       {
         min: 5
@@ -526,7 +526,7 @@ class Viewer
           CLOTH_COAT
           CLOTH_MUFFLER
         ]
-        comment: 'あ'
+        comment: '夜は寒いのでコートにマフラーがいいです'
       }
 
       {
@@ -540,7 +540,7 @@ class Viewer
           CLOTH_SHIRTS
           CLOTH_SWEATER
         ]
-        comment: '温度差はあまりのでいま体感している温度で問題ないです'
+        comment: '一日セーターです'
       }
       {
         min: 10
@@ -554,7 +554,7 @@ class Viewer
           CLOTH_SWEATER
           CLOTH_JACKET
         ]
-        comment: 'あ'
+        comment: 'セーターにジャケットを羽織ります'
       }
       {
         min: 7
@@ -568,7 +568,7 @@ class Viewer
           CLOTH_SWEATER
           CLOTH_COAT
         ]
-        comment: 'あ'
+        comment: 'もこもこセーターにコート羽織って出かけましょう'
       }
       {
         min: 5
@@ -583,7 +583,7 @@ class Viewer
           CLOTH_COAT
           CLOTH_MUFFLER
         ]
-        comment: 'あ'
+        comment: '夜は冷え込むのでたくさん着ていきましょう'
       }
 
       {
@@ -599,7 +599,7 @@ class Viewer
           CLOTH_CARDIGAN
           CLOTH_COAT
         ]
-        comment: 'あ'
+        comment: '今日は一日少し寒いです'
       }
       {
         min: 8
@@ -614,7 +614,7 @@ class Viewer
           CLOTH_SWEATER
           CLOTH_COAT
         ]
-        comment: 'あ'
+        comment: '今日は一日寒いです'
       }
       {
         min: 5
@@ -630,7 +630,7 @@ class Viewer
           CLOTH_COAT
           CLOTH_MUFFLER
         ]
-        comment: '夜は寒いのでマフラーが要ります，昼はコート'
+        comment: '今日は一日すごく寒いです'
       }
 
       {
@@ -648,7 +648,7 @@ class Viewer
           CLOTH_COAT
           CLOTH_MUFFLER
         ]
-        comment: '尋常じゃなく寒いです'
+        comment: '今日は異常な寒さです風邪に気をつけましょう'
       }
 
     ]
