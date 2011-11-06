@@ -162,9 +162,11 @@ class Viewer
 
       wear_info = self.getWearInformationFromMinAndMax(report.min, report.max)
 
-      $('#result #comment').text wear_info.comment
+      comment = self.dayInfo(report.date) + wear_info.comment
 
-      self.setTweetLink "#{city_name} #{wear_info.comment}"
+      $('#result #comment').text comment
+
+      self.setTweetLink "#{city_name} #{comment}"
 
       self.fillDay $('#result #day-max'), wear_info.daytime
       self.fillDay $('#result #day-min'), wear_info.night
@@ -186,6 +188,24 @@ class Viewer
     wod = "日月火水木金土"[date.getDay()]
 
     return "#{+ month}/#{+ day} (#{wod})"
+
+  # 2011-11-04 -> 今日は or 明日は
+  dayInfo: (date_text) ->
+    fragments = date_text.match(/(\d+)/g)
+
+    if fragments.length != 3
+      return "今日は"
+
+    year  = fragments[0]
+    month = fragments[1]
+    day   = fragments[2]
+
+    date = new Date(+year, +month-1, +day) # month = 0 ~ 11
+    today = new Date
+    if date.getDay() == today.getDay()
+      return "今日は"
+    else
+      return "明日は"
 
   fillDay:  (target, wears) ->
     self = this

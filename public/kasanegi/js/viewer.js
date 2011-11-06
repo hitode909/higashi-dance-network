@@ -151,7 +151,7 @@ Viewer = (function() {
     city = this.weather.getCityByCityCode(city_code);
     this.weather.setLastCityCode(city_code);
     return this.weather.getWeatherReportForCity(city, function(report) {
-      var wear_info;
+      var comment, wear_info;
       $('#indicator').hide();
       $('#result').show();
       $('#result #area').text(city_name);
@@ -161,8 +161,9 @@ Viewer = (function() {
       $('#result #min-temp').text(report.min);
       self.printWeatherIcons(report.description);
       wear_info = self.getWearInformationFromMinAndMax(report.min, report.max);
-      $('#result #comment').text(wear_info.comment);
-      self.setTweetLink("" + city_name + " " + wear_info.comment);
+      comment = self.dayInfo(report.date) + wear_info.comment;
+      $('#result #comment').text(comment);
+      self.setTweetLink("" + city_name + " " + comment);
       self.fillDay($('#result #day-max'), wear_info.daytime);
       self.fillDay($('#result #day-min'), wear_info.night);
       return self.checkScroll();
@@ -180,6 +181,23 @@ Viewer = (function() {
     date = new Date(+year, +month - 1, +day);
     wod = "日月火水木金土"[date.getDay()];
     return "" + (+month) + "/" + (+day) + " (" + wod + ")";
+  };
+  Viewer.prototype.dayInfo = function(date_text) {
+    var date, day, fragments, month, today, year;
+    fragments = date_text.match(/(\d+)/g);
+    if (fragments.length !== 3) {
+      return "今日は";
+    }
+    year = fragments[0];
+    month = fragments[1];
+    day = fragments[2];
+    date = new Date(+year, +month - 1, +day);
+    today = new Date;
+    if (date.getDay() === today.getDay()) {
+      return "今日は";
+    } else {
+      return "明日は";
+    }
   };
   Viewer.prototype.fillDay = function(target, wears) {
     var bg_path, icons_container, image_container, self;
