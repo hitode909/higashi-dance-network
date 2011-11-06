@@ -362,7 +362,7 @@ Viewer = (function() {
         max: 25,
         daytime: [CLOTH_SHIRTS],
         night: [CLOTH_SHIRTS],
-        comment: '今日は暖かくていい天気なのでシャツ一枚で大丈夫です'
+        comment: '暖かくていい天気なのでシャツ一枚で大丈夫です'
       }, {
         min: 18,
         max: 25,
@@ -452,25 +452,25 @@ Viewer = (function() {
         max: 10,
         daytime: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT],
         night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT],
-        comment: '今日は一日少し寒いです'
+        comment: '一日少し寒いです'
       }, {
         min: 8,
         max: 10,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
-        comment: '今日は一日寒いです'
+        comment: '一日寒いです'
       }, {
         min: 5,
         max: 10,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
-        comment: '今日は一日すごく寒いです'
+        comment: '一日すごく寒いです'
       }, {
         min: 5,
         max: 5,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
-        comment: '今日は異常な寒さです風邪に気をつけましょう'
+        comment: '異常な寒さです風邪に気をつけましょう'
       }
     ];
   })();

@@ -378,7 +378,7 @@ class Viewer
         night: [
           CLOTH_SHIRTS
         ]
-        comment: '今日は暖かくていい天気なのでシャツ一枚で大丈夫です'
+        comment: '暖かくていい天気なのでシャツ一枚で大丈夫です'
       }
       {
         min: 18
@@ -585,7 +585,7 @@ class Viewer
           CLOTH_CARDIGAN
           CLOTH_COAT
         ]
-        comment: '今日は一日少し寒いです'
+        comment: '一日少し寒いです'
       }
       {
         min: 8
@@ -600,7 +600,7 @@ class Viewer
           CLOTH_SWEATER
           CLOTH_COAT
         ]
-        comment: '今日は一日寒いです'
+        comment: '一日寒いです'
       }
       {
         min: 5
@@ -616,7 +616,7 @@ class Viewer
           CLOTH_COAT
           CLOTH_MUFFLER
         ]
-        comment: '今日は一日すごく寒いです'
+        comment: '一日すごく寒いです'
       }
 
       {
@@ -634,7 +634,7 @@ class Viewer
           CLOTH_COAT
           CLOTH_MUFFLER
         ]
-        comment: '今日は異常な寒さです風邪に気をつけましょう'
+        comment: '異常な寒さです風邪に気をつけましょう'
       }
 
     ]

@@ -248,6 +248,7 @@ select#city-selector {
 .api-message {
     margin-top: 20px;
     font-size: 80%;
+    text-align: center;
 }
 .api {
     margin-top: 20px;
