@@ -93,6 +93,15 @@ select#city-selector {
     display: none;
 }
 
+#first-time-guide .more {
+    text-align: right;
+}
+
+#first-time-guide .more a {
+    font-size: 90%;
+    color: #5f9ad1;
+}
+
 /* weather result */
 
 #result {
@@ -220,6 +229,8 @@ select#city-selector {
 }
 
 .help-button-image {
+    margin-top: 20px;
+    margin-bottom: 40px;
     width: 202px;
     height: 45px;
 }
@@ -236,7 +247,7 @@ select#city-selector {
 /* apis */
 .api-message {
     margin-top: 40px;
-    font-size: 90%;
+    font-size: 80%;
 }
 .api {
     margin-top: 20px;
