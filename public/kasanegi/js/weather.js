@@ -10,10 +10,6 @@ Weather = (function() {
   Weather.prototype.getCurrentStateCode = function(callback) {
     var self;
     self = this;
-    if (self.statusCodeCache) {
-      callback(self.statusCodeCache);
-      return;
-    }
     if (!(navigator && navigator.geolocation)) {
       callback(SURFPOINT.getPrefCode());
       return;
@@ -53,7 +49,6 @@ Weather = (function() {
         } catch (error) {
           code = self.getCurrentStateCodeFromIP();
         }
-        self.statusCodeCache = code;
         return callback(code);
       },
       error: function() {

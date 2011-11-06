@@ -13,10 +13,6 @@ class Weather
   getCurrentStateCode: (callback) ->
     self = this
 
-    if self.statusCodeCache
-      callback(self.statusCodeCache)
-      return
-
     if !(navigator && navigator.geolocation)
       callback(SURFPOINT.getPrefCode())
       return
@@ -51,7 +47,6 @@ class Weather
         catch error
           code = self.getCurrentStateCodeFromIP()
 
-        self.statusCodeCache = code
         callback(code)
       error: ->
         alert('通信時にエラーが発生しました．時間をおいて試してみてください．')
