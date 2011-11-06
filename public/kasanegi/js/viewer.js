@@ -392,25 +392,25 @@ Viewer = (function() {
         max: 25,
         daytime: [CLOTH_SHIRTS],
         night: [CLOTH_SHIRTS, CLOTH_JACKET],
-        comment: '昼は暑いのでシャツ一枚でいいです'
+        comment: '少し冷えるのでジャケットを着ましょう'
       }, {
         min: 10,
         max: 25,
         daytime: [CLOTH_SHIRTS],
         night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_JACKET],
-        comment: '昼は暑いのでシャツ一枚でいいです'
+        comment: '冷えるのでカーディガンとジャケットを着ましょう'
       }, {
         min: 7,
         max: 25,
         daytime: [CLOTH_SHIRTS],
         night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT],
-        comment: '昼は暑いのでシャツ一枚でいいです'
+        comment: '冷えるのでカーディガンとコートを着ましょう'
       }, {
         min: 5,
         max: 25,
         daytime: [CLOTH_SHIRTS],
         night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT, CLOTH_MUFFLER],
-        comment: '昼は暑いのでシャツ一枚でいいです'
+        comment: 'すごく冷えるのでカーディガンとコートとマフラーを着ましょう'
       }, {
         min: 18,
         max: 18,
@@ -470,25 +470,25 @@ Viewer = (function() {
         max: 12,
         daytime: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT],
         night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT],
-        comment: '一日少し寒いです'
+        comment: '一日少し寒いのでカーディガンとコートを着ましょう'
       }, {
         min: 8,
         max: 12,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
-        comment: '一日寒いです'
+        comment: '一日寒いのでセータとコートを着ましょう'
       }, {
         min: 5,
         max: 12,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
-        comment: '一日すごく寒いです'
+        comment: '一日寒いので昼でもコート夜はマフラーです'
       }, {
         min: 5,
         max: 5,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
-        comment: '異常な寒さです風邪に気をつけましょう'
+        comment: 'すごく寒いので一日マフラーが手放せません'
       }
     ];
   })();

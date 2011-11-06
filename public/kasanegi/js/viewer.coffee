@@ -422,7 +422,7 @@ class Viewer
           CLOTH_SHIRTS
           CLOTH_JACKET
         ]
-        comment: '昼は暑いのでシャツ一枚でいいです'
+        comment: '少し冷えるのでジャケットを着ましょう'
       }
       {
         min: 10
@@ -435,7 +435,7 @@ class Viewer
           CLOTH_CARDIGAN
           CLOTH_JACKET
         ]
-        comment: '昼は暑いのでシャツ一枚でいいです'
+        comment: '冷えるのでカーディガンとジャケットを着ましょう'
       }
       {
         min: 7
@@ -448,7 +448,7 @@ class Viewer
           CLOTH_CARDIGAN
           CLOTH_COAT
         ]
-        comment: '昼は暑いのでシャツ一枚でいいです'
+        comment: '冷えるのでカーディガンとコートを着ましょう'
       }
       {
         min: 5
@@ -462,7 +462,7 @@ class Viewer
           CLOTH_COAT
           CLOTH_MUFFLER
         ]
-        comment: '昼は暑いのでシャツ一枚でいいです'
+        comment: 'すごく冷えるのでカーディガンとコートとマフラーを着ましょう'
       }
 
       {
@@ -605,7 +605,7 @@ class Viewer
           CLOTH_CARDIGAN
           CLOTH_COAT
         ]
-        comment: '一日少し寒いです'
+        comment: '一日少し寒いのでカーディガンとコートを着ましょう'
       }
       {
         min: 8
@@ -620,7 +620,7 @@ class Viewer
           CLOTH_SWEATER
           CLOTH_COAT
         ]
-        comment: '一日寒いです'
+        comment: '一日寒いのでセータとコートを着ましょう'
       }
       {
         min: 5
@@ -636,7 +636,7 @@ class Viewer
           CLOTH_COAT
           CLOTH_MUFFLER
         ]
-        comment: '一日すごく寒いです'
+        comment: '一日寒いので昼でもコート夜はマフラーです'
       }
 
       {
@@ -654,7 +654,7 @@ class Viewer
           CLOTH_COAT
           CLOTH_MUFFLER
         ]
-        comment: '異常な寒さです風邪に気をつけましょう'
+        comment: 'すごく寒いので一日マフラーが手放せません'
       }
 
     ]

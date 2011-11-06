@@ -2,6 +2,10 @@ body {
     color: #333;
 }
 
+.center {
+    text-align: center;
+}
+
 .float {
     float: left;
 }
