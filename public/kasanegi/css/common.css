@@ -106,37 +106,6 @@ select#city-selector {
     font-size: 90%;
 }
 
-#area-container {
-    position: relative;
-    margin-bottom: 5px;
-    height: 35px;
-    display: none;
-}
-
-#__area {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    margin-top: 4px;
-
-    font-size: 120%;
-    text-align: center;
-    color: white;
-    font-weight: bold;
-}
-
-#area-background {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-}
-
-#area-background img {
-    width: 310px;
-    height: 35px;
-}
-
 #description {
     font-size: 80%;
     color: #666;
