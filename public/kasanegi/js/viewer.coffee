@@ -9,44 +9,6 @@ class Viewer
     self.checkCurrentPositionIfNeeded()
     self.appendTwitterWidget()
 
-  # マニフェストキャッシュがいい感じなので使ってない
-  preloadImages: (callback) ->
-    callback()
-    return
-    images = [
-      "/kasanegi/images/cardigan.png"
-      "/kasanegi/images/coat.png"
-      "/kasanegi/images/day.png"
-      "/kasanegi/images/docodoco_logo.gif"
-      "/kasanegi/images/icon-cardigan.png"
-      "/kasanegi/images/icon-coat.png"
-      "/kasanegi/images/icon-jacket.png"
-      "/kasanegi/images/icon-shirts.png"
-      "/kasanegi/images/icon-sweater.png"
-      "/kasanegi/images/jacket.png"
-      "/kasanegi/images/night.png"
-      "/kasanegi/images/shirts.png"
-      "/kasanegi/images/sweater.png"
-      "/kasanegi/images/tenki_logo.gif"
-    ]
-    called = false
-    count = 0
-    _.each images, (src) ->
-      image = new Image
-      image.src = src
-      image.onload = ->
-        count++
-        if count == images.length
-          unless called
-            called = true
-            callback()
-
-    setTimeout ->
-      unless called
-        called = true
-        callback()
-    , 5000
-
   selectFirstPage: ->
     if location.hash
       $(window).trigger('hashchange')

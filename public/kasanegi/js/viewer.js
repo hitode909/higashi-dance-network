@@ -12,34 +12,6 @@ Viewer = (function() {
     self.checkCurrentPositionIfNeeded();
     return self.appendTwitterWidget();
   };
-  Viewer.prototype.preloadImages = function(callback) {
-    var called, count, images;
-    callback();
-    return;
-    images = ["/kasanegi/images/cardigan.png", "/kasanegi/images/coat.png", "/kasanegi/images/day.png", "/kasanegi/images/docodoco_logo.gif", "/kasanegi/images/icon-cardigan.png", "/kasanegi/images/icon-coat.png", "/kasanegi/images/icon-jacket.png", "/kasanegi/images/icon-shirts.png", "/kasanegi/images/icon-sweater.png", "/kasanegi/images/jacket.png", "/kasanegi/images/night.png", "/kasanegi/images/shirts.png", "/kasanegi/images/sweater.png", "/kasanegi/images/tenki_logo.gif"];
-    called = false;
-    count = 0;
-    _.each(images, function(src) {
-      var image;
-      image = new Image;
-      image.src = src;
-      return image.onload = function() {
-        count++;
-        if (count === images.length) {
-          if (!called) {
-            called = true;
-            return callback();
-          }
-        }
-      };
-    });
-    return setTimeout(function() {
-      if (!called) {
-        called = true;
-        return callback();
-      }
-    }, 5000);
-  };
   Viewer.prototype.selectFirstPage = function() {
     var page_id;
     if (location.hash) {
