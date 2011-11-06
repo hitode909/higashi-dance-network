@@ -16,6 +16,11 @@ h1 {
     height: 800px;
 }
 
+.title {
+    font-size: 80px;
+    font-weight: bold;
+}
+
 .item {
     position: absolute;
     width: 96px;

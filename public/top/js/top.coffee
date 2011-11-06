@@ -1,18 +1,20 @@
 $ ->
   $('.item').each ->
     item = this
-    x = Math.random() * 200 + 50
-    y = Math.random() * 200 + 50
-    r = Math.random()
-    max_x = $('.items').width()
-    max_y = $('.items').height()
-    setInterval ->
-      r += (Math.random() - 0.5) * 0.5
-      x += Math.sin(r) * 3
-      y += Math.cos(r) * 3
+    speed = Math.random() * 5
+    setTimeout ->
+      x = $(item).position().left
+      y = $(item).position().top
+      r = Math.random()
+      max_x = $('.items').width()
+      max_y = $('.items').height()
+      setInterval ->
+        r += (Math.random() - 0.5) * 0.5
+        x += Math.sin(r) * speed
+        y += Math.cos(r) * speed
 
-      $(item).css
-        left: x
-        top:  y
-
-    , 20
+        $(item).css
+          left: x
+          top:  y
+      , 20
+    ,1000 * Math.random()
