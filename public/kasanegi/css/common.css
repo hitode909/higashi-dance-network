@@ -1,3 +1,7 @@
+body {
+    color: #333;
+}
+
 .float {
     float: left;
 }
@@ -170,6 +174,7 @@ select#city-selector {
 #comment {
     margin: 20px;
     line-height: 1.5;
+    font-size: 90%;
 }
 
 /* share button*/
