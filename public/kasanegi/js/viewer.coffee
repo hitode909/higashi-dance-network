@@ -530,7 +530,7 @@ class Viewer
           CLOTH_SHIRTS
           CLOTH_SWEATER
         ]
-        comment: 'あ'
+        comment: '温度差はあまりのでいま体感している温度で問題ないです'
       }
       {
         min: 10
@@ -577,6 +577,21 @@ class Viewer
       }
 
       {
+        min: 10
+        max: 10
+        daytime: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+          CLOTH_COAT
+        ]
+        night: [
+          CLOTH_SHIRTS
+          CLOTH_CARDIGAN
+          CLOTH_COAT
+        ]
+        comment: 'あ'
+      }
+      {
         min: 8
         max: 10
         daytime: [
@@ -605,7 +620,7 @@ class Viewer
           CLOTH_COAT
           CLOTH_MUFFLER
         ]
-        comment: 'あ'
+        comment: '夜は寒いのでマフラーが要ります，昼はコート'
       }
 
       {
@@ -623,7 +638,7 @@ class Viewer
           CLOTH_COAT
           CLOTH_MUFFLER
         ]
-        comment: 'あ'
+        comment: 'とても寒いです'
       }
 
       {
@@ -631,17 +646,17 @@ class Viewer
         max: 3
         daytime: [
           CLOTH_SHIRTS
-          CLOTH_CARDIGAN
+          CLOTH_SWEATER
           CLOTH_COAT
           CLOTH_MUFFLER
         ]
         night: [
           CLOTH_SHIRTS
-          CLOTH_CARDIGAN
+          CLOTH_SWEATER
           CLOTH_COAT
           CLOTH_MUFFLER
         ]
-        comment: 'あ'
+        comment: '尋常じゃなく寒いです'
       }
 
     ]
