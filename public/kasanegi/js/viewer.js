@@ -152,6 +152,10 @@ Viewer = (function() {
     this.weather.setLastCityCode(city_code);
     return this.weather.getWeatherReportForCity(city, function(report) {
       var comment, wear_info;
+      if (report.min === "" || report.max === "") {
+        alert("申し訳ございません，天気を取得できませんでした．時間をおいて試すか，ほかの地域で試してください．");
+        return;
+      }
       $('#indicator').hide();
       $('#result').show();
       $('#result #area').text(city_name);
