@@ -95,8 +95,11 @@ Viewer = (function() {
       target_id = target_id.replace(/^\#/, '');
       self.selectPage(target_id);
       if (target_id === 'clear') {
-        return localStorage.clear();
+        localStorage.clear();
       }
+      return setTimeout(function() {
+        return window.scrollTo(0, 0);
+      });
     });
     testWear = function(min, max) {
       var wear_info;
@@ -283,8 +286,8 @@ Viewer = (function() {
       height: 480,
       theme: {
         shell: {
-          background: '#98c6d1',
-          color: '#3c576e'
+          background: '#ccebff',
+          color: '#5f9ad1'
         },
         tweets: {
           background: '#ffffff',

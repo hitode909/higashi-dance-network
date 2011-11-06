@@ -9,6 +9,7 @@ class Viewer
     self.checkCurrentPositionIfNeeded()
     self.appendTwitterWidget()
 
+
   selectFirstPage: ->
     if location.hash
       $(window).trigger('hashchange')
@@ -93,6 +94,10 @@ class Viewer
       self.selectPage(target_id)
       if target_id == 'clear'
         localStorage.clear()
+
+      setTimeout ->
+        window.scrollTo(0, 0)
+
 
     # test
     testWear = (min, max) ->
@@ -287,8 +292,8 @@ class Viewer
       height: 480,
       theme: {
         shell: {
-          background: '#98c6d1',
-          color: '#3c576e'
+          background: '#ccebff',
+          color: '#5f9ad1'
         },
         tweets: {
           background: '#ffffff',
