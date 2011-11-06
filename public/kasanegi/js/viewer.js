@@ -109,7 +109,7 @@ Viewer = (function() {
     return $('#city-selector-container').append(button);
   };
   Viewer.prototype.setupEvents = function() {
-    var self;
+    var max, min, self, testWear;
     self = this;
     $('select#city-selector').change(function() {
       return self.printWeather();
@@ -117,7 +117,7 @@ Viewer = (function() {
     $('#reset-city').click(function() {
       return self.getCurrentPositionAndPrint();
     });
-    return $(window).bind('hashchange', function() {
+    $(window).bind('hashchange', function() {
       var target_id;
       target_id = location.hash;
       target_id = target_id.replace(/^\#/, '');
@@ -126,6 +126,22 @@ Viewer = (function() {
         return localStorage.clear();
       }
     });
+    testWear = function(min, max) {
+      var wear_info;
+      wear_info = self.getWearInformationFromMinAndMax(min, max);
+      $('#result #comment').text(wear_info.comment);
+      self.fillDay($('#result #day-max'), wear_info.daytime);
+      return self.fillDay($('#result #day-min'), wear_info.night);
+    };
+    max = 0;
+    min = 0;
+    return setInterval(function() {
+      if (+$('#test-min').val() !== min || +$('#test-max').val() !== max) {
+        min = +$('#test-min').val();
+        max = +$('#test-max').val();
+        return testWear(min, max);
+      }
+    }, 1000);
   };
   Viewer.prototype.checkCurrentPositionIfNeeded = function() {
     var city_code, self;
@@ -439,7 +455,7 @@ Viewer = (function() {
         max: 14,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER],
-        comment: 'あ'
+        comment: '温度差はあまりのでいま体感している温度で問題ないです'
       }, {
         min: 10,
         max: 14,
@@ -459,6 +475,12 @@ Viewer = (function() {
         night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
         comment: 'あ'
       }, {
+        min: 10,
+        max: 10,
+        daytime: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT],
+        night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT],
+        comment: 'あ'
+      }, {
         min: 8,
         max: 10,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
@@ -469,19 +491,19 @@ Viewer = (function() {
         max: 10,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
-        comment: 'あ'
+        comment: '夜は寒いのでマフラーが要ります，昼はコート'
       }, {
         min: 5,
         max: 5,
         daytime: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT, CLOTH_MUFFLER],
         night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT, CLOTH_MUFFLER],
-        comment: 'あ'
+        comment: 'とても寒いです'
       }, {
         min: 3,
         max: 3,
-        daytime: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT, CLOTH_MUFFLER],
-        night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT, CLOTH_MUFFLER],
-        comment: 'あ'
+        daytime: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
+        night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
+        comment: '尋常じゃなく寒いです'
       }
     ];
   })();
