@@ -81,7 +81,7 @@ Viewer = (function() {
     return $('#city-selector-container').append(button);
   };
   Viewer.prototype.setupEvents = function() {
-    var max, min, self, testWear;
+    var self;
     self = this;
     $('select#city-selector').change(function() {
       self.hideFirstTimeGuide();
@@ -91,7 +91,7 @@ Viewer = (function() {
       self.hideFirstTimeGuide();
       return self.getCurrentPositionAndPrint();
     });
-    $(window).bind('hashchange', function() {
+    return $(window).bind('hashchange', function() {
       var target_id;
       target_id = location.hash;
       target_id = target_id.replace(/^\#/, '');
@@ -103,22 +103,6 @@ Viewer = (function() {
         return window.scrollTo(0, 0);
       });
     });
-    testWear = function(min, max) {
-      var wear_info;
-      wear_info = self.getWearInformationFromMinAndMax(min, max);
-      $('#result #comment').text(wear_info.comment);
-      self.fillDay($('#result #day-max'), wear_info.daytime);
-      return self.fillDay($('#result #day-min'), wear_info.night);
-    };
-    max = 0;
-    min = 0;
-    return setInterval(function() {
-      if (+$('#test-min').val() !== min || +$('#test-max').val() !== max) {
-        min = +$('#test-min').val();
-        max = +$('#test-max').val();
-        return testWear(min, max);
-      }
-    }, 1000);
   };
   Viewer.prototype.checkCurrentPositionIfNeeded = function() {
     var city_code, self;

@@ -90,6 +90,7 @@ class Viewer
       self.hideFirstTimeGuide()
       self.getCurrentPositionAndPrint()
 
+
     $(window).bind 'hashchange', ->
       target_id = location.hash
       target_id = target_id.replace(/^\#/, '')
@@ -99,23 +100,6 @@ class Viewer
 
       setTimeout ->
         window.scrollTo(0, 0)
-
-
-    # test
-    testWear = (min, max) ->
-      wear_info = self.getWearInformationFromMinAndMax(min, max)
-      $('#result #comment').text wear_info.comment
-      self.fillDay $('#result #day-max'), wear_info.daytime
-      self.fillDay $('#result #day-min'), wear_info.night
-
-    max = 0
-    min = 0
-    setInterval ->
-      if +$('#test-min').val() != min ||  +$('#test-max').val() != max
-        min= +$('#test-min').val()
-        max = +$('#test-max').val()
-        testWear(min, max)
-    , 1000
 
   checkCurrentPositionIfNeeded: ->
     self = this
@@ -154,6 +138,8 @@ class Viewer
       self.printWeather()
 
   # ----- actions -----
+
+
   printWeather: ->
     self = this
     $('#indicator').show()
