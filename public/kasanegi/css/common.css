@@ -162,10 +162,15 @@ select#city-selector {
     border: 1px solid #b4b4b4;
 }
 
+.wear-icons {
+    padding-left: 3px;
+}
+
 .wear-icons img {
-    width: 34px;
-    height: 34px;
-    margin: 1px;
+    width: 36px;
+    height: 36px;
+    margin-right: -1px;
+    margin-top: 3px;
     border: 1px solid #b4b4b4;
 }
 
@@ -181,11 +186,12 @@ select#city-selector {
 
 #share-tweet-container {
     margin-top: 20px;
+    text-align: center;
 }
 
 #share-tweet-container img {
-    width: 310px;
-    height: 35px;
+    width: 202px;
+    height: 45px;
 }
 
 
@@ -200,11 +206,25 @@ select#city-selector {
 /* guide */
 
 #guide {
-    margin: 10px;
-    font-size: 90%;
 }
 
-/* guide */
+/* guide, help image */
+.help-image-container {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.help-image {
+    width: 310px;
+    height: 140px;
+}
+
+.help-button-image {
+    width: 202px;
+    height: 45px;
+}
+
+
 #guide-api {
     font-size: 90%;
 
@@ -214,6 +234,10 @@ select#city-selector {
 }
 
 /* apis */
+.api-message {
+    margin-top: 40px;
+    font-size: 90%;
+}
 .api {
     margin-top: 20px;
     margin-left: 85px;
