@@ -20,7 +20,7 @@ Weather = (function() {
       lon = position.coords.longitude;
       return self.getStatusCodeFromLatLon(lat, lon, callback);
     }, function(error) {
-      return alert('位置情報を取得できませんでした');
+      return callback(SURFPOINT.getPrefCode());
     });
   };
   Weather.prototype.getLastPageId = function() {

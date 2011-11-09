@@ -22,7 +22,7 @@ class Weather
       lon = position.coords.longitude
       self.getStatusCodeFromLatLon(lat, lon, callback)
     , (error) ->
-      alert('位置情報を取得できませんでした')
+      callback(SURFPOINT.getPrefCode())
 
   getLastPageId: ->
     localStorage.last_page_id || 'main'
