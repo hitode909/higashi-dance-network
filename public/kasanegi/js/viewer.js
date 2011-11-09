@@ -420,13 +420,13 @@ Viewer = (function() {
         max: 18,
         daytime: [CLOTH_SHIRTS, CLOTH_CARDIGAN],
         night: [CLOTH_SHIRTS, CLOTH_CARDIGAN],
-        comment: '一日中同じくらいの気温なのでカーディガンです'
+        comment: '一日肌寒いのでカーディガンです'
       }, {
         min: 15,
         max: 18,
         daytime: [CLOTH_SHIRTS, CLOTH_JACKET],
         night: [CLOTH_SHIRTS, CLOTH_JACKET],
-        comment: '一日中同じくらいの気温なのでジャケットです'
+        comment: '朝晩冷えるので一日ジャケットです'
       }, {
         min: 10,
         max: 18,
@@ -450,7 +450,7 @@ Viewer = (function() {
         max: 14,
         daytime: [CLOTH_SHIRTS, CLOTH_SWEATER],
         night: [CLOTH_SHIRTS, CLOTH_SWEATER],
-        comment: '一日セーターです'
+        comment: '一日冷えるのでセーターです'
       }, {
         min: 10,
         max: 14,

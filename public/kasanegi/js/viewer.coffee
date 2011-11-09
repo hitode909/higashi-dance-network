@@ -481,7 +481,7 @@ class Viewer
           CLOTH_SHIRTS
           CLOTH_CARDIGAN
         ]
-        comment: '一日中同じくらいの気温なのでカーディガンです'
+        comment: '一日肌寒いのでカーディガンです'
       }
       {
         min: 15
@@ -494,7 +494,7 @@ class Viewer
           CLOTH_SHIRTS
           CLOTH_JACKET
         ]
-        comment: '一日中同じくらいの気温なのでジャケットです'
+        comment: '朝晩冷えるので一日ジャケットです'
       }
       {
         min: 10
@@ -551,7 +551,7 @@ class Viewer
           CLOTH_SHIRTS
           CLOTH_SWEATER
         ]
-        comment: '一日セーターです'
+        comment: '一日冷えるのでセーターです'
       }
       {
         min: 10
