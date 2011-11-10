@@ -241,6 +241,7 @@ class Viewer
         title: self.getWearName wear_name
       .appendTo image_container
 
+
   getWearName: (wear) ->
     table =
       halfshirts: '半袖シャツ'

@@ -241,7 +241,6 @@ Viewer = (function() {
       coat: 'コート',
       muffler: 'マフラー'
     };
-    console.log(wear, table[wear]);
     return table[wear];
   };
   Viewer.prototype.printWeatherIcons = function(text) {
