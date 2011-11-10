@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2011-11-09 11:04:12 +0900
+# 2011-11-10 19:40:28 +0900
 
 CACHE:
 /kasanegi/css/common.css
@@ -15,6 +15,7 @@ CACHE:
 /kasanegi/images/day.png
 /kasanegi/images/docodoco_logo.gif
 /kasanegi/images/favicon.ico
+/kasanegi/images/halfshirts.png
 /kasanegi/images/header.png
 /kasanegi/images/help-button.png
 /kasanegi/images/help.png
@@ -25,6 +26,7 @@ CACHE:
 /kasanegi/images/home-icon.png
 /kasanegi/images/icon-cardigan.png
 /kasanegi/images/icon-coat.png
+/kasanegi/images/icon-halfshirts.png
 /kasanegi/images/icon-jacket.png
 /kasanegi/images/icon-muffler.png
 /kasanegi/images/icon-shirts.png

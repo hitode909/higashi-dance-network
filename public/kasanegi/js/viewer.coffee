@@ -243,6 +243,7 @@ class Viewer
 
   getWearName: (wear) ->
     table =
+      halfshirts: '半袖シャツ'
       shirts:   'シャツ'
       cardigan: 'カーディガン'
       sweater:  'セーター'
@@ -373,6 +374,7 @@ class Viewer
   SERVICE_URL: "http://higashi-dance-network.appspot.com/kasanegi/"
 
   CLOTH_RULES: (->
+    CLOTH_HALF_SHIRTS   = 'halfshirts'
     CLOTH_SHIRTS   = 'shirts'
     CLOTH_CARDIGAN = 'cardigan'
     CLOTH_SWEATER  = 'sweater'
@@ -386,12 +388,24 @@ class Viewer
         min: 100
         max: 100
         daytime: [
-          CLOTH_SHIRTS
+          CLOTH_HALF_SHIRTS
         ]
         night: [
-          CLOTH_SHIRTS
+          CLOTH_HALF_SHIRTS
         ]
         comment: '異常な暑さです'
+      }
+
+      {
+        min: 50
+        max: 50
+        daytime: [
+          CLOTH_HALF_SHIRTS
+        ]
+        night: [
+          CLOTH_HALF_SHIRTS
+        ]
+        comment: '暖かいので半袖で出かけましょう'
       }
 
       {

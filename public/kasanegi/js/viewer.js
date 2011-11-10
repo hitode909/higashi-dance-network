@@ -233,6 +233,7 @@ Viewer = (function() {
   Viewer.prototype.getWearName = function(wear) {
     var table;
     table = {
+      halfshirts: '半袖シャツ',
       shirts: 'シャツ',
       cardigan: 'カーディガン',
       sweater: 'セーター',
@@ -240,6 +241,7 @@ Viewer = (function() {
       coat: 'コート',
       muffler: 'マフラー'
     };
+    console.log(wear, table[wear]);
     return table[wear];
   };
   Viewer.prototype.printWeatherIcons = function(text) {
@@ -365,7 +367,8 @@ Viewer = (function() {
   Viewer.prototype.HASHTAG = "#重ね着";
   Viewer.prototype.SERVICE_URL = "http://higashi-dance-network.appspot.com/kasanegi/";
   Viewer.prototype.CLOTH_RULES = (function() {
-    var CLOTH_CARDIGAN, CLOTH_COAT, CLOTH_JACKET, CLOTH_MUFFLER, CLOTH_SHIRTS, CLOTH_SWEATER;
+    var CLOTH_CARDIGAN, CLOTH_COAT, CLOTH_HALF_SHIRTS, CLOTH_JACKET, CLOTH_MUFFLER, CLOTH_SHIRTS, CLOTH_SWEATER;
+    CLOTH_HALF_SHIRTS = 'halfshirts';
     CLOTH_SHIRTS = 'shirts';
     CLOTH_CARDIGAN = 'cardigan';
     CLOTH_SWEATER = 'sweater';
@@ -376,9 +379,15 @@ Viewer = (function() {
       {
         min: 100,
         max: 100,
-        daytime: [CLOTH_SHIRTS],
-        night: [CLOTH_SHIRTS],
+        daytime: [CLOTH_HALF_SHIRTS],
+        night: [CLOTH_HALF_SHIRTS],
         comment: '異常な暑さです'
+      }, {
+        min: 50,
+        max: 50,
+        daytime: [CLOTH_HALF_SHIRTS],
+        night: [CLOTH_HALF_SHIRTS],
+        comment: '暖かいので半袖で出かけましょう'
       }, {
         min: 25,
         max: 25,
