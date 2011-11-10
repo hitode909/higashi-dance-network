@@ -15,6 +15,9 @@ handlers:
 - url: /proxy/.*
   script: proxy/proxy.py
 
+- url: /kasanegi
+  script: kasanegi_redirect.py
+
 - url: (.*)/
   static_files: public\1/index.html
   upload: public(.*)/index.html
