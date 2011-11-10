@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2011-11-06 00:31:25 +0900
+# 2011-11-10 20:56:42 +0900
 
 CACHE:
 /bon/bon.manifest
@@ -44,6 +44,7 @@ CACHE:
 /bon/images/back_image.png
 /bon/images/buy-tshirts1.png
 /bon/images/buy-tshirts2.png
+/bon/images/favicon.ico
 /bon/images/hasu.png
 /bon/images/hasu2.png
 /bon/images/hatena-bookmark1.png
@@ -61,7 +62,6 @@ CACHE:
 /bon/js/jquery.ba-throttle-debounce.min.js
 /bon/js/jsdeferred.js
 /bon/js/main.js
-
 NETWORK:
 *
 
