@@ -283,19 +283,11 @@ select#city-selector {
     text-decoration: none;
 }
 
-/* facebook */
-
-.fb-container {
-    margin-top: 40px;
-    margin-left: 5px;
-}
-
 /* copyright */
 
 #copyright {
-    margin-top: 20px;
+    margin-top: 60px;
     font-size: 60%;
     text-align: center;
     color: #666;
 }
-
