@@ -406,7 +406,7 @@ class Viewer
         night: [
           CLOTH_HALF_SHIRTS
         ]
-        comment: '暖かいので半袖で出かけましょう'
+        comment: '暑いので半袖で出かけましょう'
       }
 
       {

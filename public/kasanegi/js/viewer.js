@@ -386,7 +386,7 @@ Viewer = (function() {
         max: 50,
         daytime: [CLOTH_HALF_SHIRTS],
         night: [CLOTH_HALF_SHIRTS],
-        comment: '暖かいので半袖で出かけましょう'
+        comment: '暑いので半袖で出かけましょう'
       }, {
         min: 25,
         max: 25,
