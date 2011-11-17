@@ -299,7 +299,7 @@ class Viewer
       id: 'widget-container',
       version: 2,
       type: 'search',
-      search: self.HASHTAG,
+      search: self.SEARCH_TEXT,
       interval: 30000,
       title: self.HASHTAG,
       subject: '',
@@ -373,6 +373,7 @@ class Viewer
   # ----- constants -----
   HASHTAG: "#重ね着"
   SERVICE_URL: "http://higashi-dance-network.appspot.com/kasanegi/"
+  SEARCH_TEXT: "http://higashi-dance-network.appspot.com/kasanegi/ #重ね着"
 
   CLOTH_RULES: (->
     CLOTH_HALF_SHIRTS   = 'halfshirts'

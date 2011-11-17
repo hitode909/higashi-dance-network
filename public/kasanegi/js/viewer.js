@@ -287,7 +287,7 @@ Viewer = (function() {
       id: 'widget-container',
       version: 2,
       type: 'search',
-      search: self.HASHTAG,
+      search: self.SEARCH_TEXT,
       interval: 30000,
       title: self.HASHTAG,
       subject: '',
@@ -365,6 +365,7 @@ Viewer = (function() {
   };
   Viewer.prototype.HASHTAG = "#重ね着";
   Viewer.prototype.SERVICE_URL = "http://higashi-dance-network.appspot.com/kasanegi/";
+  Viewer.prototype.SEARCH_TEXT = "http://higashi-dance-network.appspot.com/kasanegi/ #重ね着";
   Viewer.prototype.CLOTH_RULES = (function() {
     var CLOTH_CARDIGAN, CLOTH_COAT, CLOTH_HALF_SHIRTS, CLOTH_JACKET, CLOTH_MUFFLER, CLOTH_SHIRTS, CLOTH_SWEATER;
     CLOTH_HALF_SHIRTS = 'halfshirts';
