@@ -140,8 +140,8 @@ Weather = (function() {
     });
   };
   Weather.prototype.STATUS_CODE_TOKYO = "13";
-  Weather.prototype.TENKI_SERVER_ID = 'w002';
-  Weather.prototype.TENKI_USER_ID = 'c43a005f71747c2dab7ffa9c3c392ba6386bb5c2';
+  Weather.prototype.TENKI_SERVER_ID = 'w001';
+  Weather.prototype.TENKI_USER_ID = 'c8214580ef44a20d1a705ad2a65ce98868bc8803';
   Weather.prototype.YAHOO_APPLICATION_ID = 'J17Tyuixg65goAW301d5vBkBWtO9gLQsJnC0Y7OyJJk96wumaSU2U3odNwj5PdIU1A--';
   Weather.prototype.STATE_CODES = {
     "1": [
