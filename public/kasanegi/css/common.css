@@ -82,6 +82,7 @@ body {
 
 #city-selector-container {
     margin-top: 10px;
+    margin-bottom:20px;
 }
 
 select#city-selector {
@@ -94,24 +95,61 @@ select#city-selector {
 
 /* calendar */
 #calendar-container {
-    margin-top: 10px;
+    margin-top: 0px;
     margin-bottom: 10px;
+    text-align:center;
 }
+
+#calendar-container > :first-child {
+    border:2px;
+    border-bottom-left-radius:10px;
+    border-top-left-radius:10px;
+    -moz-border-bottom-left-radius:10px;
+    -moz-border-top-left-radius:10px;
+    border-right:1px;
+    border-color:#4aa8c9;
+    border-style:solid;
+}
+
+
+#calendar-container > :last-child {
+    border:2px;
+    border-bottom-right-radius:10px;
+    border-top-right-radius:10px;
+    -moz-border-bottom-right-radius:10px;
+    -moz-border-top-right-radius:10px;
+    border-left:0px;
+    border-color:#4aa8c9;
+    border-style:solid;
+}
+
 
 .calendar-day {
     cursor: pointer;
+    border-right:1px;
+    border-top:2px;
+    border-bottom:2px solid;
+    border-left:0px;
+    font-size:14px;
+    padding:5px 0px;
+    width:42px;
+    display:inline-block;
+    border-color:#4aa8c9;
+    border-style:solid;
+    text-align:center;
+    background-color:#e7f7fd;
 }
 
 .calendar-day.selected {
-    font-weight: bold;
+    background-color:#afe1f2;
 }
 
 .calendar-day.saturday {
-    color: blue;
+    color: #44c;
 }
 
 .calendar-day.sunday {
-    color: red;
+    color: #c44;
 }
 
 /* first time guide */
@@ -132,7 +170,7 @@ select#city-selector {
 /* weather result */
 
 #result {
-    margin-top: 10px;
+    margin-top: 2px;
     display: none;
 }
 
