@@ -213,14 +213,15 @@ class Viewer
     container.empty()
 
     for offset in [0..6]
-      date = new Date(date_text.split('-'))
+      date = self.dateFromText(date_text)
       date.setDate(date.getDate() + offset)
 
       element = $('<span>')
       element.addClass('calendar-day')
       element.addClass('saturday') if date.getDay() == 6
       element.addClass('sunday') if date.getDay() == 0
-      element.text(date.getDate())
+      dateText = "" + date.getDate() + "(" + "日月火水木金土"[date.getDay()] + ")"
+      element.text(dateText)
       element.attr('data-date', [date.getFullYear(), self.formatNumber(date.getMonth() + 1, 2), self.formatNumber(date.getDate(), 2)].join('-'))
       element.attr('data-is-first-day', offset == 0)
 
@@ -250,23 +251,34 @@ class Viewer
 
     return "#{+ month}/#{+ day} (#{wod})"
 
-  # 2011-11-04 -> 今日は or 明日は
-  dayInfo: (date_text) ->
+  dateFromText: (date_text) ->
     fragments = date_text.match(/(\d+)/g)
-
-    if fragments.length != 3
-      return "今日は"
 
     year  = fragments[0]
     month = fragments[1]
     day   = fragments[2]
 
-    date = new Date(+year, +month-1, +day) # month = 0 ~ 11
+    new Date(+year, +month-1, +day) # month = 0 ~ 11
+
+  # 2011-11-04 -> 今日は or 明日は or 水曜日
+  dayInfo: (date_text) ->
+    self = this
+
+    fragments = date_text.match(/(\d+)/g)
+
+    if fragments.length != 3
+      return "今日は"
+
+    date = self.dateFromText(date_text)
     today = new Date
+
     if date.getDay() == today.getDay()
       return "今日は"
-    else
+    else if date.getDay() == today.getDay() + 1
       return "明日は"
+
+    wod = "日月火水木金土"[date.getDay()]
+    return "#{date.getDate()}日(#{wod}曜日)は"
 
   fillDay:  (target, wears) ->
     self = this

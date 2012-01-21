@@ -203,14 +203,14 @@ Viewer = (function() {
     return self.checkScroll();
   };
   Viewer.prototype.createCalendar = function(report) {
-    var container, date, date_text, element, offset, self, _results;
+    var container, date, dateText, date_text, element, offset, self, _results;
     self = this;
     date_text = report.date;
     container = $('#calendar-container');
     container.empty();
     _results = [];
     for (offset = 0; offset <= 6; offset++) {
-      date = new Date(date_text.split('-'));
+      date = self.dateFromText(date_text);
       date.setDate(date.getDate() + offset);
       element = $('<span>');
       element.addClass('calendar-day');
@@ -220,7 +220,8 @@ Viewer = (function() {
       if (date.getDay() === 0) {
         element.addClass('sunday');
       }
-      element.text(date.getDate());
+      dateText = "" + date.getDate() + "(" + "日月火水木金土"[date.getDay()] + ")";
+      element.text(dateText);
       element.attr('data-date', [date.getFullYear(), self.formatNumber(date.getMonth() + 1, 2), self.formatNumber(date.getDate(), 2)].join('-'));
       element.attr('data-is-first-day', offset === 0);
       _results.push(container.append(element));
@@ -249,22 +250,30 @@ Viewer = (function() {
     wod = "日月火水木金土"[date.getDay()];
     return "" + (+month) + "/" + (+day) + " (" + wod + ")";
   };
+  Viewer.prototype.dateFromText = function(date_text) {
+    var day, fragments, month, year;
+    fragments = date_text.match(/(\d+)/g);
+    year = fragments[0];
+    month = fragments[1];
+    day = fragments[2];
+    return new Date(+year, +month - 1, +day);
+  };
   Viewer.prototype.dayInfo = function(date_text) {
-    var date, day, fragments, month, today, year;
+    var date, fragments, self, today, wod;
+    self = this;
     fragments = date_text.match(/(\d+)/g);
     if (fragments.length !== 3) {
       return "今日は";
     }
-    year = fragments[0];
-    month = fragments[1];
-    day = fragments[2];
-    date = new Date(+year, +month - 1, +day);
+    date = self.dateFromText(date_text);
     today = new Date;
     if (date.getDay() === today.getDay()) {
       return "今日は";
-    } else {
+    } else if (date.getDay() === today.getDay() + 1) {
       return "明日は";
     }
+    wod = "日月火水木金土"[date.getDay()];
+    return "" + (date.getDate()) + "日(" + wod + "曜日)は";
   };
   Viewer.prototype.fillDay = function(target, wears) {
     var bg_path, icons_container, image_container, self;
