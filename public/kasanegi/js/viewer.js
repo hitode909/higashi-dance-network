@@ -212,7 +212,6 @@ Viewer = (function() {
     for (offset = 0; offset <= 6; offset++) {
       date = new Date(date_text.split('-'));
       date.setDate(date.getDate() + offset);
-      console.log(date);
       element = $('<span>');
       element.addClass('calendar-day');
       if (date.getDay() === 6) {

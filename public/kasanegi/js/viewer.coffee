@@ -215,7 +215,6 @@ class Viewer
     for offset in [0..6]
       date = new Date(date_text.split('-'))
       date.setDate(date.getDate() + offset)
-      console.log(date)
 
       element = $('<span>')
       element.addClass('calendar-day')
