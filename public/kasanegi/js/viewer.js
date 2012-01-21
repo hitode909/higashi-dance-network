@@ -267,9 +267,9 @@ Viewer = (function() {
     }
     date = self.dateFromText(date_text);
     today = new Date;
-    if (date.getDay() === today.getDay()) {
+    if (date.getDay() === today.getDay() && date.getDate() === today.getDate()) {
       return "今日は";
-    } else if (date.getDay() === today.getDay() + 1) {
+    } else if ((date.getDay() % 7) === ((today.getDay() + 1) % 7) && (date.getDate() === today.getDate() + 1)) {
       return "明日は";
     }
     wod = "日月火水木金土"[date.getDay()];
