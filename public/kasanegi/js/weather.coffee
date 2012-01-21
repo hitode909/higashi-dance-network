@@ -75,14 +75,24 @@ class Weather
     _.find cities, (city) ->
       city.is_primary
 
-  # TODO: cache
+  _ajaxCache: {}
+
   _ajaxByProxy: (url, callback) ->
+    self = this
+    if self._ajaxCache[url]
+      callback self._ajaxCache[url]
+      return
+
     $.ajax
       type: 'GET'
       url: "/proxy/#{encodeURIComponent(url)}"
-      success: callback
+      success: (res) ->
+        self._ajaxCache[url] = res
+        callback res
       error: ->
         alert('通信時にエラーが発生しました．時間をおいて試してみてください．')
+
+    return
 
   # 最新の天気を返します．今日か明日．
   # return: { date description min max }

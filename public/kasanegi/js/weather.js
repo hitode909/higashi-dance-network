@@ -86,11 +86,21 @@ Weather = (function() {
       return city.is_primary;
     });
   };
+  Weather.prototype._ajaxCache = {};
   Weather.prototype._ajaxByProxy = function(url, callback) {
-    return $.ajax({
+    var self;
+    self = this;
+    if (self._ajaxCache[url]) {
+      callback(self._ajaxCache[url]);
+      return;
+    }
+    $.ajax({
       type: 'GET',
       url: "/proxy/" + (encodeURIComponent(url)),
-      success: callback,
+      success: function(res) {
+        self._ajaxCache[url] = res;
+        return callback(res);
+      },
       error: function() {
         return alert('通信時にエラーが発生しました．時間をおいて試してみてください．');
       }
