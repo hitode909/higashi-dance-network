@@ -139,6 +139,26 @@ Weather = (function() {
       });
     });
   };
+  Weather.prototype.getWeatherReportForCityOfDate = function(city, date_text, callback) {
+    var city_code, self;
+    city_code = city.code;
+    self = this;
+    return self._ajaxByProxy("http://" + self.TENKI_SERVER_ID + ".tenkiapi.jp/" + self.TENKI_USER_ID + "/weekly/" + city_code + ".json", function(week) {
+      var day;
+      day = _.find(week.weekly.weather, function(day) {
+        return day.date === date_text;
+      });
+      if (!day) {
+        throw "counldn't find date " + date_text;
+      }
+      callback({
+        date: day.date,
+        description: day.wDescription,
+        min: day.min,
+        max: day.max
+      });
+    });
+  };
   Weather.prototype.STATUS_CODE_TOKYO = "13";
   Weather.prototype.TENKI_SERVER_ID = 'w001';
   Weather.prototype.TENKI_USER_ID = 'c8214580ef44a20d1a705ad2a65ce98868bc8803';

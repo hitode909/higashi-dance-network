@@ -92,6 +92,29 @@ select#city-selector {
     margin-left: 1em;
 }
 
+/* calendar */
+#calendar-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.calendar-day {
+    cursor: pointer;
+    margin: 5px;
+}
+
+.calendar-day.selected {
+    font-weight: bold;
+}
+
+.calendar-day.saturday {
+    color: blue;
+}
+
+.calendar-day.sunday {
+    color: red;
+}
+
 /* first time guide */
 #first-time-guide {
     display: none;

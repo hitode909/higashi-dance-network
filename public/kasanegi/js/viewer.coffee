@@ -9,7 +9,6 @@ class Viewer
     self.checkCurrentPositionIfNeeded()
     self.appendTwitterWidget()
 
-
   selectFirstPage: ->
     if location.hash
       $(window).trigger('hashchange')
@@ -90,6 +89,8 @@ class Viewer
       self.hideFirstTimeGuide()
       self.getCurrentPositionAndPrint()
 
+    $('.calendar-day').live 'click', ->
+      self.printWeatherOfDate($(this).attr('data-date'), $(this).attr('data-is-first-day') == 'true')
 
     $(window).bind 'hashchange', ->
       target_id = location.hash
@@ -139,9 +140,10 @@ class Viewer
 
   # ----- actions -----
 
-
+  # first day
   printWeather: ->
     self = this
+
     $('#indicator').show()
     $('#result').hide()
     selected = $('select#city-selector option:selected')
@@ -151,32 +153,87 @@ class Viewer
     @weather.setLastCityCode(city_code)
 
     @weather.getWeatherReportForCity city, (report) ->
+      self.createCalendar(report)
+      self.printWeatherResult(city_name, report)
 
-      if report.min == "" || report.max == ""
-        alert("申し訳ございません，天気を取得できませんでした．時間をおいて試すか，ほかの地域で試してください．")
-        return
+  printWeatherOfDate: (date_text, is_first) ->
+    self = this
 
-      $('#indicator').hide()
-      $('#result').show()
-      $('#result #area').text city_name
-      $('#result #date').text self.convertDate(report.date)
-      $('#result #description').text report.description
-      $('#result #max-temp').text report.max
-      $('#result #min-temp').text report.min
-      self.printWeatherIcons(report.description)
+    $('#indicator').show()
+    $('#result').hide()
+    selected = $('select#city-selector option:selected')
+    city_code = selected.val()
+    city_name = selected.text()
+    city = @weather.getCityByCityCode(city_code)
+    @weather.setLastCityCode(city_code)
 
-      wear_info = self.getWearInformationFromMinAndMax(report.min, report.max)
+    if is_first
+      @weather.getWeatherReportForCity city, (report) ->
+        self.printWeatherResult(city_name, report)
+    else
+      @weather.getWeatherReportForCityOfDate city, date_text, (report) ->
+        self.printWeatherResult(city_name, report)
 
-      comment = self.dayInfo(report.date) + wear_info.comment
+  printWeatherResult: (city_name, report) ->
+    self = this
 
-      $('#result #comment').text comment
+    if report.min == "" || report.max == ""
+      alert("申し訳ございません，天気を取得できませんでした．時間をおいて試すか，ほかの地域で試してください．")
+      return
 
-      self.setTweetLink "#{city_name} #{comment}"
+    $('#indicator').hide()
+    $('#result').show()
+    $('#result #area').text city_name
+    $('#result #date').text self.convertDate(report.date)
+    $('#result #description').text report.description
+    $('#result #max-temp').text report.max
+    $('#result #min-temp').text report.min
+    self.printWeatherIcons(report.description)
 
-      self.fillDay $('#result #day-max'), wear_info.daytime
-      self.fillDay $('#result #day-min'), wear_info.night
+    wear_info = self.getWearInformationFromMinAndMax(report.min, report.max)
 
-      self.checkScroll()
+    comment = self.dayInfo(report.date) + wear_info.comment
+
+    $('#result #comment').text comment
+
+    self.setTweetLink "#{city_name} #{comment}"
+
+    self.fillDay $('#result #day-max'), wear_info.daytime
+    self.fillDay $('#result #day-min'), wear_info.night
+
+    self.highlightCalendar(report.date)
+
+    self.checkScroll()
+
+  createCalendar: (report) ->
+    self = this
+    date_text = report.date
+
+    container = $('#calendar-container')
+    container.empty()
+
+    for offset in [0..6]
+      date = new Date(date_text.split('-'))
+      date.setDate(date.getDate() + offset)
+      console.log(date)
+
+      element = $('<span>')
+      element.addClass('calendar-day')
+      element.addClass('saturday') if date.getDay() == 6
+      element.addClass('sunday') if date.getDay() == 0
+      element.text(date.getDate())
+      element.attr('data-date', [date.getFullYear(), self.formatNumber(date.getMonth() + 1, 2), self.formatNumber(date.getDate(), 2)].join('-'))
+      element.attr('data-is-first-day', offset == 0)
+
+      container.append(element)
+
+  highlightCalendar: (date_text) ->
+    $('.calendar-day.selected').removeClass('selected')
+    $(".calendar-day[data-date=\"#{date_text}\"]").addClass('selected')
+
+  formatNumber: (value, length) ->
+    all = "00000000000#{value}"
+    all[all.length - length .. all.length]
 
   # 2011-11-04 -> 11/4
   convertDate: (date_text) ->

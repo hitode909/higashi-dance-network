@@ -75,6 +75,7 @@ class Weather
     _.find cities, (city) ->
       city.is_primary
 
+  # TODO: cache
   _ajaxByProxy: (url, callback) ->
     $.ajax
       type: 'GET'
@@ -83,6 +84,7 @@ class Weather
       error: ->
         alert('通信時にエラーが発生しました．時間をおいて試してみてください．')
 
+  # 最新の天気を返します．今日か明日．
   # return: { date description min max }
   getWeatherReportForCity:  (city, callback) ->
 
@@ -122,6 +124,25 @@ class Weather
           description: today.daily.wDescription
           min: today.daily.minTemp
           max: today.daily.maxTemp
+
+  # 指定された日付の天気を返す
+  # return: { date description min max }
+  getWeatherReportForCityOfDate:  (city, date_text, callback) ->
+    city_code = city.code
+    self = this
+    self._ajaxByProxy "http://#{self.TENKI_SERVER_ID}.tenkiapi.jp/#{self.TENKI_USER_ID}/weekly/#{city_code}.json", (week) ->
+      day = _.find week.weekly.weather, (day) ->
+        day.date == date_text
+      unless day
+        throw "counldn't find date #{date_text}"
+      callback
+        date: day.date
+        description: day.wDescription
+        min: day.min
+        max: day.max
+      return
+
+
 
 # ------------------------------------------------------------------------------------
 

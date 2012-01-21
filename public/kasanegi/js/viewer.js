@@ -91,6 +91,9 @@ Viewer = (function() {
       self.hideFirstTimeGuide();
       return self.getCurrentPositionAndPrint();
     });
+    $('.calendar-day').live('click', function() {
+      return self.printWeatherOfDate($(this).attr('data-date'), $(this).attr('data-is-first-day') === 'true');
+    });
     return $(window).bind('hashchange', function() {
       var target_id;
       target_id = location.hash;
@@ -151,27 +154,88 @@ Viewer = (function() {
     city = this.weather.getCityByCityCode(city_code);
     this.weather.setLastCityCode(city_code);
     return this.weather.getWeatherReportForCity(city, function(report) {
-      var comment, wear_info;
-      if (report.min === "" || report.max === "") {
-        alert("申し訳ございません，天気を取得できませんでした．時間をおいて試すか，ほかの地域で試してください．");
-        return;
-      }
-      $('#indicator').hide();
-      $('#result').show();
-      $('#result #area').text(city_name);
-      $('#result #date').text(self.convertDate(report.date));
-      $('#result #description').text(report.description);
-      $('#result #max-temp').text(report.max);
-      $('#result #min-temp').text(report.min);
-      self.printWeatherIcons(report.description);
-      wear_info = self.getWearInformationFromMinAndMax(report.min, report.max);
-      comment = self.dayInfo(report.date) + wear_info.comment;
-      $('#result #comment').text(comment);
-      self.setTweetLink("" + city_name + " " + comment);
-      self.fillDay($('#result #day-max'), wear_info.daytime);
-      self.fillDay($('#result #day-min'), wear_info.night);
-      return self.checkScroll();
+      self.createCalendar(report);
+      return self.printWeatherResult(city_name, report);
     });
+  };
+  Viewer.prototype.printWeatherOfDate = function(date_text, is_first) {
+    var city, city_code, city_name, selected, self;
+    self = this;
+    $('#indicator').show();
+    $('#result').hide();
+    selected = $('select#city-selector option:selected');
+    city_code = selected.val();
+    city_name = selected.text();
+    city = this.weather.getCityByCityCode(city_code);
+    this.weather.setLastCityCode(city_code);
+    if (is_first) {
+      return this.weather.getWeatherReportForCity(city, function(report) {
+        return self.printWeatherResult(city_name, report);
+      });
+    } else {
+      return this.weather.getWeatherReportForCityOfDate(city, date_text, function(report) {
+        return self.printWeatherResult(city_name, report);
+      });
+    }
+  };
+  Viewer.prototype.printWeatherResult = function(city_name, report) {
+    var comment, self, wear_info;
+    self = this;
+    if (report.min === "" || report.max === "") {
+      alert("申し訳ございません，天気を取得できませんでした．時間をおいて試すか，ほかの地域で試してください．");
+      return;
+    }
+    $('#indicator').hide();
+    $('#result').show();
+    $('#result #area').text(city_name);
+    $('#result #date').text(self.convertDate(report.date));
+    $('#result #description').text(report.description);
+    $('#result #max-temp').text(report.max);
+    $('#result #min-temp').text(report.min);
+    self.printWeatherIcons(report.description);
+    wear_info = self.getWearInformationFromMinAndMax(report.min, report.max);
+    comment = self.dayInfo(report.date) + wear_info.comment;
+    $('#result #comment').text(comment);
+    self.setTweetLink("" + city_name + " " + comment);
+    self.fillDay($('#result #day-max'), wear_info.daytime);
+    self.fillDay($('#result #day-min'), wear_info.night);
+    self.highlightCalendar(report.date);
+    return self.checkScroll();
+  };
+  Viewer.prototype.createCalendar = function(report) {
+    var container, date, date_text, element, offset, self, _results;
+    self = this;
+    date_text = report.date;
+    container = $('#calendar-container');
+    container.empty();
+    _results = [];
+    for (offset = 0; offset <= 6; offset++) {
+      date = new Date(date_text.split('-'));
+      date.setDate(date.getDate() + offset);
+      console.log(date);
+      element = $('<span>');
+      element.addClass('calendar-day');
+      if (date.getDay() === 6) {
+        element.addClass('saturday');
+      }
+      if (date.getDay() === 0) {
+        element.addClass('sunday');
+      }
+      element.text(date.getDate());
+      element.attr('data-date', [date.getFullYear(), self.formatNumber(date.getMonth() + 1, 2), self.formatNumber(date.getDate(), 2)].join('-'));
+      element.attr('data-is-first-day', offset === 0);
+      _results.push(container.append(element));
+    }
+    return _results;
+  };
+  Viewer.prototype.highlightCalendar = function(date_text) {
+    $('.calendar-day.selected').removeClass('selected');
+    return $(".calendar-day[data-date=\"" + date_text + "\"]").addClass('selected');
+  };
+  Viewer.prototype.formatNumber = function(value, length) {
+    var all;
+    all = "00000000000" + value;
+    return all.slice(all.length - length, (all.length + 1) || 9e9);
   };
   Viewer.prototype.convertDate = function(date_text) {
     var date, day, fragments, month, wod, year;
