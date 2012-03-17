@@ -196,7 +196,7 @@ Viewer = (function() {
     wear_info = self.getWearInformationFromMinAndMax(report.min, report.max);
     comment = self.dayInfo(report.date) + wear_info.comment;
     $('#result #comment').text(comment);
-    self.setTweetLink("" + city_name + " " + comment);
+    self.setTweetLink("" + city_name + " " + report.description + " " + comment);
     self.fillDay($('#result #day-max'), wear_info.daytime);
     self.fillDay($('#result #day-min'), wear_info.night);
     self.highlightCalendar(report.date);

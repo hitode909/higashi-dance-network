@@ -196,7 +196,7 @@ class Viewer
 
     $('#result #comment').text comment
 
-    self.setTweetLink "#{city_name} #{comment}"
+    self.setTweetLink "#{city_name} #{report.description} #{comment}"
 
     self.fillDay $('#result #day-max'), wear_info.daytime
     self.fillDay $('#result #day-min'), wear_info.night
