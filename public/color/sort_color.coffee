@@ -82,6 +82,13 @@ $ ->
   $(document).bind 'dragover', ->
     false
 
+  $('#image-container').bind 'dragleave', (event) ->
+    console.log 'leave'
+
+  $('#image-container').bind 'dragenter', ->
+    console.log 'enter'
+    false
+
   $(document).bind 'drop', (jquery_event) ->
     event = jquery_event.originalEvent
     file = event.dataTransfer.files[0]

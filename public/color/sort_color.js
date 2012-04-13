@@ -85,6 +85,13 @@ $(function() {
   $(document).bind('dragover', function() {
     return false;
   });
+  $('#image-container').bind('dragleave', function(event) {
+    return console.log('leave');
+  });
+  $('#image-container').bind('dragenter', function() {
+    console.log('enter');
+    return false;
+  });
   $(document).bind('drop', function(jquery_event) {
     var event, file, reader;
     event = jquery_event.originalEvent;
