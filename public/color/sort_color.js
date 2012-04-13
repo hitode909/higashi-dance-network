@@ -1,5 +1,5 @@
 $(function() {
-  var histogram, load_img_to_canvas, num_to_color, pick_color, setup_click_color, setup_cursor, setup_delete_button;
+  var histogram, load_img_to_canvas, num_to_color, pick_color, setup_click_color, setup_cursor, setup_delete_button, setup_select_on_click;
   num_to_color = function(num) {
     return '#' + ('000000' + (+num).toString(16)).slice(-6).toLowerCase();
   };
@@ -17,7 +17,7 @@ $(function() {
     return item_container;
   };
   histogram = function(container) {
-    var base, canvas, color, count, ctx, data, displayed_colors_length, famous_colors, i, img_data, len, list, rate, stripe_container, stripe_width, table, total, v, width, width_total, _i, _j, _len, _len2, _ref;
+    var base, canvas, color, count, ctx, data, displayed_colors_length, famous_colors, i, img_data, len, list, rate, stripe_container, stripe_width, table, total, v, width, width_total, _i, _j, _len, _len2, _ref, _results;
     canvas = container.find('canvas')[0];
     ctx = canvas.getContext('2d');
     img_data = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -59,6 +59,7 @@ $(function() {
     }
     stripe_width = $('#stripe-container').width();
     width_total = 0;
+    _results = [];
     for (_j = 0, _len2 = famous_colors.length; _j < _len2; _j++) {
       color = famous_colors[_j];
       rate = color[1] / total;
@@ -70,17 +71,16 @@ $(function() {
       if (width_total > stripe_width) {
         break;
       }
-      console.log(width);
       displayed_colors_length++;
-      $('<span>').addClass('color stripe').attr({
+      _results.push($('<span>').addClass('color stripe').attr({
         'data-color': num_to_color(color[0])
       }).css({
         display: 'inline-block',
         width: width,
         background: num_to_color(color[0])
-      }).appendTo(stripe_container);
+      }).appendTo(stripe_container));
     }
-    return console.log("displayed " + (displayed_colors_length / famous_colors.length) + ", " + displayed_colors_length + " of  " + famous_colors.length);
+    return _results;
   };
   $(document).bind('dragover', function() {
     return false;
@@ -109,13 +109,18 @@ $(function() {
     return false;
   });
   pick_color = function(color) {
-    var color_item, delete_button;
-    delete_button = $('<img>').addClass('delete-button').attr({
-      src: 'delete.png'
-    });
-    color_item = $('<div>').addClass('picked-color-item').append($('<span>').addClass('color-sample').css({
+    var color_item;
+    color_item = $('<div>').addClass('picked-color-item');
+    color_item.append($('<span>').addClass('color-sample').css({
       background: color
-    })).append(color).append(delete_button);
+    }));
+    color_item.append($('<input>').attr({
+      type: 'text',
+      readonly: 'readonly'
+    }).val(color));
+    color_item.append($('<img>').addClass('delete-button').attr({
+      src: 'delete.png'
+    }));
     return $('#selected-colors').append(color_item);
   };
   setup_click_color = function() {
@@ -187,5 +192,11 @@ $(function() {
       });
     });
   };
-  return setup_delete_button();
+  setup_delete_button();
+  setup_select_on_click = function() {
+    return $(document).on('click', '.picked-color-item input', function(event) {
+      return $(event.target)[0].select();
+    });
+  };
+  return setup_select_on_click();
 });

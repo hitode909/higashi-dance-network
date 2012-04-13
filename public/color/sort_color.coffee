@@ -65,7 +65,6 @@ $ ->
       width = 1 if width < 1
       width_total += width
       break if width_total > stripe_width
-      console.log width
       displayed_colors_length++
       $('<span>')
         .addClass('color stripe')
@@ -76,8 +75,6 @@ $ ->
           width: width
           background: num_to_color(color[0])
         .appendTo(stripe_container)
-
-    console.log "displayed #{ displayed_colors_length / famous_colors.length }, #{ displayed_colors_length} of  #{ famous_colors.length }"
 
   $(document).bind 'dragover', ->
     false
@@ -104,19 +101,27 @@ $ ->
     false
 
   pick_color = (color) ->
-    delete_button = $('<img>')
-      .addClass('delete-button')
-      .attr
-        src: 'delete.png'
     color_item =  $('<div>')
-        .addClass('picked-color-item')
-        .append(
-          $('<span>')
-            .addClass('color-sample')
-            .css
-              background: color
-        ).append(color)
-        .append(delete_button)
+      .addClass('picked-color-item')
+    color_item.append(
+      $('<span>')
+        .addClass('color-sample')
+        .css
+          background: color
+    )
+    color_item.append(
+      $('<input>')
+        .attr
+          type: 'text'
+          readonly: 'readonly'
+        .val(color)
+    )
+    color_item.append(
+      $('<img>')
+        .addClass('delete-button')
+        .attr
+          src: 'delete.png'
+    )
 
     $('#selected-colors').append color_item
 
@@ -184,4 +189,10 @@ $ ->
 
 
   setup_delete_button()
+
+  setup_select_on_click = ->
+    $(document).on 'click', '.picked-color-item input', (event) ->
+      $(event.target)[0].select()
+
+  setup_select_on_click()
 

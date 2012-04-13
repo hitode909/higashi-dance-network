@@ -69,6 +69,11 @@ span.color {
     height: 20px;
 }
 
+.picked-color-item input {
+    border: 0px;
+    background: transparent;
+}
+
 .delete-button {
     cursor: pointer;
     vertical-align: middle;
