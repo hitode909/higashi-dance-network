@@ -1,0 +1,82 @@
+body {
+    font-family: sans-serif;
+}
+
+canvas.image {
+    margin-right: 1px;
+}
+
+span.color {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.cursor-preview {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 40px;
+    height: 40px;
+    border: 1px solid white;
+    border-radius: 20px;
+    z-index: 100;
+}
+
+#image-container {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    width: 400px;
+    height: 500px;
+    border: 1px solid black;
+}
+
+#image-container canvas {
+    max-width: 100%;
+    max-height: 100%;
+    cursor: pointer;
+}
+
+#stripe-container {
+    width: 400px;
+    height: 100px;
+    border: 1px solid #888;
+}
+
+#stripe-container .stripe {
+    height: 100%;
+}
+
+/* side bar */
+
+#sidebar {
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    width: 200px;
+    background: #fcfcfc;
+    border: 1px solid #eaeaea;
+    height: 100%;
+}
+
+#selected-colors {
+    opacity: 1.0;
+}
+
+.color-sample {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+}
+
+.delete-button {
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+#delete-all-button {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+}
