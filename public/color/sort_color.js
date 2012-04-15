@@ -1,5 +1,5 @@
 $(function() {
-  var file_dropped, get_color_from_canvas, histogram, image_url_prepared, load_img_to_canvas, num_to_color, pick_color, resize_to_fit, setup_click_color, setup_cursor, setup_delete_button, setup_drop, setup_select_on_click;
+  var file_dropped, get_color_from_canvas, histogram, image_url_prepared, load_img_to_canvas, num_to_color, pick_color, resize_to_fit, setup_click_color, setup_cursor, setup_delete_button, setup_drop, setup_load_on_submit, setup_select_on_click;
   num_to_color = function(num) {
     return '#' + ('000000' + (+num).toString(16)).slice(-6).toLowerCase();
   };
@@ -55,6 +55,7 @@ $(function() {
   };
   image_url_prepared = function(url) {
     var img;
+    console.log('prepared');
     img = new Image;
     img.onload = function() {
       var container;
@@ -241,5 +242,22 @@ $(function() {
       return $(event.target)[0].select();
     });
   };
-  return setup_select_on_click();
+  setup_select_on_click();
+  setup_load_on_submit = function() {
+    return $('form').on('submit', function(event) {
+      var img_url, proxy_url;
+      img_url = $('input.url').val();
+      if (!img_url.length) {
+        return false;
+      }
+      $('.item').remove();
+      $('#stripe-container').empty();
+      $('body').removeClass('hovering');
+      $('body').addClass('dropped');
+      proxy_url = '/proxy/' + img_url;
+      image_url_prepared(proxy_url);
+      return false;
+    });
+  };
+  return setup_load_on_submit();
 });

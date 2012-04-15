@@ -55,6 +55,7 @@ $ ->
     item_container
 
   image_url_prepared = (url) ->
+    console.log 'prepared'
     img = new Image
     img.onload = ->
       container = load_img_to_canvas img
@@ -231,3 +232,16 @@ $ ->
 
   setup_select_on_click()
 
+  setup_load_on_submit = ->
+    $('form').on 'submit', (event) ->
+      img_url = $('input.url').val()
+      return false unless img_url.length
+      $('.item').remove()
+      $('#stripe-container').empty()
+      $('body').removeClass('hovering')
+      $('body').addClass('dropped')
+      proxy_url = '/proxy/' + img_url
+      image_url_prepared(proxy_url)
+      false
+
+  setup_load_on_submit()
