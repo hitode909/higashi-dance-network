@@ -1,5 +1,5 @@
 $(function() {
-  var file_dropped, get_color_from_canvas, histogram, image_url_prepared, load_img_to_canvas, num_to_color, parse_query, pick_color, prepare_url_from_query, resize_to_fit, setup_click_color, setup_cursor, setup_delete_button, setup_drop, setup_load_on_submit, setup_select_on_click;
+  var file_dropped, get_color_from_canvas, histogram, image_url_prepared, load_img_to_canvas, num_to_color, parse_query, pick_color, prepare_url_from_query, resize_to_fit, setup_click_color, setup_cursor, setup_delete_button, setup_drop, setup_guide, setup_load_on_submit, setup_select_on_click;
   parse_query = function() {
     var k, pair, query, v, _i, _len, _ref, _ref2;
     query = {};
@@ -84,6 +84,10 @@ $(function() {
   };
   file_dropped = function(file) {
     var reader;
+    if (!window.FileReader) {
+      alert("お使いのブラウザはドラッグ & ドロップに対応していません．Google Chrome もしくは Firefox を使うとファイルをドロップして画像を読み込めます．");
+      return;
+    }
     reader = new FileReader;
     reader.onload = function() {
       return image_url_prepared(reader.result);
@@ -185,6 +189,7 @@ $(function() {
       enter_counter = 0;
       $('body').removeClass('hovering');
       event = jquery_event.originalEvent;
+      console.log(event.dataTransfer.files.length);
       if (!(event.dataTransfer.files.length > 0)) {
         return false;
       }
@@ -290,5 +295,11 @@ $(function() {
     $('input.url').val(url);
     return $('form').trigger('submit');
   };
-  return prepare_url_from_query();
+  prepare_url_from_query();
+  setup_guide = function() {
+    if (window.FileReader) {
+      return $('#guide').append($('<div id="guide-image">'));
+    }
+  };
+  return setup_guide();
 });

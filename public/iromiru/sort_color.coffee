@@ -76,6 +76,9 @@ $ ->
     img.src = url
 
   file_dropped = (file) ->
+    unless window.FileReader
+      alert "お使いのブラウザはドラッグ & ドロップに対応していません．Google Chrome もしくは Firefox を使うとファイルをドロップして画像を読み込めます．"
+      return
     reader = new FileReader
     reader.onload = ->
       image_url_prepared reader.result
@@ -170,6 +173,7 @@ $ ->
       $('body').removeClass('hovering')
       event = jquery_event.originalEvent
 
+      console.log event.dataTransfer.files.length
       return false unless event.dataTransfer.files.length > 0
 
       file = event.dataTransfer.files[0]
@@ -269,3 +273,9 @@ $ ->
     $('form').trigger('submit')
 
   prepare_url_from_query()
+
+  setup_guide = ->
+    if window.FileReader
+      $('#guide').append($('<div id="guide-image">'))
+
+  setup_guide()
