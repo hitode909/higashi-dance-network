@@ -3,14 +3,20 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext import webapp
 
-class RedirectPage(webapp.RequestHandler):
+class KasanegiRedirectPage(webapp.RequestHandler):
 
     def get(self):
         self.redirect("/kasanegi/")
 
+class IromiruRedirectPage(webapp.RequestHandler):
+
+    def get(self):
+        self.redirect("/iromiru/")
+
 application = webapp.WSGIApplication(
                                      [
-                                      ('/kasanegi', RedirectPage),
+                                      ('/kasanegi', KasanegiRedirectPage),
+                                      ('/iromiru', IromiruRedirectPage),
                                      ],
                                      debug=True)
 

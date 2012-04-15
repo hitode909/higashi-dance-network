@@ -16,7 +16,10 @@ handlers:
   script: proxy/proxy.py
 
 - url: /kasanegi
-  script: kasanegi_redirect.py
+  script: fallback.py
+
+- url: /iromiru
+  script: fallback.py
 
 - url: (.*)/
   static_files: public\1/index.html
