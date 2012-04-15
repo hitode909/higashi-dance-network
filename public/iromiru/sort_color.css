@@ -283,6 +283,19 @@ a {
     width: 180px;
 }
 
+#ad li .inner {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    width: 180px;
+    height: 180px;
+}
+
+#ad img {
+    max-width: 180px;
+    max-height: 180px;
+}
+
 /* footer */
 
 #footer {
