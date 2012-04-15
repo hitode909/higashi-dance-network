@@ -308,3 +308,8 @@ a {
   color:#777777;
   margin-bottom: 30px;
 }
+
+
+.hidden {
+    display: none;
+}
