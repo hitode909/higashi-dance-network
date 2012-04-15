@@ -2,6 +2,13 @@ $ ->
 
   # ----- utilities -----
 
+  parse_query = ->
+    query = {}
+    for pair in location.search[1..-1].split('&')
+      [k, v] = pair.split('=')
+      query[decodeURIComponent(k)] = decodeURIComponent(v)
+    query
+
   num_to_color = (num) ->
     '#' + ('000000' + (+num).toString(16))[-6..-1].toLowerCase()
 
@@ -58,6 +65,10 @@ $ ->
     console.log 'prepared'
     img = new Image
     img.onload = ->
+      $('.item').remove()
+      $('#stripe-container').empty()
+      $('body').removeClass('hovering')
+      $('body').addClass('dropped')
       container = load_img_to_canvas img
       histogram(container)
     img.onerror = ->
@@ -65,9 +76,6 @@ $ ->
     img.src = url
 
   file_dropped = (file) ->
-    $('.item').remove()
-    $('#stripe-container').empty()
-
     reader = new FileReader
     reader.onload = ->
       image_url_prepared reader.result
@@ -164,7 +172,6 @@ $ ->
 
       return false unless event.dataTransfer.files.length > 0
 
-      $('body').addClass('dropped')
       file = event.dataTransfer.files[0]
       file_dropped(file)
       false
@@ -236,12 +243,17 @@ $ ->
     $('form').on 'submit', (event) ->
       img_url = $('input.url').val()
       return false unless img_url.length
-      $('.item').remove()
-      $('#stripe-container').empty()
-      $('body').removeClass('hovering')
-      $('body').addClass('dropped')
       proxy_url = '/proxy/' + img_url
       image_url_prepared(proxy_url)
       false
 
   setup_load_on_submit()
+
+  prepare_url_from_query = ->
+    query = parse_query()
+    url = query.url
+    return unless url
+    $('input.url').val(url)
+    $('form').trigger('submit')
+
+  prepare_url_from_query()

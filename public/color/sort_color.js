@@ -1,5 +1,16 @@
 $(function() {
-  var file_dropped, get_color_from_canvas, histogram, image_url_prepared, load_img_to_canvas, num_to_color, pick_color, resize_to_fit, setup_click_color, setup_cursor, setup_delete_button, setup_drop, setup_load_on_submit, setup_select_on_click;
+  var file_dropped, get_color_from_canvas, histogram, image_url_prepared, load_img_to_canvas, num_to_color, parse_query, pick_color, prepare_url_from_query, resize_to_fit, setup_click_color, setup_cursor, setup_delete_button, setup_drop, setup_load_on_submit, setup_select_on_click;
+  parse_query = function() {
+    var k, pair, query, v, _i, _len, _ref, _ref2;
+    query = {};
+    _ref = location.search.slice(1).split('&');
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      pair = _ref[_i];
+      _ref2 = pair.split('='), k = _ref2[0], v = _ref2[1];
+      query[decodeURIComponent(k)] = decodeURIComponent(v);
+    }
+    return query;
+  };
   num_to_color = function(num) {
     return '#' + ('000000' + (+num).toString(16)).slice(-6).toLowerCase();
   };
@@ -59,6 +70,10 @@ $(function() {
     img = new Image;
     img.onload = function() {
       var container;
+      $('.item').remove();
+      $('#stripe-container').empty();
+      $('body').removeClass('hovering');
+      $('body').addClass('dropped');
       container = load_img_to_canvas(img);
       return histogram(container);
     };
@@ -69,8 +84,6 @@ $(function() {
   };
   file_dropped = function(file) {
     var reader;
-    $('.item').remove();
-    $('#stripe-container').empty();
     reader = new FileReader;
     reader.onload = function() {
       return image_url_prepared(reader.result);
@@ -175,7 +188,6 @@ $(function() {
       if (!(event.dataTransfer.files.length > 0)) {
         return false;
       }
-      $('body').addClass('dropped');
       file = event.dataTransfer.files[0];
       file_dropped(file);
       return false;
@@ -250,14 +262,21 @@ $(function() {
       if (!img_url.length) {
         return false;
       }
-      $('.item').remove();
-      $('#stripe-container').empty();
-      $('body').removeClass('hovering');
-      $('body').addClass('dropped');
       proxy_url = '/proxy/' + img_url;
       image_url_prepared(proxy_url);
       return false;
     });
   };
-  return setup_load_on_submit();
+  setup_load_on_submit();
+  prepare_url_from_query = function() {
+    var query, url;
+    query = parse_query();
+    url = query.url;
+    if (!url) {
+      return;
+    }
+    $('input.url').val(url);
+    return $('form').trigger('submit');
+  };
+  return prepare_url_from_query();
 });
