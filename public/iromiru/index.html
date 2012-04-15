@@ -6,15 +6,30 @@
     <script src="jquery-1.7.1.min.js"></script>
     <script src="sort_color.js"></script>
     <link rel="stylesheet" type="text/css" href="sort_color.css" />
-    <title>color</title>
+    <title>iromiru - 画像からカラーコード抽出便利サービス</title>
+    <meta name="description" content="今日の重ね着は、一日の最高気温と最低気温から、その日の快適な服装の重ね着枚数を、イラストでわかりやすくオススメしてくれるアプリです。twitter連携機能によって有益な情報を共有したり、アプリを使っている人が、どれくらいの重ね着をしたのかがわかります。">
+    <link rel="shortcut icon" href="favicon.ico">
+    <meta property="og:title" content="今日の重ね着"/>
+    <meta property="og:url" content="http://higashi-dance-network.appspot.com/kasanegi/"/>
+    <meta property="og:image" content="http://higashi-dance-network.appspot.com/kasanegi/images/guide.png"/>
   </head>
   <body>
     <div id="header">
-      <img src="logo.png" class="logo"/>
+      <div id="header-inner">
+        <img src="logo.png" class="logo"/>
+        <span class="buttons">
+          <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fhigashi-dance-network.appspot.com%2Firomiru%2F&amp;send=false&amp;layout=button_count&amp;width=120&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:21px;" allowTransparency="true"></iframe>
+
+          <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://higashi-dance-network.appspot.com/iromiru/" data-text="iromiru - 画像からカラーコード抽出便利サービス" data-lang="ja">ツイート</a>
+          <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+          <a href="http://b.hatena.ne.jp/entry/http://higashi-dance-network.appspot.com/iromiru/" class="hatena-bookmark-button" data-hatena-bookmark-title="iromiru - 画像からカラーコード抽出便利サービス" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+        </span>
+      </div>
     </div>
     <div id="container">
       <div id="l-contents">
-<div class="service-description">お手元の画像やインターネット上の画像から色を拾ってカラーコードを検出します。</div>
+        <div class="service-description">お手元やインターネットの画像から，色を選んでカラーコードを抽出します。</div>
         <form method="get" action=".">
           <input class="url" name="url" required="" placeholder="画像URLを入力.."/>
           <input type="submit" value="読み込み" class="load"/>
@@ -44,7 +59,7 @@
             <img class="delete-button" src="delete.png" title="削除">
           </div>
         </script>
-        <div class="description">色をクリックでカラーをピックしよう</div>
+        <div class="description">色をクリックでカラーを抽出しよう</div>
         <div id="picked-colors">
         </div>
         <div id="delete-all-button">すべて消去</div>
