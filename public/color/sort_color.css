@@ -4,6 +4,10 @@ body {
     padding:0;
 }
 
+a {
+    color: #777777;
+}
+
 #header {
   width:100%;
   background-color:#000000;
@@ -165,7 +169,6 @@ body {
 
 #link-container .download {
     font-size: 80%;
-    color: #777777;
 }
 
 /* side bar */
@@ -236,6 +239,14 @@ body {
   background-color:#ffffff;
 }
 
+.description, #delete-all-button {
+    display: none;
+}
+
+.dropped .description, .dropped #delete-all-button {
+    display: block;
+}
+
 /* ad */
 
 #ad {
@@ -264,5 +275,5 @@ body {
   text-align:center;
   font-size:80%;
   color:#777777;
-
+  margin-bottom: 30px;
 }
