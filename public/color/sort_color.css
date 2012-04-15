@@ -1,14 +1,24 @@
 body {
     font-family: sans-serif;
+    margin:0;
+    padding:0;
 }
 
-canvas.image {
-    margin-right: 1px;
+#header {
+  width:100%;
+  background-color:#000000;
+  height:40px;
 }
 
-span.color {
-    display: inline-block;
-    cursor: pointer;
+#container{
+  width:960px;
+  margin:0 auto;
+  padding:0;
+  float:0;
+}
+#l-contents{
+  float:left;
+  margin:15px 0;
 }
 
 .cursor-preview {
@@ -20,59 +30,161 @@ span.color {
     border: 1px solid white;
     border-radius: 20px;
     z-index: 100;
+    margin-top: 15px;
+    margin-left: 15px;
+}
+
+/* ---left--- */
+
+#guide-or-main {
+    position: relative;
+    width: 670px;
+    height: 500px;
+    margin:10px 0 15px;
+    border: 3px solid #dcdcdc;
+    background-color:#f9f9f9;
+}
+
+.dropped #guide-or-main {
+    background-color: #ffffff;
+}
+
+.hovering #guide-or-main {
+    background-color: #e4e2e2;
+}
+
+#guide-image {
+    background-image: url("main-image.png");
+    background-repeat: no-repeat;
+    width: 500px;
+    height: 400px;
+    margin-left: 75px;
+    margin-top: 80px;
+}
+
+.hovering #guide-image {
+    background-image: url("main-image-hover.png");
+ }
+
+#guide {
+    display: block;
+}
+
+.dropped #guide {
+    display: none;
+}
+
+.hovering #guide {
+    display: block;
+}
+
+#main {
+    display: none;
+}
+
+.dropped #main {
+    display: block;
+}
+
+.hovering #main {
+    display: none;
 }
 
 #image-container {
     display: table-cell;
     text-align: center;
     vertical-align: middle;
-    width: 400px;
-    height: 500px;
-    border: 1px solid black;
+    width: 670px;
+    height: 400px;
 }
 
 #image-container canvas {
-    max-width: 100%;
-    max-height: 100%;
+    max-width: 670px;;
+    max-height: 400px;
+    cursor: pointer;
+    z-index: 90;
+}
+
+#image-container canvas.fit-x {
+    /* width: 100%; */
+}
+
+#image-container canvas.fit-y {
+    /* height: 100%; */
+}
+
+
+#stripe-container {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    width: 670px;
+    height: 97px;
+    border-top: 3px solid #dcdcdc;
+    overflow: hidden;
     cursor: pointer;
 }
 
-#stripe-container {
-    width: 400px;
-    height: 100px;
-    border: 1px solid #888;
+#link-container {
+    display: none;
 }
 
-#stripe-container .stripe {
-    height: 100%;
+.dropped #link-container {
+    display: block;
+    position: absolute;
+    right: 0px;
+    bottom: -30px;
+}
+
+#link-container .download {
+    font-size: 80%;
+    color: #777777;
 }
 
 /* side bar */
 
 #sidebar {
-    position: fixed;
-    right: 0px;
-    top: 0px;
-    width: 200px;
-    background: #fcfcfc;
-    border: 1px solid #eaeaea;
-    height: 100%;
+    background: none repeat scroll 0 0 #ffffff;
+    border-left: 1px solid #EAEAEA;
+    border-right: 1px solid #EAEAEA;
+    float: right;
+    height: 570px;
+    width: 250px;
+    position:relative;
 }
 
-#selected-colors {
-    opacity: 1.0;
+#picked-colors {
+    height: 440px;
+    margin: 0 0 10px 10px;
+    opacity: 1;
+    overflow-y: auto;
 }
+
+.description {
+  font-size:80%;
+  color:#777777;
+  margin: 30px 10px 15px;
+}
+
 
 .color-sample {
     display: inline-block;
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
+    vertical-align:middle;
 }
 
 .picked-color-item input {
-    border: 0px;
-    background: transparent;
+    background: none repeat scroll 0 0 transparent;
+    border: 0 none;
+    font-size: 15px;
+    width: 155px;
 }
+
+.picked-color-item{
+  margin-bottom:10px;
+}
+
 
 .delete-button {
     cursor: pointer;
@@ -81,7 +193,48 @@ span.color {
 
 #delete-all-button {
     cursor: pointer;
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
+    background-color: #f9f9f9;
+    border: 3px solid #DCDCDC;
+    color: #777777;
+    margin: 10px;
+    padding: 5px 0;
+    text-align: center;
+    position:absolute;
+    bottom:0;
+    width:225px;
+}
+
+#delete-all-button:hover {
+  background-color:#ffffff;
+}
+
+/* ad */
+
+#ad {
+    border-bottom: 1px solid #CCCCCC;
+    border-top: 1px solid #CCCCCC;
+    display: inline-block;
+    height: 180px;
+    list-style: none outside none;
+    margin: 0 0 10px;
+    padding: 10px 0;
+    width: 100%;
+}
+
+#ad li{
+    border: 1px solid #CCCCCC;
+    display: inline-block;
+    height: 180px;
+    margin: 0 2px;
+    padding: 0;
+    width: 180px;
+}
+
+/* footer */
+
+#footer {
+  text-align:center;
+  font-size:80%;
+  color:#777777;
+
 }

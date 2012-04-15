@@ -1,26 +1,76 @@
 $ ->
 
+  # ----- utilities -----
+
   num_to_color = (num) ->
     '#' + ('000000' + (+num).toString(16))[-6..-1].toLowerCase()
 
+  get_color_from_canvas = (canvas, x, y) ->
+    $canvas = $(canvas)
+    rate = canvas.width / $(canvas).width()
+    ctx = canvas.getContext '2d'
+    data = (ctx.getImageData x * rate, y * rate, 1, 1).data
+    v = (data[0] << 16) + (data[1] << 8) + (data[2])
+    num_to_color v
+
+  resize_to_fit = (x1, y1, x2, y2) ->
+    return [x1, y1] if x1 <= x2 and y1 <= y2
+    rate = _.min [x2 / x1, y2 / y1]
+    return _.map [x1, y1], (v) -> Math.floor(v * rate)
+
+  pick_color = do ->
+    template = _.template($('#picked-color-template').text())
+
+    (color) ->
+      $('#picked-colors').append(
+        template
+          color: color
+      )
+
   load_img_to_canvas = (img) ->
     item_container = $('<div>')
-      .addClass 'item'
+    .addClass 'item'
 
     $('#image-container')
-      .empty()
-      .append(item_container)
+    .append(item_container)
 
     $canvas = $('<canvas>')
-      .addClass('image')
+    .addClass('image')
+
+    container_width = $('#image-container').width()
+    container_height =  $('#image-container').height()
     item_container.append $canvas
+    size = [img.width, img.height]
+
+    if size[0] == container_width
+      $canvas.addClass 'fit-x'
+    if size[1] == container_height
+      $canvas.addClass 'fit-y'
     canvas = $canvas[0]
-    canvas.width = img.width
-    canvas.height = img.height
+    canvas.width = size[0]
+    canvas.height = size[1]
     ctx = canvas.getContext('2d')
-    ctx.drawImage img, 0, 0
+    ctx.drawImage img, 0, 0, img.width, img.height, 0, 0, size[0], size[1]
 
     item_container
+
+  image_url_prepared = (url) ->
+    img = new Image
+    img.onload = ->
+      container = load_img_to_canvas img
+      histogram(container)
+    img.onerror = ->
+      alert "画像の読み込みに失敗しました．時間をおいて試してみてください．"
+    img.src = url
+
+  file_dropped = (file) ->
+    $('.item').remove()
+    $('#stripe-container').empty()
+
+    reader = new FileReader
+    reader.onload = ->
+      image_url_prepared reader.result
+    reader.readAsDataURL file
 
   histogram = (container) ->
     canvas = container.find('canvas')[0]
@@ -59,139 +109,124 @@ $ ->
 
     stripe_width = $('#stripe-container').width()
     width_total = 0
+
+    $stripe_canvas = $('<canvas>').addClass('stripe')
+    stripe_width = $('#stripe-container').width()
+    stripe_height = $('#stripe-container').width()
+    stripe_canvas = $stripe_canvas[0]
+    stripe_canvas.width = stripe_width
+    stripe_canvas.height = stripe_height
+    stripe_ctx = stripe_canvas.getContext('2d')
+
     for color in famous_colors
       rate = (color[1] / total)
       width = Math.ceil(stripe_width * rate)
       width = 1 if width < 1
+      displayed_colors_length++
+      stripe_ctx.fillStyle = num_to_color(color[0])
+      stripe_ctx.fillRect(width_total, 0, width, stripe_height)
       width_total += width
       break if width_total > stripe_width
-      displayed_colors_length++
-      $('<span>')
-        .addClass('color stripe')
-        .attr
-          'data-color': num_to_color(color[0])
-        .css
-          display: 'inline-block',
-          width: width
-          background: num_to_color(color[0])
-        .appendTo(stripe_container)
 
-  $(document).bind 'dragover', ->
-    false
+    $('a.download').attr
+      target: '_blank'
+      href: stripe_canvas.toDataURL()
 
-  $('#image-container').bind 'dragleave', (event) ->
-    console.log 'leave'
+    $('#stripe-container').append($stripe_canvas)
 
-  $('#image-container').bind 'dragenter', ->
-    console.log 'enter'
-    false
+  # ----- events -----
 
-  $(document).bind 'drop', (jquery_event) ->
-    event = jquery_event.originalEvent
-    file = event.dataTransfer.files[0]
-    reader = new FileReader
-    reader.onload = ->
-      img = new Image
-      img.onload = ->
-        histogram(load_img_to_canvas img)
-      img.src = reader.result
+  setup_drop = ->
+    enter_counter = 0
 
-    reader.readAsDataURL file
+    $(document)
+    .on 'dragover', ->
+      false
 
-    false
+    .on 'dragleave', ->
+      if enter_counter > 0
+        enter_counter--
+      if enter_counter == 0
+        $('body').removeClass('hovering')
+      false
 
-  pick_color = (color) ->
-    color_item =  $('<div>')
-      .addClass('picked-color-item')
-    color_item.append(
-      $('<span>')
-        .addClass('color-sample')
-        .css
-          background: color
-    )
-    color_item.append(
-      $('<input>')
-        .attr
-          type: 'text'
-          readonly: 'readonly'
-        .val(color)
-    )
-    color_item.append(
-      $('<img>')
-        .addClass('delete-button')
-        .attr
-          src: 'delete.png'
-    )
+    .on 'dragenter', ->
+      enter_counter++
+      if enter_counter == 1
+        $('body').addClass('hovering')
+      false
 
-    $('#selected-colors').append color_item
+    .on 'drop', (jquery_event) ->
+      enter_counter = 0
+      $('body').removeClass('hovering')
+      event = jquery_event.originalEvent
+
+      return false unless event.dataTransfer.files.length > 0
+
+      $('body').addClass('dropped')
+      file = event.dataTransfer.files[0]
+      file_dropped(file)
+      false
+
+  setup_drop()
 
   setup_click_color = ->
-    $('body').on 'click', '.color', (event) ->
-      color = $(this).attr('data-color')
+    $(document)
+    .on 'click', 'canvas', (event) ->
+      canvas = event.target
+      position = $(canvas).offset()
+      color = get_color_from_canvas(canvas, event.pageX - position.left, event.pageY - position.top)
       pick_color(color)
 
   setup_click_color()
 
   setup_cursor = ->
-    offset = 15
-    bg_color = '#ffffff'
-    $(document).bind 'mousemove', (event)->
-      $('.cursor-preview').remove()
+    bg_color = null
 
-      return unless bg_color
-
-      $('<span>').addClass('cursor-preview').appendTo($('body')).css
-        left: event.pageX + offset
-        top: event.pageY + offset
-        'background-color': bg_color
-
-      bg_color = null
-
-      true
-
-    $(document).on 'mousemove', '.color', (event)->
+    $(document)
+    .on 'mousemove', '.color', (event)->
       bg_color = $(event.target).attr('data-color')
       true
 
-    get_color_from_canvas = (canvas, x, y) ->
-      ctx = canvas.getContext('2d')
-      data = ctx.getImageData(x, y, 1, 1).data
-      v = (data[0] << 16) + (data[1] << 8) + (data[2])
-      num_to_color(v)
-
-    $(document).on 'mousemove', 'canvas', (event)->
+    .on 'mousemove', 'canvas', (event)->
       canvas = event.target
-      bg_color = get_color_from_canvas(canvas, event.offsetX, event.offsetY)
+      position = $(canvas).offset()
+      bg_color = get_color_from_canvas(canvas, event.pageX - position.left, event.pageY - position.top)
       true
 
-    $(document).on 'click', 'canvas', (event) ->
-      canvas = event.target
-      color = get_color_from_canvas(canvas, event.offsetX, event.offsetY)
-      pick_color(color)
+    .on 'mousemove', (event)->
+      $('.cursor-preview').remove()
+      return unless bg_color
+      $('<span>').addClass('cursor-preview').appendTo($('body')).css
+        left: event.pageX
+        top: event.pageY
+        backgroundColor: bg_color
+      bg_color = null
+      true
 
   setup_cursor()
 
   setup_delete_button = ->
-    $(document).on 'click', '.delete-button', (event) ->
+    $(document)
+    .on 'click', '.delete-button', (event) ->
       delete_button = $(event.target)
       item = delete_button.parents('.picked-color-item')
-      item.slideUp 300, ->
+      item.slideUp 150, ->
         item.remove()
 
-    $(document).on 'click', '#delete-all-button', (event) ->
-      $('#selected-colors').fadeOut 300, ->
-        console.log 'callback'
-        $('#selected-colors')
+    .on 'click', '#delete-all-button', ->
+      $('#picked-colors').fadeOut 150, ->
+        $('#picked-colors')
          .empty()
          .css
            display: 'block'
            opacity: 1.0
 
-
   setup_delete_button()
 
   setup_select_on_click = ->
-    $(document).on 'click', '.picked-color-item input', (event) ->
+    $(document)
+    .on 'click', '.picked-color-item input', (event) ->
       $(event.target)[0].select()
 
   setup_select_on_click()

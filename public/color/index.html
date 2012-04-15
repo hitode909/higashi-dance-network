@@ -2,22 +2,57 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <script src="underscore-min.js"></script>
     <script src="jquery-1.7.1.min.js"></script>
     <script src="sort_color.js"></script>
     <link rel="stylesheet" type="text/css" href="sort_color.css" />
-    <title>
-      画像ファイルをドラッグ &amp; ドロップすると画像に多く含まれる色を表示します
-    </title>
+    <title>color</title>
   </head>
   <body>
-    <div id="image-container">
+    <div id="header">
+      <img src="logo.png" class="logo"/>
     </div>
-    <div id="stripe-container">
-    </div>
-    <div id="sidebar">
-      <div id="selected-colors">
+    <div id="container">
+      <div id="l-contents">
+        <div id="guide-or-main">
+          <div id="guide">
+            <div id="guide-image">
+            </div>
+          </div>
+          <div id="main">
+            <div id="image-container">
+            </div>
+            <div id="stripe-container">
+            </div>
+            <div id="link-container">
+              <a class="download">ダウンロード</a>
+            </div>
+          </div>
+        </div>
       </div>
-      <img id="delete-all-button" src="delete-all.png"/>
+      <div id="sidebar">
+        <!-- 色一行のテンプレート -->
+        <script id="picked-color-template" type="text/x-underscore-template">
+          <div class="picked-color-item">
+            <span class="color-sample" style="background-color: <%= color %>;"></span>
+            <input type="text" readonly="readonly" value="<%= color %>" class="color-code">
+            <img class="delete-button" src="delete.png" title="削除">
+          </div>
+        </script>
+        <div class="description">色をクリックでカラーをピックしよう</div>
+        <div id="picked-colors">
+        </div>
+        <div id="delete-all-button">すべて消去</div>
+      </div>
+      <ul id="ad">
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+      </ul>
+      <div id="footer">(C) 2012 東ダンスネットワーク </div>
+    </div>
     </div>
   </body>
 </html>

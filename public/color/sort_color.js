@@ -1,23 +1,83 @@
 $(function() {
-  var histogram, load_img_to_canvas, num_to_color, pick_color, setup_click_color, setup_cursor, setup_delete_button, setup_select_on_click;
+  var file_dropped, get_color_from_canvas, histogram, image_url_prepared, load_img_to_canvas, num_to_color, pick_color, resize_to_fit, setup_click_color, setup_cursor, setup_delete_button, setup_drop, setup_select_on_click;
   num_to_color = function(num) {
     return '#' + ('000000' + (+num).toString(16)).slice(-6).toLowerCase();
   };
-  load_img_to_canvas = function(img) {
-    var $canvas, canvas, ctx, item_container;
-    item_container = $('<div>').addClass('item');
-    $('#image-container').empty().append(item_container);
-    $canvas = $('<canvas>').addClass('image');
-    item_container.append($canvas);
-    canvas = $canvas[0];
-    canvas.width = img.width;
-    canvas.height = img.height;
+  get_color_from_canvas = function(canvas, x, y) {
+    var $canvas, ctx, data, rate, v;
+    $canvas = $(canvas);
+    rate = canvas.width / $(canvas).width();
     ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0);
+    data = (ctx.getImageData(x * rate, y * rate, 1, 1)).data;
+    v = (data[0] << 16) + (data[1] << 8) + data[2];
+    return num_to_color(v);
+  };
+  resize_to_fit = function(x1, y1, x2, y2) {
+    var rate;
+    if (x1 <= x2 && y1 <= y2) {
+      return [x1, y1];
+    }
+    rate = _.min([x2 / x1, y2 / y1]);
+    return _.map([x1, y1], function(v) {
+      return Math.floor(v * rate);
+    });
+  };
+  pick_color = (function() {
+    var template;
+    template = _.template($('#picked-color-template').text());
+    return function(color) {
+      return $('#picked-colors').append(template({
+        color: color
+      }));
+    };
+  })();
+  load_img_to_canvas = function(img) {
+    var $canvas, canvas, container_height, container_width, ctx, item_container, size;
+    item_container = $('<div>').addClass('item');
+    $('#image-container').append(item_container);
+    $canvas = $('<canvas>').addClass('image');
+    container_width = $('#image-container').width();
+    container_height = $('#image-container').height();
+    item_container.append($canvas);
+    size = [img.width, img.height];
+    if (size[0] === container_width) {
+      $canvas.addClass('fit-x');
+    }
+    if (size[1] === container_height) {
+      $canvas.addClass('fit-y');
+    }
+    canvas = $canvas[0];
+    canvas.width = size[0];
+    canvas.height = size[1];
+    ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, size[0], size[1]);
     return item_container;
   };
+  image_url_prepared = function(url) {
+    var img;
+    img = new Image;
+    img.onload = function() {
+      var container;
+      container = load_img_to_canvas(img);
+      return histogram(container);
+    };
+    img.onerror = function() {
+      return alert("画像の読み込みに失敗しました．時間をおいて試してみてください．");
+    };
+    return img.src = url;
+  };
+  file_dropped = function(file) {
+    var reader;
+    $('.item').remove();
+    $('#stripe-container').empty();
+    reader = new FileReader;
+    reader.onload = function() {
+      return image_url_prepared(reader.result);
+    };
+    return reader.readAsDataURL(file);
+  };
   histogram = function(container) {
-    var base, canvas, color, count, ctx, data, displayed_colors_length, famous_colors, i, img_data, len, list, rate, stripe_container, stripe_width, table, total, v, width, width_total, _i, _j, _len, _len2, _ref, _results;
+    var $stripe_canvas, base, canvas, color, count, ctx, data, displayed_colors_length, famous_colors, i, img_data, len, list, rate, stripe_canvas, stripe_container, stripe_ctx, stripe_height, stripe_width, table, total, v, width, width_total, _i, _j, _len, _len2, _ref;
     canvas = container.find('canvas')[0];
     ctx = canvas.getContext('2d');
     img_data = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -59,7 +119,13 @@ $(function() {
     }
     stripe_width = $('#stripe-container').width();
     width_total = 0;
-    _results = [];
+    $stripe_canvas = $('<canvas>').addClass('stripe');
+    stripe_width = $('#stripe-container').width();
+    stripe_height = $('#stripe-container').width();
+    stripe_canvas = $stripe_canvas[0];
+    stripe_canvas.width = stripe_width;
+    stripe_canvas.height = stripe_height;
+    stripe_ctx = stripe_canvas.getContext('2d');
     for (_j = 0, _len2 = famous_colors.length; _j < _len2; _j++) {
       color = famous_colors[_j];
       rate = color[1] / total;
@@ -67,125 +133,102 @@ $(function() {
       if (width < 1) {
         width = 1;
       }
+      displayed_colors_length++;
+      stripe_ctx.fillStyle = num_to_color(color[0]);
+      stripe_ctx.fillRect(width_total, 0, width, stripe_height);
       width_total += width;
       if (width_total > stripe_width) {
         break;
       }
-      displayed_colors_length++;
-      _results.push($('<span>').addClass('color stripe').attr({
-        'data-color': num_to_color(color[0])
-      }).css({
-        display: 'inline-block',
-        width: width,
-        background: num_to_color(color[0])
-      }).appendTo(stripe_container));
     }
-    return _results;
+    $('a.download').attr({
+      target: '_blank',
+      href: stripe_canvas.toDataURL()
+    });
+    return $('#stripe-container').append($stripe_canvas);
   };
-  $(document).bind('dragover', function() {
-    return false;
-  });
-  $('#image-container').bind('dragleave', function(event) {
-    return console.log('leave');
-  });
-  $('#image-container').bind('dragenter', function() {
-    console.log('enter');
-    return false;
-  });
-  $(document).bind('drop', function(jquery_event) {
-    var event, file, reader;
-    event = jquery_event.originalEvent;
-    file = event.dataTransfer.files[0];
-    reader = new FileReader;
-    reader.onload = function() {
-      var img;
-      img = new Image;
-      img.onload = function() {
-        return histogram(load_img_to_canvas(img));
-      };
-      return img.src = reader.result;
-    };
-    reader.readAsDataURL(file);
-    return false;
-  });
-  pick_color = function(color) {
-    var color_item;
-    color_item = $('<div>').addClass('picked-color-item');
-    color_item.append($('<span>').addClass('color-sample').css({
-      background: color
-    }));
-    color_item.append($('<input>').attr({
-      type: 'text',
-      readonly: 'readonly'
-    }).val(color));
-    color_item.append($('<img>').addClass('delete-button').attr({
-      src: 'delete.png'
-    }));
-    return $('#selected-colors').append(color_item);
+  setup_drop = function() {
+    var enter_counter;
+    enter_counter = 0;
+    return $(document).on('dragover', function() {
+      return false;
+    }).on('dragleave', function() {
+      if (enter_counter > 0) {
+        enter_counter--;
+      }
+      if (enter_counter === 0) {
+        $('body').removeClass('hovering');
+      }
+      return false;
+    }).on('dragenter', function() {
+      enter_counter++;
+      if (enter_counter === 1) {
+        $('body').addClass('hovering');
+      }
+      return false;
+    }).on('drop', function(jquery_event) {
+      var event, file;
+      enter_counter = 0;
+      $('body').removeClass('hovering');
+      event = jquery_event.originalEvent;
+      if (!(event.dataTransfer.files.length > 0)) {
+        return false;
+      }
+      $('body').addClass('dropped');
+      file = event.dataTransfer.files[0];
+      file_dropped(file);
+      return false;
+    });
   };
+  setup_drop();
   setup_click_color = function() {
-    return $('body').on('click', '.color', function(event) {
-      var color;
-      color = $(this).attr('data-color');
+    return $(document).on('click', 'canvas', function(event) {
+      var canvas, color, position;
+      canvas = event.target;
+      position = $(canvas).offset();
+      color = get_color_from_canvas(canvas, event.pageX - position.left, event.pageY - position.top);
       return pick_color(color);
     });
   };
   setup_click_color();
   setup_cursor = function() {
-    var bg_color, get_color_from_canvas, offset;
-    offset = 15;
-    bg_color = '#ffffff';
-    $(document).bind('mousemove', function(event) {
+    var bg_color;
+    bg_color = null;
+    return $(document).on('mousemove', '.color', function(event) {
+      bg_color = $(event.target).attr('data-color');
+      return true;
+    }).on('mousemove', 'canvas', function(event) {
+      var canvas, position;
+      canvas = event.target;
+      position = $(canvas).offset();
+      bg_color = get_color_from_canvas(canvas, event.pageX - position.left, event.pageY - position.top);
+      return true;
+    }).on('mousemove', function(event) {
       $('.cursor-preview').remove();
       if (!bg_color) {
         return;
       }
       $('<span>').addClass('cursor-preview').appendTo($('body')).css({
-        left: event.pageX + offset,
-        top: event.pageY + offset,
-        'background-color': bg_color
+        left: event.pageX,
+        top: event.pageY,
+        backgroundColor: bg_color
       });
       bg_color = null;
       return true;
     });
-    $(document).on('mousemove', '.color', function(event) {
-      bg_color = $(event.target).attr('data-color');
-      return true;
-    });
-    get_color_from_canvas = function(canvas, x, y) {
-      var ctx, data, v;
-      ctx = canvas.getContext('2d');
-      data = ctx.getImageData(x, y, 1, 1).data;
-      v = (data[0] << 16) + (data[1] << 8) + data[2];
-      return num_to_color(v);
-    };
-    $(document).on('mousemove', 'canvas', function(event) {
-      var canvas;
-      canvas = event.target;
-      bg_color = get_color_from_canvas(canvas, event.offsetX, event.offsetY);
-      return true;
-    });
-    return $(document).on('click', 'canvas', function(event) {
-      var canvas, color;
-      canvas = event.target;
-      color = get_color_from_canvas(canvas, event.offsetX, event.offsetY);
-      return pick_color(color);
-    });
   };
   setup_cursor();
   setup_delete_button = function() {
-    $(document).on('click', '.delete-button', function(event) {
+    return $(document).on('click', '.delete-button', function(event) {
       var delete_button, item;
       delete_button = $(event.target);
       item = delete_button.parents('.picked-color-item');
-      return item.slideUp(300, function() {
+      return item.slideUp(150, function() {
         return item.remove();
       });
-    });
-    return $(document).on('click', '#delete-all-button', function(event) {
-      return $('#selected-colors').fadeOut(300, function() {
-        console.log('callback');
-        return $('#selected-colors').empty().css({
+    }).on('click', '#delete-all-button', function() {
+      return $('#picked-colors').fadeOut(150, function() {
+        return $('#picked-colors').empty().css({
           display: 'block',
           opacity: 1.0
         });
