@@ -50,7 +50,7 @@ $(function() {
     container_width = $('#image-container').width();
     container_height = $('#image-container').height();
     item_container.append($canvas);
-    size = [img.width, img.height];
+    size = resize_to_fit(img.width, img.height, container_width, container_height);
     if (size[0] === container_width) {
       $canvas.addClass('fit-x');
     }
@@ -100,9 +100,11 @@ $(function() {
     i = 0;
     while (i < len) {
       v = (data[i] << 16) + (data[i + 1] << 8) + data[i + 2];
-      if ((_ref = table[v]) == null) {
+            if ((_ref = table[v]) != null) {
+        _ref;
+      } else {
         table[v] = 0;
-      }
+      };
       table[v]++;
       i += 4;
     }
