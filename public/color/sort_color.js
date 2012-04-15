@@ -262,6 +262,8 @@ $(function() {
       } else {
         return $(event.target).parents('.picked-color-item').find('input')[0].select();
       }
+    }).on('click', 'input.url', function(event) {
+      return event.target.select();
     });
   };
   setup_select_on_click();

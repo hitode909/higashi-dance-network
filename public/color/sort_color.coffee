@@ -246,6 +246,9 @@ $ ->
       else
         $(event.target).parents('.picked-color-item').find('input')[0].select()
 
+    .on 'click', 'input.url', (event) ->
+      event.target.select()
+
   setup_select_on_click()
 
   setup_load_on_submit = ->
