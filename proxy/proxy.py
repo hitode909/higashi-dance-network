@@ -20,11 +20,15 @@ class ProxyPage(webapp.RequestHandler):
         return {"content": resource.content, "status_code": resource.status_code, "headers": headers}
 
     def get(self, path):
-        path = urllib.unquote(path)
-        resource = self.fetch_resource(path)
-        for k, v in resource["headers"].iteritems():
-            self.response.headers[k] = v
-        self.response.out.write(resource["content"])
+        try:
+            path = urllib.unquote(path)
+            resource = self.fetch_resource(path)
+            for k, v in resource["headers"].iteritems():
+                self.response.headers[k] = v
+            self.response.out.write(resource["content"])
+        except urlfetch.Error:
+            self.response.out.write("Bad Request")
+            self.response.set_status(400)
 
 application = webapp.WSGIApplication(
                                      [
