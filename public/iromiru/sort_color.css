@@ -39,6 +39,10 @@ a {
   margin:15px 0;
 }
 
+.logo {
+    height:40px;
+}
+
 
 
 .cursor-preview {
@@ -65,10 +69,9 @@ a {
 #l-contents input.url {
     border: 1px solid #CCCCCC;
     font-size: 80%;
-    height: 15px;
     margin: 0;
-    padding: 7px;
-    width: 264px;
+    padding:7px;
+    width: 570px;
 }
 
 #l-contents input.load {
@@ -104,7 +107,7 @@ a {
     width: 500px;
     height: 400px;
     margin-left: 75px;
-    margin-top: 80px;
+    margin-top: 140px;
 }
 
 .hovering #guide-image {
