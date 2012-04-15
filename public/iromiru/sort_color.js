@@ -66,7 +66,6 @@ $(function() {
   };
   image_url_prepared = function(url) {
     var img;
-    console.log('prepared');
     img = new Image;
     img.onload = function() {
       var container;

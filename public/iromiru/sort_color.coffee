@@ -62,7 +62,6 @@ $ ->
     item_container
 
   image_url_prepared = (url) ->
-    console.log 'prepared'
     img = new Image
     img.onload = ->
       $('.item').remove()
