@@ -234,8 +234,17 @@ $ ->
 
   setup_select_on_click = ->
     $(document)
-    .on 'click', '.picked-color-item input', (event) ->
-      $(event.target)[0].select()
+    .on 'click', '.picked-color-item', (event) ->
+
+      if $(event.target).is('.delete-button')
+        return
+
+      if $(event.target).is('input')
+        event.target.select()
+      if $(event.target).is('.picked-color-item')
+        $(event.target).find('input')[0].select()
+      else
+        $(event.target).parents('.picked-color-item').find('input')[0].select()
 
   setup_select_on_click()
 
