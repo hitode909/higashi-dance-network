@@ -21,6 +21,9 @@ handlers:
 - url: /iromiru
   script: fallback.py
 
+- url: /bon2/
+  script: fallback.py
+
 - url: (.*)/
   static_files: public\1/index.html
   upload: public(.*)/index.html
