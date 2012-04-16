@@ -75,6 +75,9 @@ $ ->
     img.src = url
 
   file_dropped = (file) ->
+    unless window.FileReader
+      alert("お使いのブラウザはファイル読み込みに対応していません．画像URLを指定すると読み込めます．Google ChromeかFirefoxなら画像をドロップで読み込めます．")
+      return
     reader = new FileReader
     reader.onload = ->
       image_url_prepared reader.result

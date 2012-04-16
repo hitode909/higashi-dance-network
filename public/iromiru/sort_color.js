@@ -83,6 +83,10 @@ $(function() {
   };
   file_dropped = function(file) {
     var reader;
+    if (!window.FileReader) {
+      alert("お使いのブラウザはファイル読み込みに対応していません．画像URLを指定すると読み込めます．Google ChromeかFirefoxなら画像をドロップで読み込めます．");
+      return;
+    }
     reader = new FileReader;
     reader.onload = function() {
       return image_url_prepared(reader.result);
