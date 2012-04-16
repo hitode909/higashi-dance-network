@@ -146,8 +146,15 @@ $ ->
 
   setup_drop = ->
     enter_counter = 0
+    dragging_img_src = null
 
     $(document)
+    .on 'dragstart', (jquery_event) ->
+      if event.target.src
+        dragging_img_src = event.target.src
+      else
+        dragging_img_src = null
+      true
     .on 'dragover', ->
       false
 
@@ -169,10 +176,13 @@ $ ->
       $('body').removeClass('hovering')
       event = jquery_event.originalEvent
 
-      return false unless event.dataTransfer.files.length > 0
+      if event.dataTransfer.files.length > 0
+        file = event.dataTransfer.files[0]
+        file_dropped(file)
+      else if dragging_img_src and not $(event.target).is('img')
+        proxy_url = dragging_img_src
+        image_url_prepared(proxy_url)
 
-      file = event.dataTransfer.files[0]
-      file_dropped(file)
       false
 
   setup_drop()

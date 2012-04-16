@@ -100,11 +100,9 @@ $(function() {
     i = 0;
     while (i < len) {
       v = (data[i] << 16) + (data[i + 1] << 8) + data[i + 2];
-            if ((_ref = table[v]) != null) {
-        _ref;
-      } else {
+      if ((_ref = table[v]) == null) {
         table[v] = 0;
-      };
+      }
       table[v]++;
       i += 4;
     }
@@ -163,9 +161,17 @@ $(function() {
     return $('#stripe-container').append($stripe_canvas);
   };
   setup_drop = function() {
-    var enter_counter;
+    var dragging_img_src, enter_counter;
     enter_counter = 0;
-    return $(document).on('dragover', function() {
+    dragging_img_src = null;
+    return $(document).on('dragstart', function(jquery_event) {
+      if (event.target.src) {
+        dragging_img_src = event.target.src;
+      } else {
+        dragging_img_src = null;
+      }
+      return true;
+    }).on('dragover', function() {
       return false;
     }).on('dragleave', function() {
       if (enter_counter > 0) {
@@ -182,15 +188,17 @@ $(function() {
       }
       return false;
     }).on('drop', function(jquery_event) {
-      var event, file;
+      var event, file, proxy_url;
       enter_counter = 0;
       $('body').removeClass('hovering');
       event = jquery_event.originalEvent;
-      if (!(event.dataTransfer.files.length > 0)) {
-        return false;
+      if (event.dataTransfer.files.length > 0) {
+        file = event.dataTransfer.files[0];
+        file_dropped(file);
+      } else if (dragging_img_src && !$(event.target).is('img')) {
+        proxy_url = dragging_img_src;
+        image_url_prepared(proxy_url);
       }
-      file = event.dataTransfer.files[0];
-      file_dropped(file);
       return false;
     });
   };
