@@ -169,8 +169,13 @@ $(function() {
     enter_counter = 0;
     dragging_img_src = null;
     return $(document).on('dragstart', function(jquery_event) {
+      var event;
+      event = jquery_event.originalEvent;
       if (event.target.src) {
         dragging_img_src = event.target.src;
+      }
+      if ($(event.target).find('img')) {
+        dragging_img_src = $(event.target).find('img')[0].src;
       } else {
         dragging_img_src = null;
       }
