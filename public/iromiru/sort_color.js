@@ -38,7 +38,8 @@ $(function() {
     template = _.template($('#picked-color-template').text());
     return function(color) {
       return $('#picked-colors').append(template({
-        color: color
+        color: color,
+        color_text: color.slice(1)
       }));
     };
   })();

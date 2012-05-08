@@ -32,6 +32,7 @@ $ ->
       $('#picked-colors').append(
         template
           color: color
+          color_text: color[1..-1]
       )
 
   load_img_to_canvas = (img) ->
