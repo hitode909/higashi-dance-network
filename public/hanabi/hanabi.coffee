@@ -166,7 +166,7 @@ class Hanabi.Button
 
     for i in [0...count]
       @appendedCount++
-      html += "<img src=\"/img/hanabi/stamp-#{ @appendedCount % 3 }.png\">"
+      html += "<img src=\"/hanabi/img/stamp-#{ @appendedCount % 3 }.png\">"
 
     @container.append(html)
 

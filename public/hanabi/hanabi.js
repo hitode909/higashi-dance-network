@@ -199,7 +199,7 @@ Hanabi.Button = (function() {
     html = '';
     for (i = 0; 0 <= count ? i < count : i > count; 0 <= count ? i++ : i--) {
       this.appendedCount++;
-      html += "<img src=\"/img/hanabi/stamp-" + (this.appendedCount % 3) + ".png\">";
+      html += "<img src=\"/hanabi/img/stamp-" + (this.appendedCount % 3) + ".png\">";
     }
     return this.container.append(html);
   };

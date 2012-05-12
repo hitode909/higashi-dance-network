@@ -47,6 +47,7 @@ h1 {
   padding: 10px;
 }
 #create-uchiage .submit {
+  cursor: pointer;
   float: left;
   display: inline-block;
   vertical-align: middle;
@@ -92,7 +93,6 @@ h1 {
 #uchiage-image .body {
   font-weight: bold;
   font-size: 80px;
-  -webkit-box-shadow: 0px 0px 4px #000;
 }
 #footer-image {
   margin-top: 20px;
@@ -116,4 +116,40 @@ h1 {
   margin-bottom: 30px;
   margin-top: 40px;
   text-align: center;
+}
+#service-footer a {
+  text-decoration: none;
+  color: #ffffff;
+}
+#service-footer a:hover {
+  text-decoration: underline;
+}
+#tamaya-container {
+  margin-top: 20px;
+}
+#button-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+#button-container img {
+  margin-left: 15px;
+  margin-bottom: 15px;
+  float: left;
+  vertical-align: middle;
+}
+#button-container .button {
+  cursor: pointer;
+  float: left;
+  display: inline-block;
+  vertical-align: middle;
+  background-color: #000000;
+  background-image: url("/hanabi/img/stamp-add.png");
+  background-repeat: no-repeat;
+  width: 103px;
+  height: 65px;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
+  margin-top: 6px;
+  margin-bottom: 15px;
 }
