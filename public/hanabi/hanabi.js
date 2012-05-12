@@ -119,12 +119,13 @@ Hanabi.Uchiage = (function() {
     return this.loadFlash();
   };
   Uchiage.prototype.loadFlash = function() {
-    var container, height, requiredVersion, so, width;
+    var container, height, requiredVersion, so, src, width;
     container = this.container[0];
     width = 1000;
     height = 700;
     requiredVersion = 9;
-    so = new SWFObject('/hanabi/hanabi.swf', 'canvas', width, height, requiredVersion, '#000000');
+    src = "http://d.hatena.ne.jp/hitode909/files/hanabi.swf?d=y";
+    so = new SWFObject(src, 'canvas', width, height, requiredVersion, '#000000');
     so.useExpressInstall('/hanabi/expressinstall.swf');
     so.addVariable('body', this.body);
     so.setAttribute('useGetFlashImageFallback', true);

@@ -104,7 +104,9 @@ class Hanabi.Uchiage
     height = 700
     requiredVersion = 9
 
-    so = new SWFObject('/hanabi/hanabi.swf', 'canvas', width, height, requiredVersion, '#000000')
+    # '/hanabi/hanabi.swf'
+    src = "http://d.hatena.ne.jp/hitode909/files/hanabi.swf?d=y"
+    so = new SWFObject(src, 'canvas', width, height, requiredVersion, '#000000')
     so.useExpressInstall('/hanabi/expressinstall.swf')
     so.addVariable('body', @body)
     so.setAttribute('useGetFlashImageFallback', true)
