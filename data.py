@@ -8,6 +8,7 @@ from google.appengine.ext import db
 
 class DataRecord(db.Model):
     data       = db.TextProperty()
+    count      = db.IntegerProperty()
     created_on = db.DateTimeProperty(auto_now_add = 1)
 
     def path(self):
@@ -24,6 +25,7 @@ class Page(webapp.RequestHandler):
 
         record = DataRecord()
         record.data = db.Text(self.request.get('data'))
+        record.count = 0
         record.put()
         logging.info('POST')
         logging.info(self.request.get('data'))
@@ -44,8 +46,33 @@ class GetPage(webapp.RequestHandler):
             return
 
         self.response.headers['Content-Type'] = "text/plain"
+        self.response.headers['X-Count'] = record.count if record.count else 0
         self.response.out.write(record.data)
         return
+
+    def post(self, key):
+        try:
+            record = DataRecord.get(db.Key(key))
+        except db.BadKeyError:
+            record = None
+
+        if not record:
+            self.response.set_status(404)
+            self.response.out.write('404')
+            return
+
+        count = record.count
+        if not count:
+            count = 0
+
+        count += 1
+
+        record.count = count
+        record.put()
+
+        self.response.headers['Content-Type'] = "text/plain"
+        self.response.headers['X-Count'] = count if record.count else 0
+        self.response.out.write(record.key())
 
 application = webapp.WSGIApplication(
                                      [
