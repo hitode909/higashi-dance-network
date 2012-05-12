@@ -27,10 +27,10 @@
       })();
     </script>
   </head>
-  <body>
+  <body id="top">
     <div id="container">
       <div id="service-header">
-        <h1><a href="/hanabi/">今夜も打ち上げナイト</a></h1>
+        <h1><a href="/hanabi/"><img src="/hanabi/img/logo.png" title="今夜も打ち上げナイト"></a></h1>
         <span class="buttons">
           <!-- TODO: ↓ タイトルいれるとか -->
           <iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fhigashi-dance-network.appspot.com%2Fkasanegi%2F&amp;send=false&amp;layout=button_count&amp;width=120&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:120px; height:21px;" allowTransparency="true"></iframe>
@@ -41,20 +41,16 @@
           <a href="http://b.hatena.ne.jp/entry/http://higashi-dance-network.appspot.com/kasanegi/" class="hatena-bookmark-button" data-hatena-bookmark-title="iromiru - 画像からカラーコード抽出便利サービス" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
         </span>
       </div>
-      <p>
-        真夏の夜は打ち上げナイト!!!今日の思いを打ち上げ花火ナイト!!!!!!
-        <br/>
-        一日の終わりにインターネットに打ち上げ花火を上げられます．
-        <br/>
-        今日あったいいことやがんばったできこごとを打ち上げましょう．
-        <br/>
-        (みたいあことを書く)
-      </p>
-      <h2>打ち上げ</h2>
+      <div id="catch">
+      </div>
       <form id="create-uchiage" action="/hanabi/uchiage/">
-        <textarea name="body" cols="80" rows="4" placeholder="今夜の思いを入力" required></textarea>
-        <input class="submit" type="submit" value="打ち上げ"/>
+        <textarea class="body" name="body" cols="30" rows="4" placeholder="今夜の思いを入力" required></textarea>
+        <input class="submit" type="submit" title="打ち合げる" />
       </form>
+
+      <div class="clear">
+      </div>
+
       <div class="recent-tweets">
         <script charset="utf-8" src="http://widgets.twimg.com/j/2/widget.js"></script>
         <script>
@@ -87,6 +83,7 @@
         }).render().start();
         </script>
       </div>
+      <div id="footer-image"></div>
       <div id="service-footer">&copy; 2012 <a href="/">東ダンスネットワーク</a></div>
     </div>
   </body>

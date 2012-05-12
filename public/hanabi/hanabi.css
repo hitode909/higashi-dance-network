@@ -6,16 +6,49 @@ body {
   color: #fff;
   font-size: 16px;
 }
+body#top #container {
+  background-image: url("/hanabi/img/background.png");
+  background-repeat: no-repeat;
+}
+.clear {
+  clear: both;
+}
 a,
 a:visited {
   color: #ffa;
 }
 #container {
-  width: 960px;
+  width: 1000px;
   margin: 0 auto 0;
 }
 h1 {
   display: inline;
+}
+#catch {
+  background-image: url("/hanabi/img/catch.png");
+  background-repeat: no-repeat;
+  width: 830px;
+  height: 122px;
+}
+#create-uchiage .body {
+  float: left;
+  font-weight: bold;
+  font-size: 20px;
+  height: 170px;
+  border: 0px;
+  border-radius: 10px;
+}
+#create-uchiage .submit {
+  float: left;
+  display: inline-block;
+  vertical-align: middle;
+  background-image: url("/hanabi/img/button.png");
+  background-repeat: no-repeat;
+  width: 240px;
+  height: 170px;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
 }
 #service-header .buttons {
   vertical-align: middle;
@@ -33,7 +66,11 @@ h1 {
 #uchiage-flash {
   height: 700px;
 }
+#footer-image {
+  background-image: url("/hanabi/img/footer-image.png");
+  background-repeat: no-repeat;
+  height: 86px;
+}
 #service-footer {
-  margin-top: 30px;
   text-align: center;
 }
