@@ -13,13 +13,80 @@ Page =
   createQuery: (params) ->
     throw "TODO"
 
+DataStorage =
+  save: (data) ->
+    dfd = $.Deferred()
+    $.ajax
+      url: '/data/'
+      data:
+        data: data
+      type: 'POST'
+      dataType: 'text'
+      success: (key) ->
+        localStorage["data-#{key}"] = data
+        dfd.resolve key
+      error: ->
+        dfd.reject()
+    dfd.promise()
+
+  get: (key) ->
+    dfd = $.Deferred()
+    dataKey = "data-#{key}"
+
+    if localStorage[dataKey]
+      dfd.resolve localStorage[dataKey]
+    else
+      $.ajax
+        url: "/data/#{key}"
+        type: 'GET'
+        dataType: 'text'
+        success: (data) ->
+          localStorage[dataKey] = data
+          dfd.resolve data
+        error: ->
+          dfd.reject()
+
+    dfd.promise()
+
+  clearCache: ->
+    localStorage.clear()
 
 Hanabi =
-  encode: (text) ->
-    encodeURIComponent(text).split('').reverse().join('')
+  postUchiage: (text) ->
+    DataStorage.save(text).then (key) ->
+      location.href = "/hanabi/uchiage/#{key}"
+    .fail ->
+      # fallback
+      location.href = "/hanabi/uchiage/?data=#{encodeURIComponent(text)}"
 
-  decode: (text) ->
-    decodeURIComponent(text.split('').reverse().join(''))
+  getUchiage: ->
+    dfd = $.Deferred()
+    module = this
+
+    module.getBody().then (body) ->
+      dfd.resolve new module.Uchiage(body)
+    .fail ->
+      dfd.reject()
+
+    dfd.promise()
+
+  getBody: ->
+    dfd = $.Deferred()
+    matched = location.pathname.match(/uchiage\/(.+)$/)
+    if matched
+      key = matched[1]
+      DataStorage.get(key).then (body) ->
+        dfd.resolve body
+      .fail ->
+        dfd.reject()
+    else
+      body = Page.parsePageQuery()['body']
+      if body
+        dfd.resolve body
+      else
+        dfd.reject()
+
+    dfd.promise()
 
 class Hanabi.Uchiage
   constructor: (body) ->
@@ -45,7 +112,23 @@ class Hanabi.Uchiage
     so.write(container)
 
 $ ->
-  body = Page.parsePageQuery()['body']
+  router =
+    always: ->
+      $("form#create-uchiage").submit (event) ->
+        try
+          body = $(this).find("textarea").val()
+          return false unless body.length > 0
+          $(this).find(".submit").prop("disabled", true)
+          Hanabi.postUchiage body
+        false
+    hanabi: ->
+    uchiage: ->
+      Hanabi.getUchiage().then (u) ->
+        u.show()
+      .fail ->
+        alert("申し訳ございません．打ち合げの読み込みに失敗しました．トップページに戻ります．")
+        location.href = "/hanabi/"
 
-  uchiage = new Hanabi.Uchiage(body)
-  uchiage.show()
+  pageId = $(document.documentElement).attr('data-page-id')
+  router['always']()
+  router[pageId]() if router[pageId]

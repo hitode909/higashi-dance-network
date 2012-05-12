@@ -1,4 +1,4 @@
-var Hanabi, Page;
+var DataStorage, Hanabi, Page;
 Page = {
   parsePageQuery: function() {
     var module;
@@ -20,12 +20,92 @@ Page = {
     throw "TODO";
   }
 };
-Hanabi = {
-  encode: function(text) {
-    return encodeURIComponent(text).split('').reverse().join('');
+DataStorage = {
+  save: function(data) {
+    var dfd;
+    dfd = $.Deferred();
+    $.ajax({
+      url: '/data/',
+      data: {
+        data: data
+      },
+      type: 'POST',
+      dataType: 'text',
+      success: function(key) {
+        localStorage["data-" + key] = data;
+        return dfd.resolve(key);
+      },
+      error: function() {
+        return dfd.reject();
+      }
+    });
+    return dfd.promise();
   },
-  decode: function(text) {
-    return decodeURIComponent(text.split('').reverse().join(''));
+  get: function(key) {
+    var dataKey, dfd;
+    dfd = $.Deferred();
+    dataKey = "data-" + key;
+    if (localStorage[dataKey]) {
+      dfd.resolve(localStorage[dataKey]);
+    } else {
+      $.ajax({
+        url: "/data/" + key,
+        type: 'GET',
+        dataType: 'text',
+        success: function(data) {
+          localStorage[dataKey] = data;
+          return dfd.resolve(data);
+        },
+        error: function() {
+          return dfd.reject();
+        }
+      });
+    }
+    return dfd.promise();
+  },
+  clearCache: function() {
+    return localStorage.clear();
+  }
+};
+Hanabi = {
+  postUchiage: function(text) {
+    return DataStorage.save(text).then(function(key) {
+      return location.href = "/hanabi/uchiage/" + key;
+    }).fail(function() {
+      return location.href = "/hanabi/uchiage/?data=" + (encodeURIComponent(text));
+    });
+  },
+  getUchiage: function() {
+    var dfd, module;
+    dfd = $.Deferred();
+    module = this;
+    module.getBody().then(function(body) {
+      return dfd.resolve(new module.Uchiage(body));
+    }).fail(function() {
+      return dfd.reject();
+    });
+    return dfd.promise();
+  },
+  getBody: function() {
+    var body, dfd, key, matched;
+    dfd = $.Deferred();
+    matched = location.pathname.match(/uchiage\/(.+)$/);
+    if (matched) {
+      key = matched[1];
+      DataStorage.get(key).then(function(body) {
+        return dfd.resolve(body);
+      }).fail(function() {
+        return dfd.reject();
+      });
+    } else {
+      body = Page.parsePageQuery()['body'];
+      if (body) {
+        dfd.resolve(body);
+      } else {
+        dfd.reject();
+      }
+    }
+    return dfd.promise();
   }
 };
 Hanabi.Uchiage = (function() {
@@ -54,8 +134,35 @@ Hanabi.Uchiage = (function() {
   return Uchiage;
 })();
 $(function() {
-  var body, uchiage;
-  body = Page.parsePageQuery()['body'];
-  uchiage = new Hanabi.Uchiage(body);
-  return uchiage.show();
+  var pageId, router;
+  router = {
+    always: function() {
+      return $("form#create-uchiage").submit(function(event) {
+        var body;
+        try {
+          body = $(this).find("textarea").val();
+          if (!(body.length > 0)) {
+            return false;
+          }
+          $(this).find(".submit").prop("disabled", true);
+          Hanabi.postUchiage(body);
+        } catch (_e) {}
+        return false;
+      });
+    },
+    hanabi: function() {},
+    uchiage: function() {
+      return Hanabi.getUchiage().then(function(u) {
+        return u.show();
+      }).fail(function() {
+        alert("申し訳ございません．打ち合げの読み込みに失敗しました．トップページに戻ります．");
+        return location.href = "/hanabi/";
+      });
+    }
+  };
+  pageId = $(document.documentElement).attr('data-page-id');
+  router['always']();
+  if (router[pageId]) {
+    return router[pageId]();
+  }
 });
