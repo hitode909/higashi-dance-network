@@ -77,6 +77,7 @@ Hanabi =
       key = matched[1]
       DataStorage.get(key).then (body) ->
         dfd.resolve body
+        new Hanabi.Button($("#button-container"), key)
       .fail ->
         dfd.reject()
     else
@@ -142,6 +143,62 @@ class Hanabi.Uchiage
       console.log 'finish'
       $(document.body).addClass("animation-finished")
 
+class Hanabi.Button
+  constructor: (container, key) ->
+    @container = container
+    @button = @container.find('.button')
+    @key = key
+    @bindClick()
+    @loadStamps()
+    @appendedCount = 0
+
+  bindClick: ->
+    @button.on 'click', =>
+      @appendStamps(1)
+      @postCount()
+
+  loadStamps: ->
+    @getCount().then (count) =>
+      @appendStamps(count) if count
+
+  appendStamps: (count, from) ->
+    html = ''
+
+    for i in [0...count]
+      @appendedCount++
+      html += "<img src=\"/img/hanabi/stamp-#{ @appendedCount % 3 }.png\">"
+
+    @container.append(html)
+
+  getCount: ->
+    dfd = $.Deferred()
+
+    ajax = $.ajax
+      url: "/data/#{@key}"
+      type: 'GET'
+      dataType: 'text'
+      success: (data) ->
+        count = ajax.getResponseHeader('X-Count')
+        dfd.resolve count
+      error: ->
+        dfd.reject()
+
+    dfd.promise()
+
+  postCount: ->
+    dfd = $.Deferred()
+
+    ajax = $.ajax
+      url: "/data/#{@key}"
+      type: 'POST'
+      dataType: 'text'
+      success: (data) ->
+        count = ajax.getResponseHeader('X-Count')
+        dfd.resolve count
+      error: ->
+        dfd.reject()
+
+    dfd.promise()
 
 $ ->
   router =

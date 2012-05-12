@@ -1,4 +1,5 @@
 var DataStorage, Hanabi, Page;
+var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 Page = {
   parsePageQuery: function() {
     var module;
@@ -93,7 +94,8 @@ Hanabi = {
     if (matched) {
       key = matched[1];
       DataStorage.get(key).then(function(body) {
-        return dfd.resolve(body);
+        dfd.resolve(body);
+        return new Hanabi.Button($("#button-container"), key);
       }).fail(function() {
         return dfd.reject();
       });
@@ -169,6 +171,75 @@ Hanabi.Uchiage = (function() {
     };
   };
   return Uchiage;
+})();
+Hanabi.Button = (function() {
+  function Button(container, key) {
+    this.container = container;
+    this.button = this.container.find('.button');
+    this.key = key;
+    this.bindClick();
+    this.loadStamps();
+    this.appendedCount = 0;
+  }
+  Button.prototype.bindClick = function() {
+    return this.button.on('click', __bind(function() {
+      this.appendStamps(1);
+      return this.postCount();
+    }, this));
+  };
+  Button.prototype.loadStamps = function() {
+    return this.getCount().then(__bind(function(count) {
+      if (count) {
+        return this.appendStamps(count);
+      }
+    }, this));
+  };
+  Button.prototype.appendStamps = function(count, from) {
+    var html, i;
+    html = '';
+    for (i = 0; 0 <= count ? i < count : i > count; 0 <= count ? i++ : i--) {
+      this.appendedCount++;
+      html += "<img src=\"/img/hanabi/stamp-" + (this.appendedCount % 3) + ".png\">";
+    }
+    return this.container.append(html);
+  };
+  Button.prototype.getCount = function() {
+    var ajax, dfd;
+    dfd = $.Deferred();
+    ajax = $.ajax({
+      url: "/data/" + this.key,
+      type: 'GET',
+      dataType: 'text',
+      success: function(data) {
+        var count;
+        count = ajax.getResponseHeader('X-Count');
+        return dfd.resolve(count);
+      },
+      error: function() {
+        return dfd.reject();
+      }
+    });
+    return dfd.promise();
+  };
+  Button.prototype.postCount = function() {
+    var ajax, dfd;
+    dfd = $.Deferred();
+    ajax = $.ajax({
+      url: "/data/" + this.key,
+      type: 'POST',
+      dataType: 'text',
+      success: function(data) {
+        var count;
+        count = ajax.getResponseHeader('X-Count');
+        return dfd.resolve(count);
+      },
+      error: function() {
+        return dfd.reject();
+      }
+    });
+    return dfd.promise();
+  };
+  return Button;
 })();
 $(function() {
   var pageId, router;
