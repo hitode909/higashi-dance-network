@@ -114,9 +114,14 @@ Hanabi.Uchiage = (function() {
     this.container = $("#uchiage-flash");
   }
   Uchiage.prototype.show = function() {
-    $("form#uchiage textarea").val(this.body);
-    $("#body").text(this.body + " を打ち上げました");
-    return this.loadFlash();
+    if (this.canUseFlash()) {
+      return this.loadFlash();
+    } else {
+      return this.loadByBanner();
+    }
+  };
+  Uchiage.prototype.canUseFlash = function() {
+    return deconcept.SWFObjectUtil.getPlayerVersion().major > 0;
   };
   Uchiage.prototype.loadFlash = function() {
     var container, height, requiredVersion, so, src, width;
@@ -131,6 +136,20 @@ Hanabi.Uchiage = (function() {
     so.setAttribute('useGetFlashImageFallback', true);
     so.addParam('allowScriptAccess', 'always');
     return so.write(container);
+  };
+  Uchiage.prototype.loadByBanner = function() {
+    var bodyContainer, line, text, _i, _len, _ref;
+    $("#uchiage-flash").remove();
+    bodyContainer = $("#uchiage-image .body");
+    _ref = this.body.split("\n");
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      text = _ref[_i];
+      line = $('<div>').text(text);
+      bodyContainer.append(line);
+    }
+    return $("#uchiage-image").css({
+      display: 'table-cell'
+    });
   };
   Uchiage.prototype.setTweetLink = function() {
     var hashtag, message, share, text, url;
