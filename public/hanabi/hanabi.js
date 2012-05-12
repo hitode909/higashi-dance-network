@@ -121,8 +121,8 @@ Hanabi.Uchiage = (function() {
   Uchiage.prototype.loadFlash = function() {
     var container, height, requiredVersion, so, width;
     container = this.container[0];
-    width = 960;
-    height = 600;
+    width = 1000;
+    height = 700;
     requiredVersion = 9;
     so = new SWFObject('/hanabi/hanabi.swf', 'canvas', width, height, requiredVersion, '#000000');
     so.useExpressInstall('/hanabi/expressinstall.swf');

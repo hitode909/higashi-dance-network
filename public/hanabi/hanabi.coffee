@@ -100,8 +100,8 @@ class Hanabi.Uchiage
 
   loadFlash: ->
     container = @container[0]
-    width = 960
-    height = 600
+    width = 1000
+    height = 700
     requiredVersion = 9
 
     so = new SWFObject('/hanabi/hanabi.swf', 'canvas', width, height, requiredVersion, '#000000')
