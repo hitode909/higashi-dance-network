@@ -18,10 +18,16 @@ class IromiruRedirectPage(webapp.RequestHandler):
     def get(self):
         self.redirect("/iromiru/")
 
+class HanabiRedirectPage(webapp.RequestHandler):
+
+    def get(self):
+        self.redirect("/hanabi/")
+
 application = webapp.WSGIApplication(
                                      [
                                       ('/kasanegi', KasanegiRedirectPage),
                                       ('/iromiru', IromiruRedirectPage),
+                                      ('/hanabi', HanabiRedirectPage),
                                       ('/bon2/', BonRedirectPage),
                                      ],
                                      debug=True)

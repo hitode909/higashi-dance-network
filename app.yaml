@@ -21,6 +21,9 @@ handlers:
 - url: /iromiru
   script: fallback.py
 
+- url: /hanabi
+  script: fallback.py
+
 - url: /bon2/
   script: fallback.py
 
