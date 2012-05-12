@@ -97,7 +97,6 @@ class Hanabi.Uchiage
     $("form#uchiage textarea").val(@body)
     $("#body").text(@body + " を打ち上げました")
     @loadFlash()
-    @setTweetLink()
 
   loadFlash: ->
     container = @container[0]
@@ -112,6 +111,7 @@ class Hanabi.Uchiage
     so.addParam('allowScriptAccess', 'always')
     so.write(container)
 
+  # つかってない
   setTweetLink: ->
     message = "打ち上げました"
     hashtag = "#今夜も打ち上げナイト"

@@ -116,8 +116,7 @@ Hanabi.Uchiage = (function() {
   Uchiage.prototype.show = function() {
     $("form#uchiage textarea").val(this.body);
     $("#body").text(this.body + " を打ち上げました");
-    this.loadFlash();
-    return this.setTweetLink();
+    return this.loadFlash();
   };
   Uchiage.prototype.loadFlash = function() {
     var container, height, requiredVersion, so, width;
