@@ -91,7 +91,7 @@ Hanabi =
 class Hanabi.Uchiage
   constructor: (body) ->
     @body = body
-    @container = $("#utiage-flash")
+    @container = $("#uchiage-flash")
 
   show: ->
     $("form#uchiage textarea").val(@body)
@@ -101,8 +101,8 @@ class Hanabi.Uchiage
 
   loadFlash: ->
     container = @container[0]
-    width = 500
-    height = 300
+    width = 960
+    height = 600
     requiredVersion = 9
 
     so = new SWFObject('/hanabi/hanabi.swf', 'canvas', width, height, requiredVersion, '#000000')
@@ -121,9 +121,17 @@ class Hanabi.Uchiage
     $("a#uchiage-tweet").attr
       href: share
 
+  # つかってない
+  setAnimationFinishHandler: ->
+    window.uchiageAnimationFinished = ->
+      console.log 'finish'
+      $(document.body).addClass("animation-finished")
+
+
 $ ->
   router =
     always: ->
+    hanabi: ->
       $("form#create-uchiage").submit (event) ->
         try
           body = $(this).find("textarea").val()
@@ -131,7 +139,6 @@ $ ->
           $(this).find(".submit").prop("disabled", true)
           Hanabi.postUchiage body
         false
-    hanabi: ->
     uchiage: ->
       Hanabi.getUchiage().then (u) ->
         u.show()

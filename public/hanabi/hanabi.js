@@ -108,10 +108,10 @@ Hanabi = {
     return dfd.promise();
   }
 };
-Hanabi.Twitter = Hanabi.Uchiage = (function() {
+Hanabi.Uchiage = (function() {
   function Uchiage(body) {
     this.body = body;
-    this.container = $("#utiage-flash");
+    this.container = $("#uchiage-flash");
   }
   Uchiage.prototype.show = function() {
     $("form#uchiage textarea").val(this.body);
@@ -122,8 +122,8 @@ Hanabi.Twitter = Hanabi.Uchiage = (function() {
   Uchiage.prototype.loadFlash = function() {
     var container, height, requiredVersion, so, width;
     container = this.container[0];
-    width = 500;
-    height = 300;
+    width = 960;
+    height = 600;
     requiredVersion = 9;
     so = new SWFObject('/hanabi/hanabi.swf', 'canvas', width, height, requiredVersion, '#000000');
     so.useExpressInstall('/hanabi/expressinstall.swf');
@@ -143,12 +143,19 @@ Hanabi.Twitter = Hanabi.Uchiage = (function() {
       href: share
     });
   };
+  Uchiage.prototype.setAnimationFinishHandler = function() {
+    return window.uchiageAnimationFinished = function() {
+      console.log('finish');
+      return $(document.body).addClass("animation-finished");
+    };
+  };
   return Uchiage;
 })();
 $(function() {
   var pageId, router;
   router = {
-    always: function() {
+    always: function() {},
+    hanabi: function() {
       return $("form#create-uchiage").submit(function(event) {
         var body;
         try {
@@ -162,7 +169,6 @@ $(function() {
         return false;
       });
     },
-    hanabi: function() {},
     uchiage: function() {
       return Hanabi.getUchiage().then(function(u) {
         return u.show();

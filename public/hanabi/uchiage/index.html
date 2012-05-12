@@ -26,22 +26,22 @@
       })();
     </script>
   </head>
-  <body>
+  <body id="uchiage-page">
     <div id="container">
-      <h1><a href="/hanabi/">今夜も打ち上げナイト</a></h1>
-      <p>
-        打ち上げページです
-      </p>
-      <div id="utiage-flash">
+      <div id="uchiage-flash">
       </div>
-      <div id="body">
+      <div id="footer">
+        <span>
+          <a href="/hanabi/" >今夜も打ち上げナイト</a>
+        </span>
+        <span>
+          <a id="uchiage-tweet" target="_blank" >打ち上げをツイートする</a>
+        </span>
+        <span>
+          <a id="uchiage-tweet" target="_blank" ></a>
+        </span>
       </div>
-      <h2>打ち上げ</h2>
-      <form id="create-uchiage" action="/hanabi/uchiage/">
-        <textarea name="body" cols="80" rows="4" placeholder="今夜の思いを入力" required></textarea>
-        <input class="submit" type="submit" value="打ち上げ"/>
-      </form>
-      <a id="uchiage-tweet">打ち上げをツイートする</a>
+      <div id="service-footer">(C) 2012 <a href="/">東ダンスネットワーク</a></div>
     </div>
   </body>
 </html>
