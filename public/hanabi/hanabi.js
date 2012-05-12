@@ -114,22 +114,42 @@ Hanabi.Uchiage = (function() {
     this.container = $("#uchiage-flash");
   }
   Uchiage.prototype.show = function() {
-    $("form#uchiage textarea").val(this.body);
-    $("#body").text(this.body + " を打ち上げました");
-    return this.loadFlash();
+    if (this.canUseFlash()) {
+      return this.loadFlash();
+    } else {
+      return this.loadByBanner();
+    }
+  };
+  Uchiage.prototype.canUseFlash = function() {
+    return deconcept.SWFObjectUtil.getPlayerVersion().major > 0;
   };
   Uchiage.prototype.loadFlash = function() {
-    var container, height, requiredVersion, so, width;
+    var container, height, requiredVersion, so, src, width;
     container = this.container[0];
     width = 1000;
     height = 700;
     requiredVersion = 9;
-    so = new SWFObject('/hanabi/hanabi.swf', 'canvas', width, height, requiredVersion, '#000000');
+    src = "http://d.hatena.ne.jp/hitode909/files/hanabi.swf?d=y";
+    so = new SWFObject(src, 'canvas', width, height, requiredVersion, '#000000');
     so.useExpressInstall('/hanabi/expressinstall.swf');
     so.addVariable('body', this.body);
     so.setAttribute('useGetFlashImageFallback', true);
     so.addParam('allowScriptAccess', 'always');
     return so.write(container);
+  };
+  Uchiage.prototype.loadByBanner = function() {
+    var bodyContainer, line, text, _i, _len, _ref;
+    $("#uchiage-flash").remove();
+    bodyContainer = $("#uchiage-image .body");
+    _ref = this.body.split("\n");
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      text = _ref[_i];
+      line = $('<div>').text(text);
+      bodyContainer.append(line);
+    }
+    return $("#uchiage-image").css({
+      display: 'table-cell'
+    });
   };
   Uchiage.prototype.setTweetLink = function() {
     var hashtag, message, share, text, url;

@@ -94,9 +94,13 @@ class Hanabi.Uchiage
     @container = $("#uchiage-flash")
 
   show: ->
-    $("form#uchiage textarea").val(@body)
-    $("#body").text(@body + " を打ち上げました")
-    @loadFlash()
+    if @canUseFlash()
+      @loadFlash()
+    else
+      @loadByBanner()
+
+  canUseFlash: ->
+    deconcept.SWFObjectUtil.getPlayerVersion().major > 0
 
   loadFlash: ->
     container = @container[0]
@@ -104,12 +108,23 @@ class Hanabi.Uchiage
     height = 700
     requiredVersion = 9
 
-    so = new SWFObject('/hanabi/hanabi.swf', 'canvas', width, height, requiredVersion, '#000000')
+    # '/hanabi/hanabi.swf'
+    src = "http://d.hatena.ne.jp/hitode909/files/hanabi.swf?d=y"
+    so = new SWFObject(src, 'canvas', width, height, requiredVersion, '#000000')
     so.useExpressInstall('/hanabi/expressinstall.swf')
     so.addVariable('body', @body)
     so.setAttribute('useGetFlashImageFallback', true)
     so.addParam('allowScriptAccess', 'always')
     so.write(container)
+
+  loadByBanner: ->
+    $("#uchiage-flash").remove()
+    bodyContainer =     $("#uchiage-image .body")
+    for text in @body.split("\n")
+      line = $('<div>').text(text)
+      bodyContainer.append line
+    $("#uchiage-image").css
+      display: 'table-cell'
 
   # つかってない
   setTweetLink: ->
