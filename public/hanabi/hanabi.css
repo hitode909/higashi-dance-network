@@ -50,6 +50,7 @@ h1 {
   float: left;
   display: inline-block;
   vertical-align: middle;
+  background-color: #000000;
   background-image: url("/hanabi/img/button.png");
   background-repeat: no-repeat;
   width: 240px;
