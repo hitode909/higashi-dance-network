@@ -24,8 +24,8 @@ handlers:
 - url: /bon2/
   script: fallback.py
 
-- url: /text/.*
-  script: text.py
+- url: /data/.*
+  script: data.py
 
 - url: (.*)/
   static_files: public\1/index.html
