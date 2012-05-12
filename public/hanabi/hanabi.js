@@ -108,7 +108,7 @@ Hanabi = {
     return dfd.promise();
   }
 };
-Hanabi.Uchiage = (function() {
+Hanabi.Twitter = Hanabi.Uchiage = (function() {
   function Uchiage(body) {
     this.body = body;
     this.container = $("#utiage-flash");
@@ -116,7 +116,8 @@ Hanabi.Uchiage = (function() {
   Uchiage.prototype.show = function() {
     $("form#uchiage textarea").val(this.body);
     $("#body").text(this.body + " を打ち上げました");
-    return this.loadFlash();
+    this.loadFlash();
+    return this.setTweetLink();
   };
   Uchiage.prototype.loadFlash = function() {
     var container, height, requiredVersion, so, width;
@@ -130,6 +131,17 @@ Hanabi.Uchiage = (function() {
     so.setAttribute('useGetFlashImageFallback', true);
     so.addParam('allowScriptAccess', 'always');
     return so.write(container);
+  };
+  Uchiage.prototype.setTweetLink = function() {
+    var hashtag, message, share, text, url;
+    message = "打ち上げました";
+    hashtag = "#今夜も打ち上げナイト";
+    text = "" + message + " " + hashtag;
+    url = location.href;
+    share = "https://twitter.com/share?url=" + (encodeURIComponent(url)) + "&text=" + (encodeURIComponent(text));
+    return $("a#uchiage-tweet").attr({
+      href: share
+    });
   };
   return Uchiage;
 })();

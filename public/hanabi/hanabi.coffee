@@ -97,6 +97,7 @@ class Hanabi.Uchiage
     $("form#uchiage textarea").val(@body)
     $("#body").text(@body + " を打ち上げました")
     @loadFlash()
+    @setTweetLink()
 
   loadFlash: ->
     container = @container[0]
@@ -110,6 +111,15 @@ class Hanabi.Uchiage
     so.setAttribute('useGetFlashImageFallback', true)
     so.addParam('allowScriptAccess', 'always')
     so.write(container)
+
+  setTweetLink: ->
+    message = "打ち上げました"
+    hashtag = "#今夜も打ち上げナイト"
+    text = "#{message} #{hashtag}"
+    url = location.href
+    share = "https://twitter.com/share?url=#{encodeURIComponent(url)}&text=#{encodeURIComponent(text)}"
+    $("a#uchiage-tweet").attr
+      href: share
 
 $ ->
   router =
