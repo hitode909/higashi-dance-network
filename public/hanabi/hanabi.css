@@ -25,18 +25,26 @@ h1 {
   display: inline;
 }
 #catch {
+  margin-left: 80px;
+  margin-top: 70px;
+  margin-bottom: 50px;
   background-image: url("/hanabi/img/catch.png");
   background-repeat: no-repeat;
   width: 830px;
   height: 122px;
 }
 #create-uchiage .body {
+  width: 500px;
   float: left;
   font-weight: bold;
   font-size: 20px;
-  height: 170px;
+  height: 150px;
   border: 0px;
   border-radius: 10px;
+  margin-left: 80px;
+  margin-right: 20px;
+  margin-bottom: 60px;
+  padding: 10px;
 }
 #create-uchiage .submit {
   float: left;
@@ -49,6 +57,9 @@ h1 {
   border: 0px;
   margin: 0px;
   padding: 0px;
+}
+#service-header {
+  margin-top: 24px;
 }
 #service-header .buttons {
   vertical-align: middle;
@@ -67,10 +78,24 @@ h1 {
   height: 700px;
 }
 #footer-image {
+  margin-top: 20px;
   background-image: url("/hanabi/img/footer-image.png");
   background-repeat: no-repeat;
   height: 86px;
 }
+#footer-buttons {
+  margin-top: 40px;
+  height: 32px;
+}
+#footer-catch {
+  marign-top: 20px;
+  height: 40px;
+}
+#star-container {
+  margin-left: 10px;
+}
 #service-footer {
+  margin-bottom: 30px;
+  margin-top: 40px;
   text-align: center;
 }
