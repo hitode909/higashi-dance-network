@@ -24,10 +24,16 @@ handlers:
 - url: /bon2/
   script: fallback.py
 
+- url: /text/.*
+  script: text.py
+
 - url: (.*)/
   static_files: public\1/index.html
   upload: public(.*)/index.html
 
+- url: /hanabi/uchiage/.*
+  static_files: public/hanabi/uchiage/index.html
+  upload: public/hanabi/uchiage/index.html
 
 - url: /(.*)
   static_files: public/\1
