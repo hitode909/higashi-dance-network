@@ -110,7 +110,8 @@ class Hanabi.Uchiage
     requiredVersion = 9
 
     # '/hanabi/hanabi.swf'
-    src = "http://d.hatena.ne.jp/hitode909/files/hanabi.swf?d=y"
+    # src = "http://d.hatena.ne.jp/hitode909/files/hanabi.swf?d=y"
+    src = 'http://dl.dropbox.com/u/8270034/hanabi.swf'
     so = new SWFObject(src, 'canvas', width, height, requiredVersion, '#000000')
     so.useExpressInstall('/hanabi/expressinstall.swf')
     so.addVariable('body', @body)
