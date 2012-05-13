@@ -180,11 +180,12 @@ Hanabi.Button = (function() {
     this.bindClick();
     this.loadStamps();
     this.appendedCount = 0;
+    this.cachedPostCount = 0;
   }
   Button.prototype.bindClick = function() {
     return this.button.on('click', __bind(function() {
       this.appendStamps(1);
-      return this.postCount();
+      return this.postCountCached();
     }, this));
   };
   Button.prototype.loadStamps = function() {
@@ -202,6 +203,17 @@ Hanabi.Button = (function() {
       html += "<img src=\"/hanabi/img/stamp-" + (this.appendedCount % 3) + ".png\">";
     }
     return this.container.append(html);
+  };
+  Button.prototype.postCountCached = function() {
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+    this.cachedPostCount++;
+    return this.timer = setTimeout(__bind(function() {
+      this.postCount(this.cachedPostCount);
+      this.cachedPostCount = 0;
+      return this.timer = null;
+    }, this), 500);
   };
   Button.prototype.getCount = function() {
     var ajax, dfd;
@@ -221,15 +233,20 @@ Hanabi.Button = (function() {
     });
     return dfd.promise();
   };
-  Button.prototype.postCount = function() {
+  Button.prototype.postCount = function(count) {
     var ajax, dfd;
     dfd = $.Deferred();
+    if (!count) {
+      count = 1;
+    }
     ajax = $.ajax({
       url: "/data/" + this.key,
+      data: {
+        count: count
+      },
       type: 'POST',
       dataType: 'text',
       success: function(data) {
-        var count;
         count = ajax.getResponseHeader('X-Count');
         return dfd.resolve(count);
       },

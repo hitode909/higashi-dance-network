@@ -151,15 +151,17 @@ class Hanabi.Button
     @bindClick()
     @loadStamps()
     @appendedCount = 0
+    @cachedPostCount = 0
 
   bindClick: ->
     @button.on 'click', =>
       @appendStamps(1)
-      @postCount()
+      @postCountCached()
 
   loadStamps: ->
     @getCount().then (count) =>
       @appendStamps(count) if count
+
 
   appendStamps: (count, from) ->
     html = ''
@@ -169,6 +171,16 @@ class Hanabi.Button
       html += "<img src=\"/hanabi/img/stamp-#{ @appendedCount % 3 }.png\">"
 
     @container.append(html)
+
+  postCountCached: ->
+    if @timer
+      clearTimeout(@timer)
+    @cachedPostCount++
+    @timer = setTimeout =>
+      @postCount(@cachedPostCount)
+      @cachedPostCount = 0
+      @timer = null
+    , 500
 
   getCount: ->
     dfd = $.Deferred()
@@ -185,11 +197,15 @@ class Hanabi.Button
 
     dfd.promise()
 
-  postCount: ->
+  postCount: (count) ->
     dfd = $.Deferred()
+
+    count = 1 unless count
 
     ajax = $.ajax
       url: "/data/#{@key}"
+      data:
+        count: count
       type: 'POST'
       dataType: 'text'
       success: (data) ->

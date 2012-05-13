@@ -65,7 +65,9 @@ class GetPage(webapp.RequestHandler):
         if not count:
             count = 0
 
-        count += 1
+        add = int(self.request.get('count')) if self.request.get('count') else 1
+
+        count += add
 
         record.count = count
         record.put()
