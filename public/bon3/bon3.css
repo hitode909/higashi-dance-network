@@ -5,6 +5,7 @@
 body {
   min-width: 800px;
   font-family: sans-serif;
+  cursor: pointer;
 }
 a,
 a:visited {
@@ -16,7 +17,6 @@ canvas {
   left: 0px;
   top: 0px;
   z-index: 100;
-  cursor: pointer;
 }
 .sorry {
   text-align: center;
@@ -72,4 +72,7 @@ canvas {
   bottom: 10px;
   width: 100%;
   z-index: 10;
+}
+#footer #copy:hover {
+  text-decoration: underline;
 }

@@ -6,6 +6,7 @@
 body {
     min-width: 800px;
     font-family: sans-serif;
+    cursor: pointer;
 }
 
 a, a:visited {
@@ -19,7 +20,6 @@ canvas {
     top: 0px;
     z-index: 100;
 
-    cursor: pointer;
 }
 
 .sorry {
@@ -84,6 +84,9 @@ canvas {
         bottom: 10px;
         width: 100%;
         z-index: 10;
+        &:hover {
+            text-decoration: underline;
+        }
     }
 
 }
