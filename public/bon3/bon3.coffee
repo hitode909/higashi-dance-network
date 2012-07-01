@@ -185,7 +185,8 @@ load_images = (srces) ->
   dfd.promise()
 
 main = (sources) ->
-  imgs = sources.images
+  character_images = sources.images
+  character_images_rest = character_images[1..(character_images.length)]
 
   oneliner = T("oneliner")
 
@@ -225,8 +226,8 @@ main = (sources) ->
 
   resizeCanvas()
 
-  characterWidth = 200
-  characterHeight = 277
+  characterWidth = 300
+  characterHeight = 400
   baseThreshold = 0.2
   bottomRate = 0.9
   footerHeight = 70
@@ -247,11 +248,11 @@ main = (sources) ->
 
   drawCharacter = (xRate, power) ->
     bottom = _.min([canvasHeight * bottomRate, canvasHeight - footerHeight])
-    chara = choise(imgs)
-    chara = imgs[0] if power < 0.2
+    chara = choise(character_images_rest)
+    chara = character_images[0] if power < 0.2
     ctx.fillStyle = characterColor
-    ctx.fillRect canvasWidth * xRate - characterWidth*0.5, bottom - power * 50 - characterHeight, characterWidth, characterHeight
-    ctx.drawImage chara, canvasWidth * xRate - characterWidth*0.5, bottom - power * 50 - characterHeight, characterWidth, characterHeight
+    ctx.fillRect Math.floor(canvasWidth * xRate - characterWidth*0.5), Math.floor(bottom - power * 50 - characterHeight), characterWidth, characterHeight
+    ctx.drawImage chara, Math.floor(canvasWidth * xRate - characterWidth*0.5), Math.floor(bottom - power * 50 - characterHeight), characterWidth, characterHeight
 
   drawEarth = (power) ->
     bottom = _.min([canvasHeight * bottomRate, canvasHeight - footerHeight]) - power * 50

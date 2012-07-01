@@ -234,8 +234,9 @@ load_images = function(srces) {
   return dfd.promise();
 };
 main = function(sources) {
-  var arrangeTrack, baseThreshold, bottomRate, canvas, canvasHeight, canvasWidth, characterColor, characterHeight, characterWidth, clearStage, ctx, currentTrack, drawCharacter, drawEarth, drawLamps, fft, footerHeight, imgs, indexes, lastPositions, oneliner, resetStage, resizeCanvas, setCharacterColor, setIndexes, setTracks, shuffleTracks, timer, tracks, zeroTimes;
-  imgs = sources.images;
+  var arrangeTrack, baseThreshold, bottomRate, canvas, canvasHeight, canvasWidth, characterColor, characterHeight, characterWidth, character_images, character_images_rest, clearStage, ctx, currentTrack, drawCharacter, drawEarth, drawLamps, fft, footerHeight, indexes, lastPositions, oneliner, resetStage, resizeCanvas, setCharacterColor, setIndexes, setTracks, shuffleTracks, timer, tracks, zeroTimes;
+  character_images = sources.images;
+  character_images_rest = character_images.slice(1, (character_images.length + 1) || 9e9);
   oneliner = T("oneliner");
   tracks = [];
   setTracks = function() {
@@ -281,8 +282,8 @@ main = function(sources) {
     return resizeCanvas();
   });
   resizeCanvas();
-  characterWidth = 200;
-  characterHeight = 277;
+  characterWidth = 300;
+  characterHeight = 400;
   baseThreshold = 0.2;
   bottomRate = 0.9;
   footerHeight = 70;
@@ -302,13 +303,13 @@ main = function(sources) {
   drawCharacter = function(xRate, power) {
     var bottom, chara;
     bottom = _.min([canvasHeight * bottomRate, canvasHeight - footerHeight]);
-    chara = choise(imgs);
+    chara = choise(character_images_rest);
     if (power < 0.2) {
-      chara = imgs[0];
+      chara = character_images[0];
     }
     ctx.fillStyle = characterColor;
-    ctx.fillRect(canvasWidth * xRate - characterWidth * 0.5, bottom - power * 50 - characterHeight, characterWidth, characterHeight);
-    return ctx.drawImage(chara, canvasWidth * xRate - characterWidth * 0.5, bottom - power * 50 - characterHeight, characterWidth, characterHeight);
+    ctx.fillRect(Math.floor(canvasWidth * xRate - characterWidth * 0.5), Math.floor(bottom - power * 50 - characterHeight), characterWidth, characterHeight);
+    return ctx.drawImage(chara, Math.floor(canvasWidth * xRate - characterWidth * 0.5), Math.floor(bottom - power * 50 - characterHeight), characterWidth, characterHeight);
   };
   drawEarth = function(power) {
     var bottom;
