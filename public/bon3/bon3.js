@@ -271,8 +271,8 @@ main = function(sources) {
   ctx = canvas.getContext('2d');
   resizeCanvas = _.throttle(function() {
     canvasWidth = $(window).width();
-    if (canvasWidth < 900) {
-      canvasWidth = 900;
+    if (canvasWidth < 1040) {
+      canvasWidth = 1040;
     }
     canvasHeight = $(window).height();
     canvas.width = canvasWidth;
@@ -282,7 +282,7 @@ main = function(sources) {
     return resizeCanvas();
   });
   resizeCanvas();
-  characterWidth = 300;
+  characterWidth = 250;
   characterHeight = 400;
   baseThreshold = 0.2;
   bottomRate = 0.9;
@@ -300,16 +300,22 @@ main = function(sources) {
     ctx.fillStyle = 'white';
     return ctx.fillRect(0, 0, canvas.width, canvas.height);
   };
-  drawCharacter = function(xRate, power) {
-    var bottom, chara;
+  drawCharacter = function(index, power) {
+    var bottom, chara, left, offsetOne, offsetTotal;
+    offsetTotal = canvasWidth - characterWidth * 4;
+    if (offsetTotal < 0) {
+      offsetTotal = 0;
+    }
+    offsetOne = offsetTotal / 5;
+    left = offsetOne + (characterWidth + offsetOne) * index;
     bottom = _.min([canvasHeight * bottomRate, canvasHeight - footerHeight]);
     chara = choise(character_images_rest);
     if (power < 0.2) {
       chara = character_images[0];
     }
     ctx.fillStyle = characterColor;
-    ctx.fillRect(Math.floor(canvasWidth * xRate - characterWidth * 0.5), Math.floor(bottom - power * 50 - characterHeight), characterWidth, characterHeight);
-    return ctx.drawImage(chara, Math.floor(canvasWidth * xRate - characterWidth * 0.5), Math.floor(bottom - power * 50 - characterHeight), characterWidth, characterHeight);
+    ctx.fillRect(Math.floor(left), Math.floor(bottom - power * 50 - characterHeight), characterWidth, characterHeight);
+    return ctx.drawImage(chara, Math.floor(left), Math.floor(bottom - power * 50 - characterHeight), characterWidth, characterHeight);
   };
   drawEarth = function(power) {
     var bottom;
@@ -348,7 +354,7 @@ main = function(sources) {
   zeroTimes = 0;
   lastPositions = [0, 0, 0, 0];
   fft.onfft = function(real, imag) {
-    var absv, half, i, len, segments, spectrum, sum, v, _len, _ref;
+    var absv, half, i, len, segments, spectrum, sum, v, _len, _ref, _results;
     spectrum = real;
     len = 0;
     sum = 0;
@@ -390,10 +396,11 @@ main = function(sources) {
     segments[3] *= 8;
     clearStage();
     drawEarth(sum);
-    drawCharacter(0.2, segments[0]);
-    drawCharacter(0.4, segments[1]);
-    drawCharacter(0.6, segments[2]);
-    return drawCharacter(0.8, segments[3]);
+    _results = [];
+    for (i = 0; i <= 3; i++) {
+      _results.push(drawCharacter(i, segments[i]));
+    }
+    return _results;
   };
   oneliner.play();
   window.oneliner = oneliner;

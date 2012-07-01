@@ -215,18 +215,18 @@ main = (sources) ->
   ctx = canvas.getContext('2d')
 
   resizeCanvas = _.throttle ->
-   canvasWidth = $(window).width()
-   canvasWidth = 900 if canvasWidth < 900
-   canvasHeight = $(window).height()
-   canvas.width = canvasWidth
-   canvas.height = canvasHeight
+    canvasWidth = $(window).width()
+    canvasWidth = 1040 if canvasWidth < 1040
+    canvasHeight = $(window).height()
+    canvas.width = canvasWidth
+    canvas.height = canvasHeight
 
   $(window).resize ->
     resizeCanvas()
 
   resizeCanvas()
 
-  characterWidth = 300
+  characterWidth = 250
   characterHeight = 400
   baseThreshold = 0.2
   bottomRate = 0.9
@@ -246,13 +246,19 @@ main = (sources) ->
     ctx.fillStyle = 'white'
     ctx.fillRect 0, 0, canvas.width, canvas.height
 
-  drawCharacter = (xRate, power) ->
+  drawCharacter = (index, power) ->
+    offsetTotal = canvasWidth - characterWidth * 4
+    offsetTotal = 0 if offsetTotal < 0
+    offsetOne = offsetTotal / 5
+
+    left = offsetOne + (characterWidth + offsetOne) * index
+
     bottom = _.min([canvasHeight * bottomRate, canvasHeight - footerHeight])
     chara = choise(character_images_rest)
     chara = character_images[0] if power < 0.2
     ctx.fillStyle = characterColor
-    ctx.fillRect Math.floor(canvasWidth * xRate - characterWidth*0.5), Math.floor(bottom - power * 50 - characterHeight), characterWidth, characterHeight
-    ctx.drawImage chara, Math.floor(canvasWidth * xRate - characterWidth*0.5), Math.floor(bottom - power * 50 - characterHeight), characterWidth, characterHeight
+    ctx.fillRect Math.floor(left), Math.floor(bottom - power * 50 - characterHeight), characterWidth, characterHeight
+    ctx.drawImage chara, Math.floor(left), Math.floor(bottom - power * 50 - characterHeight), characterWidth, characterHeight
 
   drawEarth = (power) ->
     bottom = _.min([canvasHeight * bottomRate, canvasHeight - footerHeight]) - power * 50
@@ -333,10 +339,9 @@ main = (sources) ->
 
     # drawLamps(sum)
 
-    drawCharacter(0.2, segments[0])
-    drawCharacter(0.4, segments[1])
-    drawCharacter(0.6, segments[2])
-    drawCharacter(0.8, segments[3])
+
+    for i in [0..3]
+      drawCharacter(i, segments[i])
 
   oneliner.play()
   window.oneliner = oneliner
