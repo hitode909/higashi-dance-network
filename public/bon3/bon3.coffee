@@ -265,28 +265,6 @@ main = (sources) ->
     ctx.fillStyle = characterColor
     ctx.fillRect 0, bottom, canvasWidth, canvasHeight
 
-  drawLamps = (power) ->
-    ctx.fillStyle = 'red'
-
-    for i in [0..7]
-      if power > 1.0
-        ctx.fillStyle = 'red'
-      else
-        ctx.fillStyle = 'rgb(40,40,40)'
-      power-=0.3
-
-      x1 = i * canvasWidth/18 + 50
-      x2 = canvasWidth - (i * canvasWidth/18 + 50)
-      y = canvasHeight * 0.15 - canvasHeight*0.03 * i
-      ctx.beginPath()
-      ctx.arc(x1 , y , 30, 0, Math.PI*2, true)
-      ctx.closePath()
-      ctx.fill()
-      ctx.beginPath()
-      ctx.arc(x2 , y , 30, 0, Math.PI*2, true)
-      ctx.closePath()
-      ctx.fill()
-
   # fft
 
   fft = T("fft").listen(oneliner).off()
@@ -336,9 +314,6 @@ main = (sources) ->
     clearStage()
 
     drawEarth(sum)
-
-    # drawLamps(sum)
-
 
     for i in [0..3]
       drawCharacter(i, segments[i])

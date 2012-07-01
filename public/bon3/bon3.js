@@ -234,7 +234,7 @@ load_images = function(srces) {
   return dfd.promise();
 };
 main = function(sources) {
-  var arrangeTrack, baseThreshold, bottomRate, canvas, canvasHeight, canvasWidth, characterColor, characterHeight, characterWidth, character_images, character_images_rest, clearStage, ctx, currentTrack, dac, drawCharacter, drawEarth, drawLamps, fft, footerHeight, indexes, lastPositions, oneliner, resetStage, resizeCanvas, setCharacterColor, setIndexes, setTracks, shuffleTracks, timer, tracks, zeroTimes;
+  var arrangeTrack, baseThreshold, bottomRate, canvas, canvasHeight, canvasWidth, characterColor, characterHeight, characterWidth, character_images, character_images_rest, clearStage, ctx, currentTrack, dac, drawCharacter, drawEarth, fft, footerHeight, indexes, lastPositions, oneliner, resetStage, resizeCanvas, setCharacterColor, setIndexes, setTracks, shuffleTracks, timer, tracks, zeroTimes;
   character_images = sources.images;
   character_images_rest = character_images.slice(1, (character_images.length + 1) || 9e9);
   oneliner = T("oneliner");
@@ -322,31 +322,6 @@ main = function(sources) {
     bottom = _.min([canvasHeight * bottomRate, canvasHeight - footerHeight]) - power * 50;
     ctx.fillStyle = characterColor;
     return ctx.fillRect(0, bottom, canvasWidth, canvasHeight);
-  };
-  drawLamps = function(power) {
-    var i, x1, x2, y, _results;
-    ctx.fillStyle = 'red';
-    _results = [];
-    for (i = 0; i <= 7; i++) {
-      if (power > 1.0) {
-        ctx.fillStyle = 'red';
-      } else {
-        ctx.fillStyle = 'rgb(40,40,40)';
-      }
-      power -= 0.3;
-      x1 = i * canvasWidth / 18 + 50;
-      x2 = canvasWidth - (i * canvasWidth / 18 + 50);
-      y = canvasHeight * 0.15 - canvasHeight * 0.03 * i;
-      ctx.beginPath();
-      ctx.arc(x1, y, 30, 0, Math.PI * 2, true);
-      ctx.closePath();
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(x2, y, 30, 0, Math.PI * 2, true);
-      ctx.closePath();
-      _results.push(ctx.fill());
-    }
-    return _results;
   };
   fft = T("fft").listen(oneliner).off();
   fft.interval = 25;
