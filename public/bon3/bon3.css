@@ -1,0 +1,46 @@
+body {
+  min-width: 800px;
+  min-height: 500px;
+}
+a,
+a:visited {
+  text-decoration: none;
+  color: #fff;
+}
+* {
+  margin: 0px;
+  padding: 0px;
+}
+canvas {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 100;
+}
+#footer {
+  color: white;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  z-index: 200;
+  width: 100%;
+  height: 50px;
+}
+#footer h1 {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+}
+#footer #tshirts {
+  position: absolute;
+  bottom: 0px;
+  right: 5px;
+}
+#footer #copy {
+  font-size: 80%;
+  text-align: center;
+  position: absolute;
+  left: 0px;
+  bottom: 5px;
+  width: 100%;
+}

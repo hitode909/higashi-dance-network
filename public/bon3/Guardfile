@@ -1,0 +1,7 @@
+guard 'livereload', :apply_js_live => false, :run_on_modifications => true  do
+  watch(%r{.+\.(css|js|html)})
+end
+
+guard 'less', :all_on_start => true, :run_on_modifications => true do
+  watch(%r{^.+\.less$})
+end
