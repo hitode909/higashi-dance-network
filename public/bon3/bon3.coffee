@@ -160,6 +160,12 @@ timbre.fn.register("oneliner", Oneliner)
 choise = (array) ->
   array[Math.floor(Math.random() * array.length)]
 
+genColorValue = ->
+  if Math.random() > 0.5 then 255 else 0
+
+randomColor = ->
+  "rgb(#{genColorValue()},#{genColorValue()},#{genColorValue()})"
+
 load_images = (srces) ->
   dfd = $.Deferred()
 
@@ -224,6 +230,10 @@ main = (sources) ->
   baseThreshold = 0.2
   bottomRate = 0.9
 
+  characterColor = randomColor()
+  setCharacterColor = ->
+    characterColor = randomColor()
+
   clearStage = ->
     ctx.fillStyle = 'white'
     ctx.fillRect 0, 0, canvas.width, canvas.height
@@ -232,11 +242,13 @@ main = (sources) ->
     bottom = canvasHeight * bottomRate
     chara = choise(imgs)
     chara = imgs[0] if power < 0.2
+    ctx.fillStyle = characterColor
+    ctx.fillRect canvasWidth * xRate - characterWidth*0.5, bottom - power * 50 - characterHeight, characterWidth, characterHeight
     ctx.drawImage chara, canvasWidth * xRate - characterWidth*0.5, bottom - power * 50 - characterHeight, characterWidth, characterHeight
 
   drawEarth = (power) ->
     bottom = canvasHeight * bottomRate - power * 50
-    ctx.fillStyle = 'black'
+    ctx.fillStyle = characterColor
     ctx.fillRect 0, bottom, canvasWidth, canvasHeight
 
   drawLamps = (power) ->
@@ -369,6 +381,7 @@ main = (sources) ->
   $('canvas').click ->
     setTracks()
     setIndexes()
+    setCharacterColor()
 
 $ ->
   load_images(['/bon3/image/image1.png','/bon3/image/image2.png','/bon3/image/image3.png','/bon3/image/image4.png','/bon3/image/image5.png','/bon3/image/image6.png']).then (images) ->

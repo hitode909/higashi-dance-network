@@ -1,4 +1,4 @@
-var Oneliner, Shiki, choise, load_images, main;
+var Oneliner, Shiki, choise, genColorValue, load_images, main, randomColor;
 var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
   for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
   function ctor() { this.constructor = child; }
@@ -204,6 +204,16 @@ timbre.fn.register("oneliner", Oneliner);
 choise = function(array) {
   return array[Math.floor(Math.random() * array.length)];
 };
+genColorValue = function() {
+  if (Math.random() > 0.5) {
+    return 255;
+  } else {
+    return 0;
+  }
+};
+randomColor = function() {
+  return "rgb(" + (genColorValue()) + "," + (genColorValue()) + "," + (genColorValue()) + ")";
+};
 load_images = function(srces) {
   var dfd, img, imgs, loaded_count, src, _i, _len;
   dfd = $.Deferred();
@@ -224,7 +234,7 @@ load_images = function(srces) {
   return dfd.promise();
 };
 main = function(sources) {
-  var arrangeTrack, baseThreshold, bottomRate, canvas, canvasHeight, canvasWidth, characterHeight, characterWidth, clearStage, ctx, currentTrack, drawCharacter, drawEarth, drawLamps, fft, imgs, indexes, lastPositions, oneliner, resizeCanvas, setIndexes, setTracks, shuffleTracks, timer, tracks, zeroTimes;
+  var arrangeTrack, baseThreshold, bottomRate, canvas, canvasHeight, canvasWidth, characterColor, characterHeight, characterWidth, clearStage, ctx, currentTrack, drawCharacter, drawEarth, drawLamps, fft, imgs, indexes, lastPositions, oneliner, resizeCanvas, setCharacterColor, setIndexes, setTracks, shuffleTracks, timer, tracks, zeroTimes;
   imgs = sources.images;
   oneliner = T("oneliner");
   tracks = [];
@@ -275,6 +285,10 @@ main = function(sources) {
   characterHeight = 277;
   baseThreshold = 0.2;
   bottomRate = 0.9;
+  characterColor = randomColor();
+  setCharacterColor = function() {
+    return characterColor = randomColor();
+  };
   clearStage = function() {
     ctx.fillStyle = 'white';
     return ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -286,12 +300,14 @@ main = function(sources) {
     if (power < 0.2) {
       chara = imgs[0];
     }
+    ctx.fillStyle = characterColor;
+    ctx.fillRect(canvasWidth * xRate - characterWidth * 0.5, bottom - power * 50 - characterHeight, characterWidth, characterHeight);
     return ctx.drawImage(chara, canvasWidth * xRate - characterWidth * 0.5, bottom - power * 50 - characterHeight, characterWidth, characterHeight);
   };
   drawEarth = function(power) {
     var bottom;
     bottom = canvasHeight * bottomRate - power * 50;
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = characterColor;
     return ctx.fillRect(0, bottom, canvasWidth, canvasHeight);
   };
   drawLamps = function(power) {
@@ -416,7 +432,8 @@ main = function(sources) {
   timer.on();
   return $('canvas').click(function() {
     setTracks();
-    return setIndexes();
+    setIndexes();
+    return setCharacterColor();
   });
 };
 $(function() {
