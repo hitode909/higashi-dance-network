@@ -212,7 +212,7 @@ genColorValue = function() {
   }
 };
 randomColor = function() {
-  return "rgb(" + (genColorValue()) + "," + (genColorValue()) + "," + (genColorValue()) + ")";
+  return "hsl(" + (Math.random() * 360) + ", 100% ,50%)";
 };
 load_images = function(srces) {
   var dfd, img, imgs, loaded_count, src, _i, _len;

@@ -164,7 +164,7 @@ genColorValue = ->
   if Math.random() > 0.5 then 255 else 0
 
 randomColor = ->
-  "rgb(#{genColorValue()},#{genColorValue()},#{genColorValue()})"
+  "hsl(#{Math.random()*360}, 100% ,50%)"
 
 load_images = (srces) ->
   dfd = $.Deferred()
