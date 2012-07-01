@@ -29,11 +29,6 @@ canvas {
   width: 100%;
   height: 50px;
 }
-#footer h1 {
-  position: absolute;
-  bottom: 5px;
-  left: 5px;
-}
 #footer #tshirts {
   position: absolute;
   left: 10px;
@@ -41,6 +36,24 @@ canvas {
 }
 #footer #tshirts img {
   height: 50px;
+}
+#footer #volume {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 100;
+}
+#footer #volume .sound-on {
+  display: none;
+}
+#footer #volume .sound-off {
+  display: block;
+}
+#footer #volume.on .sound-on {
+  display: block;
+}
+#footer #volume.on .sound-off {
+  display: none;
 }
 #footer #copy {
   font-weight: bold;
@@ -50,4 +63,5 @@ canvas {
   left: 0px;
   bottom: 10px;
   width: 100%;
+  z-index: 10;
 }

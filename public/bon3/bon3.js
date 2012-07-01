@@ -234,7 +234,7 @@ load_images = function(srces) {
   return dfd.promise();
 };
 main = function(sources) {
-  var arrangeTrack, baseThreshold, bottomRate, canvas, canvasHeight, canvasWidth, characterColor, characterHeight, characterWidth, character_images, character_images_rest, clearStage, ctx, currentTrack, drawCharacter, drawEarth, drawLamps, fft, footerHeight, indexes, lastPositions, oneliner, resetStage, resizeCanvas, setCharacterColor, setIndexes, setTracks, shuffleTracks, timer, tracks, zeroTimes;
+  var arrangeTrack, baseThreshold, bottomRate, canvas, canvasHeight, canvasWidth, characterColor, characterHeight, characterWidth, character_images, character_images_rest, clearStage, ctx, currentTrack, dac, drawCharacter, drawEarth, drawLamps, fft, footerHeight, indexes, lastPositions, oneliner, resetStage, resizeCanvas, setCharacterColor, setIndexes, setTracks, shuffleTracks, timer, tracks, zeroTimes;
   character_images = sources.images;
   character_images_rest = character_images.slice(1, (character_images.length + 1) || 9e9);
   oneliner = T("oneliner");
@@ -402,11 +402,10 @@ main = function(sources) {
     }
     return _results;
   };
-  oneliner.play();
-  window.oneliner = oneliner;
+  dac = T("*", oneliner, 1.0);
+  dac.play();
   fft.on();
   currentTrack = null;
-  oneliner.play();
   window.oneliner = oneliner;
   timer = null;
   arrangeTrack = function() {
@@ -444,8 +443,18 @@ main = function(sources) {
     }
   });
   timer.on();
-  return $('canvas').click(function() {
+  $('canvas').click(function() {
     return resetStage();
+  });
+  $('.sound-off').click(function() {
+    dac.play();
+    $('#volume').toggleClass('on');
+    return false;
+  });
+  return $('.sound-on').click(function() {
+    dac.pause();
+    $('#volume').toggleClass('on');
+    return false;
   });
 };
 $(function() {

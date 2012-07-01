@@ -343,13 +343,12 @@ main = (sources) ->
     for i in [0..3]
       drawCharacter(i, segments[i])
 
-  oneliner.play()
-  window.oneliner = oneliner
+  dac = T("*", oneliner, 1.0)
+  dac.play()
   fft.on()
 
   currentTrack = null
 
-  oneliner.play()
   window.oneliner = oneliner
 
   timer = null
@@ -393,6 +392,16 @@ main = (sources) ->
 
   $('canvas').click ->
     resetStage()
+
+  $('.sound-off').click ->
+    dac.play()
+    $('#volume').toggleClass('on')
+    false
+
+  $('.sound-on').click ->
+    dac.pause()
+    $('#volume').toggleClass('on')
+    false
 
 $ ->
 
