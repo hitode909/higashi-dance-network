@@ -47,6 +47,10 @@ canvas {
   bottom: 10px;
   z-index: 100;
 }
+#footer #volume img {
+  vertical-align: bottom;
+  height: 25px;
+}
 #footer #volume .sound-on {
   display: none;
 }
