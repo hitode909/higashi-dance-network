@@ -234,7 +234,7 @@ load_images = function(srces) {
   return dfd.promise();
 };
 main = function(sources) {
-  var arrangeTrack, baseThreshold, bottomRate, canvas, canvasHeight, canvasWidth, characterColor, characterHeight, characterWidth, character_images, character_images_rest, clearStage, ctx, currentTrack, dac, drawCharacter, drawEarth, fft, footerHeight, indexes, oneliner, resetStage, resizeCanvas, setCharacterColor, setIndexes, setTracks, shuffleTracks, timer, tracks, zeroTimes;
+  var baseThreshold, bottomRate, canvas, canvasHeight, canvasWidth, characterColor, characterHeight, characterWidth, character_images, character_images_rest, clearStage, ctx, dac, drawCharacter, drawEarth, fft, footerHeight, indexes, oneliner, resetStage, resizeCanvas, setCharacterColor, setIndexes, setTracks, timer, tracks, zeroTimes;
   character_images = sources.images;
   character_images_rest = character_images.slice(1, (character_images.length + 1) || 9e9);
   oneliner = T("oneliner");
@@ -378,28 +378,15 @@ main = function(sources) {
   dac = T("*", oneliner, 1.0);
   dac.play();
   fft.on();
-  currentTrack = null;
-  window.oneliner = oneliner;
   timer = null;
-  arrangeTrack = function() {
-    var i, track;
-    i = timer.count;
-    track = tracks[indexes[i % indexes.length]];
-    track.step();
-    return oneliner.func = track.getFunction();
-  };
-  shuffleTracks = function() {
-    var i;
-    i = timer.count;
-    return indexes[i % indexes.length] = Math.floor(Math.random() * tracks.length);
-  };
   timer = T("interval", 125, function() {
     var i, track;
     i = timer.count;
     track = tracks[indexes[i % indexes.length]];
     oneliner.func = track.getFunction();
     if (Math.random() < 0.05) {
-      arrangeTrack();
+      track.step();
+      oneliner.func = track.getFunction();
     }
     if (Math.random() < 0.1) {
       indexes[i % indexes.length] = Math.floor(Math.random() * tracks.length);
@@ -416,7 +403,10 @@ main = function(sources) {
     }
   });
   timer.on();
-  $('canvas').click(function() {
+  $('body').click(function() {
+    if ($(this).is('a')) {
+      return;
+    }
     return resetStage();
   });
   $('.sound-off').click(function() {

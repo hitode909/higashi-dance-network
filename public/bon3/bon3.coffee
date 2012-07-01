@@ -241,7 +241,6 @@ main = (sources) ->
     setIndexes()
     setCharacterColor()
 
-
   clearStage = ->
     ctx.fillStyle = 'white'
     ctx.fillRect 0, 0, canvas.width, canvas.height
@@ -320,21 +319,7 @@ main = (sources) ->
   dac.play()
   fft.on()
 
-  currentTrack = null
-
-  window.oneliner = oneliner
-
   timer = null
-
-  arrangeTrack = ->
-    i = timer.count
-    track = tracks[indexes[i%indexes.length]]
-    track.step()
-    oneliner.func = track.getFunction()
-
-  shuffleTracks = ->
-    i = timer.count
-    indexes[i%indexes.length] = Math.floor(Math.random() * tracks.length)
 
   timer = T "interval", 125, ->
 
@@ -344,9 +329,12 @@ main = (sources) ->
     oneliner.func = track.getFunction()
 
     if Math.random() < 0.05
-      arrangeTrack()
+      # step current track
+      track.step()
+      oneliner.func = track.getFunction()
 
     if Math.random() < 0.1
+      # shuffle current track
       indexes[i%indexes.length] = Math.floor(Math.random() * tracks.length)
 
     if Math.random() < 0.1
@@ -363,7 +351,8 @@ main = (sources) ->
 
   timer.on()
 
-  $('canvas').click ->
+  $('body').click ->
+    return if $(this).is('a')
     resetStage()
 
   $('.sound-off').click ->
