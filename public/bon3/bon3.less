@@ -1,6 +1,5 @@
 body {
     min-width: 800px;
-    min-height: 500px;
 }
 
 a, a:visited {
@@ -18,6 +17,12 @@ canvas {
     left: 0px;
     top: 0px;
     z-index: 100;
+
+    cursor: pointer;
+}
+
+.sorry {
+    font-size: 30px;
 }
 
 #footer {
@@ -36,15 +41,20 @@ canvas {
     }
     #tshirts {
         position: absolute;
-        bottom: 0px;
-        right: 5px;
+        left: 10px;
+        bottom: 10px;
+
+        img {
+            height:50px;
+        }
     }
     #copy {
-        font-size: 80%;
+        font-weight: bold;
+        font-size: 12px;
         text-align: center;
         position: absolute;
         left: 0px;
-        bottom: 5px;
+        bottom: 10px;
         width: 100%;
     }
 

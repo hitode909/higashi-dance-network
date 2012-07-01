@@ -234,7 +234,7 @@ load_images = function(srces) {
   return dfd.promise();
 };
 main = function(sources) {
-  var arrangeTrack, baseThreshold, bottomRate, canvas, canvasHeight, canvasWidth, characterColor, characterHeight, characterWidth, clearStage, ctx, currentTrack, drawCharacter, drawEarth, drawLamps, fft, imgs, indexes, lastPositions, oneliner, resizeCanvas, setCharacterColor, setIndexes, setTracks, shuffleTracks, timer, tracks, zeroTimes;
+  var arrangeTrack, baseThreshold, bottomRate, canvas, canvasHeight, canvasWidth, characterColor, characterHeight, characterWidth, clearStage, ctx, currentTrack, drawCharacter, drawEarth, drawLamps, fft, footerHeight, imgs, indexes, lastPositions, oneliner, resetStage, resizeCanvas, setCharacterColor, setIndexes, setTracks, shuffleTracks, timer, tracks, zeroTimes;
   imgs = sources.images;
   oneliner = T("oneliner");
   tracks = [];
@@ -270,8 +270,8 @@ main = function(sources) {
   ctx = canvas.getContext('2d');
   resizeCanvas = _.throttle(function() {
     canvasWidth = $(window).width();
-    if (canvasWidth < 800) {
-      canvasWidth = 800;
+    if (canvasWidth < 900) {
+      canvasWidth = 900;
     }
     canvasHeight = $(window).height();
     canvas.width = canvasWidth;
@@ -285,9 +285,15 @@ main = function(sources) {
   characterHeight = 277;
   baseThreshold = 0.2;
   bottomRate = 0.9;
+  footerHeight = 70;
   characterColor = randomColor();
   setCharacterColor = function() {
     return characterColor = randomColor();
+  };
+  resetStage = function() {
+    setTracks();
+    setIndexes();
+    return setCharacterColor();
   };
   clearStage = function() {
     ctx.fillStyle = 'white';
@@ -295,7 +301,7 @@ main = function(sources) {
   };
   drawCharacter = function(xRate, power) {
     var bottom, chara;
-    bottom = canvasHeight * bottomRate;
+    bottom = _.min([canvasHeight * bottomRate, canvasHeight - footerHeight]);
     chara = choise(imgs);
     if (power < 0.2) {
       chara = imgs[0];
@@ -306,7 +312,7 @@ main = function(sources) {
   };
   drawEarth = function(power) {
     var bottom;
-    bottom = canvasHeight * bottomRate - power * 50;
+    bottom = _.min([canvasHeight * bottomRate, canvasHeight - footerHeight]) - power * 50;
     ctx.fillStyle = characterColor;
     return ctx.fillRect(0, bottom, canvasWidth, canvasHeight);
   };
@@ -369,8 +375,8 @@ main = function(sources) {
         segments[i] = segments[i] / len * segments.length;
       }
     }
-    if (zeroTimes * fft.interval > 2000) {
-      setTracks();
+    if (zeroTimes * fft.interval > 1000) {
+      resetStage();
       zeroTimes = 0;
     }
     if (sum < 1.0) {
@@ -431,12 +437,21 @@ main = function(sources) {
   });
   timer.on();
   return $('canvas').click(function() {
-    setTracks();
-    setIndexes();
-    return setCharacterColor();
+    return resetStage();
   });
 };
 $(function() {
+  var message;
+  if (!timbre.env) {
+    message = $('<div>');
+    message.addClass('sorry');
+    message.text('Google ChromeかFirefoxで見てください');
+    $('body').append(message);
+    $('#footer').css({
+      background: 'black'
+    });
+    return;
+  }
   return load_images(['/bon3/image/image1.png', '/bon3/image/image2.png', '/bon3/image/image3.png', '/bon3/image/image4.png', '/bon3/image/image5.png', '/bon3/image/image6.png']).then(function(images) {
     return main({
       images: images

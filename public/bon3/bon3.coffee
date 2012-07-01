@@ -215,7 +215,7 @@ main = (sources) ->
 
   resizeCanvas = _.throttle ->
    canvasWidth = $(window).width()
-   canvasWidth = 800 if canvasWidth < 800
+   canvasWidth = 900 if canvasWidth < 900
    canvasHeight = $(window).height()
    canvas.width = canvasWidth
    canvas.height = canvasHeight
@@ -229,17 +229,24 @@ main = (sources) ->
   characterHeight = 277
   baseThreshold = 0.2
   bottomRate = 0.9
+  footerHeight = 70
 
   characterColor = randomColor()
   setCharacterColor = ->
     characterColor = randomColor()
+
+  resetStage = ->
+    setTracks()
+    setIndexes()
+    setCharacterColor()
+
 
   clearStage = ->
     ctx.fillStyle = 'white'
     ctx.fillRect 0, 0, canvas.width, canvas.height
 
   drawCharacter = (xRate, power) ->
-    bottom = canvasHeight * bottomRate
+    bottom = _.min([canvasHeight * bottomRate, canvasHeight - footerHeight])
     chara = choise(imgs)
     chara = imgs[0] if power < 0.2
     ctx.fillStyle = characterColor
@@ -247,7 +254,7 @@ main = (sources) ->
     ctx.drawImage chara, canvasWidth * xRate - characterWidth*0.5, bottom - power * 50 - characterHeight, characterWidth, characterHeight
 
   drawEarth = (power) ->
-    bottom = canvasHeight * bottomRate - power * 50
+    bottom = _.min([canvasHeight * bottomRate, canvasHeight - footerHeight]) - power * 50
     ctx.fillStyle = characterColor
     ctx.fillRect 0, bottom, canvasWidth, canvasHeight
 
@@ -305,8 +312,8 @@ main = (sources) ->
         segments[i] = segments[i] / len * segments.length
 
     # zero check
-    if zeroTimes*fft.interval > 2000
-      setTracks()
+    if zeroTimes*fft.interval > 1000
+      resetStage()
       zeroTimes = 0
 
     if sum < 1.0
@@ -379,11 +386,19 @@ main = (sources) ->
   timer.on()
 
   $('canvas').click ->
-    setTracks()
-    setIndexes()
-    setCharacterColor()
+    resetStage()
 
 $ ->
+
+  unless timbre.env
+    message = $('<div>')
+    message.addClass('sorry')
+    message.text('Google ChromeかFirefoxで見てください')
+    $('body').append(message)
+    $('#footer').css
+      background: 'black'
+    return
+
   load_images(['/bon3/image/image1.png','/bon3/image/image2.png','/bon3/image/image3.png','/bon3/image/image4.png','/bon3/image/image5.png','/bon3/image/image6.png']).then (images) ->
     main
       images: images
