@@ -234,7 +234,7 @@ load_images = function(srces) {
   return dfd.promise();
 };
 main = function(sources) {
-  var arrangeTrack, baseThreshold, bottomRate, canvas, canvasHeight, canvasWidth, characterColor, characterHeight, characterWidth, character_images, character_images_rest, clearStage, ctx, currentTrack, dac, drawCharacter, drawEarth, fft, footerHeight, indexes, lastPositions, oneliner, resetStage, resizeCanvas, setCharacterColor, setIndexes, setTracks, shuffleTracks, timer, tracks, zeroTimes;
+  var arrangeTrack, baseThreshold, bottomRate, canvas, canvasHeight, canvasWidth, characterColor, characterHeight, characterWidth, character_images, character_images_rest, clearStage, ctx, currentTrack, dac, drawCharacter, drawEarth, fft, footerHeight, indexes, oneliner, resetStage, resizeCanvas, setCharacterColor, setIndexes, setTracks, shuffleTracks, timer, tracks, zeroTimes;
   character_images = sources.images;
   character_images_rest = character_images.slice(1, (character_images.length + 1) || 9e9);
   oneliner = T("oneliner");
@@ -327,16 +327,14 @@ main = function(sources) {
   fft.interval = 25;
   fft.noSpectrum = true;
   zeroTimes = 0;
-  lastPositions = [0, 0, 0, 0];
-  fft.onfft = function(real, imag) {
-    var absv, half, i, len, segments, spectrum, sum, v, _len, _ref, _results;
-    spectrum = real;
+  fft.onfft = function(res) {
+    var absv, half, i, len, segments, sum, v, _len, _ref, _results;
     len = 0;
     sum = 0;
     segments = [0, 0, 0, 0];
-    half = spectrum.length / 2;
-    for (i = 0, _len = spectrum.length; i < _len; i++) {
-      v = spectrum[i];
+    half = res.length / 2;
+    for (i = 0, _len = res.length; i < _len; i++) {
+      v = res[i];
       if (i < 2) {
         continue;
       }
@@ -349,7 +347,7 @@ main = function(sources) {
       absv = Math.abs(v);
       sum += absv;
       len++;
-      segments[Math.floor(i * segments.length / spectrum.length / 0.5)] += absv;
+      segments[Math.floor(i * segments.length / half)] += absv;
     }
     if (len > 0) {
       sum /= len;

@@ -272,16 +272,14 @@ main = (sources) ->
   fft.noSpectrum = true
 
   zeroTimes = 0
-  lastPositions = [0,0,0,0]
 
-  fft.onfft = (real, imag) ->
-    spectrum = real
+  fft.onfft = (res) ->
 
     len = 0
     sum = 0
     segments = [0,0,0,0]
-    half = spectrum.length / 2
-    for v, i in spectrum
+    half = res.length / 2
+    for v, i in res
       continue if i < 2
       break if i > half
       continue if isNaN(v)
@@ -289,7 +287,7 @@ main = (sources) ->
       sum += absv
       len++
 
-      segments[Math.floor(i * segments.length / spectrum.length / 0.5)] += absv
+      segments[Math.floor(i * segments.length / half)] += absv
 
     if len > 0
       sum /= len
