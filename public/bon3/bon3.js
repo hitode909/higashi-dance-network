@@ -421,15 +421,16 @@ main = function(sources) {
   });
 };
 $(function() {
-  var message;
   if (!timbre.env) {
-    message = $('<div>');
-    message.addClass('sorry');
-    message.text('Google ChromeかFirefoxで見てください');
-    $('body').append(message);
     $('#footer').css({
       background: 'black'
     });
+    $('#volume').remove();
+    if (/iPhone|iPad/.test(navigator.userAgent)) {
+      $('.sorry-touch').show();
+    } else {
+      $('.sorry-pc').show();
+    }
     return;
   }
   return load_images(['/bon3/image/image1.png', '/bon3/image/image2.png', '/bon3/image/image3.png', '/bon3/image/image4.png', '/bon3/image/image5.png', '/bon3/image/image6.png']).then(function(images) {

@@ -18,10 +18,20 @@ canvas {
   top: 0px;
   z-index: 100;
 }
-.sorry {
+.sorry-pc {
   text-align: center;
   font-size: 30px;
   margin: 100px;
+  display: none;
+}
+.sorry-touch {
+  text-align: center;
+  font-size: 30px;
+  margin: 100px;
+  display: none;
+}
+.sorry-touch img {
+  width: 50%;
 }
 #footer {
   color: white;
