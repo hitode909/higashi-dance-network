@@ -133,7 +133,7 @@ SukiMap =
   icon_image_at: (value) ->
     value = +value || 1
     value = 1 unless 1 <= value <= 4
-    "/sukimap/image/face#{value}.png"
+    "http://higashi-dance-network.appspot.com/sukimap/image/face#{value}.png"
 
   og_image_at: (value) ->
     'http://dl.dropbox.com/u/8270034/sketch/map/14.png'
@@ -204,7 +204,7 @@ SukiMap =
       diff = Math.abs((new Date().getTime() - date.getTime()) / 1000)
 
       if diff < 60
-        return ""
+        return "今"
 
       diff = Math.floor(diff / 60)
       if diff < 60

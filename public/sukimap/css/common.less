@@ -8,9 +8,15 @@ body {
     font-size: 12px;
     margin:0;
     padding:0;
+    color: #801919;
+    font-weight: bold;
 
     a, a:visited {
-        color: #800;
+        color: #801919;
+    }
+
+    .clear {
+        clear: both;
     }
 
     #wrapper {
@@ -20,6 +26,7 @@ body {
     #title {
         background: url('/sukimap/image/header_back.png');
         text-align: center;
+        margin-bottom: 10px;
         img {
             width: 148px;
             height: 40px;
@@ -35,8 +42,11 @@ body {
     }
 
     #map-preview {
-        width: 310px;
-        height: 310px;
+        margin-left: 10px;
+        width: 290px;
+        height: 290px;
+        margin-top: 10px;
+        margin-bottom: 20px;
         background: #787878;
     }
 
@@ -53,38 +63,83 @@ body {
     }
 
     .message {
-        margin-top: 20px;
+        margin-left: 10px;
+        margin-top: 10px;
         margin-bottom: 5px;
+        margin-right: 10px;
         img.flag {
             margin-right: 4px;
             width: 12px;
             height: 18px;
             vertical-align: middle;
         }
+
     }
+    .share .message {
+        margin-left: 0px;
+    }
+
 
     .image-button {
         background: transparent;
         border: none;
         cursor: pointer;
     }
+
+    .line {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        .line-image {
+            width: 305px;
+            height: 20px;
+        }
+    }
 }
 
 /* 各ページ */
 
 body#main {
-    img.start-button {
-        width: 290px;
-        height: 56px;
+
+    img.guide-image {
+        margin-left: -5px;
+        width: 306px;
+        height: 280px;
+    }
+
+    .start {
+        margin-top: 10px;
+        margin-bottom: 10px;
+
+        img.start-button {
+            width: 290px;
+            height: 56px;
+        }
     }
 }
 
 body#edit-page {
     .faces {
-        margin-left: 20px;
-        margin-bottom: 20px;
+        margin-left: 10px;
+        margin-bottom: 10px;
+
+        .face-wrapper {
+            float: left;
+            width: 74px;
+            height: 74px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            width: 74px;
+            height: 74px;
+        }
 
         img {
+            padding-left: 4px;
+            padding-right: 4px;
+            padding-top: 2px;
+            padding-bottom: 2px;
             width: 65px;
             height: 70px;
             cursor: pointer;
@@ -93,7 +148,8 @@ body#edit-page {
             display: none;
         }
         input:checked+img {
-            background: pink;
+            background: url('/sukimap/image/face_select.png');
+            background-size: 73px 73px;
         }
     }
 
@@ -112,4 +168,44 @@ body#edit-page {
         width: 290px;
         height: 56px;
     }
+}
+
+body#suita-page {
+    .time-back {
+        width: 94px;
+        height: 24px;
+        margin-bottom: 20px;
+        margin-left: -5px;
+        background: url('/sukimap/image/time_back.png');
+        background-size: 94px 24px;
+
+        #ago {
+            margin-left: 10px;
+            padding: 5px;
+            color: white;
+            font-weight: bold;
+        }
+    }
+    .share {
+        margin-left: 10px;
+
+        .twitter-container {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .facebook-container {
+            margin-bottom: 20px;
+        }
+
+        .social-button {
+            width: 290px;
+            height: 56px;
+        }
+    }
+
+    .created-message {
+        margin-left: 10px;
+        margin-bottom: 5px;
+    }
+
 }
