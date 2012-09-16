@@ -330,7 +330,7 @@ Handlers = {
   },
   suita: function() {
     var key, matched, query;
-    matched = location.pathname.match(/suita\/(.+)$/);
+    matched = location.pathname.match(/suita\/([^?&\/]+)/);
     if (!matched) {
       alert("情報の取得に失敗しました．トップページに戻ります．");
       location.href = Constants.PAGE_PATH.MAIN;
