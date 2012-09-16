@@ -106,20 +106,20 @@ body#edit-page .faces {
 }
 body#edit-page .faces .face-wrapper {
   float: left;
-  width: 74px;
-  height: 74px;
+  width: 73px;
+  height: 73px;
   position: relative;
 }
 body#edit-page .faces label {
   display: block;
-  width: 74px;
-  height: 74px;
+  width: 73px;
+  height: 73px;
 }
 body#edit-page .faces img {
   padding-left: 4px;
   padding-right: 4px;
   padding-top: 2px;
-  padding-bottom: 2px;
+  padding-bottom: 1px;
   width: 65px;
   height: 70px;
   cursor: pointer;
