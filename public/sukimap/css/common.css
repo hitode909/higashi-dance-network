@@ -82,6 +82,10 @@ body .line .line-image {
   width: 305px;
   height: 20px;
 }
+body .attension {
+  font-size: 90%;
+  font-weight: normal;
+}
 /* 各ページ */
 body#main img.guide-image {
   margin-left: -5px;
