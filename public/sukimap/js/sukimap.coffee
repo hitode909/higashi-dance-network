@@ -16,6 +16,47 @@ Page =
     module = this
     location.protocol + '//' + location.host + location.pathname + '?' + module.createQuery(query)
 
+DataStorage =
+  save: (data) ->
+    dfd = $.Deferred()
+    json_data = JSON.stringify data
+    $.ajax
+      url: '/data/'
+      data:
+        data: json_data
+      type: 'POST'
+      dataType: 'text'
+      success: (key) ->
+        localStorage["data-#{key}"] = json_data
+        dfd.resolve key
+      error: ->
+        dfd.reject()
+    dfd.promise()
+
+  get: (key) ->
+    dfd = $.Deferred()
+    dataKey = "data-#{key}"
+
+    if localStorage[dataKey]
+      json_data = localStorage[dataKey]
+      dfd.resolve JSON.parse(json_data)
+    else
+      $.ajax
+        url: "/data/#{key}"
+        type: 'GET'
+        dataType: 'text'
+        success: (json_data) ->
+          localStorage[dataKey] = json_data
+          dfd.resolve JSON.parse(json_data)
+        error: ->
+          dfd.reject()
+
+    dfd.promise()
+
+  clearCache: ->
+    localStorage.clear()
+
+
 # 定数
 
 Constants =
@@ -85,6 +126,45 @@ SukiMap =
   icon_image_at: (value) ->
     'http://dl.dropbox.com/u/8270034/sketch/map/14.png'
 
+  save_status: (info) ->
+    # info:
+    #   center:
+    #     lat:
+    #     long:
+    #   icon_value:
+    #   comment:
+
+    post_info =
+      center:
+        lat: info.center.lat
+        long: info.center.long
+      icon_value: info.icon_value
+      comment: info.comment
+
+    DataStorage.save(post_info).then (key) ->
+      location.href = "/sukimap/suita/#{key}"
+    .fail ->
+      alert "保存に失敗しました．"
+
+  load_status: (key) ->
+    DataStorage.get(key).then (info) ->
+      console.log 'get done'
+      console.log info
+      SukiMap.render_map
+        container: $('#map-preview')[0]
+        center:
+          lat: info.center.lat
+          long: info.center.long
+        icon_image: SukiMap.icon_image_at info.icon_value
+        comment: info.comment
+
+      SukiMap.setup_share info
+    .fail ->
+      alert "情報の取得に失敗しました．トップページに戻ります．"
+      location.href = Constants.PAGE_PATH.MAIN
+
+  setup_share: (info) ->
+
 # 各ページのハンドラ
 
 Handlers =
@@ -152,8 +232,32 @@ Handlers =
         comment: _.escape($(this).val())
     , 100
 
-  permalink: ->
-    console.log 'permalink'
+    save_handler = _.once ->
+      SukiMap.save_status(
+        center:
+          lat: query.lat
+          long: query.long
+        icon_value: +$('input[name=face]:checked').val()
+        comment: $('textarea[name=comment]').val()
+      )
+
+    $('#edit-form').submit ->
+      try
+        save_handler(this)
+      catch e
+        console.log e
+      false
+
+  suita: ->
+    console.log 'suita!!'
+    matched = location.pathname.match(/suita\/(.+)$/)
+    unless matched
+      alert "情報の取得に失敗しました．トップページに戻ります．"
+      location.href = Constants.PAGE_PATH.MAIN
+
+    key = matched[1]
+    SukiMap.load_status key
+
 
 # 呼び出し
 

@@ -1,4 +1,4 @@
-var Constants, Handlers, Page, SukiMap;
+var Constants, DataStorage, Handlers, Page, SukiMap;
 Page = {
   parseQuery: function(query_string) {
     var k, pair, query, v, _i, _len, _ref, _ref2;
@@ -35,6 +35,55 @@ Page = {
     var module;
     module = this;
     return location.protocol + '//' + location.host + location.pathname + '?' + module.createQuery(query);
+  }
+};
+DataStorage = {
+  save: function(data) {
+    var dfd, json_data;
+    dfd = $.Deferred();
+    json_data = JSON.stringify(data);
+    $.ajax({
+      url: '/data/',
+      data: {
+        data: json_data
+      },
+      type: 'POST',
+      dataType: 'text',
+      success: function(key) {
+        localStorage["data-" + key] = json_data;
+        return dfd.resolve(key);
+      },
+      error: function() {
+        return dfd.reject();
+      }
+    });
+    return dfd.promise();
+  },
+  get: function(key) {
+    var dataKey, dfd, json_data;
+    dfd = $.Deferred();
+    dataKey = "data-" + key;
+    if (localStorage[dataKey]) {
+      json_data = localStorage[dataKey];
+      dfd.resolve(JSON.parse(json_data));
+    } else {
+      $.ajax({
+        url: "/data/" + key,
+        type: 'GET',
+        dataType: 'text',
+        success: function(json_data) {
+          localStorage[dataKey] = json_data;
+          return dfd.resolve(JSON.parse(json_data));
+        },
+        error: function() {
+          return dfd.reject();
+        }
+      });
+    }
+    return dfd.promise();
+  },
+  clearCache: function() {
+    return localStorage.clear();
   }
 };
 Constants = {
@@ -87,7 +136,43 @@ SukiMap = {
   },
   icon_image_at: function(value) {
     return 'http://dl.dropbox.com/u/8270034/sketch/map/14.png';
-  }
+  },
+  save_status: function(info) {
+    var post_info;
+    post_info = {
+      center: {
+        lat: info.center.lat,
+        long: info.center.long
+      },
+      icon_value: info.icon_value,
+      comment: info.comment
+    };
+    return DataStorage.save(post_info).then(function(key) {
+      return location.href = "/sukimap/suita/" + key;
+    }).fail(function() {
+      return alert("保存に失敗しました．");
+    });
+  },
+  load_status: function(key) {
+    return DataStorage.get(key).then(function(info) {
+      console.log('get done');
+      console.log(info);
+      SukiMap.render_map({
+        container: $('#map-preview')[0],
+        center: {
+          lat: info.center.lat,
+          long: info.center.long
+        },
+        icon_image: SukiMap.icon_image_at(info.icon_value),
+        comment: info.comment
+      });
+      return SukiMap.setup_share(info);
+    }).fail(function() {
+      alert("情報の取得に失敗しました．トップページに戻ります．");
+      return location.href = Constants.PAGE_PATH.MAIN;
+    });
+  },
+  setup_share: function(info) {}
 };
 Handlers = {
   init: function() {
@@ -134,7 +219,7 @@ Handlers = {
     });
   },
   edit: function() {
-    var query;
+    var query, save_handler;
     console.log('edit');
     query = location.search.length > 0 ? Page.parseQuery(location.search.slice(1)) : null;
     if (!query) {
@@ -155,15 +240,41 @@ Handlers = {
         icon_image: SukiMap.icon_image_at($(this).val())
       });
     });
-    return $('textarea[name=comment]').on('change keyup', _.debounce(function() {
+    $('textarea[name=comment]').on('change keyup', _.debounce(function() {
       console.log('change');
       return SukiMap.update_map({
         comment: _.escape($(this).val())
       });
     }, 100));
+    save_handler = _.once(function() {
+      return SukiMap.save_status({
+        center: {
+          lat: query.lat,
+          long: query.long
+        },
+        icon_value: +$('input[name=face]:checked').val(),
+        comment: $('textarea[name=comment]').val()
+      });
+    });
+    return $('#edit-form').submit(function() {
+      try {
+        save_handler(this);
+      } catch (e) {
+        console.log(e);
+      }
+      return false;
+    });
   },
-  permalink: function() {
-    return console.log('permalink');
+  suita: function() {
+    var key, matched;
+    console.log('suita!!');
+    matched = location.pathname.match(/suita\/(.+)$/);
+    if (!matched) {
+      alert("情報の取得に失敗しました．トップページに戻ります．");
+      location.href = Constants.PAGE_PATH.MAIN;
+    }
+    key = matched[1];
+    return SukiMap.load_status(key);
   }
 };
 $(function() {

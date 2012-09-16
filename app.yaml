@@ -38,6 +38,10 @@ handlers:
   static_files: public/hanabi/uchiage/index.html
   upload: public/hanabi/uchiage/index.html
 
+- url: /sukimap/suita/.*
+  static_files: public/sukimap/suita/index.html
+  upload: public/sukimap/suita/index.html
+
 - url: /(.*)
   static_files: public/\1
   upload: public/(.*)

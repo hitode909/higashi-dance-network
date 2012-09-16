@@ -14,7 +14,6 @@
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true&language=ja&region=JP"></script>
     <!-- ここまで -->
 
-
     <script language="javascript" type="text/javascript" defer src="/sukimap/js/jquery-1.8.1.min.js"></script>
     <script language="javascript" type="text/javascript" defer src="/sukimap/js/underscore-min.js"></script>
     <script language="javascript" type="text/javascript" defer src="/sukimap/js/sukimap.js"></script>
@@ -26,7 +25,7 @@
 
     <!-- favicon, og, facebook -->
   </head>
-  <body id="edit-page" data-page-id="edit">
+  <body id="suita-page" data-page-id="suita">
 
     <!-- fb-root -->
 
@@ -42,45 +41,20 @@
 
       <div id="main-content">
 
+        <p>
+          すきまっぷシマシタ!!!!
+        </p>
 
-        <form id="edit-form">
-          <div>
-            いまのおなかへり度に近い表情を教えてください
+        <div id="map-preview"></div>
+
+        <div class="share">
+          <div class="twitter-container">
+            <a href=".">twitter</a>
           </div>
-
-          <div class="faces">
-
-            <label>
-              <input type="radio" name="face" value="1"/>満腹
-            </label>
-            <label>
-              <input type="radio" name="face" value="2" checked />ちょっとへってる
-            </label>
-            <label>
-              <input type="radio" name="face" value="3"/>ふつうにへってる
-            </label>
-            <label>
-              <input type="radio" name="face" value="4"/>だいぶへってる
-            </label>
-            <label>
-              <input type="radio" name="face" value="5"/>やばい
-            </label>
+          <div class="facebook-container">
+            <a href=".">facebook</a>
           </div>
-
-          <div>
-            おなかへりメッセージを入力してください
-          </div>
-
-          <div class="message-container">
-            <textarea name="comment" placeholder="例：おなかすいた"></textarea>
-          </div>
-
-          <div id="map-preview"></div>
-
-          <div class="submit-container">
-            <input type="submit" value="決定"/>
-          </div>
-        </form>
+        </div>
 
       </div>
 
