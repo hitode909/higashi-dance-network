@@ -155,7 +155,7 @@ SukiMap =
       created: (new Date()).getTime()
 
     DataStorage.save(post_info).then (key) ->
-      location.href = "/sukimap/suita/#{key}"
+      location.href = "/sukimap/suita/#{key}?edit=1"
     .fail ->
       alert "保存に失敗しました．"
 
@@ -180,7 +180,7 @@ SukiMap =
   setup_share: (info) ->
     setup_twitter = ->
       text = info.comment
-      url = location.href
+      url = SukiMap.url_for_share()
       $('.twitter-share').attr
         href: "https://twitter.com/share?url=#{encodeURIComponent(url)}&text=#{encodeURIComponent(text)}"
 
@@ -189,7 +189,7 @@ SukiMap =
     setup_facebook = ->
       query =
         app_id: '115613081921666'
-        link: location.href
+        link: SukiMap.url_for_share()
         picture: SukiMap.icon_image_at info.icon_value
         name: 'おなかがすきまっぷ'
         description: info.comment
@@ -223,6 +223,9 @@ SukiMap =
 
     date = new Date(+time)
     $('#ago').text(date_str(date))
+
+  url_for_share: ->
+    location.href.replace(/\?edit=1/, '')
 
 # 各ページのハンドラ
 
@@ -308,7 +311,6 @@ Handlers =
       false
 
   suita: ->
-    console.log 'suita!!'
     matched = location.pathname.match(/suita\/(.+)$/)
     unless matched
       alert "情報の取得に失敗しました．トップページに戻ります．"
@@ -316,6 +318,15 @@ Handlers =
 
     key = matched[1]
     SukiMap.load_status key
+
+    query = if location.search.length > 0 then Page.parseQuery location.search[1..-1] else {}
+
+    if query.edit
+      $('.share').show()
+      $('.guest').hide()
+    else
+      $('.share').hide()
+      $('.guest').show()
 
 
 # 呼び出し

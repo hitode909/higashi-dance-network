@@ -164,7 +164,7 @@ SukiMap = {
       created: (new Date()).getTime()
     };
     return DataStorage.save(post_info).then(function(key) {
-      return location.href = "/sukimap/suita/" + key;
+      return location.href = "/sukimap/suita/" + key + "?edit=1";
     }).fail(function() {
       return alert("保存に失敗しました．");
     });
@@ -194,7 +194,7 @@ SukiMap = {
     setup_twitter = function() {
       var text, url;
       text = info.comment;
-      url = location.href;
+      url = SukiMap.url_for_share();
       return $('.twitter-share').attr({
         href: "https://twitter.com/share?url=" + (encodeURIComponent(url)) + "&text=" + (encodeURIComponent(text))
       });
@@ -204,7 +204,7 @@ SukiMap = {
       var query;
       query = {
         app_id: '115613081921666',
-        link: location.href,
+        link: SukiMap.url_for_share(),
         picture: SukiMap.icon_image_at(info.icon_value),
         name: 'おなかがすきまっぷ',
         description: info.comment,
@@ -241,6 +241,9 @@ SukiMap = {
     };
     date = new Date(+time);
     return $('#ago').text(date_str(date));
+  },
+  url_for_share: function() {
+    return location.href.replace(/\?edit=1/, '');
   }
 };
 Handlers = {
@@ -335,15 +338,22 @@ Handlers = {
     });
   },
   suita: function() {
-    var key, matched;
-    console.log('suita!!');
+    var key, matched, query;
     matched = location.pathname.match(/suita\/(.+)$/);
     if (!matched) {
       alert("情報の取得に失敗しました．トップページに戻ります．");
       location.href = Constants.PAGE_PATH.MAIN;
     }
     key = matched[1];
-    return SukiMap.load_status(key);
+    SukiMap.load_status(key);
+    query = location.search.length > 0 ? Page.parseQuery(location.search.slice(1)) : {};
+    if (query.edit) {
+      $('.share').show();
+      return $('.guest').hide();
+    } else {
+      $('.share').hide();
+      return $('.guest').show();
+    }
   }
 };
 $(function() {
