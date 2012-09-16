@@ -172,7 +172,31 @@ SukiMap = {
       return location.href = Constants.PAGE_PATH.MAIN;
     });
   },
-  setup_share: function(info) {}
+  setup_share: function(info) {
+    var setup_facebook, setup_twitter;
+    setup_twitter = function() {
+      var text, url;
+      text = info.comment;
+      url = location.href;
+      return $('.twitter-share').attr({
+        href: "https://twitter.com/share?url=" + (encodeURIComponent(url)) + "&text=" + (encodeURIComponent(text))
+      });
+    };
+    setup_twitter();
+    setup_facebook = function() {
+      var query;
+      query = {
+        app_id: 111,
+        link: location.href,
+        picture: 'aaa',
+        name: 'おなかがすきまっぷ'
+      };
+      return $('.facebook-share').attr({
+        href: "https://www.facebook.com/dialog/feed?" + (Page.createQuery(query))
+      });
+    };
+    return setup_facebook();
+  }
 };
 Handlers = {
   init: function() {

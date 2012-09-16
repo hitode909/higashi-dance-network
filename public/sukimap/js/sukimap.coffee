@@ -164,6 +164,35 @@ SukiMap =
       location.href = Constants.PAGE_PATH.MAIN
 
   setup_share: (info) ->
+    setup_twitter = ->
+      text = info.comment
+      url = location.href
+      $('.twitter-share').attr
+        href: "https://twitter.com/share?url=#{encodeURIComponent(url)}&text=#{encodeURIComponent(text)}"
+
+    setup_twitter()
+
+    setup_facebook = ->
+      query =
+        app_id: 111
+        link: location.href
+        picture: 'aaa'
+        name: 'おなかがすきまっぷ'
+      $('.facebook-share').attr
+        href: "https://www.facebook.com/dialog/feed?#{Page.createQuery(query)}"
+
+    setup_facebook()
+
+# https://developers.facebook.com/docs/reference/dialogs/feed/
+#   app_id=123050457758183&
+#   link=https://developers.facebook.com/docs/reference/dialogs/&
+#   picture=http://fbrell.com/f8.jpg&
+#   name=Facebook%20Dialogs&
+#   caption=Reference%20Documentation&
+#   description=Using%20Dialogs%20to%20interact%20with%20users.&
+#   redirect_uri=http://www.example.com/response
+
+
 
 # 各ページのハンドラ
 
