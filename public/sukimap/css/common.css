@@ -1,0 +1,12 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+}
+/* 共通 */
+/* 各ページ */
+body#edit-page #map-preview {
+  width: 100%;
+  height: 300px;
+  background: #787878;
+}
