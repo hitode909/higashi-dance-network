@@ -149,18 +149,18 @@ Handlers = {
       },
       icon_image: 'http://dl.dropbox.com/u/8270034/sketch/map/14.png'
     });
-    $('input[name=face]').change(function() {
+    $('input[name=face]').on('change click', function() {
       console.log('change');
       return SukiMap.update_map({
         icon_image: SukiMap.icon_image_at($(this).val())
       });
     });
-    return $('textarea[name=comment]').change(function() {
+    return $('textarea[name=comment]').on('change keyup', _.debounce(function() {
       console.log('change');
       return SukiMap.update_map({
         comment: _.escape($(this).val())
       });
-    });
+    }, 100));
   },
   permalink: function() {
     return console.log('permalink');

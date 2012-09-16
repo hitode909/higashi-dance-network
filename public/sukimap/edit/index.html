@@ -42,12 +42,14 @@
 
       <div id="main-content">
 
-        <div id="map-preview">
-          マッププレビュー
-        </div>
 
         <form id="edit-form">
+          <div>
+            いまのおなかへり度に近い表情を教えてください
+          </div>
+
           <div class="faces">
+
             <label>
               <input type="radio" name="face" value="1"/>満腹
             </label>
@@ -64,13 +66,24 @@
               <input type="radio" name="face" value="5"/>やばい
             </label>
           </div>
-          <div class="message-container">
-            <textarea name="comment" placeholder="おなかへりメッセージを入力"></textarea>
+
+          <div>
+            おなかへりメッセージを入力してください
           </div>
+
+          <div class="message-container">
+            <textarea name="comment" placeholder="例：おなかすいた"></textarea>
+          </div>
+
           <div class="submit-container">
             <input type="submit" value="決定"/>
           </div>
-          
+
+          <div id="map-preview"></div>
+
+          <div class="submit-container">
+            <input type="submit" value="決定"/>
+          </div>
         </form>
 
       </div>
