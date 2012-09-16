@@ -89,7 +89,7 @@ SukiMap =
     character = new google.maps.Marker
       position: center
       map: map
-      icon: info.icon_image
+      icon: SukiMap.icon_url_to_image info.icon_image
 
     baloon = new google.maps.InfoWindow
       content: info.comment
@@ -107,6 +107,13 @@ SukiMap =
     SukiMap.baloon = baloon
     # returns map
 
+  icon_url_to_image: (url) ->
+    size = 65
+    image = new google.maps.MarkerImage url
+    image.size = new google.maps.Size(size, size)
+    image.scaledSize = new google.maps.Size(size, size)
+    image
+
   update_map: (info) ->
     # info:
     #   icon_image
@@ -117,14 +124,16 @@ SukiMap =
       throw "map not loaded"
 
     if info.icon_image
-      SukiMap.character.setIcon info.icon_image
+      SukiMap.character.setIcon SukiMap.icon_url_to_image(info.icon_image)
 
     if info.comment
       SukiMap.baloon.setContent info.comment
       SukiMap.baloon.open SukiMap.map, SukiMap.character
 
   icon_image_at: (value) ->
-    'http://dl.dropbox.com/u/8270034/sketch/map/14.png'
+    value = +value || 1
+    value = 1 unless 1 <= value <= 4
+    "/sukimap/image/face#{value}.png"
 
   og_image_at: (value) ->
     'http://dl.dropbox.com/u/8270034/sketch/map/14.png'
@@ -179,7 +188,7 @@ SukiMap =
       query =
         app_id: '115613081921666'
         link: location.href
-        picture: SukiMap.og_image_at info.icon_value
+        picture: SukiMap.icon_image_at info.icon_value
         name: 'おなかがすきまっぷ'
         description: info.comment
         redirect_uri: location.href
@@ -242,7 +251,7 @@ Handlers =
       center:
         lat: query.lat
         long: query.long
-      icon_image: 'http://dl.dropbox.com/u/8270034/sketch/map/14.png'
+      icon_image: SukiMap.icon_image_at($('input[name=face]:checked').val())
 
     $('input[name=face]').on 'change click', ->
       console.log 'change'

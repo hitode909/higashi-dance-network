@@ -107,7 +107,7 @@ SukiMap = {
     character = new google.maps.Marker({
       position: center,
       map: map,
-      icon: info.icon_image
+      icon: SukiMap.icon_url_to_image(info.icon_image)
     });
     baloon = new google.maps.InfoWindow({
       content: info.comment,
@@ -122,12 +122,20 @@ SukiMap = {
     SukiMap.character = character;
     return SukiMap.baloon = baloon;
   },
+  icon_url_to_image: function(url) {
+    var image, size;
+    size = 65;
+    image = new google.maps.MarkerImage(url);
+    image.size = new google.maps.Size(size, size);
+    image.scaledSize = new google.maps.Size(size, size);
+    return image;
+  },
   update_map: function(info) {
     if (!SukiMap.map) {
       throw "map not loaded";
     }
     if (info.icon_image) {
-      SukiMap.character.setIcon(info.icon_image);
+      SukiMap.character.setIcon(SukiMap.icon_url_to_image(info.icon_image));
     }
     if (info.comment) {
       SukiMap.baloon.setContent(info.comment);
@@ -135,7 +143,11 @@ SukiMap = {
     }
   },
   icon_image_at: function(value) {
-    return 'http://dl.dropbox.com/u/8270034/sketch/map/14.png';
+    value = +value || 1;
+    if (!((1 <= value && value <= 4))) {
+      value = 1;
+    }
+    return "/sukimap/image/face" + value + ".png";
   },
   og_image_at: function(value) {
     return 'http://dl.dropbox.com/u/8270034/sketch/map/14.png';
@@ -191,7 +203,7 @@ SukiMap = {
       query = {
         app_id: '115613081921666',
         link: location.href,
-        picture: SukiMap.og_image_at(info.icon_value),
+        picture: SukiMap.icon_image_at(info.icon_value),
         name: 'おなかがすきまっぷ',
         description: info.comment,
         redirect_uri: location.href
@@ -261,7 +273,7 @@ Handlers = {
         lat: query.lat,
         long: query.long
       },
-      icon_image: 'http://dl.dropbox.com/u/8270034/sketch/map/14.png'
+      icon_image: SukiMap.icon_image_at($('input[name=face]:checked').val())
     });
     $('input[name=face]').on('change click', function() {
       console.log('change');
