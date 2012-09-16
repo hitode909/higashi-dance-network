@@ -12,6 +12,13 @@
 
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true&language=ja&region=JP"></script>
 
+    <link rel="shortcut icon" href="/sukimap/image/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" href="/sukimap/image/appicon.png"/>
+    <meta property="og:title" content="おなかすきまっぷ"/>
+    <meta property="og:url" content="http://higashi-dance-network.appspot.com/sukimap/"/>
+    <meta property="og:image" content="http://higashi-dance-network.appspot.com/sukimap/image/og.png"/>
+
+    <meta name="description" content="おなかすきまっぷは、おなかのすき具合と今いる場所をTwitterやFacebookで共有できるサービスです。近くにいる友達にご飯にさそってもらいましょう。">
 
     <script language="javascript" type="text/javascript" defer src="/sukimap/js/jquery-1.8.1.min.js"></script>
     <script language="javascript" type="text/javascript" defer src="/sukimap/js/underscore-min.js"></script>
@@ -35,8 +42,6 @@
   </head>
   <body id="edit-page" data-page-id="edit">
 
-    <!-- fb-root -->
-
     <div id="wrapper">
 
       <div id="title-container">
@@ -53,32 +58,44 @@
         <form id="edit-form">
           <div class="message">
             <img class="flag" src="/sukimap/image/icon.png"/>
-            今の気持ちを選ぶ
+            今のおなかすき具合を選びましょう
           </div>
 
           <div class="faces">
 
-            <label>
-              <input type="radio" name="face" value="1"/>
-              <img src="/sukimap/image/face1.png"/>
-            </label>
-            <label>
-              <input type="radio" name="face" value="2" />
-              <img src="/sukimap/image/face2.png"/>
-            </label>
-            <label>
-              <input type="radio" name="face" value="3" checked />
-              <img src="/sukimap/image/face3.png"/>
-            </label>
-            <label>
-              <input type="radio" name="face" value="4"/>
-              <img src="/sukimap/image/face4.png"/>
-            </label>
+            <div class="face-wrapper">
+              <label>
+                <input type="radio" name="face" value="1"/>
+                <img src="/sukimap/image/face1.png"/>
+              </label>
+            </div>
+            <div class="face-wrapper">
+              <label>
+                <input type="radio" name="face" value="2" />
+                <img src="/sukimap/image/face2.png"/>
+              </label>
+            </div>
+            <div class="face-wrapper">
+              <label>
+                <input type="radio" name="face" value="3" checked />
+                <img src="/sukimap/image/face3.png"/>
+              </label>
+            </div>
+            <div class="face-wrapper">
+              <label>
+                <input type="radio" name="face" value="4"/>
+                <img src="/sukimap/image/face4.png"/>
+              </label>
+            </div>
+            <div class="clear">
+            </div>
+          </div>
+          <div class="clear">
           </div>
 
           <div class="message">
             <img class="flag" src="/sukimap/image/icon.png"/>
-            メッセージを入力する
+            おなかすきメッセージを入力しましょう
           </div>
 
           <div class="message-container">
@@ -94,7 +111,7 @@
 
           <div class="message">
             <img class="flag" src="/sukimap/image/icon.png"/>
-            すきまっぷを保存します
+            おなかすきまっぷを保存します
           </div>
 
           <div class="submit-container">

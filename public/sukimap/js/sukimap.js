@@ -147,7 +147,7 @@ SukiMap = {
     if (!((1 <= value && value <= 4))) {
       value = 1;
     }
-    return "/sukimap/image/face" + value + ".png";
+    return "http://higashi-dance-network.appspot.com/sukimap/image/face" + value + ".png";
   },
   og_image_at: function(value) {
     return 'http://dl.dropbox.com/u/8270034/sketch/map/14.png';
@@ -222,7 +222,7 @@ SukiMap = {
       var diff;
       diff = Math.abs((new Date().getTime() - date.getTime()) / 1000);
       if (diff < 60) {
-        return "";
+        return "今";
       }
       diff = Math.floor(diff / 60);
       if (diff < 60) {

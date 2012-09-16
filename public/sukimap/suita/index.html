@@ -20,8 +20,13 @@
     <link rel="stylesheet" type="text/css" href="/sukimap/css/mobile.css" media="only screen and (max-device-width: 480px)" >
     <link rel="stylesheet" type="text/css" href="/sukimap/css/pc.css" media="only screen and (min-device-width: 481px)" >
 
+    <link rel="shortcut icon" href="/sukimap/image/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" href="/sukimap/image/appicon.png"/>
+    <meta property="og:title" content="おなかすきまっぷ"/>
+    <meta property="og:url" content="http://higashi-dance-network.appspot.com/sukimap/"/>
+    <meta property="og:image" content="http://higashi-dance-network.appspot.com/sukimap/image/og.png"/>
 
-    <!-- favicon, og, facebook -->
+    <meta name="description" content="おなかすきまっぷは、おなかのすき具合と今いる場所をTwitterやFacebookで共有できるサービスです。近くにいる友達にご飯にさそってもらいましょう。">
 
     <script type="text/javascript">
       var _gaq = _gaq || [];
@@ -58,27 +63,41 @@
 
       <div id="main-content">
 
-        <div>
-          <span id="ago"></span>
+        <div class="created-message">
+          おなかすきまっぷをつくりました
+        </div>
+
+        <div class="time-back">
+          <div id="ago"></div>
         </div>
 
         <div id="map-preview"></div>
 
         <div class="share">
+          <div class="message">
+            おなかすきまっぷを、TwitterやFacebookで共有して、近くのおなかすき友達を探しましょう。
+          </div>
           <div class="twitter-container">
-            <a class="twitter-share" href="." target="_blank">twitter</a>
+            <a class="twitter-share" href="." target="_blank"><img class="social-button" src="/sukimap/image/button_twitter.png"/></a>
           </div>
           <div class="facebook-container">
-            <a class="facebook-share" href=".">facebook</a>
+            <a class="facebook-share" href="."><img class="social-button" src="/sukimap/image/button_facebook.png"/></a>
           </div>
 
           <div class="message">
-            共有しましょう
+            <div class="attension">
+              ※おなかすきまっぷをTwitterに投稿すると、あなたの位置情報がフォロワーに公開されます。
+              <br/>
+              Facebookに投稿すると、ウォールに公開されます。
+            </div>
           </div>
         </div>
 
-        <div class="guest">
-          おなかすいているようです．
+        <div class="guest message">
+          おなかすきまっぷは、おなかすいたことを近くの友達に伝えるサービスです。近くにいる人はTwitterやFacebookなどでご飯に誘ってあげましょう。
+          <br/>
+          <br/>
+          <a href="/">おなかすきまっぷとは</a>
         </div>
 
       </div>

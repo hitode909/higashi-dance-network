@@ -8,10 +8,15 @@ body {
   font-size: 12px;
   margin: 0;
   padding: 0;
+  color: #801919;
+  font-weight: bold;
 }
 body a,
 body a:visited {
-  color: #800;
+  color: #801919;
+}
+body .clear {
+  clear: both;
 }
 body #wrapper {
   background: url('/sukimap/image/background.png');
@@ -19,6 +24,7 @@ body #wrapper {
 body #title {
   background: url('/sukimap/image/header_back.png');
   text-align: center;
+  margin-bottom: 10px;
 }
 body #title img {
   width: 148px;
@@ -31,8 +37,11 @@ body #main-content {
   padding: 5px;
 }
 body #map-preview {
-  width: 310px;
-  height: 310px;
+  margin-left: 10px;
+  width: 290px;
+  height: 290px;
+  margin-top: 10px;
+  margin-bottom: 20px;
   background: #787878;
 }
 body .footer {
@@ -46,8 +55,10 @@ body .footer #copyright {
   color: #666;
 }
 body .message {
-  margin-top: 20px;
+  margin-left: 10px;
+  margin-top: 10px;
   margin-bottom: 5px;
+  margin-right: 10px;
 }
 body .message img.flag {
   margin-right: 4px;
@@ -55,21 +66,60 @@ body .message img.flag {
   height: 18px;
   vertical-align: middle;
 }
+body .share .message {
+  margin-left: 0px;
+}
 body .image-button {
   background: transparent;
   border: none;
   cursor: pointer;
 }
+body .line {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+body .line .line-image {
+  width: 305px;
+  height: 20px;
+}
+body .attension {
+  font-size: 90%;
+  font-weight: normal;
+}
 /* 各ページ */
-body#main img.start-button {
+body#main img.guide-image {
+  margin-left: -5px;
+  width: 306px;
+  height: 280px;
+}
+body#main .start {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+body#main .start img.start-button {
   width: 290px;
   height: 56px;
 }
 body#edit-page .faces {
-  margin-left: 20px;
-  margin-bottom: 20px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+body#edit-page .faces .face-wrapper {
+  float: left;
+  width: 73px;
+  height: 73px;
+  position: relative;
+}
+body#edit-page .faces label {
+  display: block;
+  width: 73px;
+  height: 73px;
 }
 body#edit-page .faces img {
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-top: 2px;
+  padding-bottom: 1px;
   width: 65px;
   height: 70px;
   cursor: pointer;
@@ -78,7 +128,8 @@ body#edit-page .faces input {
   display: none;
 }
 body#edit-page .faces input:checked + img {
-  background: pink;
+  background: url('/sukimap/image/face_select.png');
+  background-size: 73px 73px;
 }
 body#edit-page .message-container {
   margin-bottom: 20px;
@@ -93,4 +144,36 @@ body#edit-page .message-container textarea {
 body#edit-page img.ok-button {
   width: 290px;
   height: 56px;
+}
+body#suita-page .time-back {
+  width: 94px;
+  height: 24px;
+  margin-bottom: 20px;
+  margin-left: -5px;
+  background: url('/sukimap/image/time_back.png');
+  background-size: 94px 24px;
+}
+body#suita-page .time-back #ago {
+  margin-left: 10px;
+  padding: 5px;
+  color: white;
+  font-weight: bold;
+}
+body#suita-page .share {
+  margin-left: 10px;
+}
+body#suita-page .share .twitter-container {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+body#suita-page .share .facebook-container {
+  margin-bottom: 20px;
+}
+body#suita-page .share .social-button {
+  width: 290px;
+  height: 56px;
+}
+body#suita-page .created-message {
+  margin-left: 10px;
+  margin-bottom: 5px;
 }
