@@ -78,8 +78,9 @@ SukiMap =
     # returns: map???
 
     center = new google.maps.LatLng +info.center.lat, +info.center.long
+    view_center = new google.maps.LatLng +info.center.lat+0.13, +info.center.long+0.07
     map_options =
-      center: center
+      center: view_center
       zoom: 10
       disableDefaultUI: true
       mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -161,8 +162,6 @@ SukiMap =
 
   load_status: (key) ->
     DataStorage.get(key).then (info) ->
-      console.log 'get done'
-      console.log info
       SukiMap.render_map
         container: $('#map-preview')[0]
         center:
@@ -233,13 +232,10 @@ Handlers =
   init: ->
     Handlers.common()
     Handlers[$(document.body).attr('data-page-id')]()
-    console.log 'done'
 
   common: ->
-    console.log 'common'
 
   main: ->
-    console.log 'main'
 
     check = ->
       navigator?.geolocation?.getCurrentPosition
@@ -261,14 +257,12 @@ Handlers =
 
     $('.start-button').click ->
       start().then (position) ->
-        console.log position
         query = Page.createQuery position
         location.href = "#{Constants.PAGE_PATH.EDIT}?#{query}"
       , ->
         alert "現在地を取得できませでした．時間をおいて試してみてください．"
 
   edit: ->
-    console.log 'edit'
 
     query = if location.search.length > 0 then Page.parseQuery location.search[1..-1] else null
 
@@ -284,12 +278,10 @@ Handlers =
       icon_image: SukiMap.icon_image_at($('input[name=face]:checked').val())
 
     $('input[name=face]').on 'change click', ->
-      console.log 'change'
       SukiMap.update_map
         icon_image: SukiMap.icon_image_at($(this).val())
 
     $('textarea[name=comment]').on 'change keyup', _.debounce ->
-      console.log 'change'
       SukiMap.update_map
         comment: _.escape($(this).val())
     , 100

@@ -95,10 +95,11 @@ Constants = {
 };
 SukiMap = {
   render_map: function(info) {
-    var baloon, center, character, map, map_options;
+    var baloon, center, character, map, map_options, view_center;
     center = new google.maps.LatLng(+info.center.lat, +info.center.long);
+    view_center = new google.maps.LatLng(+info.center.lat + 0.13, +info.center.long + 0.07);
     map_options = {
-      center: center,
+      center: view_center,
       zoom: 10,
       disableDefaultUI: true,
       mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -171,8 +172,6 @@ SukiMap = {
   },
   load_status: function(key) {
     return DataStorage.get(key).then(function(info) {
-      console.log('get done');
-      console.log(info);
       SukiMap.render_map({
         container: $('#map-preview')[0],
         center: {
@@ -249,15 +248,11 @@ SukiMap = {
 Handlers = {
   init: function() {
     Handlers.common();
-    Handlers[$(document.body).attr('data-page-id')]();
-    return console.log('done');
+    return Handlers[$(document.body).attr('data-page-id')]();
   },
-  common: function() {
-    return console.log('common');
-  },
+  common: function() {},
   main: function() {
     var check, start;
-    console.log('main');
     check = function() {
       var _ref;
       return typeof navigator !== "undefined" && navigator !== null ? (_ref = navigator.geolocation) != null ? _ref.getCurrentPosition : void 0 : void 0;
@@ -282,7 +277,6 @@ Handlers = {
     return $('.start-button').click(function() {
       return start().then(function(position) {
         var query;
-        console.log(position);
         query = Page.createQuery(position);
         return location.href = "" + Constants.PAGE_PATH.EDIT + "?" + query;
       }, function() {
@@ -292,7 +286,6 @@ Handlers = {
   },
   edit: function() {
     var query, save_handler;
-    console.log('edit');
     query = location.search.length > 0 ? Page.parseQuery(location.search.slice(1)) : null;
     if (!query) {
       alert("位置情報を取得できませんでした．トップページに戻ります．");
@@ -307,13 +300,11 @@ Handlers = {
       icon_image: SukiMap.icon_image_at($('input[name=face]:checked').val())
     });
     $('input[name=face]').on('change click', function() {
-      console.log('change');
       return SukiMap.update_map({
         icon_image: SukiMap.icon_image_at($(this).val())
       });
     });
     $('textarea[name=comment]').on('change keyup', _.debounce(function() {
-      console.log('change');
       return SukiMap.update_map({
         comment: _.escape($(this).val())
       });
