@@ -152,6 +152,7 @@ SukiMap =
         long: info.center.long
       icon_value: info.icon_value
       comment: info.comment
+      created: (new Date()).getTime()
 
     DataStorage.save(post_info).then (key) ->
       location.href = "/sukimap/suita/#{key}"
@@ -171,6 +172,7 @@ SukiMap =
         comment: info.comment
 
       SukiMap.setup_share info
+      SukiMap.setup_time info.created
     .fail ->
       alert "情報の取得に失敗しました．トップページに戻ります．"
       location.href = Constants.PAGE_PATH.MAIN
@@ -196,6 +198,31 @@ SukiMap =
         href: "https://www.facebook.com/dialog/feed?#{Page.createQuery(query)}"
 
     setup_facebook()
+
+  setup_time: (time) ->
+    date_str = (date) ->
+      diff = Math.abs((new Date().getTime() - date.getTime()) / 1000)
+
+      if diff < 60
+        return ""
+
+      diff = Math.floor(diff / 60)
+      if diff < 60
+        return "#{diff}分前"
+
+      diff = Math.floor(diff / 60)
+      if diff < 24
+        return "#{diff}時間前"
+
+      diff = Math.floor(diff / 24)
+      if diff < 365
+        return "#{diff}日前"
+
+      diff = Math.floor(diff / 365)
+      return "#{diff}年前"
+
+    date = new Date(+time)
+    $('#ago').text(date_str(date))
 
 # 各ページのハンドラ
 

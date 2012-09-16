@@ -160,7 +160,8 @@ SukiMap = {
         long: info.center.long
       },
       icon_value: info.icon_value,
-      comment: info.comment
+      comment: info.comment,
+      created: (new Date()).getTime()
     };
     return DataStorage.save(post_info).then(function(key) {
       return location.href = "/sukimap/suita/" + key;
@@ -181,7 +182,8 @@ SukiMap = {
         icon_image: SukiMap.icon_image_at(info.icon_value),
         comment: info.comment
       });
-      return SukiMap.setup_share(info);
+      SukiMap.setup_share(info);
+      return SukiMap.setup_time(info.created);
     }).fail(function() {
       alert("情報の取得に失敗しました．トップページに戻ります．");
       return location.href = Constants.PAGE_PATH.MAIN;
@@ -213,6 +215,32 @@ SukiMap = {
       });
     };
     return setup_facebook();
+  },
+  setup_time: function(time) {
+    var date, date_str;
+    date_str = function(date) {
+      var diff;
+      diff = Math.abs((new Date().getTime() - date.getTime()) / 1000);
+      if (diff < 60) {
+        return "";
+      }
+      diff = Math.floor(diff / 60);
+      if (diff < 60) {
+        return "" + diff + "分前";
+      }
+      diff = Math.floor(diff / 60);
+      if (diff < 24) {
+        return "" + diff + "時間前";
+      }
+      diff = Math.floor(diff / 24);
+      if (diff < 365) {
+        return "" + diff + "日前";
+      }
+      diff = Math.floor(diff / 365);
+      return "" + diff + "年前";
+    };
+    date = new Date(+time);
+    return $('#ago').text(date_str(date));
   }
 };
 Handlers = {
