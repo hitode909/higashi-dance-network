@@ -137,6 +137,9 @@ SukiMap = {
   icon_image_at: function(value) {
     return 'http://dl.dropbox.com/u/8270034/sketch/map/14.png';
   },
+  og_image_at: function(value) {
+    return 'http://dl.dropbox.com/u/8270034/sketch/map/14.png';
+  },
   save_status: function(info) {
     var post_info;
     post_info = {
@@ -186,10 +189,12 @@ SukiMap = {
     setup_facebook = function() {
       var query;
       query = {
-        app_id: 111,
+        app_id: '115613081921666',
         link: location.href,
-        picture: 'aaa',
-        name: 'おなかがすきまっぷ'
+        picture: SukiMap.og_image_at(info.icon_value),
+        name: 'おなかがすきまっぷ',
+        description: info.comment,
+        redirect_uri: location.href
       };
       return $('.facebook-share').attr({
         href: "https://www.facebook.com/dialog/feed?" + (Page.createQuery(query))
