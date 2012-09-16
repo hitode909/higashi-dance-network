@@ -316,6 +316,7 @@ Handlers =
     if query.edit
       $('.share').show()
       $('.guest').hide()
+      $('.created-message').show()
     else
       $('.share').hide()
       $('.guest').show()

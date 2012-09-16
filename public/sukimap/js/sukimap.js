@@ -340,7 +340,8 @@ Handlers = {
     query = location.search.length > 0 ? Page.parseQuery(location.search.slice(1)) : {};
     if (query.edit) {
       $('.share').show();
-      return $('.guest').hide();
+      $('.guest').hide();
+      return $('.created-message').show();
     } else {
       $('.share').hide();
       return $('.guest').show();
