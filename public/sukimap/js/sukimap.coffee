@@ -66,7 +66,7 @@ SukiMap =
     SukiMap.baloon = baloon
     # returns map
 
-  update_icon: (info) ->
+  update_map: (info) ->
     # info:
     #   icon_image
     #   comment
@@ -81,6 +81,9 @@ SukiMap =
     if info.comment
       SukiMap.baloon.setContent info.comment
       SukiMap.baloon.open SukiMap.map, SukiMap.character
+
+  icon_image_at: (value) ->
+    'http://dl.dropbox.com/u/8270034/sketch/map/14.png'
 
 # 各ページのハンドラ
 
@@ -131,15 +134,6 @@ Handlers =
       alert "位置情報を取得できませんでした．トップページに戻ります．"
       location.href = Constants.PAGE_PATH.MAIN
 
-    console.log query
-
-    map_options =
-      container: $('#map-preview')[0]
-      center:
-        lat: query.lat
-        long: query.long
-      icon_image: 'http://dl.dropbox.com/u/8270034/sketch/map/14.png'
-
     SukiMap.render_map
       container: $('#map-preview')[0]
       center:
@@ -147,7 +141,15 @@ Handlers =
         long: query.long
       icon_image: 'http://dl.dropbox.com/u/8270034/sketch/map/14.png'
 
-    
+    $('input[name=face]').change ->
+      console.log 'change'
+      SukiMap.update_map
+        icon_image: SukiMap.icon_image_at($(this).val())
+
+    $('textarea[name=comment]').change ->
+      console.log 'change'
+      SukiMap.update_map
+        comment: _.escape($(this).val())
 
   permalink: ->
     console.log 'permalink'

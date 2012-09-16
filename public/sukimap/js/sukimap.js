@@ -73,7 +73,7 @@ SukiMap = {
     SukiMap.character = character;
     return SukiMap.baloon = baloon;
   },
-  update_icon: function(info) {
+  update_map: function(info) {
     if (!SukiMap.map) {
       throw "map not loaded";
     }
@@ -84,6 +84,9 @@ SukiMap = {
       SukiMap.baloon.setContent(info.comment);
       return SukiMap.baloon.open(SukiMap.map, SukiMap.character);
     }
+  },
+  icon_image_at: function(value) {
+    return 'http://dl.dropbox.com/u/8270034/sketch/map/14.png';
   }
 };
 Handlers = {
@@ -131,29 +134,32 @@ Handlers = {
     });
   },
   edit: function() {
-    var map_options, query;
+    var query;
     console.log('edit');
     query = location.search.length > 0 ? Page.parseQuery(location.search.slice(1)) : null;
     if (!query) {
       alert("位置情報を取得できませんでした．トップページに戻ります．");
       location.href = Constants.PAGE_PATH.MAIN;
     }
-    console.log(query);
-    map_options = {
+    SukiMap.render_map({
       container: $('#map-preview')[0],
       center: {
         lat: query.lat,
         long: query.long
       },
       icon_image: 'http://dl.dropbox.com/u/8270034/sketch/map/14.png'
-    };
-    return SukiMap.render_map({
-      container: $('#map-preview')[0],
-      center: {
-        lat: query.lat,
-        long: query.long
-      },
-      icon_image: 'http://dl.dropbox.com/u/8270034/sketch/map/14.png'
+    });
+    $('input[name=face]').change(function() {
+      console.log('change');
+      return SukiMap.update_map({
+        icon_image: SukiMap.icon_image_at($(this).val())
+      });
+    });
+    return $('textarea[name=comment]').change(function() {
+      console.log('change');
+      return SukiMap.update_map({
+        comment: _.escape($(this).val())
+      });
     });
   },
   permalink: function() {
