@@ -2,27 +2,114 @@ html, body {
     height: 100%;
 }
 
-body {
-    font-family: sans-serif;
-    margin:0;
-    padding:0;
-}
-
 /* 共通 */
 body {
+    font-family: sans-serif;
+    font-size: 12px;
+    margin:0;
+    padding:0;
+
+    a, a:visited {
+        color: #800;
+    }
+
+    #wrapper {
+        background: url('/sukimap/image/background.png');
+    }
+
+    #title {
+        background: url('/sukimap/image/header_back.png');
+        text-align: center;
+        img {
+            width: 148px;
+            height: 40px;
+        }
+    }
+
+    img[src*="iws3.png"] {
+        display: none;
+    }
+
+    #main-content {
+        padding: 5px;
+    }
+
     #map-preview {
-        width: 100%;
-        height: 300px;
+        width: 310px;
+        height: 310px;
         background: #787878;
+    }
+
+    .footer {
+        margin-top: 40px;
+        padding: 5px;
+
+        #copyright {
+            margin-top: 20px;
+            font-size: 60%;
+            text-align: center;
+            color: #666;
+        }
+    }
+
+    .message {
+        margin-top: 20px;
+        margin-bottom: 5px;
+        img.flag {
+            margin-right: 4px;
+            width: 12px;
+            height: 18px;
+            vertical-align: middle;
+        }
+    }
+
+    .image-button {
+        background: transparent;
+        border: none;
+        cursor: pointer;
     }
 }
 
 /* 各ページ */
 
+body#main {
+    img.start-button {
+        width: 290px;
+        height: 56px;
+    }
+}
+
 body#edit-page {
-    #map-preview {
-        width: 100%;
-        height: 300px;
-        background: #787878;
+    .faces {
+        margin-left: 20px;
+        margin-bottom: 20px;
+
+        img {
+            width: 65px;
+            height: 70px;
+            cursor: pointer;
+        }
+        input {
+            display: none;
+        }
+        input:checked+img {
+            background: pink;
+        }
+    }
+
+    .message-container {
+        margin-bottom: 20px;
+        textarea {
+            margin: 4px;
+            width: 290px;
+            border: 2px solid pink;
+            border-radius: 2px;
+            padding: 5px;
+        }
+    }
+
+    img.ok-button {
+        width: 290px;
+        height: 56px;
     }
 }

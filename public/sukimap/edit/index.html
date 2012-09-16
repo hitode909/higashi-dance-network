@@ -10,9 +10,7 @@
 
     <link rel="apple-touch-icon-precomposed" href="/sukimap/images/home-icon.png"/>
 
-    <!-- 追加 -->
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true&language=ja&region=JP"></script>
-    <!-- ここまで -->
 
 
     <script language="javascript" type="text/javascript" defer src="/sukimap/js/jquery-1.8.1.min.js"></script>
@@ -23,8 +21,17 @@
     <link rel="stylesheet" type="text/css" href="/sukimap/css/mobile.css" media="only screen and (max-device-width: 480px)" >
     <link rel="stylesheet" type="text/css" href="/sukimap/css/pc.css" media="only screen and (min-device-width: 481px)" >
 
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-30891681-1']);
+      _gaq.push(['_trackPageview']);
 
-    <!-- favicon, og, facebook -->
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
   </head>
   <body id="edit-page" data-page-id="edit">
 
@@ -35,7 +42,7 @@
       <div id="title-container">
         <div id="title">
           <a href="/sukimap/">
-            <img src="images/title.png" title="おなかすきまっぷ">
+            <img src="/sukimap/image/logo.png" title="おなかすきまっぷ">
           </a>
         </div>
       </div>
@@ -44,48 +51,63 @@
 
 
         <form id="edit-form">
-          <div>
-            いまのおなかへり度に近い表情を教えてください
+          <div class="message">
+            <img class="flag" src="/sukimap/image/icon.png"/>
+            今の気持ちを選ぶ
           </div>
 
           <div class="faces">
 
             <label>
-              <input type="radio" name="face" value="1"/>満腹
+              <input type="radio" name="face" value="1"/>
+              <img src="/sukimap/image/face1.png"/>
             </label>
             <label>
-              <input type="radio" name="face" value="2" checked />ちょっとへってる
+              <input type="radio" name="face" value="2" />
+              <img src="/sukimap/image/face2.png"/>
             </label>
             <label>
-              <input type="radio" name="face" value="3"/>ふつうにへってる
+              <input type="radio" name="face" value="3" checked />
+              <img src="/sukimap/image/face3.png"/>
             </label>
             <label>
-              <input type="radio" name="face" value="4"/>だいぶへってる
-            </label>
-            <label>
-              <input type="radio" name="face" value="5"/>やばい
+              <input type="radio" name="face" value="4"/>
+              <img src="/sukimap/image/face4.png"/>
             </label>
           </div>
 
-          <div>
-            おなかへりメッセージを入力してください
+          <div class="message">
+            <img class="flag" src="/sukimap/image/icon.png"/>
+            メッセージを入力する
           </div>
 
           <div class="message-container">
-            <textarea name="comment" placeholder="例：おなかすいた"></textarea>
+            <textarea name="comment" placeholder="例：寿司食べたい"></textarea>
+          </div>
+
+          <div class="message">
+            <img class="flag" src="/sukimap/image/icon.png"/>
+            プレビュー
           </div>
 
           <div id="map-preview"></div>
 
+          <div class="message">
+            <img class="flag" src="/sukimap/image/icon.png"/>
+            すきまっぷを保存します
+          </div>
+
           <div class="submit-container">
-            <input type="submit" value="決定"/>
+            <button class="image-button" type="submit"><img class="ok-button" src="/sukimap/image/button_ok.png"/></button>
           </div>
         </form>
 
       </div>
 
-      <div id="copyright">
-        (C) 2012 東ダンスネットワーク
+      <div class="footer">
+        <div id="copyright">
+          <a href="/">(C) 2012 東ダンスネットワーク</a>
+        </div>
       </div>
 
     </div>

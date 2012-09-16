@@ -107,7 +107,7 @@ SukiMap = {
     character = new google.maps.Marker({
       position: center,
       map: map,
-      icon: info.icon_image
+      icon: SukiMap.icon_url_to_image(info.icon_image)
     });
     baloon = new google.maps.InfoWindow({
       content: info.comment,
@@ -122,12 +122,20 @@ SukiMap = {
     SukiMap.character = character;
     return SukiMap.baloon = baloon;
   },
+  icon_url_to_image: function(url) {
+    var image, size;
+    size = 65;
+    image = new google.maps.MarkerImage(url);
+    image.size = new google.maps.Size(size, size);
+    image.scaledSize = new google.maps.Size(size, size);
+    return image;
+  },
   update_map: function(info) {
     if (!SukiMap.map) {
       throw "map not loaded";
     }
     if (info.icon_image) {
-      SukiMap.character.setIcon(info.icon_image);
+      SukiMap.character.setIcon(SukiMap.icon_url_to_image(info.icon_image));
     }
     if (info.comment) {
       SukiMap.baloon.setContent(info.comment);
@@ -135,6 +143,13 @@ SukiMap = {
     }
   },
   icon_image_at: function(value) {
+    value = +value || 1;
+    if (!((1 <= value && value <= 4))) {
+      value = 1;
+    }
+    return "/sukimap/image/face" + value + ".png";
+  },
+  og_image_at: function(value) {
     return 'http://dl.dropbox.com/u/8270034/sketch/map/14.png';
   },
   save_status: function(info) {
@@ -145,10 +160,11 @@ SukiMap = {
         long: info.center.long
       },
       icon_value: info.icon_value,
-      comment: info.comment
+      comment: info.comment,
+      created: (new Date()).getTime()
     };
     return DataStorage.save(post_info).then(function(key) {
-      return location.href = "/sukimap/suita/" + key;
+      return location.href = "/sukimap/suita/" + key + "?edit=1";
     }).fail(function() {
       return alert("保存に失敗しました．");
     });
@@ -166,13 +182,69 @@ SukiMap = {
         icon_image: SukiMap.icon_image_at(info.icon_value),
         comment: info.comment
       });
-      return SukiMap.setup_share(info);
+      SukiMap.setup_share(info);
+      return SukiMap.setup_time(info.created);
     }).fail(function() {
       alert("情報の取得に失敗しました．トップページに戻ります．");
       return location.href = Constants.PAGE_PATH.MAIN;
     });
   },
-  setup_share: function(info) {}
+  setup_share: function(info) {
+    var setup_facebook, setup_twitter;
+    setup_twitter = function() {
+      var text, url;
+      text = info.comment;
+      url = SukiMap.url_for_share();
+      return $('.twitter-share').attr({
+        href: "https://twitter.com/share?url=" + (encodeURIComponent(url)) + "&text=" + (encodeURIComponent(text))
+      });
+    };
+    setup_twitter();
+    setup_facebook = function() {
+      var query;
+      query = {
+        app_id: '115613081921666',
+        link: SukiMap.url_for_share(),
+        picture: SukiMap.icon_image_at(info.icon_value),
+        name: 'おなかがすきまっぷ',
+        description: info.comment,
+        redirect_uri: location.href
+      };
+      return $('.facebook-share').attr({
+        href: "https://www.facebook.com/dialog/feed?" + (Page.createQuery(query))
+      });
+    };
+    return setup_facebook();
+  },
+  setup_time: function(time) {
+    var date, date_str;
+    date_str = function(date) {
+      var diff;
+      diff = Math.abs((new Date().getTime() - date.getTime()) / 1000);
+      if (diff < 60) {
+        return "";
+      }
+      diff = Math.floor(diff / 60);
+      if (diff < 60) {
+        return "" + diff + "分前";
+      }
+      diff = Math.floor(diff / 60);
+      if (diff < 24) {
+        return "" + diff + "時間前";
+      }
+      diff = Math.floor(diff / 24);
+      if (diff < 365) {
+        return "" + diff + "日前";
+      }
+      diff = Math.floor(diff / 365);
+      return "" + diff + "年前";
+    };
+    date = new Date(+time);
+    return $('#ago').text(date_str(date));
+  },
+  url_for_share: function() {
+    return location.href.replace(/\?edit=1/, '');
+  }
 };
 Handlers = {
   init: function() {
@@ -232,7 +304,7 @@ Handlers = {
         lat: query.lat,
         long: query.long
       },
-      icon_image: 'http://dl.dropbox.com/u/8270034/sketch/map/14.png'
+      icon_image: SukiMap.icon_image_at($('input[name=face]:checked').val())
     });
     $('input[name=face]').on('change click', function() {
       console.log('change');
@@ -266,15 +338,22 @@ Handlers = {
     });
   },
   suita: function() {
-    var key, matched;
-    console.log('suita!!');
+    var key, matched, query;
     matched = location.pathname.match(/suita\/(.+)$/);
     if (!matched) {
       alert("情報の取得に失敗しました．トップページに戻ります．");
       location.href = Constants.PAGE_PATH.MAIN;
     }
     key = matched[1];
-    return SukiMap.load_status(key);
+    SukiMap.load_status(key);
+    query = location.search.length > 0 ? Page.parseQuery(location.search.slice(1)) : {};
+    if (query.edit) {
+      $('.share').show();
+      return $('.guest').hide();
+    } else {
+      $('.share').hide();
+      return $('.guest').show();
+    }
   }
 };
 $(function() {

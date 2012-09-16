@@ -89,7 +89,7 @@ SukiMap =
     character = new google.maps.Marker
       position: center
       map: map
-      icon: info.icon_image
+      icon: SukiMap.icon_url_to_image info.icon_image
 
     baloon = new google.maps.InfoWindow
       content: info.comment
@@ -107,6 +107,13 @@ SukiMap =
     SukiMap.baloon = baloon
     # returns map
 
+  icon_url_to_image: (url) ->
+    size = 65
+    image = new google.maps.MarkerImage url
+    image.size = new google.maps.Size(size, size)
+    image.scaledSize = new google.maps.Size(size, size)
+    image
+
   update_map: (info) ->
     # info:
     #   icon_image
@@ -117,13 +124,18 @@ SukiMap =
       throw "map not loaded"
 
     if info.icon_image
-      SukiMap.character.setIcon info.icon_image
+      SukiMap.character.setIcon SukiMap.icon_url_to_image(info.icon_image)
 
     if info.comment
       SukiMap.baloon.setContent info.comment
       SukiMap.baloon.open SukiMap.map, SukiMap.character
 
   icon_image_at: (value) ->
+    value = +value || 1
+    value = 1 unless 1 <= value <= 4
+    "/sukimap/image/face#{value}.png"
+
+  og_image_at: (value) ->
     'http://dl.dropbox.com/u/8270034/sketch/map/14.png'
 
   save_status: (info) ->
@@ -140,9 +152,10 @@ SukiMap =
         long: info.center.long
       icon_value: info.icon_value
       comment: info.comment
+      created: (new Date()).getTime()
 
     DataStorage.save(post_info).then (key) ->
-      location.href = "/sukimap/suita/#{key}"
+      location.href = "/sukimap/suita/#{key}?edit=1"
     .fail ->
       alert "保存に失敗しました．"
 
@@ -159,11 +172,60 @@ SukiMap =
         comment: info.comment
 
       SukiMap.setup_share info
+      SukiMap.setup_time info.created
     .fail ->
       alert "情報の取得に失敗しました．トップページに戻ります．"
       location.href = Constants.PAGE_PATH.MAIN
 
   setup_share: (info) ->
+    setup_twitter = ->
+      text = info.comment
+      url = SukiMap.url_for_share()
+      $('.twitter-share').attr
+        href: "https://twitter.com/share?url=#{encodeURIComponent(url)}&text=#{encodeURIComponent(text)}"
+
+    setup_twitter()
+
+    setup_facebook = ->
+      query =
+        app_id: '115613081921666'
+        link: SukiMap.url_for_share()
+        picture: SukiMap.icon_image_at info.icon_value
+        name: 'おなかがすきまっぷ'
+        description: info.comment
+        redirect_uri: location.href
+      $('.facebook-share').attr
+        href: "https://www.facebook.com/dialog/feed?#{Page.createQuery(query)}"
+
+    setup_facebook()
+
+  setup_time: (time) ->
+    date_str = (date) ->
+      diff = Math.abs((new Date().getTime() - date.getTime()) / 1000)
+
+      if diff < 60
+        return ""
+
+      diff = Math.floor(diff / 60)
+      if diff < 60
+        return "#{diff}分前"
+
+      diff = Math.floor(diff / 60)
+      if diff < 24
+        return "#{diff}時間前"
+
+      diff = Math.floor(diff / 24)
+      if diff < 365
+        return "#{diff}日前"
+
+      diff = Math.floor(diff / 365)
+      return "#{diff}年前"
+
+    date = new Date(+time)
+    $('#ago').text(date_str(date))
+
+  url_for_share: ->
+    location.href.replace(/\?edit=1/, '')
 
 # 各ページのハンドラ
 
@@ -219,7 +281,7 @@ Handlers =
       center:
         lat: query.lat
         long: query.long
-      icon_image: 'http://dl.dropbox.com/u/8270034/sketch/map/14.png'
+      icon_image: SukiMap.icon_image_at($('input[name=face]:checked').val())
 
     $('input[name=face]').on 'change click', ->
       console.log 'change'
@@ -249,7 +311,6 @@ Handlers =
       false
 
   suita: ->
-    console.log 'suita!!'
     matched = location.pathname.match(/suita\/(.+)$/)
     unless matched
       alert "情報の取得に失敗しました．トップページに戻ります．"
@@ -257,6 +318,15 @@ Handlers =
 
     key = matched[1]
     SukiMap.load_status key
+
+    query = if location.search.length > 0 then Page.parseQuery location.search[1..-1] else {}
+
+    if query.edit
+      $('.share').show()
+      $('.guest').hide()
+    else
+      $('.share').hide()
+      $('.guest').show()
 
 
 # 呼び出し
