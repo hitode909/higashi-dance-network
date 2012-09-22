@@ -100,7 +100,7 @@ SukiMap = {
     view_center = new google.maps.LatLng(+info.center.lat + 0.13, +info.center.long + 0.07);
     map_options = {
       center: view_center,
-      zoom: 10,
+      zoom: 14,
       disableDefaultUI: true,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
@@ -249,17 +249,15 @@ SukiMap = {
 GourmetMap = {
   setup: function(position) {
     return GourmetMap.search(position).done(function(res) {
-      var shop, template, _i, _len, _ref, _results;
-      console.log(res);
+      var i, shop, template, _len, _ref, _results;
       template = _.template($('#shop-template').html());
       _ref = res.results.shop;
       _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        shop = _ref[_i];
-        $('#shops').append(template({
+      for (i = 0, _len = _ref.length; i < _len; i++) {
+        shop = _ref[i];
+        _results.push($('#shops').append(template({
           shop: shop
-        }));
-        _results.push(console.log(shop));
+        })));
       }
       return _results;
     });
@@ -273,8 +271,10 @@ GourmetMap = {
         format: 'jsonp',
         lat: position.lat,
         lng: position.long,
-        keyword: 'カレー',
-        range: 5
+        keyword: '寿司',
+        range: 5,
+        is_open_time: 'now',
+        count: 10
       }
     });
   }

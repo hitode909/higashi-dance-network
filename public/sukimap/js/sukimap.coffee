@@ -238,12 +238,10 @@ GourmetMap =
     #   long:
 
     GourmetMap.search(position).done (res) ->
-      console.log res
 
       template = _.template($('#shop-template').html())
-      for shop in res.results.shop
+      for shop, i in res.results.shop
         $('#shops').append(template(shop: shop))
-        console.log shop
 
   search: (position) ->
     $.ajax
@@ -254,8 +252,10 @@ GourmetMap =
         format: 'jsonp'
         lat: position.lat
         lng: position.long
-        keyword: 'カレー'
+        keyword: '寿司'
         range: 5
+        is_open_time: 'now'
+        count: 10
 
 # 各ページのハンドラ
 
