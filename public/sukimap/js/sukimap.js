@@ -97,14 +97,15 @@ SukiMap = {
   render_map: function(info) {
     var baloon, center, character, map, map_options, view_center;
     center = new google.maps.LatLng(+info.center.lat, +info.center.long);
-    view_center = new google.maps.LatLng(+info.center.lat + 0.13, +info.center.long + 0.07);
+    view_center = new google.maps.LatLng(+info.center.lat + 0.008, +info.center.long + 0.004);
     map_options = {
-      center: view_center,
+      center: center,
       zoom: 14,
       disableDefaultUI: true,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map = new google.maps.Map(info.container, map_options);
+    map.panTo(view_center);
     character = new google.maps.Marker({
       position: center,
       map: map,
@@ -144,12 +145,13 @@ SukiMap = {
     }
   },
   add_shop_pin: function(info) {
-    var dfd, marker;
+    var dfd, marker, position;
     if (!SukiMap.map) {
       throw "map not loaded";
     }
+    position = new google.maps.LatLng(info.lat, info.long);
     marker = new google.maps.Marker({
-      position: new google.maps.LatLng(info.lat, info.long),
+      position: position,
       title: info.name
     });
     marker.setMap(SukiMap.map);
@@ -158,6 +160,19 @@ SukiMap = {
       return dfd.resolve();
     });
     return dfd;
+  },
+  fit_to_positions: function(positions) {
+    var bounds, point, position, _i, _len;
+    bounds = new google.maps.LatLngBounds();
+    bounds.extend(SukiMap.character.getPosition());
+    for (_i = 0, _len = positions.length; _i < _len; _i++) {
+      position = positions[_i];
+      point = new google.maps.LatLng(+position.lat, +position.long);
+      console.log(point);
+      bounds.extend(point);
+    }
+    console.log(bounds);
+    return SukiMap.map.fitBounds(bounds);
   },
   icon_image_at: function(value) {
     value = +value || 1;
@@ -283,8 +298,9 @@ GourmetMap = {
     });
   },
   render_shops: function(shops) {
-    var i, shop, shop_html, template, _len, _results;
+    var i, positions, shop, shop_html, template, _len, _results;
     template = _.template($('#shop-template').html());
+    positions = [];
     _results = [];
     for (i = 0, _len = shops.length; i < _len; i++) {
       shop = shops[i];
@@ -293,6 +309,10 @@ GourmetMap = {
       });
       if (i < 10) {
         $('#shops').append(shop_html);
+        positions.push({
+          lat: shop.lat,
+          long: shop.lng
+        });
       }
       _results.push(SukiMap.add_shop_pin({
         name: shop.name,
