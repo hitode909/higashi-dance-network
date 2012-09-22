@@ -274,7 +274,9 @@ GourmetMap = {
         shop_html = template({
           shop: shop
         });
-        $('#shops').append(shop_html);
+        if (i < 10) {
+          $('#shops').append(shop_html);
+        }
         _results.push(SukiMap.add_shop_pin({
           name: shop.name,
           lat: shop.lat,
@@ -297,10 +299,10 @@ GourmetMap = {
         format: 'jsonp',
         lat: position.lat,
         lng: position.long,
-        keyword: '寿司',
+        keyword: 'ラーメン',
         range: 5,
-        is_open_time: 'now',
-        count: 10
+        count: 100,
+        order: 4
       }
     });
   }
