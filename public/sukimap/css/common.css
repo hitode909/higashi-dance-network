@@ -72,6 +72,11 @@ body .share .message {
 body .image-button {
   background: transparent;
   border: none;
+  padding: 0 10px;
+  cursor: pointer;
+}
+body .image-button:active {
+  padding: 0 10px;
   cursor: pointer;
 }
 body .line {
@@ -155,7 +160,7 @@ body#suita-page .time-back {
 }
 body#suita-page .time-back #ago {
   margin-left: 10px;
-  padding: 5px;
+  padding: 2px 5px;
   color: white;
   font-weight: bold;
 }
@@ -177,4 +182,74 @@ body#suita-page .created-message {
   display: none;
   margin-left: 10px;
   margin-bottom: 5px;
+}
+#shops {
+  margin: 0 -5px;
+  border-top: 2px solid #FCE28D;
+}
+#shops .shop {
+  background: none repeat scroll 0 0 #FDFAF1;
+  border-bottom: 2px solid #FCE28D;
+}
+#shops .shop a {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+}
+#shops .shop a .photo {
+  background-position: center center;
+  background-size: cover;
+  border-radius: 5px 5px 5px 5px;
+  float: left;
+  height: 60px;
+  margin-right: 10px;
+  overflow: hidden;
+  width: 60px;
+}
+#shops .shop a .shop-d {
+  margin-left: 70px;
+}
+#shops .shop a .name {
+  color: #a62020;
+  font-size: 120%;
+  margin-top: -2px;
+}
+#shops .shop a .catch {
+  color: #858585;
+  font-size: 86%;
+  color: #858585;
+  font-size: 86%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 230px;
+}
+#shops .shop a .budget-title,
+#shops .shop a .budget,
+#shops .shop a .open-title,
+#shops .shop a .open {
+  color: #858585;
+  font-size: 80%;
+}
+#shops .shop a .budget-title,
+#shops .shop a .open-title {
+  float: left;
+}
+#shops .shop a .budget,
+#shops .shop a .open {
+  margin-left: 50px;
+  font-weight: normal;
+}
+.shoptitle-back {
+  width: 170px;
+  height: 24px;
+  margin: 15px 0 10px -5px;
+  background: url('/sukimap/image/shoptitle_back.png');
+  background-size: 170px 24px;
+}
+.shoptitle-back .shoptitle {
+  margin-left: 10px;
+  padding: 2px 5px;
+  color: white;
+  font-weight: bold;
 }

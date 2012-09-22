@@ -100,15 +100,25 @@
           <a href="/sukimap/">おなかすきまっぷとは</a>
         </div>
 
+        <div class="shoptitle-back">
+          <div class="shoptitle">
+            今あいている近くのお店
+          </div>
+        </div>
+
         <div id="shops">
           <script id="shop-template" type="text/x-underscore-template">
             <div class="shop">
               <a href="<%- shop.urls.pc %>">
-                <div class="name"><%- shop.name %></div>
-                <div class="catch"><%- shop.catch  %></div>
-                <div class="budget"><%- shop.budget.average  %></div>
-                <div class="open"><%- shop.open  %></div>
-                <div class="photo"><img src="<%- shop.photo.mobile.l %>"></div>
+                <div class="photo" style="background-image:url(<%- shop.photo.mobile.l %>);"></div>
+                <div class="shop-d">
+                  <div class="name"><%- shop.name %></div>
+                  <div class="catch"><%- shop.catch  %></div>
+                  <div class="open-title">営業時間</div>
+                  <div class="open"><%- shop.open  %></div>
+                  <div class="budget-title">平均予算</div>
+                  <div class="budget"><%- shop.budget.average  %></div>
+                </div>
               </a>
             </div>
           </script>

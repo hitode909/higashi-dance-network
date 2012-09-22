@@ -83,7 +83,13 @@ body {
     .image-button {
         background: transparent;
         border: none;
+        padding:0 10px;
         cursor: pointer;
+    }
+    .image-button:active {
+        padding:0 10px;
+        cursor: pointer;
+        
     }
 
     .line {
@@ -186,7 +192,7 @@ body#suita-page {
 
         #ago {
             margin-left: 10px;
-            padding: 5px;
+            padding: 2px 5px;
             color: white;
             font-weight: bold;
         }
@@ -214,4 +220,72 @@ body#suita-page {
         margin-bottom: 5px;
     }
 
+}
+
+#shops{
+  margin:0 -5px;
+  border-top: 2px solid #FCE28D;
+  .shop{    
+    background: none repeat scroll 0 0 #FDFAF1;
+    border-bottom: 2px solid #FCE28D;
+    a{
+      display:block;
+      padding:10px;
+      text-decoration:none;
+      .photo{
+         background-position: center center;
+         background-size: cover;
+         border-radius: 5px 5px 5px 5px;
+         float: left;
+         height: 60px;
+         margin-right: 10px;
+         overflow: hidden;
+         width: 60px;
+       }
+      .shop-d{
+        margin-left:70px;
+      }
+      .name{
+        color:#a62020;
+        font-size:120%;
+        margin-top: -2px;
+      }
+      .catch{
+        color:#858585;
+        font-size:86%;
+        color: #858585;
+        font-size: 86%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 230px;
+      }
+      .budget-title,.budget,.open-title,.open{
+        color:#858585;
+        font-size:80%;	
+      }
+      .budget-title,.open-title{
+        float:left;
+      }
+      .budget,.open{
+        margin-left: 50px;
+        font-weight: normal;
+      }
+    }
+  }
+}
+
+
+.shoptitle-back {
+     width: 170px;
+     height: 24px;
+     margin: 15px 0 10px -5px;
+     background: url('/sukimap/image/shoptitle_back.png');
+     background-size: 170px 24px;
+    .shoptitle {
+        margin-left: 10px;
+        padding:2px 5px;
+        color: white;
+        font-weight: bold;
+    }
 }
