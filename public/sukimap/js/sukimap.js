@@ -342,7 +342,7 @@ GourmetMap = {
         lng: position.long,
         keyword: keyword,
         range: 5,
-        count: 100
+        count: 30
       }
     });
   },
