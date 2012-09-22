@@ -100,6 +100,20 @@
           <a href="/sukimap/">おなかすきまっぷとは</a>
         </div>
 
+        <div id="shops">
+          <script id="shop-template" type="text/x-underscore-template">
+            <div class="shop">
+              <a href="<%- shop.urls.pc %>">
+                <div class="name"><%- shop.name %></div>
+                <div class="catch"><%- shop.catch  %></div>
+                <div class="budget"><%- shop.budget.average  %></div>
+                <div class="open"><%- shop.open  %></div>
+                <div class="photo"><img src="<%- shop.photo.mobile.l %>"></div>
+              </a>
+            </div>
+          </script>
+        </div>
+
       </div>
 
       <div class="footer">

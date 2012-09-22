@@ -172,9 +172,14 @@ SukiMap =
 
       SukiMap.setup_share info
       SukiMap.setup_time info.created
-    .fail ->
-      alert "情報の取得に失敗しました．トップページに戻ります．"
-      location.href = Constants.PAGE_PATH.MAIN
+
+      GourmetMap.setup
+        lat: info.center.lat
+        long: info.center.long
+
+    # .fail ->
+    #   alert "情報の取得に失敗しました．トップページに戻ります．"
+    #   location.href = Constants.PAGE_PATH.MAIN
 
   setup_share: (info) ->
     setup_twitter = ->
@@ -225,6 +230,32 @@ SukiMap =
 
   url_for_share: ->
     location.href.replace(/\?edit=1/, '')
+
+GourmetMap =
+  setup: (position) ->
+    # position:
+    #   lat:
+    #   long:
+
+    GourmetMap.search(position).done (res) ->
+      console.log res
+
+      template = _.template($('#shop-template').html())
+      for shop in res.results.shop
+        $('#shops').append(template(shop: shop))
+        console.log shop
+
+  search: (position) ->
+    $.ajax
+      url: 'http://webservice.recruit.co.jp/hotpepper/gourmet/v1/'
+      dataType: 'jsonp'
+      data:
+        key: '94eef068f7a6eab9'
+        format: 'jsonp'
+        lat: position.lat
+        lng: position.long
+        keyword: 'カレー'
+        range: 5
 
 # 各ページのハンドラ
 

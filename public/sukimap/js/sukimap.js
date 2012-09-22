@@ -1,4 +1,4 @@
-var Constants, DataStorage, Handlers, Page, SukiMap;
+var Constants, DataStorage, GourmetMap, Handlers, Page, SukiMap;
 Page = {
   parseQuery: function(query_string) {
     var k, pair, query, v, _i, _len, _ref, _ref2;
@@ -182,10 +182,11 @@ SukiMap = {
         comment: info.comment
       });
       SukiMap.setup_share(info);
-      return SukiMap.setup_time(info.created);
-    }).fail(function() {
-      alert("情報の取得に失敗しました．トップページに戻ります．");
-      return location.href = Constants.PAGE_PATH.MAIN;
+      SukiMap.setup_time(info.created);
+      return GourmetMap.setup({
+        lat: info.center.lat,
+        long: info.center.long
+      });
     });
   },
   setup_share: function(info) {
@@ -243,6 +244,39 @@ SukiMap = {
   },
   url_for_share: function() {
     return location.href.replace(/\?edit=1/, '');
+  }
+};
+GourmetMap = {
+  setup: function(position) {
+    return GourmetMap.search(position).done(function(res) {
+      var shop, template, _i, _len, _ref, _results;
+      console.log(res);
+      template = _.template($('#shop-template').html());
+      _ref = res.results.shop;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        shop = _ref[_i];
+        $('#shops').append(template({
+          shop: shop
+        }));
+        _results.push(console.log(shop));
+      }
+      return _results;
+    });
+  },
+  search: function(position) {
+    return $.ajax({
+      url: 'http://webservice.recruit.co.jp/hotpepper/gourmet/v1/',
+      dataType: 'jsonp',
+      data: {
+        key: '94eef068f7a6eab9',
+        format: 'jsonp',
+        lat: position.lat,
+        lng: position.long,
+        keyword: 'カレー',
+        range: 5
+      }
+    });
   }
 };
 Handlers = {
