@@ -196,8 +196,10 @@ SukiMap =
       SukiMap.setup_time info.created
 
       GourmetMap.setup
-        lat: info.center.lat
-        long: info.center.long
+        comment: info.comment
+        position:
+          lat: info.center.lat
+          long: info.center.long
 
     # .fail ->
     #   alert "情報の取得に失敗しました．トップページに戻ります．"
@@ -254,33 +256,37 @@ SukiMap =
     location.href.replace(/\?edit=1/, '')
 
 GourmetMap =
-  setup: (position) ->
-    # position:
-    #   lat:
-    #   long:
+  setup: (info) ->
+    # info:
+    #   comment: (comment)
+    #   position:
+    #     lat:
+    #     long:
 
-    GourmetMap.search(position).done (res) ->
+    GourmetMap.extract_keyword(info.comment).done (keyword) ->
+      GourmetMap.search(keyword, info.position).done (res) ->
 
-      template = _.template $('#shop-template').html()
-      for shop, i in res.results.shop
-        shop_html = template
-          shop: shop
+        template = _.template $('#shop-template').html()
+        for shop, i in res.results.shop
+          shop_html = template
+            shop: shop
 
-        # リストには出さないけど
-        if i < 10
-          $('#shops').append shop_html
+          # リストには出さないけど
+          if i < 10
+            $('#shops').append shop_html
 
-        # ピンは出す
-        SukiMap.add_shop_pin
-          name: shop.name
-          lat: shop.lat
-          long: shop.lng
-        .done do (shop_html) ->
-          ->
-            $('#shop-preview').html shop_html
+          # ピンは出す
+          SukiMap.add_shop_pin
+            name: shop.name
+            lat: shop.lat
+            long: shop.lng
+          .done do (shop_html) ->
+            ->
+              $('#shop-preview').html shop_html
 
-  search: (position) ->
+  search: (keyword, position) ->
     $.ajax
+      type: 'get'
       url: 'http://webservice.recruit.co.jp/hotpepper/gourmet/v1/'
       dataType: 'jsonp'
       data:
@@ -288,11 +294,36 @@ GourmetMap =
         format: 'jsonp'
         lat: position.lat
         lng: position.long
-        keyword: 'ラーメン'
+        keyword: keyword
         range: 5
         # is_open_time: 'now'
         count: 100
         order: 4
+
+  extract_keyword: (text) ->
+    dfd = $.Deferred()
+    # http://developer.yahoo.co.jp/webapi/jlp/ma/v1/parse.html
+    url = 'http://jlp.yahooapis.jp/MAService/V1/parse?' + $.param
+      appid: 'J17Tyuixg65goAW301d5vBkBWtO9gLQsJnC0Y7OyJJk96wumaSU2U3odNwj5PdIU1A--'
+      sentence: text
+      results: 'ma'
+      filter: 9
+    GourmetMap.get_by_proxy(url)
+    .done (doc) ->
+      surface = $(doc).find('surface')[0]
+      if surface
+        dfd.resolve $(surface).text()
+      else
+        dfd.resolve null
+    .fail (error) ->
+      alert('通信時にエラーが発生しました．時間をおいて試してみてください．')
+
+    dfd
+
+  get_by_proxy: (url) ->
+    $.ajax
+      type: 'get'
+      url: "/proxy/#{encodeURIComponent(url)}"
 
 # 各ページのハンドラ
 
