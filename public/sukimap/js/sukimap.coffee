@@ -220,7 +220,7 @@ SukiMap =
 
   setup_share: (info) ->
     setup_twitter = ->
-      text = info.comment
+      text = "#{info.comment} #おなかすきまっぷ"
       url = SukiMap.url_for_share()
       $('.twitter-share').attr
         href: "https://twitter.com/share?url=#{encodeURIComponent(url)}&text=#{encodeURIComponent(text)}"
@@ -289,6 +289,10 @@ GourmetMap =
             GourmetMap.render_shops res.results.shop
 
   render_shops: (shops) ->
+    return if shops.length == 0
+
+    $('.shoptitle-back').show()
+
     template = _.template $('#shop-template').html()
     positions = []
     for shop, i in shops

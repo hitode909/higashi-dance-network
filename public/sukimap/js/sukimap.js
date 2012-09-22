@@ -227,7 +227,7 @@ SukiMap = {
     var setup_facebook, setup_twitter;
     setup_twitter = function() {
       var text, url;
-      text = info.comment;
+      text = "" + info.comment + " #おなかすきまっぷ";
       url = SukiMap.url_for_share();
       return $('.twitter-share').attr({
         href: "https://twitter.com/share?url=" + (encodeURIComponent(url)) + "&text=" + (encodeURIComponent(text))
@@ -299,6 +299,10 @@ GourmetMap = {
   },
   render_shops: function(shops) {
     var i, positions, shop, shop_html, template, _len, _results;
+    if (shops.length === 0) {
+      return;
+    }
+    $('.shoptitle-back').show();
     template = _.template($('#shop-template').html());
     positions = [];
     _results = [];

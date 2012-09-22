@@ -103,7 +103,7 @@
           <a href="/sukimap/">おなかすきまっぷとは</a>
         </div>
 
-        <div class="shoptitle-back">
+        <div class="shoptitle-back" style="display: none">
           <div class="shoptitle">
             今あいている近くのお店
           </div>
@@ -112,7 +112,7 @@
         <div id="shops">
           <script id="shop-template" type="text/x-underscore-template">
             <div class="shop">
-              <a href="<%- shop.urls.pc %>">
+              <a href="<%- shop.urls.pc %>" target="_blank" >
                 <div class="photo" style="background-image:url(<%- shop.photo.mobile.l %>);"></div>
                 <div class="shop-d">
                   <div class="name"><%- shop.name %></div>
