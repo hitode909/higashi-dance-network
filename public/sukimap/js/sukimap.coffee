@@ -265,24 +265,34 @@ GourmetMap =
 
     GourmetMap.extract_keyword(info.comment).done (keyword) ->
       GourmetMap.search(keyword, info.position).done (res) ->
+        shops = res.results.shop
+        if shops.length > 0
+          # 検索結果あったとき
+          GourmetMap.render_shops shops
+        else
+          # 検索した結果なにもなかったら近くの店を出す
+          GourmetMap.search(null, info.position).done (res) ->
+            shops = res.results.shop
+            GourmetMap.render_shops res.results.shop
 
-        template = _.template $('#shop-template').html()
-        for shop, i in res.results.shop
-          shop_html = template
-            shop: shop
+  render_shops: (shops) ->
+    template = _.template $('#shop-template').html()
+    for shop, i in shops
+      shop_html = template
+        shop: shop
 
-          # リストには出さないけど
-          if i < 10
-            $('#shops').append shop_html
+      # リストには出さないけど
+      if i < 10
+        $('#shops').append shop_html
 
-          # ピンは出す
-          SukiMap.add_shop_pin
-            name: shop.name
-            lat: shop.lat
-            long: shop.lng
-          .done do (shop_html) ->
-            ->
-              $('#shop-preview').html shop_html
+      # ピンは出す
+      SukiMap.add_shop_pin
+        name: shop.name
+        lat: shop.lat
+        long: shop.lng
+      .done do (shop_html) ->
+        ->
+          $('#shop-preview').html shop_html
 
   search: (keyword, position) ->
     $.ajax

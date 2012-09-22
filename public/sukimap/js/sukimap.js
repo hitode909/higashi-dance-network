@@ -269,31 +269,42 @@ GourmetMap = {
   setup: function(info) {
     return GourmetMap.extract_keyword(info.comment).done(function(keyword) {
       return GourmetMap.search(keyword, info.position).done(function(res) {
-        var i, shop, shop_html, template, _len, _ref, _results;
-        template = _.template($('#shop-template').html());
-        _ref = res.results.shop;
-        _results = [];
-        for (i = 0, _len = _ref.length; i < _len; i++) {
-          shop = _ref[i];
-          shop_html = template({
-            shop: shop
+        var shops;
+        shops = res.results.shop;
+        if (shops.length > 0) {
+          return GourmetMap.render_shops(shops);
+        } else {
+          return GourmetMap.search(null, info.position).done(function(res) {
+            shops = res.results.shop;
+            return GourmetMap.render_shops(res.results.shop);
           });
-          if (i < 10) {
-            $('#shops').append(shop_html);
-          }
-          _results.push(SukiMap.add_shop_pin({
-            name: shop.name,
-            lat: shop.lat,
-            long: shop.lng
-          }).done((function(shop_html) {
-            return function() {
-              return $('#shop-preview').html(shop_html);
-            };
-          })(shop_html)));
         }
-        return _results;
       });
     });
+  },
+  render_shops: function(shops) {
+    var i, shop, shop_html, template, _len, _results;
+    template = _.template($('#shop-template').html());
+    _results = [];
+    for (i = 0, _len = shops.length; i < _len; i++) {
+      shop = shops[i];
+      shop_html = template({
+        shop: shop
+      });
+      if (i < 10) {
+        $('#shops').append(shop_html);
+      }
+      _results.push(SukiMap.add_shop_pin({
+        name: shop.name,
+        lat: shop.lat,
+        long: shop.lng
+      }).done((function(shop_html) {
+        return function() {
+          return $('#shop-preview').html(shop_html);
+        };
+      })(shop_html)));
+    }
+    return _results;
   },
   search: function(keyword, position) {
     return $.ajax({
