@@ -81,7 +81,7 @@ SukiMap =
     view_center = new google.maps.LatLng +info.center.lat+0.13, +info.center.long+0.07
     map_options =
       center: view_center
-      zoom: 10
+      zoom: 14
       disableDefaultUI: true
       mapTypeId: google.maps.MapTypeId.ROADMAP
 
@@ -131,6 +131,28 @@ SukiMap =
       SukiMap.baloon.setContent info.comment
       SukiMap.baloon.open SukiMap.map, SukiMap.character
 
+  add_shop_pin: (info) ->
+    # info:
+    #   lat:
+    #   long:
+
+    # 先にrender_mapすること
+    unless SukiMap.map
+      throw "map not loaded"
+
+    marker = new google.maps.Marker
+      position: new google.maps.LatLng(info.lat, info.long)
+      title: info.name
+
+    marker.setMap(SukiMap.map)
+
+    dfd = $.Deferred()
+
+    google.maps.event.addListener marker, 'click', ->
+      dfd.resolve()
+
+    dfd
+
   icon_image_at: (value) ->
     value = +value || 1
     value = 1 unless 1 <= value <= 4
@@ -174,8 +196,10 @@ SukiMap =
       SukiMap.setup_time info.created
 
       GourmetMap.setup
-        lat: info.center.lat
-        long: info.center.long
+        comment: info.comment
+        position:
+          lat: info.center.lat
+          long: info.center.long
 
     # .fail ->
     #   alert "情報の取得に失敗しました．トップページに戻ります．"
@@ -208,7 +232,7 @@ SukiMap =
       diff = Math.abs((new Date().getTime() - date.getTime()) / 1000)
 
       if diff < 60
-        return "今"
+        return "今さっき"
 
       diff = Math.floor(diff / 60)
       if diff < 60
@@ -232,21 +256,37 @@ SukiMap =
     location.href.replace(/\?edit=1/, '')
 
 GourmetMap =
-  setup: (position) ->
-    # position:
-    #   lat:
-    #   long:
+  setup: (info) ->
+    # info:
+    #   comment: (comment)
+    #   position:
+    #     lat:
+    #     long:
 
-    GourmetMap.search(position).done (res) ->
-      console.log res
+    GourmetMap.extract_keyword(info.comment).done (keyword) ->
+      GourmetMap.search(keyword, info.position).done (res) ->
 
-      template = _.template($('#shop-template').html())
-      for shop in res.results.shop
-        $('#shops').append(template(shop: shop))
-        console.log shop
+        template = _.template $('#shop-template').html()
+        for shop, i in res.results.shop
+          shop_html = template
+            shop: shop
 
-  search: (position) ->
+          # リストには出さないけど
+          if i < 10
+            $('#shops').append shop_html
+
+          # ピンは出す
+          SukiMap.add_shop_pin
+            name: shop.name
+            lat: shop.lat
+            long: shop.lng
+          .done do (shop_html) ->
+            ->
+              $('#shop-preview').html shop_html
+
+  search: (keyword, position) ->
     $.ajax
+      type: 'get'
       url: 'http://webservice.recruit.co.jp/hotpepper/gourmet/v1/'
       dataType: 'jsonp'
       data:
@@ -254,8 +294,36 @@ GourmetMap =
         format: 'jsonp'
         lat: position.lat
         lng: position.long
-        keyword: 'カレー'
+        keyword: keyword
         range: 5
+        # is_open_time: 'now'
+        count: 100
+        order: 4
+
+  extract_keyword: (text) ->
+    dfd = $.Deferred()
+    # http://developer.yahoo.co.jp/webapi/jlp/ma/v1/parse.html
+    url = 'http://jlp.yahooapis.jp/MAService/V1/parse?' + $.param
+      appid: 'J17Tyuixg65goAW301d5vBkBWtO9gLQsJnC0Y7OyJJk96wumaSU2U3odNwj5PdIU1A--'
+      sentence: text
+      results: 'ma'
+      filter: 9
+    GourmetMap.get_by_proxy(url)
+    .done (doc) ->
+      surface = $(doc).find('surface')[0]
+      if surface
+        dfd.resolve $(surface).text()
+      else
+        dfd.resolve null
+    .fail (error) ->
+      alert('通信時にエラーが発生しました．時間をおいて試してみてください．')
+
+    dfd
+
+  get_by_proxy: (url) ->
+    $.ajax
+      type: 'get'
+      url: "/proxy/#{encodeURIComponent(url)}"
 
 # 各ページのハンドラ
 

@@ -100,7 +100,7 @@ SukiMap = {
     view_center = new google.maps.LatLng(+info.center.lat + 0.13, +info.center.long + 0.07);
     map_options = {
       center: view_center,
-      zoom: 10,
+      zoom: 14,
       disableDefaultUI: true,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
@@ -143,6 +143,22 @@ SukiMap = {
       return SukiMap.baloon.open(SukiMap.map, SukiMap.character);
     }
   },
+  add_shop_pin: function(info) {
+    var dfd, marker;
+    if (!SukiMap.map) {
+      throw "map not loaded";
+    }
+    marker = new google.maps.Marker({
+      position: new google.maps.LatLng(info.lat, info.long),
+      title: info.name
+    });
+    marker.setMap(SukiMap.map);
+    dfd = $.Deferred();
+    google.maps.event.addListener(marker, 'click', function() {
+      return dfd.resolve();
+    });
+    return dfd;
+  },
   icon_image_at: function(value) {
     value = +value || 1;
     if (!((1 <= value && value <= 4))) {
@@ -184,8 +200,11 @@ SukiMap = {
       SukiMap.setup_share(info);
       SukiMap.setup_time(info.created);
       return GourmetMap.setup({
-        lat: info.center.lat,
-        long: info.center.long
+        comment: info.comment,
+        position: {
+          lat: info.center.lat,
+          long: info.center.long
+        }
       });
     });
   },
@@ -222,7 +241,7 @@ SukiMap = {
       var diff;
       diff = Math.abs((new Date().getTime() - date.getTime()) / 1000);
       if (diff < 60) {
-        return "今";
+        return "今さっき";
       }
       diff = Math.floor(diff / 60);
       if (diff < 60) {
@@ -247,25 +266,38 @@ SukiMap = {
   }
 };
 GourmetMap = {
-  setup: function(position) {
-    return GourmetMap.search(position).done(function(res) {
-      var shop, template, _i, _len, _ref, _results;
-      console.log(res);
-      template = _.template($('#shop-template').html());
-      _ref = res.results.shop;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        shop = _ref[_i];
-        $('#shops').append(template({
-          shop: shop
-        }));
-        _results.push(console.log(shop));
-      }
-      return _results;
+  setup: function(info) {
+    return GourmetMap.extract_keyword(info.comment).done(function(keyword) {
+      return GourmetMap.search(keyword, info.position).done(function(res) {
+        var i, shop, shop_html, template, _len, _ref, _results;
+        template = _.template($('#shop-template').html());
+        _ref = res.results.shop;
+        _results = [];
+        for (i = 0, _len = _ref.length; i < _len; i++) {
+          shop = _ref[i];
+          shop_html = template({
+            shop: shop
+          });
+          if (i < 10) {
+            $('#shops').append(shop_html);
+          }
+          _results.push(SukiMap.add_shop_pin({
+            name: shop.name,
+            lat: shop.lat,
+            long: shop.lng
+          }).done((function(shop_html) {
+            return function() {
+              return $('#shop-preview').html(shop_html);
+            };
+          })(shop_html)));
+        }
+        return _results;
+      });
     });
   },
-  search: function(position) {
+  search: function(keyword, position) {
     return $.ajax({
+      type: 'get',
       url: 'http://webservice.recruit.co.jp/hotpepper/gourmet/v1/',
       dataType: 'jsonp',
       data: {
@@ -273,9 +305,39 @@ GourmetMap = {
         format: 'jsonp',
         lat: position.lat,
         lng: position.long,
-        keyword: 'カレー',
-        range: 5
+        keyword: keyword,
+        range: 5,
+        count: 100,
+        order: 4
       }
+    });
+  },
+  extract_keyword: function(text) {
+    var dfd, url;
+    dfd = $.Deferred();
+    url = 'http://jlp.yahooapis.jp/MAService/V1/parse?' + $.param({
+      appid: 'J17Tyuixg65goAW301d5vBkBWtO9gLQsJnC0Y7OyJJk96wumaSU2U3odNwj5PdIU1A--',
+      sentence: text,
+      results: 'ma',
+      filter: 9
+    });
+    GourmetMap.get_by_proxy(url).done(function(doc) {
+      var surface;
+      surface = $(doc).find('surface')[0];
+      if (surface) {
+        return dfd.resolve($(surface).text());
+      } else {
+        return dfd.resolve(null);
+      }
+    }).fail(function(error) {
+      return alert('通信時にエラーが発生しました．時間をおいて試してみてください．');
+    });
+    return dfd;
+  },
+  get_by_proxy: function(url) {
+    return $.ajax({
+      type: 'get',
+      url: "/proxy/" + (encodeURIComponent(url))
     });
   }
 };
