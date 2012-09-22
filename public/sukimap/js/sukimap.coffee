@@ -81,7 +81,7 @@ SukiMap =
     view_center = new google.maps.LatLng +info.center.lat+0.13, +info.center.long+0.07
     map_options =
       center: view_center
-      zoom: 10
+      zoom: 14
       disableDefaultUI: true
       mapTypeId: google.maps.MapTypeId.ROADMAP
 
