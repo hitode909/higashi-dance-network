@@ -131,6 +131,28 @@ SukiMap =
       SukiMap.baloon.setContent info.comment
       SukiMap.baloon.open SukiMap.map, SukiMap.character
 
+  add_shop_pin: (info) ->
+    # info:
+    #   lat:
+    #   long:
+
+    # 先にrender_mapすること
+    unless SukiMap.map
+      throw "map not loaded"
+
+    marker = new google.maps.Marker
+      position: new google.maps.LatLng(info.lat, info.long)
+      title: info.name
+
+    marker.setMap(SukiMap.map)
+
+    dfd = $.Deferred()
+
+    google.maps.event.addListener marker, 'click', ->
+      dfd.resolve()
+
+    dfd
+
   icon_image_at: (value) ->
     value = +value || 1
     value = 1 unless 1 <= value <= 4
@@ -239,9 +261,18 @@ GourmetMap =
 
     GourmetMap.search(position).done (res) ->
 
-      template = _.template($('#shop-template').html())
+      template = _.template $('#shop-template').html()
       for shop, i in res.results.shop
-        $('#shops').append(template(shop: shop))
+        shop_html = template
+          shop: shop
+        $('#shops').append shop_html
+        SukiMap.add_shop_pin
+          name: shop.name
+          lat: shop.lat
+          long: shop.lng
+        .done do (shop_html) ->
+          ->
+            $('#shop-preview').html shop_html
 
   search: (position) ->
     $.ajax

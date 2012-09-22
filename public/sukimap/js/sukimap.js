@@ -143,6 +143,22 @@ SukiMap = {
       return SukiMap.baloon.open(SukiMap.map, SukiMap.character);
     }
   },
+  add_shop_pin: function(info) {
+    var dfd, marker;
+    if (!SukiMap.map) {
+      throw "map not loaded";
+    }
+    marker = new google.maps.Marker({
+      position: new google.maps.LatLng(info.lat, info.long),
+      title: info.name
+    });
+    marker.setMap(SukiMap.map);
+    dfd = $.Deferred();
+    google.maps.event.addListener(marker, 'click', function() {
+      return dfd.resolve();
+    });
+    return dfd;
+  },
   icon_image_at: function(value) {
     value = +value || 1;
     if (!((1 <= value && value <= 4))) {
@@ -249,15 +265,25 @@ SukiMap = {
 GourmetMap = {
   setup: function(position) {
     return GourmetMap.search(position).done(function(res) {
-      var i, shop, template, _len, _ref, _results;
+      var i, shop, shop_html, template, _len, _ref, _results;
       template = _.template($('#shop-template').html());
       _ref = res.results.shop;
       _results = [];
       for (i = 0, _len = _ref.length; i < _len; i++) {
         shop = _ref[i];
-        _results.push($('#shops').append(template({
+        shop_html = template({
           shop: shop
-        })));
+        });
+        $('#shops').append(shop_html);
+        _results.push(SukiMap.add_shop_pin({
+          name: shop.name,
+          lat: shop.lat,
+          long: shop.lng
+        }).done((function(shop_html) {
+          return function() {
+            return $('#shop-preview').html(shop_html);
+          };
+        })(shop_html)));
       }
       return _results;
     });
