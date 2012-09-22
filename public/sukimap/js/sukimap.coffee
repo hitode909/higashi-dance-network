@@ -232,7 +232,7 @@ SukiMap =
       diff = Math.abs((new Date().getTime() - date.getTime()) / 1000)
 
       if diff < 60
-        return "今"
+        return "今さっき"
 
       diff = Math.floor(diff / 60)
       if diff < 60
