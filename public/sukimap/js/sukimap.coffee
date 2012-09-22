@@ -308,7 +308,7 @@ GourmetMap =
         range: 5
         # is_open_time: 'now'
         count: 100
-        order: 4
+        # order: 4
 
   extract_keyword: (text) ->
     dfd = $.Deferred()
