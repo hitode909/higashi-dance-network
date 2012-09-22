@@ -46,7 +46,7 @@ body {
         width: 290px;
         height: 290px;
         margin-top: 10px;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         background: #787878;
     }
 
@@ -222,7 +222,7 @@ body#suita-page {
 
 }
 
-#shops{
+#shops,#shop-preview{
   margin:0 -5px;
   border-top: 2px solid #FCE28D;
   .shop{    
@@ -268,13 +268,13 @@ body#suita-page {
         float:left;
       }
       .budget,.open{
+        word-wrap: break-word;
         margin-left: 50px;
         font-weight: normal;
       }
     }
   }
 }
-
 
 .shoptitle-back {
      width: 170px;
@@ -288,4 +288,32 @@ body#suita-page {
         color: white;
         font-weight: bold;
     }
+}
+
+
+#shop-preview{
+  margin:0;
+  border:none;
+  .shop{    
+    border: 2px solid #FCE28D;
+    background: none repeat scroll 0 0 #FDFAF1;
+    border-radius: 5px 5px 5px 5px;
+    margin: 0 5px;
+    .catch{
+      width: 200px !important;
+    }
+  }
+}
+
+.apis{
+  .api{
+    float:left;
+  }
+  .hotpepper-bana{
+    margin:15px 15px 15px 0;
+  }
+}
+
+.api-message{
+  margin:10px 0 0;
 }

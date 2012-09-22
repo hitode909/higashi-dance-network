@@ -41,7 +41,7 @@ body #map-preview {
   width: 290px;
   height: 290px;
   margin-top: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   background: #787878;
 }
 body .footer {
@@ -183,20 +183,24 @@ body#suita-page .created-message {
   margin-left: 10px;
   margin-bottom: 5px;
 }
-#shops {
+#shops,
+#shop-preview {
   margin: 0 -5px;
   border-top: 2px solid #FCE28D;
 }
-#shops .shop {
+#shops .shop,
+#shop-preview .shop {
   background: none repeat scroll 0 0 #FDFAF1;
   border-bottom: 2px solid #FCE28D;
 }
-#shops .shop a {
+#shops .shop a,
+#shop-preview .shop a {
   display: block;
   padding: 10px;
   text-decoration: none;
 }
-#shops .shop a .photo {
+#shops .shop a .photo,
+#shop-preview .shop a .photo {
   background-position: center center;
   background-size: cover;
   border-radius: 5px 5px 5px 5px;
@@ -206,15 +210,18 @@ body#suita-page .created-message {
   overflow: hidden;
   width: 60px;
 }
-#shops .shop a .shop-d {
+#shops .shop a .shop-d,
+#shop-preview .shop a .shop-d {
   margin-left: 70px;
 }
-#shops .shop a .name {
+#shops .shop a .name,
+#shop-preview .shop a .name {
   color: #a62020;
   font-size: 120%;
   margin-top: -2px;
 }
-#shops .shop a .catch {
+#shops .shop a .catch,
+#shop-preview .shop a .catch {
   color: #858585;
   font-size: 86%;
   color: #858585;
@@ -225,18 +232,27 @@ body#suita-page .created-message {
   width: 230px;
 }
 #shops .shop a .budget-title,
+#shop-preview .shop a .budget-title,
 #shops .shop a .budget,
+#shop-preview .shop a .budget,
 #shops .shop a .open-title,
-#shops .shop a .open {
+#shop-preview .shop a .open-title,
+#shops .shop a .open,
+#shop-preview .shop a .open {
   color: #858585;
   font-size: 80%;
 }
 #shops .shop a .budget-title,
-#shops .shop a .open-title {
+#shop-preview .shop a .budget-title,
+#shops .shop a .open-title,
+#shop-preview .shop a .open-title {
   float: left;
 }
 #shops .shop a .budget,
-#shops .shop a .open {
+#shop-preview .shop a .budget,
+#shops .shop a .open,
+#shop-preview .shop a .open {
+  word-wrap: break-word;
   margin-left: 50px;
   font-weight: normal;
 }
@@ -252,4 +268,26 @@ body#suita-page .created-message {
   padding: 2px 5px;
   color: white;
   font-weight: bold;
+}
+#shop-preview {
+  margin: 0;
+  border: none;
+}
+#shop-preview .shop {
+  border: 2px solid #FCE28D;
+  background: none repeat scroll 0 0 #FDFAF1;
+  border-radius: 5px 5px 5px 5px;
+  margin: 0 5px;
+}
+#shop-preview .shop .catch {
+  width: 200px !important;
+}
+.apis .api {
+  float: left;
+}
+.apis .hotpepper-bana {
+  margin: 15px 15px 15px 0;
+}
+.api-message {
+  margin: 10px 0 0;
 }
