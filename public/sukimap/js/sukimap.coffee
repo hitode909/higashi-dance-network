@@ -214,9 +214,9 @@ SukiMap =
           lat: info.center.lat
           long: info.center.long
 
-    # .fail ->
-    #   alert "情報の取得に失敗しました．トップページに戻ります．"
-    #   location.href = Constants.PAGE_PATH.MAIN
+    .fail ->
+      alert "情報の取得に失敗しました．トップページに戻ります．"
+      location.href = Constants.PAGE_PATH.MAIN
 
   setup_share: (info) ->
     setup_twitter = ->

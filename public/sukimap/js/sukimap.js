@@ -221,6 +221,9 @@ SukiMap = {
           long: info.center.long
         }
       });
+    }).fail(function() {
+      alert("情報の取得に失敗しました．トップページに戻ります．");
+      return location.href = Constants.PAGE_PATH.MAIN;
     });
   },
   setup_share: function(info) {
