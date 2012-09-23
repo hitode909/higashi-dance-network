@@ -161,9 +161,7 @@ SukiMap =
     bounds.extend(SukiMap.character.getPosition())
     for position in positions
       point = new google.maps.LatLng(+position.lat, +position.long)
-      console.log point
       bounds.extend point
-    console.log bounds
     SukiMap.map.fitBounds bounds
 
   icon_image_at: (value) ->
