@@ -377,7 +377,17 @@ $ ->
     return
 
   load_images(['/bon3/image/image1.png','/bon3/image/image2.png','/bon3/image/image3.png','/bon3/image/image4.png','/bon3/image/image5.png','/bon3/image/image6.png']).then (images) ->
-    main
-      images: images
+    if navigator.userAgent.match(/(iPhone|iPad)/)
+      $('#tap-to-start').show()
+      $('#footer').addClass('wait-touch')
+      $(document).click _.once ->
+        $('#tap-to-start').hide()
+        $('#footer').removeClass('wait-touch')
+        main
+          images: images
+
+    else
+      main
+        images: images
 
 

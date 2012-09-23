@@ -1,9 +1,14 @@
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
 * {
   margin: 0px;
   padding: 0px;
 }
 body {
-  min-width: 800px;
+  min-width: 1040px;
   font-family: sans-serif;
   cursor: pointer;
 }
@@ -23,6 +28,14 @@ canvas {
   font-size: 30px;
   margin: 100px;
 }
+#tap-to-start {
+  display: none;
+  text-align: center;
+  font-size: 30px;
+  padding: 100px;
+  padding-bottom: 2000px;
+  font-weight: bold;
+}
 #footer {
   color: white;
   position: absolute;
@@ -31,6 +44,9 @@ canvas {
   z-index: 200;
   width: 100%;
   height: 70px;
+}
+#footer.wait-touch {
+  background: yellow;
 }
 #footer #tshirts {
   position: absolute;
