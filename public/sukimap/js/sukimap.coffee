@@ -274,17 +274,9 @@ GourmetMap =
     #     lat:
     #     long:
 
-    GourmetMap.extract_keyword(info.comment).done (keyword) ->
-      GourmetMap.search(keyword, info.position).done (res) ->
-        shops = res.results.shop
-        if shops.length > 0
-          # 検索結果あったとき
-          GourmetMap.render_shops shops
-        else
-          # 検索した結果なにもなかったら近くの店を出す
-          GourmetMap.search(null, info.position).done (res) ->
-            shops = res.results.shop
-            GourmetMap.render_shops res.results.shop
+    GourmetMap.extract_keywords(info.comment).done (keywords) ->
+      GourmetMap.search(keywords, info.position).done (shops) ->
+        GourmetMap.render_shops shops
 
   render_shops: (shops) ->
     return if shops.length == 0
@@ -317,23 +309,44 @@ GourmetMap =
     # あきらめる
     # SukiMap.fit_to_positions(positions)
 
-  search: (keyword, position) ->
-    $.ajax
-      type: 'get'
-      url: 'http://webservice.recruit.co.jp/hotpepper/gourmet/v1/'
-      dataType: 'jsonp'
-      data:
-        key: '94eef068f7a6eab9'
-        format: 'jsonp'
-        lat: position.lat
-        lng: position.long
-        keyword: keyword
-        range: 5
-        # is_open_time: 'now'
-        count: 30
-        # order: 4
+  search: (keywords, position) ->
+    dfd = $.Deferred()
 
-  extract_keyword: (text) ->
+    # 結果が得られるまで先頭から順に検索
+    # keywordsの末尾にnullを入れるのでどのキーワードもマッチしなかったとき近くの店が出る
+
+    keywords.push null
+
+    try_search = ->
+      return unless keywords && keywords.length > 0
+
+      keyword = keywords.shift()
+      $.ajax
+        type: 'get'
+        url: 'http://webservice.recruit.co.jp/hotpepper/gourmet/v1/'
+        dataType: 'jsonp'
+        data:
+          key: '94eef068f7a6eab9'
+          format: 'jsonp'
+          lat: position.lat
+          lng: position.long
+          keyword: keyword
+          range: 5
+          is_open_time: 'now'
+          count: 30
+          # order: 4
+      .done (res) ->
+        shops = res.results.shop
+        if shops.length > 0
+          dfd.resolve(shops)
+        else
+          try_search()
+
+    try_search()
+
+    dfd
+
+  extract_keywords: (text) ->
     dfd = $.Deferred()
     # http://developer.yahoo.co.jp/webapi/jlp/ma/v1/parse.html
     url = 'http://jlp.yahooapis.jp/MAService/V1/parse?' + $.param
@@ -343,11 +356,11 @@ GourmetMap =
       filter: 9
     GourmetMap.get_by_proxy(url)
     .done (doc) ->
-      surface = $(doc).find('surface')[0]
-      if surface
-        dfd.resolve $(surface).text()
+      surfaces = $(doc).find('surface')
+      if surfaces.length > 0
+        dfd.resolve $.makeArray surfaces.map -> $(this).text()
       else
-        dfd.resolve null
+        dfd.resolve []
     .fail (error) ->
       alert('通信時にエラーが発生しました．時間をおいて試してみてください．')
 

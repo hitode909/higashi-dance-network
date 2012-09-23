@@ -168,10 +168,8 @@ SukiMap = {
     for (_i = 0, _len = positions.length; _i < _len; _i++) {
       position = positions[_i];
       point = new google.maps.LatLng(+position.lat, +position.long);
-      console.log(point);
       bounds.extend(point);
     }
-    console.log(bounds);
     return SukiMap.map.fitBounds(bounds);
   },
   icon_image_at: function(value) {
@@ -285,18 +283,9 @@ SukiMap = {
 };
 GourmetMap = {
   setup: function(info) {
-    return GourmetMap.extract_keyword(info.comment).done(function(keyword) {
-      return GourmetMap.search(keyword, info.position).done(function(res) {
-        var shops;
-        shops = res.results.shop;
-        if (shops.length > 0) {
-          return GourmetMap.render_shops(shops);
-        } else {
-          return GourmetMap.search(null, info.position).done(function(res) {
-            shops = res.results.shop;
-            return GourmetMap.render_shops(res.results.shop);
-          });
-        }
+    return GourmetMap.extract_keywords(info.comment).done(function(keywords) {
+      return GourmetMap.search(keywords, info.position).done(function(shops) {
+        return GourmetMap.render_shops(shops);
       });
     });
   },
@@ -333,23 +322,44 @@ GourmetMap = {
     }
     return _results;
   },
-  search: function(keyword, position) {
-    return $.ajax({
-      type: 'get',
-      url: 'http://webservice.recruit.co.jp/hotpepper/gourmet/v1/',
-      dataType: 'jsonp',
-      data: {
-        key: '94eef068f7a6eab9',
-        format: 'jsonp',
-        lat: position.lat,
-        lng: position.long,
-        keyword: keyword,
-        range: 5,
-        count: 30
+  search: function(keywords, position) {
+    var dfd, try_search;
+    dfd = $.Deferred();
+    keywords.push(null);
+    try_search = function() {
+      var keyword;
+      if (!(keywords && keywords.length > 0)) {
+        return;
       }
-    });
+      keyword = keywords.shift();
+      return $.ajax({
+        type: 'get',
+        url: 'http://webservice.recruit.co.jp/hotpepper/gourmet/v1/',
+        dataType: 'jsonp',
+        data: {
+          key: '94eef068f7a6eab9',
+          format: 'jsonp',
+          lat: position.lat,
+          lng: position.long,
+          keyword: keyword,
+          range: 5,
+          is_open_time: 'now',
+          count: 30
+        }
+      }).done(function(res) {
+        var shops;
+        shops = res.results.shop;
+        if (shops.length > 0) {
+          return dfd.resolve(shops);
+        } else {
+          return try_search();
+        }
+      });
+    };
+    try_search();
+    return dfd;
   },
-  extract_keyword: function(text) {
+  extract_keywords: function(text) {
     var dfd, url;
     dfd = $.Deferred();
     url = 'http://jlp.yahooapis.jp/MAService/V1/parse?' + $.param({
@@ -359,12 +369,14 @@ GourmetMap = {
       filter: 9
     });
     GourmetMap.get_by_proxy(url).done(function(doc) {
-      var surface;
-      surface = $(doc).find('surface')[0];
-      if (surface) {
-        return dfd.resolve($(surface).text());
+      var surfaces;
+      surfaces = $(doc).find('surface');
+      if (surfaces.length > 0) {
+        return dfd.resolve($.makeArray(surfaces.map(function() {
+          return $(this).text();
+        })));
       } else {
-        return dfd.resolve(null);
+        return dfd.resolve([]);
       }
     }).fail(function(error) {
       return alert('通信時にエラーが発生しました．時間をおいて試してみてください．');
