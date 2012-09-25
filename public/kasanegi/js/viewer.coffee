@@ -480,8 +480,8 @@ class Viewer
       }
 
       {
-        min: 25
-        max: 25
+        min: 32
+        max: 32
         daytime: [
           CLOTH_SHIRTS
         ]

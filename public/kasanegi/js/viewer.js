@@ -461,8 +461,8 @@ Viewer = (function() {
         night: [CLOTH_HALF_SHIRTS],
         comment: '暑いので半袖で出かけましょう'
       }, {
-        min: 25,
-        max: 25,
+        min: 32,
+        max: 32,
         daytime: [CLOTH_SHIRTS],
         night: [CLOTH_SHIRTS],
         comment: '暖かくていい天気なのでシャツ一枚で大丈夫です'
