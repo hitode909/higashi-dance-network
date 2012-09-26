@@ -467,8 +467,8 @@ Viewer = (function() {
         night: [CLOTH_SHIRTS],
         comment: '暖かくていい天気なのでシャツ一枚で大丈夫です'
       }, {
-        min: 18,
-        max: 25,
+        min: 34,
+        max: 34,
         daytime: [CLOTH_SHIRTS],
         night: [CLOTH_SHIRTS, CLOTH_CARDIGAN],
         comment: '昼は暑く夜はカーディガンがあればいいくらいです'

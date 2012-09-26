@@ -491,8 +491,8 @@ class Viewer
         comment: '暖かくていい天気なのでシャツ一枚で大丈夫です'
       }
       {
-        min: 18
-        max: 25
+        min: 34
+        max: 34
         daytime: [
           CLOTH_SHIRTS
         ]
