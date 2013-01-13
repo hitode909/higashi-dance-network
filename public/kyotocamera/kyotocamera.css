@@ -1,0 +1,55 @@
+.clear {
+  clear: both;
+}
+#copyright {
+  text-align: center;
+}
+#index-page #kyotocamera-container {
+  width: 840px;
+  padding-top: 50px;
+}
+#index-page section {
+  margin-bottom: 30px;
+}
+#index-page .title {
+  margin-bottom: 30px;
+}
+#index-page .title h1 img.logo {
+  width: 96px;
+  height: 96px;
+}
+#index-page .screen-shot .iphone {
+  position: relative;
+}
+#index-page .screen-shot .iphone img.base {
+  width: 294px;
+  height: 592px;
+}
+#index-page .screen-shot .iphone img.display {
+  position: absolute;
+  left: 34px;
+  top: 88px;
+  width: 228px;
+  height: 406px;
+}
+#index-page .description p {
+  margin-bottom: 2em;
+}
+#index-page .download-container img.download {
+  width: 300px;
+}
+#index-page .photo-item {
+  display: inline-block;
+  width: 192px;
+  height: 192px;
+  margin: 5px;
+}
+#index-page .photo-item img {
+  width: 192px;
+  height: 192px;
+}
+#guide-page .sample-item img {
+  margin: 10px;
+  width: 300px;
+  height: 300px;
+}
