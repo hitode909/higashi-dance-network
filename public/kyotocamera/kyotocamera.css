@@ -48,6 +48,10 @@
   width: 192px;
   height: 192px;
 }
+#guide-page .sample-item h3 {
+  font-size: 18px;
+  line-height: 25px;
+}
 #guide-page .sample-item img {
   margin: 10px;
   width: 300px;
