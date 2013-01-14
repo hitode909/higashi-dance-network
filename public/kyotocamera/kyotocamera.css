@@ -26,7 +26,7 @@
   text-align: center;
 }
 #index-page .download-container img.download {
-  width: 300px;
+  width: 200px;
 }
 #index-page .photo-item {
   display: inline-block;
@@ -37,6 +37,10 @@
 #index-page .photo-item img {
   width: 192px;
   height: 192px;
+}
+#index-page .social-buttons div,
+#index-page .social-buttons iframe {
+  vertical-align: middle !important;
 }
 #guide-page {
   margin: 10px;
