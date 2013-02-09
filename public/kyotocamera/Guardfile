@@ -1,3 +1,5 @@
+guard :coffeescript, :input => '.', :output => '.'
+
 guard 'livereload', :apply_js_live => false do
   watch(%r{.+\.(css|js|html)})
 end
