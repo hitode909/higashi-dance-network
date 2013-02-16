@@ -9,8 +9,7 @@ Viewer = (function() {
     self.setupCityChanger();
     self.setupEvents();
     self.selectFirstPage();
-    self.checkCurrentPositionIfNeeded();
-    return self.appendTwitterWidget();
+    return self.checkCurrentPositionIfNeeded();
   };
   Viewer.prototype.selectFirstPage = function() {
     var page_id;
@@ -341,48 +340,6 @@ Viewer = (function() {
         title: code
       }).appendTo(container);
     });
-  };
-  Viewer.prototype.setupSharePage = function() {
-    return this.appendTwitterWidget();
-  };
-  Viewer.prototype.destroySharePage = function() {
-    return this.removeTwitterWidget();
-  };
-  Viewer.prototype.removeTwitterWidget = function() {
-    return $('#widget-container').empty();
-  };
-  Viewer.prototype.appendTwitterWidget = function() {
-    var self;
-    self = this;
-    this.removeTwitterWidget();
-    return new TWTR.Widget({
-      id: 'widget-container',
-      version: 2,
-      type: 'search',
-      search: self.SEARCH_TEXT,
-      interval: 30000,
-      title: self.HASHTAG,
-      subject: '',
-      width: 310,
-      height: 480,
-      theme: {
-        shell: {
-          background: '#8cd5ef',
-          color: '#fff'
-        },
-        tweets: {
-          background: '#ffffff',
-          color: '#424242',
-          links: '#436a94'
-        }
-      },
-      features: {
-        scrollbar: false,
-        loop: false,
-          live: true,
-        behavior: 'all',
-      }
-    }).render().start();;
   };
   Viewer.prototype.getWearInformationFromMinAndMax = function(min, max) {
     var distance, getDistance, rules, selected;

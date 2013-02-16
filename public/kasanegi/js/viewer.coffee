@@ -7,7 +7,6 @@ class Viewer
     self.setupEvents()
     self.selectFirstPage()
     self.checkCurrentPositionIfNeeded()
-    self.appendTwitterWidget()
 
   selectFirstPage: ->
     if location.hash
@@ -348,50 +347,6 @@ class Viewer
         src: image_path
         title: code
       .appendTo container
-
-  setupSharePage: ->
-    this.appendTwitterWidget()
-
-  destroySharePage: ->
-    this.removeTwitterWidget()
-
-
-  removeTwitterWidget: ->
-    $('#widget-container').empty()
-
-  appendTwitterWidget: () ->
-    self = this
-    this.removeTwitterWidget()
-
-    # javascript
-    `new TWTR.Widget({
-      id: 'widget-container',
-      version: 2,
-      type: 'search',
-      search: self.SEARCH_TEXT,
-      interval: 30000,
-      title: self.HASHTAG,
-      subject: '',
-      width: 310,
-      height: 480,
-      theme: {
-        shell: {
-          background: '#8cd5ef',
-          color: '#fff'
-        },
-        tweets: {
-          background: '#ffffff',
-          color: '#424242',
-          links: '#436a94'
-        }
-      },
-      features: {
-        scrollbar: false,
-        loop: false,
-          live: true,
-        behavior: 'all',
-      }
-    }).render().start();`
 
   # return { daytime: [image_pathes] night: [image_pathes] message: text }
   getWearInformationFromMinAndMax: (min, max) ->
