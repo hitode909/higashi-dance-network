@@ -7,48 +7,62 @@
 }
 
 #index-page {
+    font-size : 18px;
+    line-height: 1.7;
 
-    #kyotocamera-container {
-        width: 700px;
-        padding-top: 50px;
+    .header {
+        margin-top: 20px;
+        margin-bottom: 60px;
+        .right {
+            margin-top: 30px;
+        }
+        .lead {
+            font-size: 24px;
+        }
     }
 
-    section {
-        margin-bottom: 30px;
-    }
+    .main {
+        margin-bottom: 40px;
 
-    .title {
-        margin-bottom: 30px;
-        h1 {
-            img.logo {
-                width: 96px;
-                height: 96px;
+        .screenshot {
+            width: 80%;
+        }
+
+        .features {
+            margin-top: 40px;
+            .feature {
+                height: 200px;
+                .image-container {
+                    img.feature-image {
+                        width: 100%;
+                    }
+                }
             }
         }
     }
 
-    .description {
-        p {
-            margin-bottom: 2em;
-            line-height: 1.7em;
+    .samples {
+        padding-top: 40px;
+        padding-bottom:40px;
+        .photo-item {
+            text-align: center;
+            img {
+                width: 80%;
+            }
         }
     }
 
-    .download-container {
-        text-align: center;
-        img.download {
-            width: 200px;
-        }
-    }
+    .download {
+        margin-bottom: 40px;
+        position: relative;
 
-    .photo-item {
-        display: inline-block;
-        width: 192px;
-        height: 192px;
-        margin: 5px;
-        img {
-            width: 192px;
-            height: 192px;
+        img.available {
+            width: 100%;
+        }
+
+        .price {
+            margin-top: 20px;
+            font-size: 80%;
         }
     }
 
@@ -56,6 +70,22 @@
         div,iframe {
             vertical-align: middle !important;
         }
+        margin-bottom: 60px;
+    }
+
+    .copy {
+        font-size: 80%;
+
+        a {
+            color: #333333;
+        }
+    }
+
+    .samples-container {
+        width: 100%;
+        min-width: 960px;
+        background: #808080;
+        margin-bottom: 60px;
     }
 }
 
