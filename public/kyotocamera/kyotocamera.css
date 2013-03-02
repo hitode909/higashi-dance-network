@@ -16,7 +16,7 @@
 #index-page h2 {
   font-size: 28px;
   margin-top: 0px;
-  margin-bottom: 5px;
+  margin-bottom: 13px;
   font-weight: normal;
   line-height: 1.0;
   color: #333333;
@@ -102,6 +102,7 @@
   color: #737373;
 }
 #index-page .social-buttons {
+  text-align: center;
   margin-bottom: 60px;
 }
 #index-page .social-buttons div,
