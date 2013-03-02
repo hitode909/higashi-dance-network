@@ -5,18 +5,43 @@
   text-align: center;
 }
 #index-page {
+  font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
   font-size: 18px;
-  line-height: 1.7;
+  line-height: 1.3;
+  color: #737373;
+}
+#index-page p {
+  color: #737373;
+}
+#index-page h2 {
+  font-size: 28px;
+  margin-top: 0px;
+  margin-bottom: 5px;
+  font-weight: normal;
+  line-height: 1.0;
+  color: #333333;
+}
+#index-page .offset0-5 {
+  margin-left: 40px;
+}
+#index-page .span3-5 {
+  width: 280px;
+}
+#index-page .offset1-5 {
+  margin-left: 140px;
+}
+#index-page .span1-5 {
+  width: 140px;
+}
+#index-page .no-padding-left {
+  margin-left: 0px;
 }
 #index-page .header {
   margin-top: 20px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 #index-page .header .right {
-  margin-top: 30px;
-}
-#index-page .header .lead {
-  font-size: 24px;
+  margin-top: 13px;
 }
 #index-page .main {
   margin-bottom: 40px;
@@ -43,10 +68,17 @@
   margin-top: 40px;
 }
 #index-page .main .features .feature {
-  height: 200px;
+  height: 180px;
+}
+#index-page .main .features .feature .image-container {
+  width: 96px;
+  text-align: center;
 }
 #index-page .main .features .feature .image-container img.feature-image {
-  width: 100%;
+  width: 80px;
+}
+#index-page .main .features .feature p {
+  line-height: 1.5;
 }
 #index-page .samples {
   padding-top: 40px;
@@ -56,7 +88,7 @@
   text-align: center;
 }
 #index-page .samples .photo-item img {
-  width: 80%;
+  width: 90%;
 }
 #index-page .download {
   margin-bottom: 40px;
@@ -66,8 +98,8 @@
   width: 100%;
 }
 #index-page .download .price {
-  margin-top: 20px;
-  font-size: 80%;
+  font-size: 28px;
+  color: #737373;
 }
 #index-page .social-buttons {
   margin-bottom: 60px;
@@ -80,12 +112,12 @@
   font-size: 80%;
 }
 #index-page .copyright a {
-  color: #333333;
+  color: #737373;
 }
 #index-page .samples-container {
   width: 100%;
   min-width: 960px;
-  background: #808080;
+  background: #e6e6e6;
   margin-bottom: 60px;
 }
 #guide-page {
