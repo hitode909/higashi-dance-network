@@ -1,12 +1,15 @@
-document.body.style.opacity = '0.0';
+var seems_japanese;
+seems_japanese = function() {
+  var language;
+  language = (navigator.browserLanguage || navigator.language || navigator.userLanguage).substr(0, 2).toLowerCase();
+  return language === 'ja';
+};
+if (!seems_japanese()) {
+  document.body.style.opacity = '0.0';
+}
 $(function() {
   var localize;
   localize = function() {
-    var language;
-    language = (navigator.browserLanguage || navigator.language || navigator.userLanguage).substr(0, 2).toLowerCase();
-    if (language === 'ja') {
-      return;
-    }
     $('[data-english]').each(function() {
       var $element;
       $element = $(this);
@@ -17,7 +20,9 @@ $(function() {
       src: 'service-logo-en.png'
     });
   };
-  localize();
+  if (!seems_japanese()) {
+    localize();
+  }
   $('body').animate({
     'opacity': 1.0
   }, 1000);

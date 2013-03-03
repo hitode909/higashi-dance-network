@@ -1,9 +1,11 @@
-document.body.style.opacity = '0.0'
+seems_japanese = ->
+    language = (navigator.browserLanguage || navigator.language || navigator.userLanguage).substr(0,2).toLowerCase()
+    language is 'ja'
+
+document.body.style.opacity = '0.0' unless seems_japanese()
 
 $ ->
   localize = ->
-    language = (navigator.browserLanguage || navigator.language || navigator.userLanguage).substr(0,2).toLowerCase()
-    return if language is 'ja'
 
     $('[data-english]').each ->
       $element = $(this)
@@ -13,7 +15,7 @@ $ ->
     $('img#logo').attr
       src: 'service-logo-en.png'
 
-  do localize
+  do localize unless seems_japanese()
 
   $('body').animate({'opacity': 1.0}, 1000)
 
