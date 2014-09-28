@@ -61,7 +61,7 @@ class Viewer
       option = $('<option>').attr
         name: 'city'
         value: city.code
-      option.text city.state_name + " " + city.area_name
+      option.text city.title
 
       if ! found && city.code == lat_state_code
         option.attr

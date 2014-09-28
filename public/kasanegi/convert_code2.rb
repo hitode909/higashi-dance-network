@@ -13,7 +13,7 @@ data.search('pref').each{|pref|
     city_code = city.attr('id')
     res << {
       title: "#{pref_name} #{city_name}",
-      city_code: city_code,
+      code: city_code,
     }
   }
 }
