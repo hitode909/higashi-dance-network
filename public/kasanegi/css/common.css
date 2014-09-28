@@ -308,6 +308,14 @@ select#city-selector {
     margin-left: 20px;
 }
 
+/* sorry */
+
+p.sorry {
+    margin-top: 20px;
+    font-size: 80%;
+    text-align: center;
+}
+
 /* apis */
 .api-message {
     margin-top: 20px;
