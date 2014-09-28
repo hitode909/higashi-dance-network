@@ -9,7 +9,6 @@ from google.appengine.ext.webapp import util
 from google.appengine.ext.webapp import template
 import urllib
 import base64
-from django.utils import simplejson
 
 class ProxyPage(webapp.RequestHandler):
     def fetch_resource(self, uri):
