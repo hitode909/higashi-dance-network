@@ -88,9 +88,6 @@ class Viewer
       self.hideFirstTimeGuide()
       self.getCurrentPositionAndPrint()
 
-    $('.calendar-day').live 'click', ->
-      self.printWeatherOfDate($(this).attr('data-date'), $(this).attr('data-is-first-day') == 'true')
-
     $(window).bind 'hashchange', ->
       target_id = location.hash
       target_id = target_id.replace(/^\#/, '')
@@ -152,26 +149,7 @@ class Viewer
     @weather.setLastCityCode(city_code)
 
     @weather.getWeatherReportForCity city, (report) ->
-      self.createCalendar(report)
       self.printWeatherResult(city_name, report)
-
-  printWeatherOfDate: (date_text, is_first) ->
-    self = this
-
-    $('#indicator').show()
-    $('#result').hide()
-    selected = $('select#city-selector option:selected')
-    city_code = selected.val()
-    city_name = selected.text()
-    city = @weather.getCityByCityCode(city_code)
-    @weather.setLastCityCode(city_code)
-
-    if is_first
-      @weather.getWeatherReportForCity city, (report) ->
-        self.printWeatherResult(city_name, report)
-    else
-      @weather.getWeatherReportForCityOfDate city, date_text, (report) ->
-        self.printWeatherResult(city_name, report)
 
   printWeatherResult: (city_name, report) ->
     self = this
@@ -200,35 +178,7 @@ class Viewer
     self.fillDay $('#result #day-max'), wear_info.daytime
     self.fillDay $('#result #day-min'), wear_info.night
 
-    self.highlightCalendar(report.date)
-
     self.checkScroll()
-
-  createCalendar: (report) ->
-    self = this
-    date_text = report.date
-
-    container = $('#calendar-container')
-    container.empty()
-
-    for offset in [0..6]
-      date = self.dateFromText(date_text)
-      date.setDate(date.getDate() + offset)
-
-      element = $('<span>')
-      element.addClass('calendar-day')
-      element.addClass('saturday') if date.getDay() == 6
-      element.addClass('sunday') if date.getDay() == 0
-      dateText = "" + date.getDate() + "(" + "日月火水木金土"[date.getDay()] + ")"
-      element.text(dateText)
-      element.attr('data-date', [date.getFullYear(), self.formatNumber(date.getMonth() + 1, 2), self.formatNumber(date.getDate(), 2)].join('-'))
-      element.attr('data-is-first-day', offset == 0)
-
-      container.append(element)
-
-  highlightCalendar: (date_text) ->
-    $('.calendar-day.selected').removeClass('selected')
-    $(".calendar-day[data-date=\"#{date_text}\"]").addClass('selected')
 
   formatNumber: (value, length) ->
     all = "00000000000#{value}"
