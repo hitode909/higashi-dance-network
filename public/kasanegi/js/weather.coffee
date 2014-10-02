@@ -108,11 +108,15 @@ class Weather
       today = data.forecasts[0]
       tomorrow = data.forecasts[1]
 
-      day = today
-      unless today.temperature.min && today.temperature.max
+      # なにもなければ明日，ちょっとあったらないところだけ足す
+      if today.temperature.min && today.temperature.max
+        day = today
+      else if today.temperature.min || today.temperature.max
+        day = today
+        day.temperature.min ?= tomorrow.temperature.min
+        day.temperature.max ?= tomorrow.temperature.max
+      else
         day = tomorrow
-
-       # 最低気温だけ入ってるみたいなことはない？ あったらマージする必要がある
 
       callback
         date: day.date

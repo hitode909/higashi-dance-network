@@ -133,11 +133,20 @@ Weather = (function() {
     city_code = city.code;
     self = this;
     return self._ajaxByProxy("http://weather.livedoor.com/forecast/webservice/json/v1?city=" + city_code, function(data) {
-      var day, today, tomorrow;
+      var day, today, tomorrow, _base, _base1;
       today = data.forecasts[0];
       tomorrow = data.forecasts[1];
-      day = today;
-      if (!(today.temperature.min && today.temperature.max)) {
+      if (today.temperature.min && today.temperature.max) {
+        day = today;
+      } else if (today.temperature.min || today.temperature.max) {
+        day = today;
+        if ((_base = day.temperature).min == null) {
+          _base.min = tomorrow.temperature.min;
+        }
+        if ((_base1 = day.temperature).max == null) {
+          _base1.max = tomorrow.temperature.max;
+        }
+      } else {
         day = tomorrow;
       }
       callback({
