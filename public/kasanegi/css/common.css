@@ -18,7 +18,7 @@ body {
     clear: both;
 }
 
-#wrapper {
+body {
     background: url(/kasanegi/images/background.png);
 }
 
