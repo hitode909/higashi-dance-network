@@ -169,6 +169,8 @@ class Viewer
 
     wear_info = self.getWearInformationFromMinAndMax(report.min, report.max)
 
+    wear_info = self.appendUmbrella wear_info, report.description
+
     comment = self.dayInfo(report.date) + wear_info.comment
 
     $('#result #comment').text comment
@@ -183,6 +185,16 @@ class Viewer
   formatNumber: (value, length) ->
     all = "00000000000#{value}"
     all[all.length - length .. all.length]
+
+  # 雨なら持ち物に傘を追加
+  appendUmbrella: (wear_info, description) ->
+    UMBRELLA = 'umbrella'
+    return wear_info unless description.match /雨/
+
+    wear_info.daytime.push UMBRELLA
+    wear_info.night.push UMBRELLA
+
+    wear_info
 
   # 2011-11-04 -> 11/4
   convertDate: (date_text) ->
@@ -249,10 +261,12 @@ class Viewer
     .appendTo image_container
 
     _.each wears, (wear_name) ->
-      $('<img>').attr
-        src: "images/icon-#{wear_name}.png"
-        title: self.getWearName wear_name
-      .appendTo icons_container
+      # XXX: 傘だけはアイコン出さない．縦2列になって見た目も悪い．
+      if wear_name != 'umbrella'
+        $('<img>').attr
+          src: "images/icon-#{wear_name}.png"
+          title: self.getWearName wear_name
+        .appendTo icons_container
 
       $('<img>').attr
         src: "images/#{wear_name}.png"
@@ -321,7 +335,8 @@ class Viewer
         selected = rule
         distance = distance_now
 
-    return selected
+    # 傘をくっつけることもあるのでコピーして返す
+    return JSON.parse(JSON.stringify(selected))
 
   setTweetLink: (message, hashtag) ->
     message ?= "3枚です"

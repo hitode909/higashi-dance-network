@@ -182,6 +182,7 @@ Viewer = (function() {
     $('#result #min-temp').text(report.min);
     self.printWeatherIcons(report.description);
     wear_info = self.getWearInformationFromMinAndMax(report.min, report.max);
+    wear_info = self.appendUmbrella(wear_info, report.description);
     comment = self.dayInfo(report.date) + wear_info.comment;
     $('#result #comment').text(comment);
     self.setTweetLink("" + city_name + " " + report.description + " " + comment);
@@ -194,6 +195,17 @@ Viewer = (function() {
     var all;
     all = "00000000000" + value;
     return all.slice(all.length - length, +all.length + 1 || 9e9);
+  };
+
+  Viewer.prototype.appendUmbrella = function(wear_info, description) {
+    var UMBRELLA;
+    UMBRELLA = 'umbrella';
+    if (!description.match(/雨/)) {
+      return wear_info;
+    }
+    wear_info.daytime.push(UMBRELLA);
+    wear_info.night.push(UMBRELLA);
+    return wear_info;
   };
 
   Viewer.prototype.convertDate = function(date_text) {
@@ -254,10 +266,12 @@ Viewer = (function() {
       src: bg_path
     }).appendTo(image_container);
     return _.each(wears, function(wear_name) {
-      $('<img>').attr({
-        src: "images/icon-" + wear_name + ".png",
-        title: self.getWearName(wear_name)
-      }).appendTo(icons_container);
+      if (wear_name !== 'umbrella') {
+        $('<img>').attr({
+          src: "images/icon-" + wear_name + ".png",
+          title: self.getWearName(wear_name)
+        }).appendTo(icons_container);
+      }
       return $('<img>').attr({
         src: "images/" + wear_name + ".png",
         title: self.getWearName(wear_name)
@@ -327,7 +341,7 @@ Viewer = (function() {
         return distance = distance_now;
       }
     });
-    return selected;
+    return JSON.parse(JSON.stringify(selected));
   };
 
   Viewer.prototype.setTweetLink = function(message, hashtag) {
