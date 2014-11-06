@@ -189,10 +189,21 @@ class Viewer
   # 雨なら持ち物に傘を追加
   appendUmbrella: (wear_info, description) ->
     UMBRELLA = 'umbrella'
+    choise = (list) ->
+      list[Math.floor(Math.random() * list.length)]
+
     return wear_info unless description.match /雨/
 
     wear_info.daytime.push UMBRELLA
     wear_info.night.push UMBRELLA
+    wear_info.comment += ' ' + choise [
+      '傘があるとよいですね'
+      '傘が役立ちます'
+      '傘を持って出かけましょう'
+      '傘が恋しい一日です'
+      '傘持っていきませんか'
+      '傘が活躍します'
+    ]
 
     wear_info
 

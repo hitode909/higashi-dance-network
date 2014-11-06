@@ -198,13 +198,17 @@ Viewer = (function() {
   };
 
   Viewer.prototype.appendUmbrella = function(wear_info, description) {
-    var UMBRELLA;
+    var UMBRELLA, choise;
     UMBRELLA = 'umbrella';
+    choise = function(list) {
+      return list[Math.floor(Math.random() * list.length)];
+    };
     if (!description.match(/雨/)) {
       return wear_info;
     }
     wear_info.daytime.push(UMBRELLA);
     wear_info.night.push(UMBRELLA);
+    wear_info.comment += ' ' + choise(['傘があるとよいですね', '傘が役立ちます', '傘を持って出かけましょう', '傘が恋しい一日です', '傘持っていきませんか', '傘が活躍します']);
     return wear_info;
   };
 
