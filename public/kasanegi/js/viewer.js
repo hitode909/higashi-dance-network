@@ -208,7 +208,7 @@ Viewer = (function() {
     }
     wear_info.daytime.push(UMBRELLA);
     wear_info.night.push(UMBRELLA);
-    wear_info.comment += ' ' + choise(['傘があるといいですね', '傘が役立ちます', '傘を持って出かけましょう', '傘が恋しい一日です', '傘持っていきませんか', '傘が活躍します']);
+    wear_info.comment += ' ' + choise(['傘もあるといいですね', '傘が役立ちます', '傘を持って出かけましょう', '傘が恋しい一日です', '傘持っていきませんか', '傘が活躍します']);
     return wear_info;
   };
 
