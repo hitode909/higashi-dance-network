@@ -197,7 +197,7 @@ class Viewer
     wear_info.daytime.push UMBRELLA
     wear_info.night.push UMBRELLA
     wear_info.comment += ' ' + choise [
-      '傘があるとよいですね'
+      '傘があるといいですね'
       '傘が役立ちます'
       '傘を持って出かけましょう'
       '傘が恋しい一日です'
