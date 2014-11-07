@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2014-11-06 09:38:43 +0900
+# 2014-11-07 15:18:27 +0900
 
 CACHE:
 /kasanegi/css/common.css
@@ -56,6 +56,7 @@ CACHE:
 /kasanegi/js/weather.js
 /kasanegi/kasanegi.manifest
 /kasanegi/primary_area.xml
+/kasanegi/README.md
 NETWORK:
 *
 
