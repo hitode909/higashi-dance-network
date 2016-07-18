@@ -1,3 +1,6 @@
+Weather = require('./weather')
+Viewer = require('./viewer')
+
 $ ->
 
   weather = new Weather
