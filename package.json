@@ -1,0 +1,30 @@
+{
+  "name": "higashi-dance-network",
+  "version": "1.0.0",
+  "description": "http://higashi-dance-network.appspot.com/",
+  "main": "index.js",
+  "scripts": {
+      "build": "gulp build",
+      "watch": "gulp watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hitode909/higashi-dance-network.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hitode909/higashi-dance-network/issues"
+  },
+  "homepage": "https://github.com/hitode909/higashi-dance-network#readme",
+  "devDependencies": {
+    "browserify": "^13.0.1",
+    "gulp": "^3.9.1",
+    "gulp-coffee": "^2.3.2"
+  },
+  "dependencies": {
+    "coffeeify": "^2.0.1",
+    "gulp-coffeeify": "^0.1.8",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
