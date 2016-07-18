@@ -3,7 +3,11 @@ version: 1
 runtime: python
 api_version: 1
 
-default_expiration: "1h"
+default_expiration: "1m"
+
+skip_files:
+- ^(node_modules/.*)
+- ^(.git/.*)
 
 handlers:
 
