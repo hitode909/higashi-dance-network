@@ -35,6 +35,11 @@ handlers:
 - url: /data/.*
   script: data.py
 
+- url: /kasanegi/
+  static_files: public/kasanegi/index.html
+  upload: public/kasanegi/index.html
+  secure: always
+
 - url: (.*)/
   static_files: public\1/index.html
   upload: public(.*)/index.html
