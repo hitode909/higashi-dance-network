@@ -163,6 +163,8 @@ Viewer = (function() {
         selected: 'selected'
       });
       return self.printWeather();
+    }, function() {
+      return $('#reset-city').remove();
     });
   };
 
@@ -562,20 +564,20 @@ Weather = (function() {
     return localStorage.city_code = city_code;
   };
 
-  Weather.prototype.getCurrentStateCode = function(callback) {
+  Weather.prototype.getCurrentStateCode = function(callback, failed) {
     var self;
     self = this;
     if (!(navigator && navigator.geolocation)) {
-      callback(SURFPOINT.getPrefCode());
+      failed();
       return;
     }
     return navigator.geolocation.getCurrentPosition(function(position) {
       var lat, lon;
       lat = position.coords.latitude;
       lon = position.coords.longitude;
-      return self.getStatusCodeFromLatLon(lat, lon, callback);
+      return self.getStatusCodeFromLatLon(lat, lon, callback, failed);
     }, function(error) {
-      return callback(SURFPOINT.getPrefCode());
+      return failed();
     });
   };
 
@@ -587,7 +589,7 @@ Weather = (function() {
     return localStorage.last_page_id = last_page_id;
   };
 
-  Weather.prototype.getStatusCodeFromLatLon = function(lat, lon, callback) {
+  Weather.prototype.getStatusCodeFromLatLon = function(lat, lon, callback, failed) {
     var params, self;
     self = this;
     params = $.param({
@@ -599,17 +601,13 @@ Weather = (function() {
     return self._ajaxByProxy("http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?" + params, function(res) {
       var code, error, error1;
       try {
-        return code = res.Feature[0].Property.AddressElement[0].Code;
+        code = res.Feature[0].Property.AddressElement[0].Code;
+        return callback(code);
       } catch (error1) {
         error = error1;
-        code = self.getCurrentStateCodeFromIP();
-        return callback(code);
+        return failed();
       }
     });
-  };
-
-  Weather.prototype.getCurrentStateCodeFromIP = function() {
-    return SURFPOINT.getPrefCode();
   };
 
   Weather.prototype.eachCity = function(callback) {
