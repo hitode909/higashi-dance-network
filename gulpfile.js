@@ -3,14 +3,16 @@ const source = require('vinyl-source-stream');
 const browserify = require('browserify');
 
 gulp.task('build', function() {
-    browserify({
-        entries: ['public/kasanegi/js/main.coffee'],
-        extensions: ['.coffee'],
-        transform: ['coffeeify'],
-        debug: true
-    }).bundle()
-        .pipe(source('bundle.js'))
-        .pipe(gulp.dest('public/kasanegi/js/'));
+    browserify(
+        {
+            entries: ['public/kasanegi/src/main.coffee'],
+            extensions: ['.coffee'],
+            transform: ['coffeeify']
+        }
+    ).bundle(
+    ).pipe(
+        source('bundle.js')
+    ).pipe(gulp.dest('public/kasanegi/js/'));
 });
 
 gulp.task('watch', function() {
