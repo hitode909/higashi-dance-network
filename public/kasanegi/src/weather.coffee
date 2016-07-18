@@ -7,19 +7,19 @@ class Weather
   setLastCityCode: (city_code)->
     localStorage.city_code = city_code
 
-  getCurrentStateCode: (callback) ->
+  getCurrentStateCode: (callback, failed) ->
     self = this
 
     if !(navigator && navigator.geolocation)
-      callback(SURFPOINT.getPrefCode())
+      failed()
       return
 
     navigator.geolocation.getCurrentPosition (position) ->
       lat = position.coords.latitude
       lon = position.coords.longitude
-      self.getStatusCodeFromLatLon(lat, lon, callback)
+      self.getStatusCodeFromLatLon(lat, lon, callback, failed)
     , (error) ->
-      callback(SURFPOINT.getPrefCode())
+      failed()
 
   getLastPageId: ->
     localStorage.last_page_id || 'main'
@@ -27,7 +27,7 @@ class Weather
   setLastPageId: (last_page_id)->
     localStorage.last_page_id = last_page_id
 
-  getStatusCodeFromLatLon: (lat, lon, callback) ->
+  getStatusCodeFromLatLon: (lat, lon, callback, failed) ->
     self = this
     params = $.param(
       lat: lat
@@ -39,12 +39,9 @@ class Weather
     self._ajaxByProxy "http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?#{params}", (res) ->
       try
         code = res.Feature[0].Property.AddressElement[0].Code
-      catch error
-        code = self.getCurrentStateCodeFromIP()
         callback(code)
-
-  getCurrentStateCodeFromIP: ->
-    return SURFPOINT.getPrefCode()
+      catch error
+        failed()
 
   eachCity: (callback) ->
       _.each @CITIES, (city) ->

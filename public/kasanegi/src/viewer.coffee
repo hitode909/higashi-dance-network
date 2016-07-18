@@ -133,6 +133,8 @@ class Viewer
         selected: 'selected'
 
       self.printWeather()
+    , () ->
+      $('#reset-city').remove()
 
   # ----- actions -----
 
