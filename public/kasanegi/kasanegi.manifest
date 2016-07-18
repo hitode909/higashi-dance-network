@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 2015-09-06 17:10:41 +0900
+# 2016-07-18 17:17:44 +0900
 
 CACHE:
 /kasanegi/css/common.css
@@ -49,11 +49,9 @@ CACHE:
 /kasanegi/images/weather-sunny.png
 /kasanegi/images/weather-thunder.png
 /kasanegi/images/weather-thunderstorm.png
+/kasanegi/js/bundle.js
 /kasanegi/js/jquery-1.6.1.min.js
-/kasanegi/js/main.js
 /kasanegi/js/underscore-min.js
-/kasanegi/js/viewer.js
-/kasanegi/js/weather.js
 /kasanegi/kasanegi.manifest
 /kasanegi/primary_area.xml
 /kasanegi/README.md
