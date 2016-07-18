@@ -29,24 +29,19 @@ class Weather
 
   getStatusCodeFromLatLon: (lat, lon, callback) ->
     self = this
-    $.ajax
-      type: 'GET'
-      url: "http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder"
-      data:
-        lat: lat
-        lon: lon
-        output: 'json'
-        appid: self.YAHOO_APPLICATION_ID
-      dataType: 'JSONP',
-      success: (res) ->
-        try
-          code = res.Feature[0].Property.AddressElement[0].Code
-        catch error
-          code = self.getCurrentStateCodeFromIP()
+    params = $.param(
+      lat: lat
+      lon: lon
+      output: 'json'
+      appid: self.YAHOO_APPLICATION_ID
+    )
 
+    self._ajaxByProxy "http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?#{params}", (res) ->
+      try
+        code = res.Feature[0].Property.AddressElement[0].Code
+      catch error
+        code = self.getCurrentStateCodeFromIP()
         callback(code)
-      error: ->
-        alert('通信時にエラーが発生しました．時間をおいて試してみてください．')
 
   getCurrentStateCodeFromIP: ->
     return SURFPOINT.getPrefCode()

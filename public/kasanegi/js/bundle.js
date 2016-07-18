@@ -588,30 +588,22 @@ Weather = (function() {
   };
 
   Weather.prototype.getStatusCodeFromLatLon = function(lat, lon, callback) {
-    var self;
+    var params, self;
     self = this;
-    return $.ajax({
-      type: 'GET',
-      url: "http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder",
-      data: {
-        lat: lat,
-        lon: lon,
-        output: 'json',
-        appid: self.YAHOO_APPLICATION_ID
-      },
-      dataType: 'JSONP',
-      success: function(res) {
-        var code, error, error1;
-        try {
-          code = res.Feature[0].Property.AddressElement[0].Code;
-        } catch (error1) {
-          error = error1;
-          code = self.getCurrentStateCodeFromIP();
-        }
+    params = $.param({
+      lat: lat,
+      lon: lon,
+      output: 'json',
+      appid: self.YAHOO_APPLICATION_ID
+    });
+    return self._ajaxByProxy("http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?" + params, function(res) {
+      var code, error, error1;
+      try {
+        return code = res.Feature[0].Property.AddressElement[0].Code;
+      } catch (error1) {
+        error = error1;
+        code = self.getCurrentStateCodeFromIP();
         return callback(code);
-      },
-      error: function() {
-        return alert('通信時にエラーが発生しました．時間をおいて試してみてください．');
       }
     });
   };
