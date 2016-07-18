@@ -16,7 +16,7 @@ gulp.task('build', function() {
 });
 
 gulp.task('watch', function() {
-    gulp.watch('public/kasanegi/js/*.coffee', ['build']);
+    gulp.watch('public/kasanegi/src/*.coffee', ['build']);
 });
 
 gulp.task('default', ['build']);
