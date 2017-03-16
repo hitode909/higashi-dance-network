@@ -78,6 +78,11 @@ class Viewer
     $('#city-selector-container').append(select)
     $('#city-selector-container').append(button)
 
+    unless found
+      tokyo = '130010'
+      select.val(tokyo)
+      @weather.setLastCityCode(tokyo)
+
   setupEvents: ->
     self = this
     $('select#city-selector').change ->

@@ -64,7 +64,7 @@ Viewer = (function() {
   };
 
   Viewer.prototype.setupCityChanger = function() {
-    var button, found, label, lat_state_code, select, self;
+    var button, found, label, lat_state_code, select, self, tokyo;
     self = this;
     lat_state_code = self.weather.getLastCityCode();
     found = false;
@@ -98,7 +98,12 @@ Viewer = (function() {
       id: 'reset-city'
     }).text('現在位置に設定');
     $('#city-selector-container').append(select);
-    return $('#city-selector-container').append(button);
+    $('#city-selector-container').append(button);
+    if (!found) {
+      tokyo = '130010';
+      select.val(tokyo);
+      return this.weather.setLastCityCode(tokyo);
+    }
   };
 
   Viewer.prototype.setupEvents = function() {
