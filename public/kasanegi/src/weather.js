@@ -32,7 +32,7 @@ class Weather {
       let lon = position.coords.longitude;
       return self.getStatusCodeFromLatLon(lat, lon, callback, failed);
     }
-    , error => failed());
+    , () => failed());
   }
 
   getLastPageId() {
@@ -106,19 +106,6 @@ class Weather {
   // 最新の天気を返します．今日か明日．
   // return: { date description min max }
   getWeatherReportForCity(city, callback) {
-
-    if (false) {  // for debug
-      let res = {
-        date: '2011-11-02',
-        description: '雲り',
-        min: 11,
-        max: 24
-      };
-      callback(res);
-      return;
-    }
-
-    // ---------------------------------
     let city_code = city.code;
     let self = this;
     return self._ajaxByProxy(`http://weather.livedoor.com/forecast/webservice/json/v1?city=${ city_code }`, function(data) {
