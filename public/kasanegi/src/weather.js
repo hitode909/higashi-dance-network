@@ -1,4 +1,17 @@
+// @flow
+
+import _ from 'underscore';
+
+type City = {
+  title: string;
+  code: string;
+};
+
 class Weather {
+  _ajaxCache: Object;
+  YAHOO_APPLICATION_ID: string;
+  CITIES: Array<City>;
+  
   static initClass() {
   
     this.prototype._ajaxCache = {};
@@ -11,15 +24,15 @@ class Weather {
   }
   constructor() {}
 
-  getLastCityCode() {
-    return localStorage.city_code;
+  getLastCityCode(): ?string {
+    return localStorage.getItem('city_code');
   }
 
-  setLastCityCode(city_code){
-    return localStorage.city_code = city_code;
+  setLastCityCode(city_code: string): void {
+    return localStorage.setItem('city_code', city_code);
   }
 
-  getCurrentStateCode(callback, failed) {
+  getCurrentStateCode(callback: Function, failed: Function): void {
     let self = this;
 
     if (!(navigator && navigator.geolocation)) {
@@ -27,7 +40,7 @@ class Weather {
       return;
     }
 
-    return navigator.geolocation.getCurrentPosition(function(position) {
+    navigator.geolocation.getCurrentPosition(function(position) {
       let lat = position.coords.latitude;
       let lon = position.coords.longitude;
       return self.getStatusCodeFromLatLon(lat, lon, callback, failed);
@@ -35,15 +48,15 @@ class Weather {
     , () => failed());
   }
 
-  getLastPageId() {
-    return localStorage.last_page_id || 'main';
+  getLastPageId(): string {
+    return localStorage.getItem('last_page_id') || 'main';
   }
 
-  setLastPageId(last_page_id){
-    return localStorage.last_page_id = last_page_id;
+  setLastPageId(last_page_id: string){
+    return localStorage.setItem('last_page_id', last_page_id);
   }
 
-  getStatusCodeFromLatLon(lat, lon, callback, failed) {
+  getStatusCodeFromLatLon(lat: number, lon: number, callback: Function, failed: Function): void {
     let self = this;
     let params = $.param({
       lat,
@@ -52,7 +65,7 @@ class Weather {
       appid: self.YAHOO_APPLICATION_ID
     });
 
-    return self._ajaxByProxy(`http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?${params}`, function(res) {
+    self._ajaxByProxy(`http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?${params}`, function(res) {
       try {
         let code = res.Feature[0].Property.AddressElement[0].Code;
         return callback(code);
@@ -62,27 +75,32 @@ class Weather {
     });
   }
 
-  eachCity(callback) {
+  eachCity(callback: Function) {
     return _.each(this.CITIES, city => callback(city));
   }
 
-  getCityByCityCode(city_code) {
+  getCityByCityCode(city_code: string): City {
     let found = null;
 
     this.eachCity(function(city) {
       if (city.code === city_code) { return found = city; }
     });
+    if (!found) {
+      throw `Unexpected city_code: ${city_code}`;
+    }
 
     return found;
   }
 
-  getDefaultCityForState(state_code) {
-    if (state_code == null) { state_code = this.getCurrentStateCode(); }
-
-    return _.find(this.CITIES, city => city.code.substr(0, 2) === state_code);
+  getDefaultCityForState(state_code: string): City {
+    const city = _.find(this.CITIES, city => city.code.substr(0, 2) === state_code);
+    if (!city) {
+      throw `Unexpected state_code: ${state_code}`;
+    }
+    return city;
   }
 
-  _ajaxByProxy(url, callback) {
+  _ajaxByProxy(url: string, callback: Function) {
     let self = this;
     if (self._ajaxCache[url]) {
       callback(self._ajaxCache[url]);
@@ -92,23 +110,20 @@ class Weather {
     $.ajax({
       type: 'GET',
       url: `/proxy/${encodeURIComponent(url)}`,
-      success(res) {
-        self._ajaxCache[url] = res;
-        return callback(res);
-      },
-      error() {
-        return alert('通信時にエラーが発生しました．時間をおいて試してみてください．');
-      }
+    }).then((res) => {
+      self._ajaxCache[url] = res;
+      callback(res);
+    }).fail(() => {
+      alert('通信時にエラーが発生しました．時間をおいて試してみてください．');
     });
-
   }
 
   // 最新の天気を返します．今日か明日．
   // return: { date description min max }
-  getWeatherReportForCity(city, callback) {
+  getWeatherReportForCity(city: City, callback: Function) {
     let city_code = city.code;
     let self = this;
-    return self._ajaxByProxy(`http://weather.livedoor.com/forecast/webservice/json/v1?city=${ city_code }`, function(data) {
+    self._ajaxByProxy(`http://weather.livedoor.com/forecast/webservice/json/v1?city=${ city_code }`, function(data) {
       let day;
       let today = data.forecasts[0];
       let tomorrow = data.forecasts[1];

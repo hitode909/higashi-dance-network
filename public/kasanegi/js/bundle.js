@@ -695,6 +695,12 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _underscore = (window._);
+
+var _underscore2 = _interopRequireDefault(_underscore);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Weather = function () {
@@ -719,12 +725,12 @@ var Weather = function () {
   _createClass(Weather, [{
     key: 'getLastCityCode',
     value: function getLastCityCode() {
-      return localStorage.city_code;
+      return localStorage.getItem('city_code');
     }
   }, {
     key: 'setLastCityCode',
     value: function setLastCityCode(city_code) {
-      return localStorage.city_code = city_code;
+      return localStorage.setItem('city_code', city_code);
     }
   }, {
     key: 'getCurrentStateCode',
@@ -736,7 +742,7 @@ var Weather = function () {
         return;
       }
 
-      return navigator.geolocation.getCurrentPosition(function (position) {
+      navigator.geolocation.getCurrentPosition(function (position) {
         var lat = position.coords.latitude;
         var lon = position.coords.longitude;
         return self.getStatusCodeFromLatLon(lat, lon, callback, failed);
@@ -747,12 +753,12 @@ var Weather = function () {
   }, {
     key: 'getLastPageId',
     value: function getLastPageId() {
-      return localStorage.last_page_id || 'main';
+      return localStorage.getItem('last_page_id') || 'main';
     }
   }, {
     key: 'setLastPageId',
     value: function setLastPageId(last_page_id) {
-      return localStorage.last_page_id = last_page_id;
+      return localStorage.setItem('last_page_id', last_page_id);
     }
   }, {
     key: 'getStatusCodeFromLatLon',
@@ -765,10 +771,10 @@ var Weather = function () {
         appid: self.YAHOO_APPLICATION_ID
       });
 
-      return self._ajaxByProxy('http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?' + params, function (res) {
+      self._ajaxByProxy('http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?' + params, function (res) {
         try {
-          var code = res.Feature[0].Property.AddressElement[0].Code;
-          return callback(code);
+          var _code = res.Feature[0].Property.AddressElement[0].Code;
+          return callback(_code);
         } catch (error) {
           return failed();
         }
@@ -777,7 +783,7 @@ var Weather = function () {
   }, {
     key: 'eachCity',
     value: function eachCity(callback) {
-      return _.each(this.CITIES, function (city) {
+      return _underscore2.default.each(this.CITIES, function (city) {
         return callback(city);
       });
     }
@@ -791,19 +797,22 @@ var Weather = function () {
           return found = city;
         }
       });
+      if (!found) {
+        throw 'Unexpected city_code: ' + city_code;
+      }
 
       return found;
     }
   }, {
     key: 'getDefaultCityForState',
     value: function getDefaultCityForState(state_code) {
-      if (state_code == null) {
-        state_code = this.getCurrentStateCode();
-      }
-
-      return _.find(this.CITIES, function (city) {
+      var city = _underscore2.default.find(this.CITIES, function (city) {
         return city.code.substr(0, 2) === state_code;
       });
+      if (!city) {
+        throw 'Unexpected state_code: ' + state_code;
+      }
+      return city;
     }
   }, {
     key: '_ajaxByProxy',
@@ -816,14 +825,12 @@ var Weather = function () {
 
       $.ajax({
         type: 'GET',
-        url: '/proxy/' + encodeURIComponent(url),
-        success: function success(res) {
-          self._ajaxCache[url] = res;
-          return callback(res);
-        },
-        error: function error() {
-          return alert('通信時にエラーが発生しました．時間をおいて試してみてください．');
-        }
+        url: '/proxy/' + encodeURIComponent(url)
+      }).then(function (res) {
+        self._ajaxCache[url] = res;
+        callback(res);
+      }).fail(function () {
+        alert('通信時にエラーが発生しました．時間をおいて試してみてください．');
       });
     }
 
@@ -835,7 +842,7 @@ var Weather = function () {
     value: function getWeatherReportForCity(city, callback) {
       var city_code = city.code;
       var self = this;
-      return self._ajaxByProxy('http://weather.livedoor.com/forecast/webservice/json/v1?city=' + city_code, function (data) {
+      self._ajaxByProxy('http://weather.livedoor.com/forecast/webservice/json/v1?city=' + city_code, function (data) {
         var day = void 0;
         var today = data.forecasts[0];
         var tomorrow = data.forecasts[1];

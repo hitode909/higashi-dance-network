@@ -6,7 +6,7 @@
   "scripts": {
     "build": "browserify public/kasanegi/src/main.js -o public/kasanegi/js/bundle.js",
     "watch": "watchify   public/kasanegi/src/main.js -o public/kasanegi/js/bundle.js --verbose",
-    "lint": "eslint public/kasanegi/src/*"
+    "lint": "eslint public/kasanegi/src/* && flow"
   },
   "repository": {
     "type": "git",
