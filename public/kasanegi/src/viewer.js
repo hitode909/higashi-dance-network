@@ -2,8 +2,25 @@
 
 import _ from 'underscore';
 import $ from 'jquery';
+import Weather from './weather';
+
+type Cloth = 'halfshirts' | 'shirts' | 'cardigan' | 'sweater' | 'jacket' | 'coat' | 'muffler' | 'umbrella';
+
+type ClothSet = {
+  min: number,
+  max: number,
+  daytime: Array<Cloth>;
+  night: Array<Cloth>;
+  comment: string,
+}
 
 class Viewer {
+  HASHTAG: string;
+  SERVICE_URL: string;
+  SEARCH_TEXT: string;
+  CLOTH_RULES: Array<ClothSet>
+  weather: Weather;
+
   static initClass() {
   
     // ----- constants -----
@@ -317,7 +334,7 @@ class Viewer {
       ];
     })();
   }
-  constructor(weather) {
+  constructor(weather: Weather) {
     this.weather = weather;
   }
 
@@ -339,7 +356,7 @@ class Viewer {
     return this.selectPage(page_id, true);
   }
 
-  selectPage(target_id, force) {
+  selectPage(target_id: string, force: ?boolean) {
     if (!force && (target_id === this.weather.getLastPageId)) {
       // do nothing
       return;
@@ -500,7 +517,7 @@ class Viewer {
     return this.weather.getWeatherReportForCity(city, report => self.printWeatherResult(city_name, report));
   }
 
-  printWeatherResult(city_name, report) {
+  printWeatherResult(city_name: string, report: Object) {
     let self = this;
 
     if ((report.min === '') || (report.max === '')) {
@@ -533,13 +550,13 @@ class Viewer {
     return self.checkScroll();
   }
 
-  formatNumber(value, length) {
+  formatNumber(value: number, length: number) {
     let all = `00000000000${value}`;
     return all.slice(all.length - length , + all.length + 1 || undefined);
   }
 
   // 雨なら持ち物に傘を追加
-  appendUmbrella(wear_info, description) {
+  appendUmbrella(wear_info: Object, description: string) {
     let UMBRELLA = 'umbrella';
     let choise = list => list[Math.floor(Math.random() * list.length)];
 
@@ -560,9 +577,11 @@ class Viewer {
   }
 
   // 2011-11-04 -> 11/4
-  convertDate(date_text) {
+  convertDate(date_text: string): string {
     let fragments = date_text.match(/(\d+)/g);
-
+    if (!fragments) {
+      return date_text;
+    }
     if (fragments.length !== 3) {
       return date_text;
     }
@@ -577,8 +596,11 @@ class Viewer {
     return `${+ month}/${+ day} (${wod})`;
   }
 
-  dateFromText(date_text) {
+  dateFromText(date_text: string): ?Date {
     let fragments = date_text.match(/(\d+)/g);
+    if (!fragments) {
+      return;
+    }
 
     let year  = fragments[0];
     let month = fragments[1];
@@ -588,18 +610,23 @@ class Viewer {
   }
 
   // 2011-11-04 -> 今日は or 明日は or 水曜日
-  dayInfo(date_text) {
+  dayInfo(date_text: string): string {
     let self = this;
 
     let fragments = date_text.match(/(\d+)/g);
 
+    if (!fragments) {
+      return '今日は';
+    }
     if (fragments.length !== 3) {
       return '今日は';
     }
 
     let date = self.dateFromText(date_text);
+    if (!date) {
+      throw 'failed to handle dayInfo';
+    }
     let today = new Date;
-
 
     if ((date.getDay() === today.getDay()) && (date.getDate() === today.getDate())) {
       return '今日は';
@@ -611,7 +638,7 @@ class Viewer {
     return `${date.getDate()}日(${wod}曜日)は`;
   }
 
-  fillDay(target, wears) {
+  fillDay(target: JQuery, wears: Array<Cloth>) {
     let self = this;
     let image_container = target.find('.wear-image');
     let icons_container = target.find('.wear-icons');
@@ -638,14 +665,14 @@ class Viewer {
           title: self.getWearName(wear_name)}).appendTo(icons_container);
       }
 
-      return $('<img>').attr({
+      $('<img>').attr({
         src: `images/${wear_name}.png`,
         title: self.getWearName(wear_name)}).appendTo(image_container);
     });
   }
 
 
-  getWearName(wear) {
+  getWearName(wear: Cloth): string {
     let table = {
       halfshirts: '半袖シャツ',
       shirts:   'シャツ',
@@ -653,19 +680,22 @@ class Viewer {
       sweater:  'セーター',
       jacket:  'ジャケット',
       coat:     'コート',
-      muffler:  'マフラー'
+      muffler:  'マフラー',
+      umbrella: '傘', // ここに傘がくることはないはず
     };
 
     return table[wear];
   }
 
-  printWeatherIcons(text) {
+  printWeatherIcons(text: string) {
     let container = $('#weather-icons');
 
     container.empty();
 
     text = text.replace(/\(.*\)/, '');
     let matched = text.match(/(晴|雷雨|雪|雨|雷|曇|霧|)/g);
+    
+    if (!matched) return;
 
     return _.each(matched, function(code) {
       let rule = {
@@ -681,14 +711,14 @@ class Viewer {
       let image_path = rule[code];
       if (!image_path) { return; }
 
-      return $('<img>').attr({
+      $('<img>').attr({
         src: image_path,
         title: code}).appendTo(container);
     });
   }
 
   // return { daytime: [image_pathes] night: [image_pathes] message: text }
-  getWearInformationFromMinAndMax(min, max) {
+  getWearInformationFromMinAndMax(min: number, max: number): ClothSet {
     // あらかじめ決められたペアから一番近いのを探してきます
 
     let rules = this.CLOTH_RULES;
@@ -708,9 +738,9 @@ class Viewer {
 
     _.each(rules, function(rule) {
       let distance_now = getDistance(min, rule.min, max, rule.max);
-      if (!selected || (distance_now < distance)) {
+      if (!selected || !distance || (distance_now < distance)) {
         selected = rule;
-        return distance = distance_now;
+        distance = distance_now;
       }
     });
 
@@ -718,19 +748,19 @@ class Viewer {
     return JSON.parse(JSON.stringify(selected));
   }
 
-  setTweetLink(message, hashtag) {
+  setTweetLink(message: string, hashtag: ?string) {
     if (message == null) { message = '3枚です'; }
     if (hashtag == null) { hashtag = this.HASHTAG; }
     let url = this.SERVICE_URL;
     let text = `${message} ${hashtag}`;
     let share_url = `https://twitter.com/share?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
-    return $('a#share-tweet').attr({
+    $('a#share-tweet').attr({
       href: share_url});
   }
 
-  setPageButton(target_id) {
+  setPageButton(target_id: string): void {
     $('.page-changer.selected').removeClass('selected');
-    return $(`#${target_id}-selector`).addClass('selected');
+    $(`#${target_id}-selector`).addClass('selected');
   }
 
   checkScroll() {

@@ -13,10 +13,6 @@ var _jquery = (window.$);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _underscore = (window._);
-
-var _underscore2 = _interopRequireDefault(_underscore);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (0, _jquery2.default)(function () {
@@ -41,6 +37,10 @@ var _underscore2 = _interopRequireDefault(_underscore);
 var _jquery = (window.$);
 
 var _jquery2 = _interopRequireDefault(_jquery);
+
+var _weather = require('./weather');
+
+var _weather2 = _interopRequireDefault(_weather);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -467,7 +467,9 @@ var Viewer = function () {
     key: 'convertDate',
     value: function convertDate(date_text) {
       var fragments = date_text.match(/(\d+)/g);
-
+      if (!fragments) {
+        return date_text;
+      }
       if (fragments.length !== 3) {
         return date_text;
       }
@@ -485,6 +487,9 @@ var Viewer = function () {
     key: 'dateFromText',
     value: function dateFromText(date_text) {
       var fragments = date_text.match(/(\d+)/g);
+      if (!fragments) {
+        return;
+      }
 
       var year = fragments[0];
       var month = fragments[1];
@@ -502,11 +507,17 @@ var Viewer = function () {
 
       var fragments = date_text.match(/(\d+)/g);
 
+      if (!fragments) {
+        return '今日は';
+      }
       if (fragments.length !== 3) {
         return '今日は';
       }
 
       var date = self.dateFromText(date_text);
+      if (!date) {
+        throw 'failed to handle dayInfo';
+      }
       var today = new Date();
 
       if (date.getDay() === today.getDay() && date.getDate() === today.getDate()) {
@@ -546,7 +557,7 @@ var Viewer = function () {
             title: self.getWearName(wear_name) }).appendTo(icons_container);
         }
 
-        return (0, _jquery2.default)('<img>').attr({
+        (0, _jquery2.default)('<img>').attr({
           src: 'images/' + wear_name + '.png',
           title: self.getWearName(wear_name) }).appendTo(image_container);
       });
@@ -561,8 +572,8 @@ var Viewer = function () {
         sweater: 'セーター',
         jacket: 'ジャケット',
         coat: 'コート',
-        muffler: 'マフラー'
-      };
+        muffler: 'マフラー',
+        umbrella: '傘' };
 
       return table[wear];
     }
@@ -575,6 +586,8 @@ var Viewer = function () {
 
       text = text.replace(/\(.*\)/, '');
       var matched = text.match(/(晴|雷雨|雪|雨|雷|曇|霧|)/g);
+
+      if (!matched) return;
 
       return _underscore2.default.each(matched, function (code) {
         var rule = {
@@ -592,7 +605,7 @@ var Viewer = function () {
           return;
         }
 
-        return (0, _jquery2.default)('<img>').attr({
+        (0, _jquery2.default)('<img>').attr({
           src: image_path,
           title: code }).appendTo(container);
       });
@@ -622,9 +635,9 @@ var Viewer = function () {
 
       _underscore2.default.each(rules, function (rule) {
         var distance_now = getDistance(min, rule.min, max, rule.max);
-        if (!selected || distance_now < distance) {
+        if (!selected || !distance || distance_now < distance) {
           selected = rule;
-          return distance = distance_now;
+          distance = distance_now;
         }
       });
 
@@ -643,14 +656,14 @@ var Viewer = function () {
       var url = this.SERVICE_URL;
       var text = message + ' ' + hashtag;
       var share_url = 'https://twitter.com/share?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text);
-      return (0, _jquery2.default)('a#share-tweet').attr({
+      (0, _jquery2.default)('a#share-tweet').attr({
         href: share_url });
     }
   }, {
     key: 'setPageButton',
     value: function setPageButton(target_id) {
       (0, _jquery2.default)('.page-changer.selected').removeClass('selected');
-      return (0, _jquery2.default)('#' + target_id + '-selector').addClass('selected');
+      (0, _jquery2.default)('#' + target_id + '-selector').addClass('selected');
     }
   }, {
     key: 'checkScroll',
@@ -673,7 +686,7 @@ Viewer.initClass();
 
 exports.default = Viewer;
 
-},{}],3:[function(require,module,exports){
+},{"./weather":3}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
