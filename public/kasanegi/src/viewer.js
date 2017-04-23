@@ -1,3 +1,8 @@
+// @flow
+
+import _ from 'underscore';
+import $ from 'jquery';
+
 class Viewer {
   static initClass() {
   
@@ -664,13 +669,13 @@ class Viewer {
 
     return _.each(matched, function(code) {
       let rule = {
-        晴:   'images/weather-sunny.png',
-        雨:   'images/weather-rain.png',
-        雷:   'images/weather-thunder.png',
-        雪:   'images/weather-snow.png',
-        曇:   'images/weather-cloudy.png',
-        霧:   'images/weather-mist.png',
-        雷雨: 'images/weather-thunderstorm.png'
+        '晴':   'images/weather-sunny.png',
+        '雨':   'images/weather-rain.png',
+        '雷':   'images/weather-thunder.png',
+        '雪':   'images/weather-snow.png',
+        '曇':   'images/weather-cloudy.png',
+        '霧':   'images/weather-mist.png',
+        '雷雨': 'images/weather-thunderstorm.png'
       };
 
       let image_path = rule[code];
