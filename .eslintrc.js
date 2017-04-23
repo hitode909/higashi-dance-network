@@ -1,4 +1,8 @@
 module.exports = {
+    "parser": "babel-eslint",
+    "plugins": [
+        "flowtype"
+    ],
     "env": {
         "browser": true,
         "es6": true
@@ -23,10 +27,12 @@ module.exports = {
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "flowtype/define-flow-type": 1,
+        "flowtype/use-flow-type": 1
     },
     "globals": {
         "$": true,
         "_": true
-    }
+    },
 };
