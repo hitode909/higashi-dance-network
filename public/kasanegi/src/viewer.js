@@ -2,9 +2,9 @@ class Viewer {
   static initClass() {
   
     // ----- constants -----
-    this.prototype.HASHTAG = "#重ね着";
-    this.prototype.SERVICE_URL = "http://higashi-dance-network.appspot.com/kasanegi/";
-    this.prototype.SEARCH_TEXT = "http://higashi-dance-network.appspot.com/kasanegi/ #重ね着";
+    this.prototype.HASHTAG = '#重ね着';
+    this.prototype.SERVICE_URL = 'http://higashi-dance-network.appspot.com/kasanegi/';
+    this.prototype.SEARCH_TEXT = 'http://higashi-dance-network.appspot.com/kasanegi/ #重ね着';
   
     this.prototype.CLOTH_RULES = (function() {
       let CLOTH_HALF_SHIRTS   = 'halfshirts';
@@ -351,7 +351,7 @@ class Viewer {
     $('.page').hide();
     target_page.show();
 
-    if (target_id === "main") {
+    if (target_id === 'main') {
       $('#help-button').show();
       return $('#back-to-main').hide();
     } else {
@@ -398,7 +398,7 @@ class Viewer {
       return select.append(option);
     });
 
-    let button = $("<button>").attr({
+    let button = $('<button>').attr({
       id: 'reset-city'})
     .text('現在位置に設定');
 
@@ -449,14 +449,14 @@ class Viewer {
   }
 
   printFirstTimeGuide() {
-    $("#indicator .message").hide();
-    return setTimeout(() => $("#first-time-guide").show()
+    $('#indicator .message').hide();
+    return setTimeout(() => $('#first-time-guide').show()
     ,500);
   }
 
   hideFirstTimeGuide() {
-    $("#first-time-guide").hide();
-    return $("#indicator .message").show();
+    $('#first-time-guide').hide();
+    return $('#indicator .message').show();
   }
 
   getCurrentPositionAndPrint() {
@@ -498,8 +498,8 @@ class Viewer {
   printWeatherResult(city_name, report) {
     let self = this;
 
-    if ((report.min === "") || (report.max === "")) {
-      alert("申し訳ございません，天気を取得できませんでした．時間をおいて試すか，ほかの地域で試してください．");
+    if ((report.min === '') || (report.max === '')) {
+      alert('申し訳ございません，天気を取得できませんでした．時間をおいて試すか，ほかの地域で試してください．');
       return;
     }
 
@@ -567,7 +567,7 @@ class Viewer {
     let day   = fragments[2];
 
     let date = new Date(+year, +month-1, +day); // month = 0 ~ 11
-    let wod = "日月火水木金土"[date.getDay()];
+    let wod = '日月火水木金土'[date.getDay()];
 
     return `${+ month}/${+ day} (${wod})`;
   }
@@ -589,7 +589,7 @@ class Viewer {
     let fragments = date_text.match(/(\d+)/g);
 
     if (fragments.length !== 3) {
-      return "今日は";
+      return '今日は';
     }
 
     let date = self.dateFromText(date_text);
@@ -597,12 +597,12 @@ class Viewer {
 
 
     if ((date.getDay() === today.getDay()) && (date.getDate() === today.getDate())) {
-      return "今日は";
+      return '今日は';
     } else if (((date.getDay() % 7) === ((today.getDay() + 1) % 7)) && (date.getDate() === (today.getDate() + 1))) {
-      return "明日は";
+      return '明日は';
     }
 
-    let wod = "日月火水木金土"[date.getDay()];
+    let wod = '日月火水木金土'[date.getDay()];
     return `${date.getDate()}日(${wod}曜日)は`;
   }
 
@@ -616,9 +616,9 @@ class Viewer {
 
     let bg_path = null;
     if (target.attr('id') === 'day-max') {
-      bg_path = "images/day.png";
+      bg_path = 'images/day.png';
     } else {
-      bg_path = "images/night.png";
+      bg_path = 'images/night.png';
     }
 
     $('<img>').attr({
@@ -714,18 +714,18 @@ class Viewer {
   }
 
   setTweetLink(message, hashtag) {
-    if (message == null) { message = "3枚です"; }
+    if (message == null) { message = '3枚です'; }
     if (hashtag == null) { hashtag = this.HASHTAG; }
     let url = this.SERVICE_URL;
     let text = `${message} ${hashtag}`;
     let share_url = `https://twitter.com/share?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
-    return $("a#share-tweet").attr({
+    return $('a#share-tweet').attr({
       href: share_url});
   }
 
   setPageButton(target_id) {
-    $(".page-changer.selected").removeClass("selected");
-    return $(`#${target_id}-selector`).addClass("selected");
+    $('.page-changer.selected').removeClass('selected');
+    return $(`#${target_id}-selector`).addClass('selected');
   }
 
   checkScroll() {
