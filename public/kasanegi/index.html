@@ -54,13 +54,13 @@
   <body>
 
     <div id="fb-root"></div>
-    <script>(function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {return;}
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/ja_JP/all.js#xfbml=1";
-      fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));</script>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.9&appId=115613081921666";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
     <div id="wrapper">
       <div id="title-container">
@@ -285,7 +285,7 @@
       </div>
 
       <div class="fb-container">
-        <div class="fb-like" data-href="https://higashi-dance-network.appspot.com/kasanegi/" data-width="310" data-layout="standard" data-action="like" data-size="small" data-show-faces="true" data-share="false"></div>
+        <div class="fb-like" data-href="https://higashi-dance-network.appspot.com/kasanegi/" data-width="310" data-layout="box_count" data-action="like" data-size="small" data-show-faces="true" data-share="false"></div>
       </div>
 
       <div id="copyright">

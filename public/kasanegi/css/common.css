@@ -356,6 +356,7 @@ p.tips {
 .fb-container {
     margin-top: 40px;
     margin-left: 5px;
+    text-align: center;
 }
 
 /* copyright */
@@ -366,4 +367,3 @@ p.tips {
     text-align: center;
     color: #666;
 }
-
