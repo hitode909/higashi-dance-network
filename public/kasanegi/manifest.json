@@ -1,0 +1,26 @@
+{
+  "short_name": "今日の重ね着",
+  "name": "今日の重ね着",
+  "icons": [
+    {
+      "src": "/kasanegi/images/home-icon.png",
+      "type": "image/png",
+      "sizes": "114x114"
+    },
+    {
+      "src": "/kasanegi/images/home-icon-144.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "/kasanegi/images/home-icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "background_color": "#fefbee",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#fefbee",
+  "start_url": "/kasanegi/?utm_source=homescreen"
+}

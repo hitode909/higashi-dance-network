@@ -22,12 +22,12 @@ class Viewer {
   weather: Weather;
 
   static initClass() {
-  
+
     // ----- constants -----
     this.prototype.HASHTAG = '#重ね着';
-    this.prototype.SERVICE_URL = 'http://higashi-dance-network.appspot.com/kasanegi/';
-    this.prototype.SEARCH_TEXT = 'http://higashi-dance-network.appspot.com/kasanegi/ #重ね着';
-  
+    this.prototype.SERVICE_URL = 'https://higashi-dance-network.appspot.com/kasanegi/';
+    this.prototype.SEARCH_TEXT = 'https://higashi-dance-network.appspot.com/kasanegi/ #重ね着';
+
     this.prototype.CLOTH_RULES = (function() {
       let CLOTH_HALF_SHIRTS   = 'halfshirts';
       let CLOTH_SHIRTS   = 'shirts';
@@ -36,7 +36,7 @@ class Viewer {
       let CLOTH_JACKET   = 'jacket';
       let CLOTH_COAT     = 'coat';
       let CLOTH_MUFFLER  = 'muffler';
-  
+
       return [
         // エラー対策
         {
@@ -50,7 +50,7 @@ class Viewer {
           ],
           comment: '異常な暑さです'
         },
-  
+
         {
           min: 50,
           max: 50,
@@ -62,7 +62,7 @@ class Viewer {
           ],
           comment: '暑いので半袖で出かけましょう'
         },
-  
+
         {
           min: 35,
           max: 35,
@@ -138,7 +138,7 @@ class Viewer {
           ],
           comment: 'すごく冷えるのでカーディガンとコートとマフラーを着ましょう'
         },
-  
+
         {
           min: 18,
           max: 18,
@@ -208,7 +208,7 @@ class Viewer {
           ],
           comment: '夜は寒いのでコートにマフラーがいいです'
         },
-  
+
         {
           min: 14,
           max: 14,
@@ -265,7 +265,7 @@ class Viewer {
           ],
           comment: '夜は冷え込むのでたくさん着ていきましょう'
         },
-  
+
         {
           min: 12,
           max: 12,
@@ -312,7 +312,7 @@ class Viewer {
           ],
           comment: '一日寒いので昼でもコート夜はマフラーです'
         },
-  
+
         {
           min: 5,
           max: 5,
@@ -330,7 +330,7 @@ class Viewer {
           ],
           comment: 'すごく寒いので一日マフラーが手放せません'
         }
-  
+
       ];
     })();
   }
@@ -694,7 +694,7 @@ class Viewer {
 
     text = text.replace(/\(.*\)/, '');
     let matched = text.match(/(晴|雷雨|雪|雨|雷|曇|霧|)/g);
-    
+
     if (!matched) return;
 
     return _.each(matched, function(code) {
