@@ -59,6 +59,12 @@ const urlsToCache = [
   '/images/yahoo.gif',
 ].map(path => '/kasanegi' + path);
 
+// cache API response for one hour
+const cacheKeyForNow = () => {
+  const timeKey = Math.floor(new Date() / 1000 / 3600);
+  return `kasanegi-proxy-v1-${timeKey}`;
+};
+
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -69,7 +75,7 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('activate', function(event) {
-  var cacheWhitelist = [CACHE_NAME];
+  var cacheWhitelist = [CACHE_NAME, cacheKeyForNow()];
 
   event.waitUntil(
     caches.keys().then(function(cacheNames) {
@@ -91,11 +97,32 @@ self.addEventListener('fetch', function(event) {
     .then(function(response) {
       if (response) {
         return response;
-      } else {
-        // not found
       }
+
+      const url = event.request.url;
+
+      if (url.match(/proxy/)) {
+        var fetchRequest = event.request.clone();
+
+        return fetch(fetchRequest).then(
+          function(response) {
+            if(!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+
+            var responseToCache = response.clone();
+
+            caches.open(cacheKeyForNow())
+            .then(function(cache) {
+              cache.put(event.request, responseToCache);
+            });
+
+            return response;
+          }
+        );
+      }
+
       return fetch(event.request);
-    }
-  )
-);
+    })
+  );
 });
