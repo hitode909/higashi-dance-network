@@ -1,7 +1,8 @@
 // @flow
 
-var CACHE_NAME = 'kasanegi-v1';
-var urlsToCache = [
+const CACHE_NAME = 'kasanegi-v1';
+
+const urlsToCache = [
   '/',
   '/js/jquery-1.6.1.min.js',
   '/js/underscore-min.js',
