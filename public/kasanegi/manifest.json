@@ -1,6 +1,6 @@
 {
-  "short_name": "重ね着",
-  "name": "今日の重ね着",
+  "short_name": "今日の重ね着",
+  "name": "今日の重ね着 - 天気に合わせて服装を提案します",
   "icons": [
     {
       "src": "/kasanegi/images/home-icon.png",
