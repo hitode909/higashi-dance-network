@@ -6,7 +6,7 @@
   "scripts": {
     "build": "browserify public/kasanegi/src/main.js -o public/kasanegi/js/bundle.js",
     "watch:main": "watchify public/kasanegi/src/main.js -o public/kasanegi/js/bundle.js --verbose",
-    "watch:sw": "watchify public/kasanegi/src/ServiceWorker.js -o public/kasanegi/js/sw.js --verbose",
+    "watch:sw": "watchify public/kasanegi/src/ServiceWorker.js -o public/kasanegi-service-worker.js --verbose",
     "watch": "npm-run-all -p watch:*",
     "lint": "eslint public/kasanegi/src/* && flow"
   },
