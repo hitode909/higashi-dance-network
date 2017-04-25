@@ -749,9 +749,6 @@ var Weather = function () {
   _createClass(Weather, null, [{
     key: 'initClass',
     value: function initClass() {
-
-      this.prototype._ajaxCache = {};
-
       // ------------------------------------------------------------------------------------
 
       this.prototype.YAHOO_APPLICATION_ID = 'J17Tyuixg65goAW301d5vBkBWtO9gLQsJnC0Y7OyJJk96wumaSU2U3odNwj5PdIU1A--';
@@ -859,17 +856,10 @@ var Weather = function () {
   }, {
     key: '_ajaxByProxy',
     value: function _ajaxByProxy(url, callback) {
-      var self = this;
-      if (self._ajaxCache[url]) {
-        callback(self._ajaxCache[url]);
-        return;
-      }
-
       $.ajax({
         type: 'GET',
         url: '/proxy/' + encodeURIComponent(url)
       }).then(function (res) {
-        self._ajaxCache[url] = res;
         callback(res);
       }).fail(function () {
         alert('通信時にエラーが発生しました．時間をおいて試してみてください．');
