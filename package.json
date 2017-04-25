@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "browserify public/kasanegi/src/main.js -o public/kasanegi/js/bundle.js",
-    "watch": "watchify   public/kasanegi/src/main.js -o public/kasanegi/js/bundle.js --verbose",
+    "watch:main": "watchify public/kasanegi/src/main.js -o public/kasanegi/js/bundle.js --verbose",
+    "watch:sw": "watchify public/kasanegi/src/ServiceWorker.js -o public/kasanegi-service-worker.js --verbose",
+    "watch": "npm-run-all -p watch:*",
     "lint": "eslint public/kasanegi/src/* && flow"
   },
   "repository": {
@@ -48,7 +50,8 @@
     "eslint-plugin-flowtype": "^2.32.1",
     "flow-bin": "^0.44.2",
     "flow-typed": "^2.1.1",
-    "watchify": "^3.9.0"
+    "watchify": "^3.9.0",
+    "yarn-run-all": "^3.1.1"
   },
   "dependencies": {}
 }

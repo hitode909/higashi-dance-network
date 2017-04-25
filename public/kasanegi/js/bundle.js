@@ -1,6 +1,42 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var WorkerLoader = function () {
+  function WorkerLoader() {
+    _classCallCheck(this, WorkerLoader);
+
+    this.register();
+  }
+
+  _createClass(WorkerLoader, [{
+    key: 'register',
+    value: function register() {
+      if (!navigator.serviceWorker) return;
+
+      navigator.serviceWorker.register('/kasanegi-service-worker.js').then(function (registration) {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }).catch(function (err) {
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    }
+  }]);
+
+  return WorkerLoader;
+}();
+
+exports.default = WorkerLoader;
+
+},{}],2:[function(require,module,exports){
+'use strict';
+
 var _weather = require('./weather');
 
 var _weather2 = _interopRequireDefault(_weather);
@@ -8,6 +44,10 @@ var _weather2 = _interopRequireDefault(_weather);
 var _viewer = require('./viewer');
 
 var _viewer2 = _interopRequireDefault(_viewer);
+
+var _WorkerLoader = require('./WorkerLoader');
+
+var _WorkerLoader2 = _interopRequireDefault(_WorkerLoader);
 
 var _jquery = (window.$);
 
@@ -18,10 +58,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 (0, _jquery2.default)(function () {
   var weather = new _weather2.default();
   var viewer = new _viewer2.default(weather);
-  return viewer.setup();
+  viewer.setup();
+
+  new _WorkerLoader2.default();
 });
 
-},{"./viewer":2,"./weather":3}],2:[function(require,module,exports){
+},{"./WorkerLoader":1,"./viewer":3,"./weather":4}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -686,7 +728,7 @@ Viewer.initClass();
 
 exports.default = Viewer;
 
-},{"./weather":3}],3:[function(require,module,exports){
+},{"./weather":4}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -707,9 +749,6 @@ var Weather = function () {
   _createClass(Weather, null, [{
     key: 'initClass',
     value: function initClass() {
-
-      this.prototype._ajaxCache = {};
-
       // ------------------------------------------------------------------------------------
 
       this.prototype.YAHOO_APPLICATION_ID = 'J17Tyuixg65goAW301d5vBkBWtO9gLQsJnC0Y7OyJJk96wumaSU2U3odNwj5PdIU1A--';
@@ -817,17 +856,10 @@ var Weather = function () {
   }, {
     key: '_ajaxByProxy',
     value: function _ajaxByProxy(url, callback) {
-      var self = this;
-      if (self._ajaxCache[url]) {
-        callback(self._ajaxCache[url]);
-        return;
-      }
-
       $.ajax({
         type: 'GET',
         url: '/proxy/' + encodeURIComponent(url)
       }).then(function (res) {
-        self._ajaxCache[url] = res;
         callback(res);
       }).fail(function () {
         alert('通信時にエラーが発生しました．時間をおいて試してみてください．');
@@ -879,4 +911,4 @@ Weather.initClass();
 
 exports.default = Weather;
 
-},{}]},{},[1]);
+},{}]},{},[2]);
