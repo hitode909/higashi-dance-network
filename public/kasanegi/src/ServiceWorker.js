@@ -63,25 +63,36 @@ self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME)
     .then(function(cache) {
-      console.log('Opened cache');
       return cache.addAll(urlsToCache);
+    })
+  );
+});
+
+self.addEventListener('activate', function(event) {
+  var cacheWhitelist = [CACHE_NAME];
+
+  event.waitUntil(
+    caches.keys().then(function(cacheNames) {
+      return Promise.all(
+        cacheNames.map(function(cacheName) {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
     })
   );
 });
 
 
 self.addEventListener('fetch', function(event) {
-  console.log('fetch event');
-  console.log(event.request.url);
   event.respondWith(
     caches.match(event.request)
     .then(function(response) {
-      // キャッシュがあったのでそのレスポンスを返す
       if (response) {
-        console.log('cache hit');
         return response;
       } else {
-        console.log('cache not found');
+        // not found
       }
       return fetch(event.request);
     }
