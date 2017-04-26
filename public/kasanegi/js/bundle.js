@@ -95,8 +95,8 @@ var Viewer = function () {
 
       // ----- constants -----
       this.prototype.HASHTAG = '#重ね着';
-      this.prototype.SERVICE_URL = 'http://higashi-dance-network.appspot.com/kasanegi/';
-      this.prototype.SEARCH_TEXT = 'http://higashi-dance-network.appspot.com/kasanegi/ #重ね着';
+      this.prototype.SERVICE_URL = 'https://higashi-dance-network.appspot.com/kasanegi/';
+      this.prototype.SEARCH_TEXT = 'https://higashi-dance-network.appspot.com/kasanegi/ #重ね着';
 
       this.prototype.CLOTH_RULES = function () {
         var CLOTH_HALF_SHIRTS = 'halfshirts';
