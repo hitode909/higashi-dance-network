@@ -7,12 +7,6 @@ var urlsToCache = ['/', '/js/jquery-1.6.1.min.js', '/js/underscore-min.js', '/js
   return '/kasanegi' + path;
 });
 
-// cache API response for one hour
-var cacheKeyForNow = function cacheKeyForNow() {
-  var timeKey = Math.floor(new Date() / 1000 / 3600);
-  return 'kasanegi-proxy-v1-' + timeKey;
-};
-
 self.addEventListener('install', function (event) {
   event.waitUntil(caches.open(CACHE_NAME).then(function (cache) {
     return cache.addAll(urlsToCache);
@@ -20,7 +14,7 @@ self.addEventListener('install', function (event) {
 });
 
 self.addEventListener('activate', function (event) {
-  var cacheWhitelist = [CACHE_NAME, cacheKeyForNow()];
+  var cacheWhitelist = [CACHE_NAME];
 
   event.waitUntil(caches.keys().then(function (cacheNames) {
     return Promise.all(cacheNames.map(function (cacheName) {
@@ -35,26 +29,6 @@ self.addEventListener('fetch', function (event) {
   event.respondWith(caches.match(event.request).then(function (response) {
     if (response) {
       return response;
-    }
-
-    var url = event.request.url;
-
-    if (url.match(/proxy/)) {
-      var fetchRequest = event.request.clone();
-
-      return fetch(fetchRequest).then(function (response) {
-        if (!response || response.status !== 200 || response.type !== 'basic') {
-          return response;
-        }
-
-        var responseToCache = response.clone();
-
-        caches.open(cacheKeyForNow()).then(function (cache) {
-          cache.put(event.request, responseToCache);
-        });
-
-        return response;
-      });
     }
 
     return fetch(event.request);
