@@ -39,6 +39,7 @@ handlers:
   static_files: public/kasanegi/index.html
   upload: public/kasanegi/index.html
   secure: always
+  redirect_http_response_code: 301
 
 - url: (.*)/
   static_files: public\1/index.html
