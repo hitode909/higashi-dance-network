@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
     <meta charset="utf-8">
     <title>今日の重ね着 - 天気に合わせて服装を提案します</title>
 
-    <meta name="viewport" content="width=320, user-scalable=no">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no" />
 
@@ -13,15 +13,7 @@
     <meta name="theme-color" content="#fefbee">
     <link rel="icon" sizes="192x192" href="images/home-icon-192.png">
 
-    <script language="javascript" type="text/javascript" defer src="js/jquery-1.6.1.min.js"></script>
-    <script language="javascript" type="text/javascript" defer src="js/underscore-min.js"></script>
-    <script language="javascript" type="text/javascript" defer src="js/bundle.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="css/reset.css" />
-    <link rel="stylesheet" type="text/css" href="css/text.css" />
-    <link rel="stylesheet" type="text/css" href="css/common.css" />
-    <link rel="stylesheet" type="text/css" href="css/mobile.css" media="only screen and (max-device-width: 480px)" >
-    <link rel="stylesheet" type="text/css" href="css/pc.css" media="only screen and (min-device-width: 481px)" >
+    <link rel="stylesheet" type="text/css" href="css/common.css?version=20190421" />
     <link rel="shortcut icon" href="images/favicon.ico">
 
     <meta property="og:title" content="今日の重ね着"/>
@@ -64,16 +56,16 @@
 
     <div id="wrapper">
       <div id="title-container">
+        <a href="#main" id="back-to-main" class="title-button">
+          戻る
+        </a>
         <div id="title">
-          <a href="#main">
-            <img src="images/header.png" title="今日の重ね着">
+          <a href="#main" title="今日の重ね着">
+            <h1>今日の重ね着</h1>
           </a>
         </div>
-        <a href="#main" id="back-to-main">
-          <img src="images/back-button.png" title="戻る"/>
-        </a>
-        <a href="#help" id="help-button">
-          <img src="images/help.png" title="ヘルプ"/>
+        <a href="#help" id="help-button" class="title-button">
+          ヘルプ
         </a>
       </div>
 
@@ -96,95 +88,81 @@
         </div>
         <div id="result">
           <div id="weather-container">
-            <div class="float" id="area-date-container">
+            <div id="area-date-container">
               <div id="area"></div>
               <div id="date"></div>
             </div>
-            <div class="float-right">
+            <div>
               <div id="weather-icons"></div>
               <div id="description"></div>
-            </div>
-            <div class="clear">
             </div>
           </div>
 
           <div id="images">
+            <div class="days">
+              <div class="day" id="day-max">
+                <div class="heat">
+                  <span>最高気温 </span><span id="max-temp"></span><span>℃</span>
+                </div>
+                <div class="wear-image">
+                </div>
+                <div class="wear-icons">
+                </div>
+              </div>
 
-            <div class="day" id="day-max">
-              <div class="heat">
-                <span>最高気温 </span><span id="max-temp"></span><span>℃</span>
+              <div class="day" id="day-min">
+                <div class="heat">
+                  <span>最低気温 </span><span id="min-temp"></span><span>℃</span>
+                </div>
+                <div class="wear-image">
+                </div>
+                <div class="wear-icons">
+                </div>
               </div>
-              <div class="wear-image">
-              </div>
-              <div class="wear-icons">
-              </div>
-              <div class="clear">
-              </div>
-            </div>
-
-            <div class="day" id="day-min">
-              <div class="heat">
-                <span>最低気温 </span><span id="min-temp"></span><span>℃</span>
-              </div>
-              <div class="wear-image">
-              </div>
-              <div class="wear-icons">
-              </div>
-              <div class="clear">
-              </div>
-            </div>
-
-            <div class="clear">
             </div>
           </div>
 
           <div id="comment">
-            マフラーが必要です
           </div>
 
-          <style>
-            .my_adslot { width: 320px; height: 50px; }
-          </style>
-          <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-          <!-- 重ね着のヘッダ -->
-          <ins class="adsbygoogle my_adslot my-header-ad"
-               style="display:inline-block"
-               data-ad-client="ca-pub-0514478731635320"
-               data-ad-slot="2102442229"></ins>
-          <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-          </script>
-          <style>
-            .my-header-ad {
-            margin-left: -5px;
-            }
-          </style>
+          <div class="ad-containier">
+            <style>
+              .my_adslot { width: 320px; height: 50px; }
+            </style>
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- 重ね着のヘッダ -->
+            <ins class="adsbygoogle my_adslot my-header-ad"
+                style="display:inline-block"
+                data-ad-client="ca-pub-0514478731635320"
+                data-ad-slot="2102442229"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+          </div>
 
           <div id="share-tweet-container">
             <a target="_blank" rel="noopener noreferrer" id="share-tweet" href="https://twitter.com/share?url=http%3A%2F%2Fhigashi-dance-network.appspot.com%2Fbon%2F&text=3%E6%9E%9A%E3%81%A7%E3%81%99%20%23%E9%87%8D%E3%81%AD%E7%9D%80%20%23%E9%87%8D%E3%81%AD%E7%9D%80%E4%BA%AC%E9%83%BD"><img src="images/tweet-button.png" title="重ね着をツイートする"></a>
           </div>
 
-          <style>
-            .my_adslot_footer { width: 300px; height: 250px; }
-          </style>
-          <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-          <!-- 重ね着のフッタ -->
-          <ins class="adsbygoogle my_adslot_footer my-ad-footer"
-               style="display:inline-block"
-               data-ad-client="ca-pub-0514478731635320"
-               data-ad-slot="6532641821"></ins>
-          <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-          </script>
-          <style>
-            .my-ad-footer {
-            margin-top: 10px;
-            margin-left: 5px;
-            }
-          </style>
-
+          <div class="ad-containier">
+            <style>
+              .my_adslot_footer { width: 300px; height: 250px; }
+            </style>
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- 重ね着のフッタ -->
+            <ins class="adsbygoogle my_adslot_footer my-ad-footer"
+                style="display:inline-block"
+                data-ad-client="ca-pub-0514478731635320"
+                data-ad-slot="6532641821"
+                data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <style>
+              .my-ad-footer {
+                margin-top: 10px;
+                margin-left: 5px;
+              }
+            </style>
+          </div>
         </div>
-
 
       </div> <!-- main page end -->
 
@@ -205,15 +183,20 @@
           </a>
         </div>
 
+        <!-- <p class="tips">
+          <strong>お知らせ 2019年4月</strong><br/>
+          画面サイズにあわせて表示されるようになりました
+        </p>
+
         <p class="tips">
           <strong>お知らせ 2014年11月</strong><br/>
-          雨の日には傘を持つようになりました．雨の日のお出かけにもご利用ください．
+          雨の日には傘を持つようになりました．<br>雨の日のお出かけにもご利用ください．
         </p>
 
         <p class="tips">
           <strong>お知らせ 2014年9月</strong><br/>
           しばらくの間，重ね着を表示できない不具合がありました．ご迷惑をおかけしました．復旧にあたって，週間重ね着機能を提供できなくなりました．利用者の皆様にはご迷惑をおかけします．
-        </p>
+        </p> -->
 
         <p class="api-message">
           今日の重ね着では、以下のAPIを利用しています。
@@ -291,7 +274,10 @@
       <div id="copyright">
         (C) 2012 東ダンスネットワーク
       </div>
-
+      <script language="javascript" type="text/javascript" defer src="js/jquery-1.6.1.min.js"></script>
+      <script language="javascript" type="text/javascript" defer src="js/underscore-min.js"></script>
+      <script language="javascript" type="text/javascript" defer src="js/bundle.js?version=20190421"></script>
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     </div>
   </body>
 </html>

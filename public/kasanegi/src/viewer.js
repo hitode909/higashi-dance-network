@@ -374,11 +374,11 @@ class Viewer {
     target_page.show();
 
     if (target_id === 'main') {
-      $('#help-button').show();
-      return $('#back-to-main').hide();
+      $('#help-button').css({ visibility: 'visible' });
+      $('#back-to-main').css({ visibility: 'hidden' });
     } else {
-      $('#help-button').hide();
-      return $('#back-to-main').show();
+      $('#help-button').css({ visibility: 'hidden' });
+      $('#back-to-main').css({ visibility: 'visible' });
     }
   }
 
@@ -547,7 +547,12 @@ class Viewer {
     self.fillDay($('#result #day-max'), wear_info.daytime);
     self.fillDay($('#result #day-min'), wear_info.night);
 
-    return self.checkScroll();
+    self.checkScroll();
+
+    if (!this.initAd) {
+      (window.adsbygoogle || []).push({});
+      this.initAd = true;
+    }
   }
 
   formatNumber(value: number, length: number) {

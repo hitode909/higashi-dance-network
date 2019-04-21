@@ -286,11 +286,11 @@ var Viewer = function () {
       target_page.show();
 
       if (target_id === 'main') {
-        (0, _jquery2.default)('#help-button').show();
-        return (0, _jquery2.default)('#back-to-main').hide();
+        (0, _jquery2.default)('#help-button').css({ visibility: 'visible' });
+        (0, _jquery2.default)('#back-to-main').css({ visibility: 'hidden' });
       } else {
-        (0, _jquery2.default)('#help-button').hide();
-        return (0, _jquery2.default)('#back-to-main').show();
+        (0, _jquery2.default)('#help-button').css({ visibility: 'hidden' });
+        (0, _jquery2.default)('#back-to-main').css({ visibility: 'visible' });
       }
     }
   }, {
@@ -473,7 +473,12 @@ var Viewer = function () {
       self.fillDay((0, _jquery2.default)('#result #day-max'), wear_info.daytime);
       self.fillDay((0, _jquery2.default)('#result #day-min'), wear_info.night);
 
-      return self.checkScroll();
+      self.checkScroll();
+
+      if (!this.initAd) {
+        (window.adsbygoogle || []).push({});
+        this.initAd = true;
+      }
     }
   }, {
     key: 'formatNumber',

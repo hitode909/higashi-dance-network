@@ -2,7 +2,7 @@ runtime: python27
 api_version: 1
 threadsafe: no
 
-default_expiration: "10m"
+default_expiration: "6s"
 
 skip_files:
 - ^(node_modules/.*)

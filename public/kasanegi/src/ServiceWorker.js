@@ -1,6 +1,6 @@
 // @flow
 
-const CACHE_NAME = 'kasanegi-v1';
+const CACHE_NAME = 'kasanegi-v3';
 
 const urlsToCache = [
   '/',
@@ -8,14 +8,7 @@ const urlsToCache = [
   '/js/underscore-min.js',
   '/js/bundle.js',
 
-  '/css/reset.css',
-  '/css/text.css',
   '/css/common.css',
-  '/css/mobile.css',
-  '/css/pc.css',
-
-  '/images/back-button.png',
-  '/images/back.png',
   '/images/background.png',
   '/images/cardigan.png',
   '/images/coat.png',
@@ -31,6 +24,8 @@ const urlsToCache = [
   '/images/help2.png',
   '/images/help3.png',
   '/images/hitode909.png',
+  '/images/home-icon-144.png',
+  '/images/home-icon-192.png',
   '/images/home-icon.png',
   '/images/icon-cardigan.png',
   '/images/icon-coat.png',

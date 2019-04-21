@@ -1,27 +1,38 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     color: #333;
+    background: url(/kasanegi/images/background.png);
+    font-size: 5vw;
+    font-family: 'Helvetica Neue', Arial, 'Liberation Sans', FreeSans, sans-serif;
+}
+
+@media screen and (min-width:480px) {
+    body {
+        font-size: 19px;
+    }
+}
+
+img {
+    max-width: 100%;
+}
+
+#wrapper {
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .center {
     text-align: center;
 }
 
-.float {
-    float: left;
-}
-
-.float-right {
-    float: right;
-}
-
 .clear {
     clear: both;
 }
-
-body {
-    background: url(/kasanegi/images/background.png);
-}
-
 #indicator {
     margin: 50px;
     height: 500px;
@@ -34,43 +45,40 @@ body {
 /* title */
 
 #title-container {
-    position: relative;
-    height: 44px;
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  background: url('/kasanegi/images/header.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: top center;
+  padding-left: 5px;
+  padding-right:5px;
+  min-height: 44px;
+  height: calc(100vw * (88 / 640));
+  max-height: 88px;
 }
 
-#title img {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 320px;
-    height: 44px;
+#title {
+    opacity: 0;
+    flex-grow: 1;
 }
 
-#back-to-main {
-    position: absolute;
-    left: 10px;
-    top:  8px;
-    cursor: pointer;
+#title h1 {
+    margin-bottom: 0px;
 }
 
-#back-to-main img {
-    width: 50px;
-    height: 24px;
+.title-button {
+    text-decoration: none;
+    background-color: #4aa8c9;
+    color: white;
+    border-radius: 3px;
+    padding: 3px;
+    font-size: 90%;
+
 }
-
-#help-button {
-    position: absolute;
-    right: 10px;
-    top:  8px;
-    cursor: pointer;
-}
-
-#help-button img {
-    width: 50px;
-    height: 24px;
-}
-
-
 /* page */
 
 .page {
@@ -83,73 +91,14 @@ body {
 #city-selector-container {
     margin-top: 10px;
     margin-bottom:20px;
+    display: flex;
 }
 
 select#city-selector {
-    width: 180px;
+    /* width: 180px; */
 }
 
 #reset-city {
-    margin-left: 1em;
-}
-
-/* calendar */
-#calendar-container {
-    margin-top: 0px;
-    margin-bottom: 10px;
-    text-align:center;
-}
-
-#calendar-container > :first-child {
-    border:2px;
-    border-bottom-left-radius:10px;
-    border-top-left-radius:10px;
-    -moz-border-bottom-left-radius:10px;
-    -moz-border-top-left-radius:10px;
-    border-right:1px;
-    border-color:#4aa8c9;
-    border-style:solid;
-}
-
-
-#calendar-container > :last-child {
-    border:2px;
-    border-bottom-right-radius:10px;
-    border-top-right-radius:10px;
-    -moz-border-bottom-right-radius:10px;
-    -moz-border-top-right-radius:10px;
-    border-left:0px;
-    border-color:#4aa8c9;
-    border-style:solid;
-}
-
-
-.calendar-day {
-    cursor: pointer;
-    border-right:1px;
-    border-top:2px;
-    border-bottom:2px solid;
-    border-left:0px;
-    font-size:14px;
-    padding:5px 0px;
-    width:42px;
-    display:inline-block;
-    border-color:#4aa8c9;
-    border-style:solid;
-    text-align:center;
-    background-color:#e7f7fd;
-}
-
-.calendar-day.selected {
-    background-color:#afe1f2;
-}
-
-.calendar-day.saturday {
-    color: #44c;
-}
-
-.calendar-day.sunday {
-    color: #c44;
 }
 
 /* first time guide */
@@ -163,8 +112,7 @@ select#city-selector {
 }
 
 #first-time-guide .more a {
-    font-size: 90%;
-    color: #d42c0a;
+        color: #d42c0a;
 }
 
 /* weather result */
@@ -174,6 +122,10 @@ select#city-selector {
     display: none;
 }
 
+#area-date-container {
+    margin-right: auto;
+}
+
 #area {
     font-weight: bold;
     color: #333;
@@ -181,11 +133,10 @@ select#city-selector {
 
 #date {
     color: #666;
-    font-size: 90%;
-}
+    }
 
 #description {
-    font-size: 80%;
+    font-size: 90%;
     color: #666;
     text-align: right;
     margin-top: 2px;
@@ -198,7 +149,7 @@ select#city-selector {
 }
 
 .heat {
-    font-size: 80%;
+    font-size: 90%;
     text-align: center;
 }
 
@@ -210,39 +161,48 @@ select#city-selector {
     color: #44c;
 }
 
+.days {
+    display: flex;
+    justify-content: space-around;
+}
+
 .day {
-    float: left;
-    width: 155px;
+    min-width: 155px;
+    width: 100%;
+    max-width: 240px;
 }
 
 .day .wear-image {
     position: relative;
-    width: 155px;
-    height: 240px;
 }
 
 .day .wear-image img {
-    width: 155px;
-    height: 240px;
     position: absolute;
     left: 0px;
     top: 0px;
 }
 
+.day .wear-image img:first-child {
+    position: relative;
+
+}
+
+#weather-container {
+display: flex;
+}
+
 #weather-icons img {
-    width: 42px;
-    height: 42px;
+    min-width: 42px;
+    width: 15vw;
+    max-width: 64px;
     margin-left: 5px;
     border: 1px solid #b4b4b4;
 }
 
-.wear-icons {
-    padding-left: 3px;
-}
-
 .wear-icons img {
-    width: 36px;
-    height: 36px;
+    max-width: 48px;
+    width: 11vw;
+    min-width: 36px;
     margin-right: -1px;
     margin-top: 3px;
     border: 1px solid #b4b4b4;
@@ -253,7 +213,12 @@ select#city-selector {
 #comment {
     margin: 20px;
     line-height: 1.5;
-    font-size: 90%;
+    font-size: 110%;
+}
+
+/* ads */
+.ad-containier {
+    text-align: center;
 }
 
 /* share button*/
@@ -264,8 +229,9 @@ select#city-selector {
 }
 
 #share-tweet-container img {
-    width: 202px;
-    height: 45px;
+    min-width: 202px;
+    width:50%;
+    max-width: 404px;
 }
 
 
@@ -279,9 +245,6 @@ select#city-selector {
 
 /* guide */
 
-#guide {
-}
-
 /* guide, help image */
 .help-image-container {
     margin-top: 10px;
@@ -289,19 +252,19 @@ select#city-selector {
 }
 
 .help-image {
-    width: 310px;
-    height: 140px;
+    width: 100%;
+    min-width: 310px;
 }
 
 .help-button-image {
     margin-top: 20px;
-    width: 202px;
-    height: 45px;
+    min-width: 202px;
+    width: 50%;
+    max-width: 404px;
 }
 
 
 #guide-api {
-    font-size: 90%;
 
     margin-top: 20px;
     margin-right: 20px;
@@ -312,14 +275,14 @@ select#city-selector {
 
 p.tips {
     margin-top: 20px;
-    font-size: 80%;
+    font-size: 90%;
     text-align: center;
 }
 
 /* apis */
 .api-message {
     margin-top: 20px;
-    font-size: 80%;
+    font-size: 90%;
     text-align: center;
 }
 .api {
@@ -333,7 +296,7 @@ p.tips {
 .tenki-logo {
     text-decoration: none;
     color: #333;
-    font-size: 60%;
+    font-size: 70%;
 }
 
 /* authors */
@@ -363,7 +326,7 @@ p.tips {
 
 #copyright {
     margin-top: 20px;
-    font-size: 60%;
+    font-size: 70%;
     text-align: center;
     color: #666;
 }
