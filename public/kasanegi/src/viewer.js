@@ -547,7 +547,9 @@ class Viewer {
     self.fillDay($('#result #day-max'), wear_info.daytime);
     self.fillDay($('#result #day-min'), wear_info.night);
 
-    return self.checkScroll();
+    self.checkScroll();
+
+    (window.adsbygoogle || []).push({});
   }
 
   formatNumber(value: number, length: number) {
