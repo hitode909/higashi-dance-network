@@ -548,8 +548,6 @@ class Viewer {
     self.fillDay($('#result #day-min'), wear_info.night);
 
     self.checkScroll();
-
-    (window.adsbygoogle || []).push({});
   }
 
   formatNumber(value: number, length: number) {

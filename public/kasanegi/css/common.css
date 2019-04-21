@@ -216,6 +216,11 @@ display: flex;
     font-size: 110%;
 }
 
+/* ads */
+.ad-containier {
+    text-align: center;
+}
+
 /* share button*/
 
 #share-tweet-container {
