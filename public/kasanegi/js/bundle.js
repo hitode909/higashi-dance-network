@@ -474,6 +474,11 @@ var Viewer = function () {
       self.fillDay((0, _jquery2.default)('#result #day-min'), wear_info.night);
 
       self.checkScroll();
+
+      if (!this.initAd) {
+        (window.adsbygoogle || []).push({});
+        this.initAd = true;
+      }
     }
   }, {
     key: 'formatNumber',

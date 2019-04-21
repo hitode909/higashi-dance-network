@@ -1,6 +1,6 @@
 // @flow
 
-const CACHE_NAME = 'kasanegi-v2';
+const CACHE_NAME = 'kasanegi-v3';
 
 const urlsToCache = [
   '/',
