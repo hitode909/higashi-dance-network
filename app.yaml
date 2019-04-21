@@ -1,5 +1,3 @@
-application: higashi-dance-network
-version: 7
 runtime: python27
 api_version: 1
 threadsafe: no
