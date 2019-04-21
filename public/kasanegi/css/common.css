@@ -25,14 +25,6 @@ img {
     text-align: center;
 }
 
-.float {
-    float: left;
-}
-
-.float-right {
-    float: right;
-}
-
 .clear {
     clear: both;
 }
@@ -125,6 +117,10 @@ select#city-selector {
     display: none;
 }
 
+#area-date-container {
+    margin-right: auto;
+}
+
 #area {
     font-weight: bold;
     color: #333;
@@ -186,16 +182,16 @@ select#city-selector {
 
 }
 
+#weather-container {
+display: flex;
+}
+
 #weather-icons img {
     min-width: 42px;
     width: 15vw;
     max-width: 64px;
     margin-left: 5px;
     border: 1px solid #b4b4b4;
-}
-
-.wear-icons {
-    padding-left: 3px;
 }
 
 .wear-icons img {
