@@ -1,5 +1,26 @@
 body {
     color: #333;
+    background: url(/kasanegi/images/background.png);
+}
+
+* {
+    font-size: 5vw;
+}
+
+@media screen and (min-width:480px) {
+    * {
+        font-size: 19px;
+    }
+}
+
+img {
+    max-width: 100%;
+}
+
+#wrapper {
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .center {
@@ -17,11 +38,6 @@ body {
 .clear {
     clear: both;
 }
-
-body {
-    background: url(/kasanegi/images/background.png);
-}
-
 #indicator {
     margin: 50px;
     height: 500px;
@@ -34,43 +50,40 @@ body {
 /* title */
 
 #title-container {
-    position: relative;
-    height: 44px;
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  background: url('/kasanegi/images/header.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: top center;
+  padding-left: 5px;
+  padding-right:5px;
+  min-height: 44px;
+  height: calc(100vw * (88 / 640));
+  max-height: 88px;
 }
 
-#title img {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 320px;
-    height: 44px;
+#title {
+    opacity: 0;
+    flex-grow: 1;
 }
 
-#back-to-main {
-    position: absolute;
-    left: 10px;
-    top:  8px;
-    cursor: pointer;
+#title h1 {
+    margin-bottom: 0px;
 }
 
-#back-to-main img {
-    width: 50px;
-    height: 24px;
+.title-button {
+    text-decoration: none;
+    background-color: #4aa8c9;
+    color: white;
+    border-radius: 3px;
+    padding: 3px;
+    font-size: 80%;
+
 }
-
-#help-button {
-    position: absolute;
-    right: 10px;
-    top:  8px;
-    cursor: pointer;
-}
-
-#help-button img {
-    width: 50px;
-    height: 24px;
-}
-
-
 /* page */
 
 .page {
@@ -83,14 +96,11 @@ body {
 #city-selector-container {
     margin-top: 10px;
     margin-bottom:20px;
+    display: flex;
 }
 
 select#city-selector {
     width: 180px;
-}
-
-#reset-city {
-    margin-left: 1em;
 }
 
 /* calendar */
@@ -210,28 +220,36 @@ select#city-selector {
     color: #44c;
 }
 
+.days {
+    display: flex;
+    justify-content: space-around;
+}
+
 .day {
-    float: left;
-    width: 155px;
+    min-width: 155px;
+    width: 100%;
+    max-width: 240px;
 }
 
 .day .wear-image {
     position: relative;
-    width: 155px;
-    height: 240px;
 }
 
 .day .wear-image img {
-    width: 155px;
-    height: 240px;
     position: absolute;
     left: 0px;
     top: 0px;
 }
 
+.day .wear-image img:first-child {
+    position: relative;
+
+}
+
 #weather-icons img {
-    width: 42px;
-    height: 42px;
+    min-width: 42px;
+    width: 15vw;
+    max-width: 64px;
     margin-left: 5px;
     border: 1px solid #b4b4b4;
 }
@@ -241,8 +259,9 @@ select#city-selector {
 }
 
 .wear-icons img {
-    width: 36px;
-    height: 36px;
+    max-width: 48px;
+    width: 11vw;
+    min-width: 36px;
     margin-right: -1px;
     margin-top: 3px;
     border: 1px solid #b4b4b4;
@@ -264,8 +283,9 @@ select#city-selector {
 }
 
 #share-tweet-container img {
-    width: 202px;
-    height: 45px;
+    min-width: 202px;
+    width:50%;
+    max-width: 404px;
 }
 
 
