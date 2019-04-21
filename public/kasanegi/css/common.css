@@ -1,14 +1,12 @@
 body {
     color: #333;
     background: url(/kasanegi/images/background.png);
-}
-
-* {
     font-size: 5vw;
+    font-family: 'Helvetica Neue', Arial, 'Liberation Sans', FreeSans, sans-serif;
 }
 
 @media screen and (min-width:480px) {
-    * {
+    body {
         font-size: 19px;
     }
 }
@@ -81,7 +79,7 @@ img {
     color: white;
     border-radius: 3px;
     padding: 3px;
-    font-size: 80%;
+    font-size: 90%;
 
 }
 /* page */
@@ -100,7 +98,10 @@ img {
 }
 
 select#city-selector {
-    width: 180px;
+    /* width: 180px; */
+}
+
+#reset-city {
 }
 
 /* first time guide */
@@ -114,8 +115,7 @@ select#city-selector {
 }
 
 #first-time-guide .more a {
-    font-size: 90%;
-    color: #d42c0a;
+        color: #d42c0a;
 }
 
 /* weather result */
@@ -132,11 +132,10 @@ select#city-selector {
 
 #date {
     color: #666;
-    font-size: 90%;
-}
+    }
 
 #description {
-    font-size: 80%;
+    font-size: 90%;
     color: #666;
     text-align: right;
     margin-top: 2px;
@@ -149,7 +148,7 @@ select#city-selector {
 }
 
 .heat {
-    font-size: 80%;
+    font-size: 90%;
     text-align: center;
 }
 
@@ -213,7 +212,7 @@ select#city-selector {
 #comment {
     margin: 20px;
     line-height: 1.5;
-    font-size: 90%;
+    font-size: 110%;
 }
 
 /* share button*/
@@ -259,7 +258,6 @@ select#city-selector {
 
 
 #guide-api {
-    font-size: 90%;
 
     margin-top: 20px;
     margin-right: 20px;
@@ -270,14 +268,14 @@ select#city-selector {
 
 p.tips {
     margin-top: 20px;
-    font-size: 80%;
+    font-size: 90%;
     text-align: center;
 }
 
 /* apis */
 .api-message {
     margin-top: 20px;
-    font-size: 80%;
+    font-size: 90%;
     text-align: center;
 }
 .api {
@@ -291,7 +289,7 @@ p.tips {
 .tenki-logo {
     text-decoration: none;
     color: #333;
-    font-size: 60%;
+    font-size: 70%;
 }
 
 /* authors */
@@ -321,7 +319,7 @@ p.tips {
 
 #copyright {
     margin-top: 20px;
-    font-size: 60%;
+    font-size: 70%;
     text-align: center;
     color: #666;
 }
