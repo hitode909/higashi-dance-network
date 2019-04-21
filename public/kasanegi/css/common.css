@@ -246,14 +246,15 @@ select#city-selector {
 }
 
 .help-image {
-    width: 310px;
-    height: 140px;
+    width: 100%;
+    min-width: 310px;
 }
 
 .help-button-image {
     margin-top: 20px;
-    width: 202px;
-    height: 45px;
+    min-width: 202px;
+    width: 50%;
+    max-width: 404px;
 }
 
 
