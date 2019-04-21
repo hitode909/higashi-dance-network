@@ -1,0 +1,12 @@
+{
+    "typescript.validate.enable": false,
+    "javascript.validate.enable": false,
+    "typescript.check.npmIsInstalled": false,
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
+    "typescript.format.insertSpaceAfterSemicolonInForStatements": false,
+    "typescript.format.insertSpaceBeforeAndAfterBinaryOperators": false,
+    "typescript.suggest.enabled": false,
+    "typescript.suggest.paths": false,
+    "typescript.suggestionActions.enabled": false,
+    "typescript.surveys.enabled": false
+}
