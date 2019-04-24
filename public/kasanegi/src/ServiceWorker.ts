@@ -52,14 +52,13 @@ const urlsToCache = [
   '/images/weather-thunder.png',
   '/images/weather-thunderstorm.png',
   '/images/yahoo.gif',
-].map(path => '/kasanegi' + path);
+].map((path) => '/kasanegi' + path);
 
 self.addEventListener('install', function(event) {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-    .then(function(cache) {
+    caches.open(CACHE_NAME).then(function(cache) {
       return cache.addAll(urlsToCache);
-    })
+    }),
   );
 });
 
@@ -73,22 +72,20 @@ self.addEventListener('activate', function(event) {
           if (cacheWhitelist.indexOf(cacheName) === -1) {
             return caches.delete(cacheName);
           }
-        })
+        }),
       );
-    })
+    }),
   );
 });
 
-
 self.addEventListener('fetch', function(event) {
   event.respondWith(
-    caches.match(event.request)
-    .then(function(response) {
+    caches.match(event.request).then(function(response) {
       if (response) {
         return response;
       }
 
       return fetch(event.request);
-    })
+    }),
   );
 });
