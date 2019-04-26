@@ -1,4 +1,4 @@
-// @flow
+// declare var self: any;
 
 const CACHE_NAME = 'kasanegi-v3';
 
@@ -54,7 +54,7 @@ const urlsToCache = [
   '/images/yahoo.gif',
 ].map((path) => '/kasanegi' + path);
 
-self.addEventListener('install', function(event) {
+self.addEventListener('install', function(event: any) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
       return cache.addAll(urlsToCache);
@@ -62,7 +62,7 @@ self.addEventListener('install', function(event) {
   );
 });
 
-self.addEventListener('activate', function(event) {
+self.addEventListener('activate', function(event: any) {
   var cacheWhitelist = [CACHE_NAME];
 
   event.waitUntil(
@@ -78,7 +78,7 @@ self.addEventListener('activate', function(event) {
   );
 });
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', function(event: FetchEvent) {
   event.respondWith(
     caches.match(event.request).then(function(response) {
       if (response) {

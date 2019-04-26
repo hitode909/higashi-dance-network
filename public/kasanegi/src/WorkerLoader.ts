@@ -1,5 +1,3 @@
-// @flow
-
 class WorkerLoader {
   constructor() {
     this.register();

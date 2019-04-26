@@ -1,7 +1,7 @@
 // @flow
-import _ from 'underscore';
-import $ from 'jquery';
-import { Weather } from './weather';
+import * as $ from "jquery";
+import Weather from './weather';
+
 type Cloth = 'halfshirts' | 'shirts' | 'cardigan' | 'sweater' | 'jacket' | 'coat' | 'muffler' | 'umbrella';
 
 interface ClothSet {
@@ -12,244 +12,239 @@ interface ClothSet {
   comment: string;
 }
 
+interface Report {
+  date: string;
+  description: string;
+  min: number
+  max: number;
+}
 class Viewer {
-  public readonly HASHTAG: string;
-  public readonly SERVICE_URL: string;
-  public readonly SEARCH_TEXT: string;
+  public readonly HASHTAG = '#重ね着';
+  public readonly SERVICE_URL = 'https://higashi-dance-network.appspot.com/kasanegi/';
+  public readonly SEARCH_TEXT = 'https://higashi-dance-network.appspot.com/kasanegi/ #重ね着';
+  private initAd: boolean;
   public readonly CLOTH_RULES: ClothSet[];
+
+
   public readonly weather: Weather;
 
-  public static initClass() {
-    // ----- constants -----
-    this.prototype.HASHTAG = '#重ね着';
-    this.prototype.SERVICE_URL = 'https://higashi-dance-network.appspot.com/kasanegi/';
-    this.prototype.SEARCH_TEXT = 'https://higashi-dance-network.appspot.com/kasanegi/ #重ね着';
-
-    this.prototype.CLOTH_RULES = (function() {
-      let CLOTH_HALF_SHIRTS = 'halfshirts';
-      let CLOTH_SHIRTS = 'shirts';
-      let CLOTH_CARDIGAN = 'cardigan';
-      let CLOTH_SWEATER = 'sweater';
-      let CLOTH_JACKET = 'jacket';
-      let CLOTH_COAT = 'coat';
-      let CLOTH_MUFFLER = 'muffler';
-
-      return [
-        // エラー対策
-        {
-          min: 100,
-          max: 100,
-          daytime: [CLOTH_HALF_SHIRTS],
-
-          night: [CLOTH_HALF_SHIRTS],
-
-          comment: '異常な暑さです',
-        },
-
-        {
-          min: 50,
-          max: 50,
-          daytime: [CLOTH_HALF_SHIRTS],
-
-          night: [CLOTH_HALF_SHIRTS],
-
-          comment: '暑いので半袖で出かけましょう',
-        },
-
-        {
-          min: 35,
-          max: 35,
-          daytime: [CLOTH_SHIRTS],
-
-          night: [CLOTH_SHIRTS],
-
-          comment: '暖かくていい天気なのでシャツ一枚で大丈夫です',
-        },
-
-        {
-          min: 34,
-          max: 34,
-          daytime: [CLOTH_SHIRTS],
-
-          night: [CLOTH_SHIRTS, CLOTH_CARDIGAN],
-
-          comment: '昼は暑く夜はカーディガンがあればいいくらいです',
-        },
-
-        {
-          min: 15,
-          max: 25,
-          daytime: [CLOTH_SHIRTS],
-
-          night: [CLOTH_SHIRTS, CLOTH_JACKET],
-
-          comment: '少し冷えるのでジャケットを着ましょう',
-        },
-
-        {
-          min: 10,
-          max: 25,
-          daytime: [CLOTH_SHIRTS],
-
-          night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_JACKET],
-
-          comment: '冷えるのでカーディガンとジャケットを着ましょう',
-        },
-
-        {
-          min: 7,
-          max: 25,
-          daytime: [CLOTH_SHIRTS],
-
-          night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT],
-
-          comment: '冷えるのでカーディガンとコートを着ましょう',
-        },
-
-        {
-          min: 5,
-          max: 25,
-          daytime: [CLOTH_SHIRTS],
-
-          night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT, CLOTH_MUFFLER],
-
-          comment: 'すごく冷えるのでカーディガンとコートとマフラーを着ましょう',
-        },
-
-        {
-          min: 18,
-          max: 18,
-          daytime: [CLOTH_SHIRTS, CLOTH_CARDIGAN],
-
-          night: [CLOTH_SHIRTS, CLOTH_CARDIGAN],
-
-          comment: '一日肌寒いのでカーディガンです',
-        },
-
-        {
-          min: 15,
-          max: 18,
-          daytime: [CLOTH_SHIRTS, CLOTH_JACKET],
-
-          night: [CLOTH_SHIRTS, CLOTH_JACKET],
-
-          comment: '朝晩冷えるので一日ジャケットです',
-        },
-
-        {
-          min: 10,
-          max: 18,
-          daytime: [CLOTH_SHIRTS, CLOTH_CARDIGAN],
-
-          night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_JACKET],
-
-          comment: 'カーディガンにジャケットを羽織ります',
-        },
-
-        {
-          min: 7,
-          max: 18,
-          daytime: [CLOTH_SHIRTS, CLOTH_CARDIGAN],
-
-          night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT],
-
-          comment: 'カーディガンにコートを羽織ります',
-        },
-
-        {
-          min: 5,
-          max: 18,
-          daytime: [CLOTH_SHIRTS, CLOTH_CARDIGAN],
-
-          night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT, CLOTH_MUFFLER],
-
-          comment: '夜は寒いのでコートにマフラーがいいです',
-        },
-
-        {
-          min: 14,
-          max: 14,
-          daytime: [CLOTH_SHIRTS, CLOTH_SWEATER],
-
-          night: [CLOTH_SHIRTS, CLOTH_SWEATER],
-
-          comment: '一日冷えるのでセーターです',
-        },
-
-        {
-          min: 10,
-          max: 14,
-          daytime: [CLOTH_SHIRTS, CLOTH_SWEATER],
-
-          night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_JACKET],
-
-          comment: 'セーターにジャケットを羽織ります',
-        },
-
-        {
-          min: 7,
-          max: 14,
-          daytime: [CLOTH_SHIRTS, CLOTH_SWEATER],
-
-          night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
-
-          comment: 'もこもこセーターにコート羽織って出かけましょう',
-        },
-
-        {
-          min: 5,
-          max: 14,
-          daytime: [CLOTH_SHIRTS, CLOTH_SWEATER],
-
-          night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
-
-          comment: '夜は冷え込むのでたくさん着ていきましょう',
-        },
-
-        {
-          min: 12,
-          max: 12,
-          daytime: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT],
-
-          night: [CLOTH_SHIRTS, CLOTH_CARDIGAN, CLOTH_COAT],
-
-          comment: '一日少し寒いのでカーディガンとコートを着ましょう',
-        },
-
-        {
-          min: 8,
-          max: 12,
-          daytime: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
-
-          night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
-
-          comment: '一日寒いのでセータとコートを着ましょう',
-        },
-
-        {
-          min: 5,
-          max: 12,
-          daytime: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT],
-
-          night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
-
-          comment: '一日寒いので昼でもコート夜はマフラーです',
-        },
-
-        {
-          min: 5,
-          max: 5,
-          daytime: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
-
-          night: [CLOTH_SHIRTS, CLOTH_SWEATER, CLOTH_COAT, CLOTH_MUFFLER],
-
-          comment: 'すごく寒いので一日マフラーが手放せません',
-        },
-      ];
-    })();
-  }
   constructor(weather: Weather) {
+    this.initAd = false;
     this.weather = weather;
+
+    this.CLOTH_RULES = [
+      // エラー対策
+      {
+        min: 100,
+        max: 100,
+        daytime: ['halfshirts'],
+
+        night: ['halfshirts'],
+
+        comment: '異常な暑さです',
+      },
+
+      {
+        min: 50,
+        max: 50,
+        daytime: ['halfshirts'],
+
+        night: ['halfshirts'],
+
+        comment: '暑いので半袖で出かけましょう',
+      },
+
+      {
+        min: 35,
+        max: 35,
+        daytime: ['shirts'],
+
+        night: ['shirts'],
+
+        comment: '暖かくていい天気なのでシャツ一枚で大丈夫です',
+      },
+
+      {
+        min: 34,
+        max: 34,
+        daytime: ['shirts'],
+
+        night: ['shirts', 'cardigan'],
+
+        comment: '昼は暑く夜はカーディガンがあればいいくらいです',
+      },
+
+      {
+        min: 15,
+        max: 25,
+        daytime: ['shirts'],
+
+        night: ['shirts', 'jacket'],
+
+        comment: '少し冷えるのでジャケットを着ましょう',
+      },
+
+      {
+        min: 10,
+        max: 25,
+        daytime: ['shirts'],
+
+        night: ['shirts', 'cardigan', 'jacket'],
+
+        comment: '冷えるのでカーディガンとジャケットを着ましょう',
+      },
+
+      {
+        min: 7,
+        max: 25,
+        daytime: ['shirts'],
+
+        night: ['shirts', 'cardigan', 'coat'],
+
+        comment: '冷えるのでカーディガンとコートを着ましょう',
+      },
+
+      {
+        min: 5,
+        max: 25,
+        daytime: ['shirts'],
+
+        night: ['shirts', 'cardigan', 'coat', 'muffler'],
+
+        comment: 'すごく冷えるのでカーディガンとコートとマフラーを着ましょう',
+      },
+
+      {
+        min: 18,
+        max: 18,
+        daytime: ['shirts', 'cardigan'],
+
+        night: ['shirts', 'cardigan'],
+
+        comment: '一日肌寒いのでカーディガンです',
+      },
+
+      {
+        min: 15,
+        max: 18,
+        daytime: ['shirts', 'jacket'],
+
+        night: ['shirts', 'jacket'],
+
+        comment: '朝晩冷えるので一日ジャケットです',
+      },
+
+      {
+        min: 10,
+        max: 18,
+        daytime: ['shirts', 'cardigan'],
+
+        night: ['shirts', 'cardigan', 'jacket'],
+
+        comment: 'カーディガンにジャケットを羽織ります',
+      },
+
+      {
+        min: 7,
+        max: 18,
+        daytime: ['shirts', 'cardigan'],
+
+        night: ['shirts', 'cardigan', 'coat'],
+
+        comment: 'カーディガンにコートを羽織ります',
+      },
+
+      {
+        min: 5,
+        max: 18,
+        daytime: ['shirts', 'cardigan'],
+
+        night: ['shirts', 'cardigan', 'coat', 'muffler'],
+
+        comment: '夜は寒いのでコートにマフラーがいいです',
+      },
+
+      {
+        min: 14,
+        max: 14,
+        daytime: ['shirts', 'sweater'],
+
+        night: ['shirts', 'sweater'],
+
+        comment: '一日冷えるのでセーターです',
+      },
+
+      {
+        min: 10,
+        max: 14,
+        daytime: ['shirts', 'sweater'],
+
+        night: ['shirts', 'sweater', 'jacket'],
+
+        comment: 'セーターにジャケットを羽織ります',
+      },
+
+      {
+        min: 7,
+        max: 14,
+        daytime: ['shirts', 'sweater'],
+
+        night: ['shirts', 'sweater', 'coat'],
+
+        comment: 'もこもこセーターにコート羽織って出かけましょう',
+      },
+
+      {
+        min: 5,
+        max: 14,
+        daytime: ['shirts', 'sweater'],
+
+        night: ['shirts', 'sweater', 'coat', 'muffler'],
+
+        comment: '夜は冷え込むのでたくさん着ていきましょう',
+      },
+
+      {
+        min: 12,
+        max: 12,
+        daytime: ['shirts', 'cardigan', 'coat'],
+
+        night: ['shirts', 'cardigan', 'coat'],
+
+        comment: '一日少し寒いのでカーディガンとコートを着ましょう',
+      },
+
+      {
+        min: 8,
+        max: 12,
+        daytime: ['shirts', 'sweater', 'coat'],
+
+        night: ['shirts', 'sweater', 'coat'],
+
+        comment: '一日寒いのでセータとコートを着ましょう',
+      },
+
+      {
+        min: 5,
+        max: 12,
+        daytime: ['shirts', 'sweater', 'coat'],
+
+        night: ['shirts', 'sweater', 'coat', 'muffler'],
+
+        comment: '一日寒いので昼でもコート夜はマフラーです',
+      },
+
+      {
+        min: 5,
+        max: 5,
+        daytime: ['shirts', 'sweater', 'coat', 'muffler'],
+
+        night: ['shirts', 'sweater', 'coat', 'muffler'],
+
+        comment: 'すごく寒いので一日マフラーが手放せません',
+      },
+    ];
+
   }
 
   public setup() {
@@ -266,16 +261,10 @@ class Viewer {
       return;
     }
 
-    let page_id = this.weather.getLastPageId();
-    return this.selectPage(page_id, true);
+    return this.selectPage('main', true);
   }
 
-  public selectPage(target_id: string, force: boolean | undefined) {
-    if (!force && target_id === this.weather.getLastPageId) {
-      // do nothing
-      return;
-    }
-
+  public selectPage(target_id: string, force?: boolean | undefined): void {
     this.setPageButton(target_id);
     let target_page = $(document.body).find(`#${target_id}-page`);
     if (target_page.length === 0) {
@@ -295,6 +284,7 @@ class Viewer {
       $('#back-to-main').css({ visibility: 'visible' });
     }
   }
+
 
   public setupCityChanger() {
     let self = this;
@@ -316,7 +306,7 @@ class Viewer {
 
     select.append(label);
 
-    this.weather.eachCity(function(city) {
+    this.weather.CITIES.forEach((city) => {
       let option = $('<option>').attr({
         name: 'city',
         value: city.code,
@@ -377,7 +367,7 @@ class Viewer {
 
   public checkCurrentPositionIfNeeded() {
     let self = this;
-    let city_code = $('select#city-selector').val();
+    let city_code = $('select#city-selector').val() || -1;
 
     // 地域を選択 = -1
     if (+city_code === -1) {
@@ -404,7 +394,7 @@ class Viewer {
     $('#result').hide();
 
     return self.weather.getCurrentStateCode(
-      function(state_code) {
+      function(state_code: string) {
         let city = self.weather.getDefaultCityForState(state_code);
         let city_code = city.code;
 
@@ -428,18 +418,18 @@ class Viewer {
     $('#indicator').show();
     $('#result').hide();
     let selected = $('select#city-selector option:selected');
-    let city_code = selected.val();
+    let city_code: string = `${selected.val()}`;
     let city_name = selected.text();
     let city = this.weather.getCityByCityCode(city_code);
     this.weather.setLastCityCode(city_code);
 
-    return this.weather.getWeatherReportForCity(city, (report) => self.printWeatherResult(city_name, report));
+    return this.weather.getWeatherReportForCity(city, (report: Report) => self.printWeatherResult(city_name, report));
   }
 
-  public printWeatherResult(city_name: string, report: any) {
+  public printWeatherResult(city_name: string, report: {date: string, description: string, min: number, max: number}) {
     let self = this;
 
-    if (report.min === '' || report.max === '') {
+    if (!report.description) {
       alert('申し訳ございません，天気を取得できませんでした．時間をおいて試すか，ほかの地域で試してください．');
       return;
     }
@@ -461,7 +451,7 @@ class Viewer {
 
     $('#result #comment').text(comment);
 
-    self.setTweetLink(`${city_name} ${report.description} ${comment}`);
+    self.setTweetLink(`${city_name} ${report.description} ${comment}`, undefined);
 
     self.fillDay($('#result #day-max'), wear_info.daytime);
     self.fillDay($('#result #day-min'), wear_info.night);
@@ -469,7 +459,11 @@ class Viewer {
     self.checkScroll();
 
     if (!this.initAd) {
-      (window.adsbygoogle || []).push({});
+      try {
+        ((window as any).adsbygoogle||[]).push({});
+      } catch (ignore) {
+
+      }
       this.initAd = true;
     }
   }
@@ -482,7 +476,7 @@ class Viewer {
   // 雨なら持ち物に傘を追加
   public appendUmbrella(wear_info: any, description: string) {
     let UMBRELLA = 'umbrella';
-    let choise = (list) => list[Math.floor(Math.random() * list.length)];
+    let choise = (list: Array<any>) => list[Math.floor(Math.random() * list.length)];
 
     if (!description.match(/雨/)) {
       return wear_info;
@@ -587,7 +581,7 @@ class Viewer {
       })
       .appendTo(image_container);
 
-    return _.each(wears, function(wear_name) {
+    wears.forEach(wear_name => {
       // XXX: 傘だけはアイコン出さない．縦2列になって見た目も悪い．
       if (wear_name !== 'umbrella') {
         $('<img>')
@@ -632,8 +626,8 @@ class Viewer {
 
     if (!matched) return;
 
-    return _.each(matched, function(code) {
-      let rule = {
+    matched.forEach((code) => {
+      let rule: {[key: string]: string} = {
         晴: 'images/weather-sunny.png',
         雨: 'images/weather-rain.png',
         雷: 'images/weather-thunder.png',
@@ -643,7 +637,7 @@ class Viewer {
         雷雨: 'images/weather-thunderstorm.png',
       };
 
-      let image_path = rule[code];
+      let image_path: string  = rule[code];
       if (!image_path) {
         return;
       }
@@ -662,13 +656,13 @@ class Viewer {
     // あらかじめ決められたペアから一番近いのを探してきます
 
     let rules = this.CLOTH_RULES;
-    let selected = null;
-    let distance = null;
+    let selected: null | ClothSet = null;
+    let distance: null | number  = null;
 
     //       .  point 2
     //
     // .  point 1
-    let getDistance = function(x1, x2, y1, y2) {
+    let getDistance = function(x1: number, x2: number, y1: number, y2: number) {
       if (x1 <= x2 && y1 <= y2) {
         return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
       } else {
@@ -676,7 +670,7 @@ class Viewer {
       }
     };
 
-    _.each(rules, function(rule) {
+    rules.forEach((rule) => {
       let distance_now = getDistance(min, rule.min, max, rule.max);
       if (!selected || !distance || distance_now < distance) {
         selected = rule;
@@ -689,10 +683,10 @@ class Viewer {
   }
 
   public setTweetLink(message: string, hashtag: string | undefined) {
-    if (message == null) {
+    if (!message) {
       message = '3枚です';
     }
-    if (hashtag == null) {
+    if (!hashtag) {
       hashtag = this.HASHTAG;
     }
     let url = this.SERVICE_URL;
@@ -717,7 +711,5 @@ class Viewer {
     }
   }
 }
-
-Viewer.initClass();
 
 export default Viewer;

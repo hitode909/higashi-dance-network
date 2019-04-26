@@ -1,21 +1,19 @@
-// @flow
-import _ from 'underscore';
+import * as $ from "jquery";
 
 interface City {
   title: string;
   code: string;
 }
 
+interface Report {
+  date: string;
+  description: string;
+  min: number
+  max: number;
+}
 class Weather {
-  public readonly YAHOO_APPLICATION_ID: string;
-  public readonly CITIES: City[];
-
-  public static initClass() {
-    // ------------------------------------------------------------------------------------
-
-    this.prototype.YAHOO_APPLICATION_ID = 'J17Tyuixg65goAW301d5vBkBWtO9gLQsJnC0Y7OyJJk96wumaSU2U3odNwj5PdIU1A--';
-
-    this.prototype.CITIES = [
+  readonly YAHOO_APPLICATION_ID = 'J17Tyuixg65goAW301d5vBkBWtO9gLQsJnC0Y7OyJJk96wumaSU2U3odNwj5PdIU1A--';
+  readonly CITIES: Array<{ title: string; code: string;}> = [
       { title: '道北 稚内', code: '011000' },
       { title: '道北 旭川', code: '012010' },
       { title: '道北 留萌', code: '012020' },
@@ -159,10 +157,8 @@ class Weather {
       { title: '沖縄県 石垣島', code: '474010' },
       { title: '沖縄県 与那国島', code: '474020' },
     ];
-  }
-  constructor() {}
 
-  public getLastCityCode(): string | undefined {
+  public getLastCityCode() {
     return localStorage.getItem('city_code');
   }
 
@@ -206,7 +202,7 @@ class Weather {
     });
 
     self.ajaxByProxy(`http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?${params}`, function(
-      res,
+      res: any,
     ) {
       try {
         let code = res.Feature[0].Property.AddressElement[0].Code;
@@ -217,14 +213,10 @@ class Weather {
     });
   }
 
-  public eachCity(callback: Function) {
-    return _.each(this.CITIES, (city) => callback(city));
-  }
-
   public getCityByCityCode(city_code: string): City {
     let found = null;
 
-    this.eachCity(function(city) {
+    this.CITIES.forEach((city) => {
       if (city.code === city_code) {
         return (found = city);
       }
@@ -237,32 +229,37 @@ class Weather {
   }
 
   public getDefaultCityForState(state_code: string): City {
-    const city = _.find(this.CITIES, (city) => city.code.substr(0, 2) === state_code);
-    if (!city) {
-      throw `Unexpected state_code: ${state_code}`;
+    for (let i = 0; i < this.CITIES.length; i++) {
+      const city = this.CITIES[i];
+      if (city.code.substr(0, 2) === state_code) {
+        return city;
+      }
     }
-    return city;
+    throw `Unexpected state_code: ${state_code}`;
   }
 
   private ajaxByProxy(url: string, callback: Function) {
     $.ajax({
       type: 'GET',
       url: `/proxy/${encodeURIComponent(url)}`,
+      dataType: 'json',
     })
       .then((res) => {
         callback(res);
       })
-      .fail(() => {
-        alert('通信時にエラーが発生しました．時間をおいて試してみてください．');
-      });
+      // .fail(() => {
+      //   alert('通信時にエラーが発生しました．時間をおいて試してみてください．');
+      // });
   }
 
   // 最新の天気を返します．今日か明日．
   // return: { date description min max }
-  public getWeatherReportForCity(city: City, callback: Function) {
+  public getWeatherReportForCity(city: City, callback: (report: Report) => void) {
     let city_code = city.code;
     let self = this;
-    self.ajaxByProxy(`http://weather.livedoor.com/forecast/webservice/json/v1?city=${city_code}`, function(data) {
+    self.ajaxByProxy(
+      `http://weather.livedoor.com/forecast/webservice/json/v1?city=${city_code}`,
+      function (data: any) { // : {forecasts: Array<{temperature: Array<{min: number?; max: number?;}>})
       let day;
       let today = data.forecasts[0];
       let tomorrow = data.forecasts[1];
@@ -291,7 +288,5 @@ class Weather {
     });
   }
 }
-
-Weather.initClass();
 
 export default Weather;
