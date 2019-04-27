@@ -50,7 +50,7 @@ export class Weather {
     return localStorage.setItem('last_page_id', last_page_id);
   }
 
-  public getStatusCodeFromLatLon(lat: number, lon: number, callback: Function, failed: Function): void {
+  public async getStatusCodeFromLatLon(lat: number, lon: number, callback: Function, failed: Function) {
     let self = this;
     let params = $.param({
       lat,
@@ -59,16 +59,13 @@ export class Weather {
       appid: self.YAHOO_APPLICATION_ID,
     });
 
-    self.ajaxByProxy(`http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?${params}`, function(
-      res: any,
-    ) {
+    const res = await self.ajaxByProxy(`http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?${params}`);
       try {
         let code = res.Feature[0].Property.AddressElement[0].Code;
         return callback(code);
       } catch (error) {
         return failed();
       }
-    });
   }
 
   public getCityByCityCode(city_code: string): City {
@@ -96,53 +93,50 @@ export class Weather {
     throw `Unexpected state_code: ${state_code}`;
   }
 
-  private ajaxByProxy(url: string, callback: Function) {
-    $.ajax({
-      type: 'GET',
-      url: `/proxy/${encodeURIComponent(url)}`,
-      dataType: 'json',
-    })
-      .then((res) => {
-        callback(res);
+  private async ajaxByProxy(url: string) {
+    try {
+      return $.ajax({
+        type: 'GET',
+        url: `/proxy/${encodeURIComponent(url)}`,
+        dataType: 'json',
       })
-      .fail(() => {
-        alert('通信時にエラーが発生しました．時間をおいて試してみてください．');
-      });
+    } catch (error) {
+      alert('通信時にエラーが発生しました．時間をおいて試してみてください．');
+    }
   }
 
   // 最新の天気を返します．今日か明日．
   // return: { date description min max }
-  public getWeatherReportForCity(city: City, callback: (report: Report) => void) {
+  public async getWeatherReportForCity(city: City, callback: (report: Report) => void) {
     let city_code = city.code;
     let self = this;
-    self.ajaxByProxy(
-      `http://weather.livedoor.com/forecast/webservice/json/v1?city=${city_code}`,
-      function (data: any) { // : {forecasts: Array<{temperature: Array<{min: number?; max: number?;}>})
-      let day;
-      let today = data.forecasts[0];
-      let tomorrow = data.forecasts[1];
+    const data = await self.ajaxByProxy(
+      `http://weather.livedoor.com/forecast/webservice/json/v1?city=${city_code}`
+    );
+    let day;
+    let today = data.forecasts[0];
+    let tomorrow = data.forecasts[1];
 
-      // なにもなければ明日，ちょっとあったらないところだけ足す
-      if (today.temperature.min && today.temperature.max) {
-        day = today;
-      } else if (today.temperature.min || today.temperature.max) {
-        day = today;
-        if (day.temperature.min == null) {
-          day.temperature.min = tomorrow.temperature.min;
-        }
-        if (day.temperature.max == null) {
-          day.temperature.max = tomorrow.temperature.max;
-        }
-      } else {
-        day = tomorrow;
+    // なにもなければ明日，ちょっとあったらないところだけ足す
+    if (today.temperature.min && today.temperature.max) {
+      day = today;
+    } else if (today.temperature.min || today.temperature.max) {
+      day = today;
+      if (day.temperature.min == null) {
+        day.temperature.min = tomorrow.temperature.min;
       }
+      if (day.temperature.max == null) {
+        day.temperature.max = tomorrow.temperature.max;
+      }
+    } else {
+      day = tomorrow;
+    }
 
-      callback({
-        date: day.date,
-        description: day.telop,
-        min: day.temperature.min.celsius,
-        max: day.temperature.max.celsius,
-      });
+    callback({
+      date: day.date,
+      description: day.telop,
+      min: day.temperature.min.celsius,
+      max: day.temperature.max.celsius,
     });
   }
 }
