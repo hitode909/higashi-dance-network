@@ -24,22 +24,18 @@ export class Weather {
     return localStorage.setItem('city_code', city_code);
   }
 
-  public getCurrentStateCode(callback: Function, failed: Function): void {
-    let self = this;
+  public async getCurrentPosition(): Promise<Position> {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject)
+    })
+  }
 
-    if (!(navigator && navigator.geolocation)) {
-      failed();
-      return;
-    }
+  public async getCurrentStateCode() {
+    const position = await this.getCurrentPosition();
 
-    navigator.geolocation.getCurrentPosition(
-      function(position) {
-        let lat = position.coords.latitude;
-        let lon = position.coords.longitude;
-        return self.getStatusCodeFromLatLon(lat, lon, callback, failed);
-      },
-      () => failed(),
-    );
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    return await this.getStatusCodeFromLatLon(lat, lon);
   }
 
   public getLastPageId(): string {
@@ -50,7 +46,7 @@ export class Weather {
     return localStorage.setItem('last_page_id', last_page_id);
   }
 
-  public async getStatusCodeFromLatLon(lat: number, lon: number, callback: Function, failed: Function) {
+  public async getStatusCodeFromLatLon(lat: number, lon: number) {
     let self = this;
     let params = $.param({
       lat,
@@ -60,12 +56,7 @@ export class Weather {
     });
 
     const res = await self.ajaxByProxy(`http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?${params}`);
-      try {
-        let code = res.Feature[0].Property.AddressElement[0].Code;
-        return callback(code);
-      } catch (error) {
-        return failed();
-      }
+    return res.Feature[0].Property.AddressElement[0].Code;
   }
 
   public getCityByCityCode(city_code: string): City {
@@ -94,15 +85,11 @@ export class Weather {
   }
 
   private async ajaxByProxy(url: string) {
-    try {
-      return $.ajax({
+    return await $.ajax({
         type: 'GET',
         url: `/proxy/${encodeURIComponent(url)}`,
         dataType: 'json',
-      })
-    } catch (error) {
-      alert('通信時にエラーが発生しました．時間をおいて試してみてください．');
-    }
+      });
   }
 
   // 最新の天気を返します．今日か明日．

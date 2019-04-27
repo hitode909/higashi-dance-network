@@ -167,26 +167,24 @@ export class Viewer {
     return $('#indicator .message').show();
   }
 
-  public getCurrentPositionAndPrint() {
+  public async getCurrentPositionAndPrint() {
     let self = this;
 
     $('#indicator').show();
     $('#result').hide();
 
-    return self.weather.getCurrentStateCode(
-      function(state_code: string) {
-        let city = self.weather.getDefaultCityForState(state_code);
-        let city_code = city.code;
+    try {
+      const state_code: string = await self.weather.getCurrentStateCode();
+      let city = self.weather.getDefaultCityForState(state_code);
+      let city_code = city.code;
 
-        let option = $(`option[value=${city_code}]`);
-        option.attr({
-          selected: 'selected',
-        });
+      $('#city-selector').val(city_code);
 
-        return self.printWeather();
-      },
-      () => $('#reset-city').remove(),
-    );
+      return self.printWeather();
+    } catch (error) {
+      console.error(error);
+      alert('通信時にエラーが発生しました．時間をおいて試してみてください．');
+    }
   }
 
   // ----- actions -----
