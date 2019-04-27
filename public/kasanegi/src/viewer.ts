@@ -192,7 +192,7 @@ export class Viewer {
   // ----- actions -----
 
   // first day
-  public printWeather() {
+  public async printWeather() {
     let self = this;
 
     $('#indicator').show();
@@ -203,7 +203,8 @@ export class Viewer {
     let city = this.weather.getCityByCityCode(city_code);
     this.weather.setLastCityCode(city_code);
 
-    return this.weather.getWeatherReportForCity(city, (report: Report) => self.printWeatherResult(city_name, report));
+    const report = await this.weather.getWeatherReportForCity(city);
+    self.printWeatherResult(city_name, report);
   }
 
   public printWeatherResult(city_name: string, report: {date: string, description: string, min: number, max: number}) {

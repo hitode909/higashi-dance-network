@@ -107,7 +107,7 @@ export class Weather {
 
   // 最新の天気を返します．今日か明日．
   // return: { date description min max }
-  public async getWeatherReportForCity(city: City, callback: (report: Report) => void) {
+  public async getWeatherReportForCity(city: City): Promise<Report> {
     let city_code = city.code;
     let self = this;
     const data = await self.ajaxByProxy(
@@ -132,11 +132,11 @@ export class Weather {
       day = tomorrow;
     }
 
-    callback({
+    return {
       date: day.date,
       description: day.telop,
       min: day.temperature.min.celsius,
       max: day.temperature.max.celsius,
-    });
+    };
   }
 }
