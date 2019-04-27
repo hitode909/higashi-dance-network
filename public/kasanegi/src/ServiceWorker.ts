@@ -1,11 +1,9 @@
 // declare var self: any;
 
-const CACHE_NAME = 'kasanegi-v3';
+const CACHE_NAME = 'kasanegi-v4';
 
 const urlsToCache = [
   '/',
-  '/js/jquery-1.6.1.min.js',
-  '/js/underscore-min.js',
   '/js/bundle.js',
 
   '/css/common.css',
