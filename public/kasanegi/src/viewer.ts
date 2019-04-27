@@ -1,6 +1,6 @@
 // @flow
 import * as $ from "jquery";
-import Weather from './weather';
+import { Weather } from './weather';
 import {ClothSet, ClothRules, Cloth} from './ClothRules';
 
 interface Report {
@@ -9,7 +9,7 @@ interface Report {
   min: number
   max: number;
 }
-class Viewer {
+export class Viewer {
   public readonly HASHTAG = '#重ね着';
   public readonly SERVICE_URL = 'https://higashi-dance-network.appspot.com/kasanegi/';
   public readonly SEARCH_TEXT = 'https://higashi-dance-network.appspot.com/kasanegi/ #重ね着';
@@ -491,5 +491,3 @@ class Viewer {
     }
   }
 }
-
-export default Viewer;

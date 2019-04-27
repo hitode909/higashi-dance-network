@@ -12,7 +12,7 @@ interface Report {
   min: number
   max: number;
 }
-class Weather {
+export class Weather {
   readonly YAHOO_APPLICATION_ID = 'J17Tyuixg65goAW301d5vBkBWtO9gLQsJnC0Y7OyJJk96wumaSU2U3odNwj5PdIU1A--';
   readonly CITIES: Array<City> = Cities;
 
@@ -146,5 +146,3 @@ class Weather {
     });
   }
 }
-
-export default Weather;

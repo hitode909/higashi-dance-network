@@ -1,4 +1,4 @@
-class WorkerLoader {
+export class WorkerLoader {
   constructor() {
     this.register();
   }
@@ -16,5 +16,3 @@ class WorkerLoader {
       });
   }
 }
-
-export default WorkerLoader;
