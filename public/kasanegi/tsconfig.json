@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "module": "es6",
+    "target": "es5",
+    "lib": ["webworker", "es5", "es2015", "dom"],
+    "sourceMap": true
+  },
+//   "exclude": [
+//     "src/ServiceWorker.ts",
+//   ],
+//   "exclude": [
+//     "node_modules"
+// ]
+}

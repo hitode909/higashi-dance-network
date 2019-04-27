@@ -1,11 +1,9 @@
-// @flow
+// declare var self: any;
 
-const CACHE_NAME = 'kasanegi-v3';
+const CACHE_NAME = 'kasanegi-v4';
 
 const urlsToCache = [
   '/',
-  '/js/jquery-1.6.1.min.js',
-  '/js/underscore-min.js',
   '/js/bundle.js',
 
   '/css/common.css',
@@ -52,18 +50,17 @@ const urlsToCache = [
   '/images/weather-thunder.png',
   '/images/weather-thunderstorm.png',
   '/images/yahoo.gif',
-].map(path => '/kasanegi' + path);
+].map((path) => '/kasanegi' + path);
 
-self.addEventListener('install', function(event) {
+self.addEventListener('install', function(event: any) {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-    .then(function(cache) {
+    caches.open(CACHE_NAME).then(function(cache) {
       return cache.addAll(urlsToCache);
-    })
+    }),
   );
 });
 
-self.addEventListener('activate', function(event) {
+self.addEventListener('activate', function(event: any) {
   var cacheWhitelist = [CACHE_NAME];
 
   event.waitUntil(
@@ -73,22 +70,20 @@ self.addEventListener('activate', function(event) {
           if (cacheWhitelist.indexOf(cacheName) === -1) {
             return caches.delete(cacheName);
           }
-        })
+        }),
       );
-    })
+    }),
   );
 });
 
-
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', function(event: FetchEvent) {
   event.respondWith(
-    caches.match(event.request)
-    .then(function(response) {
+    caches.match(event.request).then(function(response) {
       if (response) {
         return response;
       }
 
       return fetch(event.request);
-    })
+    }),
   );
 });
