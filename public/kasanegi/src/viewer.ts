@@ -239,7 +239,9 @@ export class Viewer {
 
     if (!this.initAd) {
       try {
-        ((window as any).adsbygoogle||[]).push({});
+        if (!(window as any)['portalHost']) {
+          ((window as any).adsbygoogle || []).push({});
+        }
       } catch (ignore) {
 
       }

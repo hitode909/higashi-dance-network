@@ -37,10 +37,19 @@
 
     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <script>
-      (adsbygoogle = window.adsbygoogle || []).push({
-        google_ad_client: "ca-pub-0514478731635320",
-        enable_page_level_ads: true
-       });
+      if (!window.portalHost) {
+        (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-0514478731635320",
+          enable_page_level_ads: true
+        });
+      } else {
+        window.addEventListener('portalactivate', function(event) {
+          (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-0514478731635320",
+            enable_page_level_ads: true
+          });
+        });
+      }
     </script>
   </head>
   <body>
