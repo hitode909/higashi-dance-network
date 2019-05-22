@@ -10,12 +10,13 @@ interface Report {
   max: number;
 }
 export class Viewer {
+  public readonly SERVICE = '今日の重ね着';
   public readonly HASHTAG = '#重ね着';
   public readonly SERVICE_URL = 'https://higashi-dance-network.appspot.com/kasanegi/';
   public readonly SEARCH_TEXT = 'https://higashi-dance-network.appspot.com/kasanegi/ #重ね着';
   private initAd: boolean;
   public readonly CLOTH_RULES: ClothSet[];
-
+  private tweetMessage: string;
 
   public readonly weather: Weather;
 
@@ -133,7 +134,7 @@ export class Viewer {
       return self.getCurrentPositionAndPrint();
     });
 
-    return $(window).bind('hashchange', function() {
+    $(window).bind('hashchange', function() {
       let target_id = location.hash;
       target_id = target_id.replace(/^\#/, '');
       self.selectPage(target_id);
@@ -141,7 +142,23 @@ export class Viewer {
         localStorage.clear();
       }
 
-      return setTimeout(() => window.scrollTo(0, 0));
+      setTimeout(() => window.scrollTo(0, 0));
+    });
+    this.setupShareEvents();
+  }
+
+  private setupShareEvents() {
+    if (!(window.navigator as any).share) return;
+
+    const shareButton = document.querySelector('a#share-tweet');
+    if (!shareButton) return;
+    shareButton.addEventListener('click', (event: MouseEvent) => {
+      event.preventDefault();
+      (navigator as any).share({
+        title: this.SERVICE,
+        text: `${this.tweetMessage} ${this.HASHTAG}`,
+        url: this.SERVICE_URL,
+      });
     });
   }
 
@@ -461,10 +478,11 @@ export class Viewer {
     return JSON.parse(JSON.stringify(selected));
   }
 
-  public setTweetLink(message: string, hashtag: string | undefined) {
+  public setTweetLink(message: string, hashtag: string|undefined) {
     if (!message) {
       message = '3枚です';
     }
+    this.tweetMessage = message;
     if (!hashtag) {
       hashtag = this.HASHTAG;
     }
