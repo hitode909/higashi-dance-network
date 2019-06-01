@@ -374,6 +374,7 @@ export class Viewer {
     $('<img>')
       .attr({
         src: bg_path,
+        intrinsicsize: "309x480",
       })
       .appendTo(image_container);
 
@@ -384,6 +385,7 @@ export class Viewer {
           .attr({
             src: `images/icon-${wear_name}.png`,
             title: self.getWearName(wear_name),
+            intrinsicsize: "72x72",
           })
           .appendTo(icons_container);
       }
@@ -392,6 +394,7 @@ export class Viewer {
         .attr({
           src: `images/${wear_name}.png`,
           title: self.getWearName(wear_name),
+          intrinsicsize: "309x480",
         })
         .appendTo(image_container);
     });
@@ -442,6 +445,7 @@ export class Viewer {
         .attr({
           src: image_path,
           title: code,
+          intrinsicsize: "84x84",
         })
         .appendTo(container);
     });
