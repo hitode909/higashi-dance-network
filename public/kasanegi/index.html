@@ -278,6 +278,28 @@
         (C) 2012 東ダンスネットワーク
       </div>
       <script src="https://browser.sentry-cdn.com/5.3.0/bundle.min.js" crossorigin="anonymous"></script>
+      <script>
+        try {
+          Sentry.init({ dsn: 'https://a864b4ad35594708b2b2a6bb8f371565@sentry.io/1472798' });
+            const observer = new ReportingObserver((reportList) => {
+              reportList.forEach((report) => {
+                console.warn("Whatever you just tried to do was blocked by policy.: " + report.body.featureId);
+                const extra = {};
+                for (let key in report.body) {
+                  extra[key] = report.body[key];
+                }
+                Sentry.captureMessage("feature-policy-violation", {
+                  level: 'warning',
+                  extra: extra,
+                });
+              });
+            }, {"types": ["feature-policy-violation"]}
+          );
+          observer.observe();
+        } catch(error) {
+          console.warn(error);
+        }
+      </script>
       <script language="javascript" type="text/javascript" defer src="js/bundle.js?version=20190421"></script>
       <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     </div>
