@@ -284,13 +284,13 @@
             const observer = new ReportingObserver((reportList) => {
               reportList.forEach((report) => {
                 console.warn("Whatever you just tried to do was blocked by policy.: " + report.body.featureId);
-                const extra = {};
-                for (let key in report.body) {
-                  extra[key] = report.body[key];
-                }
-                Sentry.captureMessage("feature-policy-violation", {
-                  level: 'warning',
-                  extra: extra,
+                Sentry.withScope(scope => {
+                  for (let key in report.body) {
+                    scope.setTag(key, report.body[key] || '');
+                  }
+                  Sentry.captureMessage("feature-policy-violation", {
+                    level: 'warning',
+                  });
                 });
               });
             }, {"types": ["feature-policy-violation"]}
