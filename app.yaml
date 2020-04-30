@@ -40,7 +40,7 @@ handlers:
   secure: always
   redirect_http_response_code: 301
   http_headers:
-    Feature-Policy: unsized-media 'none'
+    Feature-Policy: unsized-media 'none' https://higashi-dance-network.appspot.com/;unsized-media 'none' http://localhost:8080/;
 
 - url: (.*)/
   static_files: public\1/index.html
