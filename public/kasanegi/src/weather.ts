@@ -45,11 +45,11 @@ export class Weather {
   readonly newCities = NewCities;
 
   public getLastCityCode() {
-    return localStorage.getItem('city_code');
+    return localStorage.getItem('pref_name');
   }
 
   public setLastCityCode(city_code: string): void {
-    return localStorage.setItem('city_code', city_code);
+    return localStorage.setItem('pref_name', city_code);
   }
 
   public async getCurrentPosition(): Promise<Position> {
