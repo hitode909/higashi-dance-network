@@ -20,6 +20,25 @@ interface Report {
   min: number
   max: number;
 }
+
+interface RawWeather {
+  id: number;
+  main: string;
+  description: string;
+  icon: string;
+}
+interface RawDailyReport {
+  dt: number;
+  temp: {
+    max: number;
+    min: number;
+  }
+  weather: RawWeather[];
+};
+  interface RawReport {
+    daily: RawDailyReport[];
+  };
+
 export class Weather {
   readonly YAHOO_APPLICATION_ID = 'J17Tyuixg65goAW301d5vBkBWtO9gLQsJnC0Y7OyJJk96wumaSU2U3odNwj5PdIU1A--';
   readonly CITIES: Array<City> = Cities;
@@ -87,6 +106,15 @@ export class Weather {
     return res.Feature[0].Property.AddressElement[0].Name;
   }
 
+  public getCityByCityCode2(name: string): NewCity {
+    const city = NewCities.find(c => c.name === name);
+    if (!city) {
+      throw new Error(`Unexpected prefName: ${name}`);
+    }
+    return city;
+  }
+
+
   public getCityByCityCode(city_code: string): City {
     let found = null;
 
@@ -118,6 +146,27 @@ export class Weather {
         url: `/proxy/${encodeURIComponent(url)}`,
         dataType: 'json',
       });
+  }
+
+  // 最新の天気を返します．今日か明日．
+  // return: { date description min max }
+  public async getWeatherReportForCity2(city: NewCity): Promise<Report> {
+
+    const data = await $.ajax({
+      type: 'GET',
+      url: `/weather?lat=${city.lat}&lon=${city.lon}`,
+      dataType: 'json',
+    }) as RawReport;
+    console.log(data);
+
+    let today = data.daily[0];
+
+    return {
+      date: new Date(today.dt * 1000).toLocaleDateString(),
+      description: today.weather[0].description,
+      min: today.temp.min,
+      max: today.temp.max,
+    };
   }
 
   // 最新の天気を返します．今日か明日．

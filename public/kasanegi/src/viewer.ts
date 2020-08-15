@@ -213,12 +213,11 @@ export class Viewer {
     $('#indicator').show();
     $('#result').hide();
     let selected = $('select#city-selector option:selected');
-    let city_code: string = `${selected.val()}`;
     let city_name = selected.text();
-    let city = this.weather.getCityByCityCode(city_code);
-    this.weather.setLastCityCode(city_code);
+    let city = this.weather.getCityByCityCode2(city_name);
+    this.weather.setLastCityCode(city_name);
 
-    const report = await this.weather.getWeatherReportForCity(city);
+    const report = await this.weather.getWeatherReportForCity2(city);
     self.printWeatherResult(city_name, report);
   }
 
