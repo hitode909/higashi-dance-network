@@ -1,10 +1,4 @@
 import * as $ from "jquery";
-import {Cities} from "./Cities";
-
-interface City {
-  title: string;
-  code: string;
-}
 
 interface NewCity {
   name: string;
@@ -41,7 +35,6 @@ interface RawDailyReport {
 
 export class Weather {
   readonly YAHOO_APPLICATION_ID = 'J17Tyuixg65goAW301d5vBkBWtO9gLQsJnC0Y7OyJJk96wumaSU2U3odNwj5PdIU1A--';
-  readonly CITIES: Array<City> = Cities;
   readonly newCities = NewCities;
 
   public getLastCityCode() {
@@ -114,22 +107,6 @@ export class Weather {
     return city;
   }
 
-
-  public getCityByCityCode(city_code: string): City {
-    let found = null;
-
-    this.CITIES.forEach((city) => {
-      if (city.code === city_code) {
-        return (found = city);
-      }
-    });
-    if (!found) {
-      throw `Unexpected city_code: ${city_code}`;
-    }
-
-    return found;
-  }
-
   private async ajaxByProxy(url: string) {
     return await $.ajax({
         type: 'GET',
@@ -156,41 +133,6 @@ export class Weather {
       description: today.weather[0].description,
       min: today.temp.min,
       max: today.temp.max,
-    };
-  }
-
-  // 最新の天気を返します．今日か明日．
-  // return: { date description min max }
-  public async getWeatherReportForCity(city: City): Promise<Report> {
-    let city_code = city.code;
-    let self = this;
-    const data = await self.ajaxByProxy(
-      `http://weather.livedoor.com/forecast/webservice/json/v1?city=${city_code}`
-    );
-    let day;
-    let today = data.forecasts[0];
-    let tomorrow = data.forecasts[1];
-
-    // なにもなければ明日，ちょっとあったらないところだけ足す
-    if (today.temperature.min && today.temperature.max) {
-      day = today;
-    } else if (today.temperature.min || today.temperature.max) {
-      day = today;
-      if (day.temperature.min == null) {
-        day.temperature.min = tomorrow.temperature.min;
-      }
-      if (day.temperature.max == null) {
-        day.temperature.max = tomorrow.temperature.max;
-      }
-    } else {
-      day = tomorrow;
-    }
-
-    return {
-      date: day.date,
-      description: day.telop,
-      min: day.temperature.min.celsius,
-      max: day.temperature.max.celsius,
     };
   }
 }

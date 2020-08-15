@@ -10,13 +10,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   let weather=new Weather();
-  const position = await weather.getCurrentPosition();
-  const city = await weather.getCityFromLatLon(position.coords.latitude, position.coords.longitude);
-  const report = await weather.getWeatherReportForCity2(city);
-  console.log(report);
-
-
-
   let viewer = new Viewer(weather);
   viewer.setup();
 
