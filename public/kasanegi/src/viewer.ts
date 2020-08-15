@@ -69,7 +69,7 @@ export class Viewer {
 
   public setupCityChanger() {
     let self = this;
-    let lat_state_code = self.weather.getLastCityCode();
+    let lastCityName = self.weather.getLastCityName();
     let found = false;
 
     let select = $('<select>').attr({
@@ -79,7 +79,7 @@ export class Viewer {
 
     let label = $('<option>').attr({
       name: 'city',
-      value: -1,
+      value: '',
       disabled: 'disabled',
     });
 
@@ -95,7 +95,7 @@ export class Viewer {
 
       option.text(city.name);
 
-      if (!found && city.name === lat_state_code) {
+      if (!found && city.name === lastCityName) {
         option.attr({
           selected: true,
         });
@@ -116,9 +116,9 @@ export class Viewer {
     $('#city-selector-container').append(button);
 
     if (!found) {
-      let tokyo = '130010';
+      let tokyo = '東京都';
       select.val(tokyo);
-      return this.weather.setLastCityCode(tokyo);
+      return this.weather.setLastCityName(tokyo);
     }
   }
 
@@ -164,10 +164,10 @@ export class Viewer {
 
   public checkCurrentPositionIfNeeded() {
     let self = this;
-    let city_code = $('select#city-selector').val() || -1;
+    let cityName = $('select#city-selector').val() || '';
 
-    // 地域を選択 = -1
-    if (+city_code === -1) {
+    // 地域を選択 = ''
+    if (cityName === '') {
       return self.printFirstTimeGuide();
     } else {
       return this.printWeather();
@@ -192,9 +192,9 @@ export class Viewer {
 
     try {
       const city = await self.weather.getCurrentCity();
-      let city_code = city.name;
+      let cityName = city.name;
 
-      $('#city-selector').val(city_code);
+      $('#city-selector').val(cityName);
 
       return self.printWeather();
     } catch (error) {
@@ -212,12 +212,12 @@ export class Viewer {
     $('#indicator').show();
     $('#result').hide();
     let selected = $('select#city-selector option:selected');
-    let city_name = selected.text();
-    let city = this.weather.getCityByCityCode2(city_name);
-    this.weather.setLastCityCode(city_name);
+    let cityName = selected.text();
+    let city = this.weather.getCityByCityName(cityName);
+    this.weather.setLastCityName(cityName);
 
-    const report = await this.weather.getWeatherReportForCity2(city);
-    self.printWeatherResult(city_name, report);
+    const report = await this.weather.getWeatherReportForCity(city);
+    self.printWeatherResult(cityName, report);
   }
 
   public printWeatherResult(city_name: string, report: {date: string, description: string, min: number, max: number}) {
@@ -419,7 +419,7 @@ export class Viewer {
     container.empty();
 
     text = text.replace(/\(.*\)/, '');
-    let matched = text.match(/(晴|雷雨|雪|雨|雷|曇|霧|)/g);
+    let matched = text.match(/(晴|雷雨|雪|雨|雷|曇|雲|霧|)/g);
 
     if (!matched) return;
 
@@ -430,6 +430,7 @@ export class Viewer {
         雷: 'images/weather-thunder.png',
         雪: 'images/weather-snow.png',
         曇: 'images/weather-cloudy.png',
+        雲: 'images/weather-cloudy.png',
         霧: 'images/weather-mist.png',
         雷雨: 'images/weather-thunderstorm.png',
       };

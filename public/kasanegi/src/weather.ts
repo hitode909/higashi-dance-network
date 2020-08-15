@@ -1,12 +1,12 @@
 import * as $ from "jquery";
 
-interface NewCity {
+interface City {
   name: string;
   lat: number;
   lon: number;
 };
-type NewCityList = NewCity[];
-const NewCities = require('./cities.json') as NewCityList;
+
+const Cities = require('./cities.json') as City[];
 
 interface Report {
   date: string;
@@ -35,13 +35,13 @@ interface RawDailyReport {
 
 export class Weather {
   readonly YAHOO_APPLICATION_ID = 'J17Tyuixg65goAW301d5vBkBWtO9gLQsJnC0Y7OyJJk96wumaSU2U3odNwj5PdIU1A--';
-  readonly newCities = NewCities;
+  readonly newCities = Cities;
 
-  public getLastCityCode() {
+  public getLastCityName() {
     return localStorage.getItem('pref_name');
   }
 
-  public setLastCityCode(city_code: string): void {
+  public setLastCityName(city_code: string): void {
     return localStorage.setItem('pref_name', city_code);
   }
 
@@ -51,7 +51,7 @@ export class Weather {
     })
   }
 
-  public async getCurrentCity(): Promise<NewCity> {
+  public async getCurrentCity(): Promise<City> {
     const position = await this.getCurrentPosition();
 
     const lat = position.coords.latitude;
@@ -67,7 +67,7 @@ export class Weather {
     return localStorage.setItem('last_page_id', last_page_id);
   }
 
-  public async getCityFromLatLon(lat: number, lon: number): Promise<NewCity> {
+  public async getCityFromLatLon(lat: number, lon: number): Promise<City> {
     let self = this;
     let params = $.param({
       lat,
@@ -79,7 +79,7 @@ export class Weather {
     const res = await self.ajaxByProxy(`http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?${params}`);
 
     const nameGot = res.Feature[0].Property.AddressElement[0].Name;
-    const city = NewCities.find(c => c.name === nameGot);
+    const city = Cities.find(c => c.name === nameGot);
     if (!city) {
       throw new Error(`Unexpected prefName: ${nameGot}`);
     }
@@ -99,8 +99,8 @@ export class Weather {
     return res.Feature[0].Property.AddressElement[0].Name;
   }
 
-  public getCityByCityCode2(name: string): NewCity {
-    const city = NewCities.find(c => c.name === name);
+  public getCityByCityName(name: string): City {
+    const city = Cities.find(c => c.name === name);
     if (!city) {
       throw new Error(`Unexpected prefName: ${name}`);
     }
@@ -117,7 +117,7 @@ export class Weather {
 
   // 最新の天気を返します．今日か明日．
   // return: { date description min max }
-  public async getWeatherReportForCity2(city: NewCity): Promise<Report> {
+  public async getWeatherReportForCity(city: City): Promise<Report> {
 
     const data = await $.ajax({
       type: 'GET',
