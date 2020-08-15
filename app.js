@@ -2,15 +2,15 @@
 
 const express = require('express');
 const fetch = require('node-fetch');
-
 const app = express();
 
 app.get('/weather', async (req, res) => {
-  const APIKEY = process.env['OPENWEATHERMAP_API_KEY'];
+  let APIKEY = process.env['OPENWEATHERMAP_API_KEY'];
 
   if (!APIKEY) {
-    console.larn('OPENWEATHERMAP_API_KEY IS NOT SET')
-    process.exit(1);
+    console.warn('OPENWEATHERMAP_API_KEY IS NOT SET')
+    res.status(400).end();
+    return;
   }
 
   console.log(req.params);
@@ -27,6 +27,7 @@ app.get('/weather', async (req, res) => {
 app.get('/proxy/\*', async (req, res) => {
   console.log(req.originalUrl);
   const url = decodeURIComponent(req.originalUrl.replace(/^\/proxy\//, ''));
+  console.log(`fetch ${url}`);
   if (url.match(/meta/i)) {
     res.status(400).end();
   }

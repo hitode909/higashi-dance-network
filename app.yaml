@@ -1,3 +1,6 @@
 runtime: nodejs12
 
 default_expiration: "1m"
+
+includes:
+- secret.yaml
