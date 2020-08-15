@@ -79,8 +79,8 @@ export class Viewer {
 
     let label = $('<option>').attr({
       name: 'city',
-      value: '',
-      disabled: 'disabled',
+      value: '地域を選択',
+      // disabled: 'disabled',
     });
 
     label.text('地域を選択');
@@ -114,12 +114,6 @@ export class Viewer {
 
     $('#city-selector-container').append(select);
     $('#city-selector-container').append(button);
-
-    if (!found) {
-      let tokyo = '東京都';
-      select.val(tokyo);
-      return this.weather.setLastCityName(tokyo);
-    }
   }
 
   public setupEvents() {
@@ -164,10 +158,9 @@ export class Viewer {
 
   public checkCurrentPositionIfNeeded() {
     let self = this;
-    let cityName = $('select#city-selector').val() || '';
+    let cityName = $('select#city-selector').val() || '地域を選択';
 
-    // 地域を選択 = ''
-    if (cityName === '') {
+    if (cityName === '地域を選択') {
       return self.printFirstTimeGuide();
     } else {
       return this.printWeather();
@@ -214,10 +207,13 @@ export class Viewer {
     let selected = $('select#city-selector option:selected');
     let cityName = selected.text();
     let city = this.weather.getCityByCityName(cityName);
-    this.weather.setLastCityName(cityName);
-
-    const report = await this.weather.getWeatherReportForCity(city);
-    self.printWeatherResult(cityName, report);
+    if (city) {
+      this.weather.setLastCityName(cityName);
+      const report = await this.weather.getWeatherReportForCity(city);
+      self.printWeatherResult(cityName, report);
+    } else {
+      self.printFirstTimeGuide();
+    }
   }
 
   public printWeatherResult(city_name: string, report: {date: string, description: string, min: number, max: number}) {

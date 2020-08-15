@@ -99,12 +99,8 @@ export class Weather {
     return res.Feature[0].Property.AddressElement[0].Name;
   }
 
-  public getCityByCityName(name: string): City {
-    const city = Cities.find(c => c.name === name);
-    if (!city) {
-      throw new Error(`Unexpected prefName: ${name}`);
-    }
-    return city;
+  public getCityByCityName(name: string): City | undefined {
+    return Cities.find(c => c.name === name);
   }
 
   private async ajaxByProxy(url: string) {
