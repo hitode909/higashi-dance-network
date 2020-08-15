@@ -121,13 +121,13 @@ export class Weather {
       dataType: 'json',
     }) as RawReport;
 
-    let today = data.daily[0];
+    let day = (new Date()).getHours() < 18 ? data.daily[0] : data.daily[1];
 
     return {
-      date: new Date(today.dt * 1000).toLocaleDateString(),
-      description: today.weather[0].description,
-      min: today.temp.min,
-      max: today.temp.max,
+      date: new Date(day.dt * 1000).toLocaleDateString(),
+      description: day.weather[0].description,
+      min: day.temp.min,
+      max: day.temp.max,
     };
   }
 }
