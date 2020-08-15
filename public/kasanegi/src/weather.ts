@@ -58,12 +58,12 @@ export class Weather {
     })
   }
 
-  public async getCurrentStateCode(): Promise<string> {
+  public async getCurrentCity(): Promise<NewCity> {
     const position = await this.getCurrentPosition();
 
     const lat = position.coords.latitude;
     const lon = position.coords.longitude;
-    return await this.getStatusCodeFromLatLon(lat, lon);
+    return await this.getCityFromLatLon(lat, lon);
   }
 
   public getLastPageId(): string {
@@ -128,16 +128,6 @@ export class Weather {
     }
 
     return found;
-  }
-
-  public getDefaultCityForState(state_code: string): City {
-    for (let i = 0; i < this.CITIES.length; i++) {
-      const city = this.CITIES[i];
-      if (city.code.substr(0, 2) === state_code) {
-        return city;
-      }
-    }
-    throw `Unexpected state_code: ${state_code}`;
   }
 
   private async ajaxByProxy(url: string) {

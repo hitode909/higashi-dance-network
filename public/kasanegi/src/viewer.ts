@@ -191,9 +191,8 @@ export class Viewer {
     $('#result').hide();
 
     try {
-      const state_code: string = await self.weather.getCurrentStateCode();
-      let city = self.weather.getDefaultCityForState(state_code);
-      let city_code = city.code;
+      const city = await self.weather.getCurrentCity();
+      let city_code = city.name;
 
       $('#city-selector').val(city_code);
 
