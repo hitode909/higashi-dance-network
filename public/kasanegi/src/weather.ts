@@ -124,7 +124,6 @@ export class Weather {
       url: `/weather?lat=${city.lat}&lon=${city.lon}`,
       dataType: 'json',
     }) as RawReport;
-    console.log(data);
 
     let today = data.daily[0];
 
