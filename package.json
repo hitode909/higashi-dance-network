@@ -12,8 +12,7 @@
   },
   "scripts": {
     "deploy": "gcloud app deploy",
-    "start-weather": "node weather.js",
-    "start-proxy": "node proxy.js"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
