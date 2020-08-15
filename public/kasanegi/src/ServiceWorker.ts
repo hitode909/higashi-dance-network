@@ -1,6 +1,6 @@
 // declare var self: any;
 
-const CACHE_NAME = 'kasanegi-v5';
+const CACHE_NAME = 'kasanegi-v6';
 
 const urlsToCache = [
   '/',

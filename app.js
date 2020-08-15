@@ -16,6 +16,8 @@ const mirror = async (res, url) => {
   const buffer = await fetched.buffer();
   res.status(fetched.status);
   res.append('content-type', fetched.headers.get('content-type'));
+  res.setHeader("Cache-Control", "public, max-age=3600");
+  res.setHeader("Expires", new Date(Date.now() + 3600*1000).toUTCString());
   res.end(buffer, 'binary');
 }
 
@@ -28,7 +30,6 @@ app.get('/weather', async (req, res) => {
     return;
   }
 
-  console.log(req.params);
   const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${encodeURIComponent(req.query.lat)}&lon=${encodeURIComponent(req.query.lon)}&exclude=current,minutely,hourly&units=metric&lang=ja&appid=${APIKEY}`;
   await mirror(res, url);
 });

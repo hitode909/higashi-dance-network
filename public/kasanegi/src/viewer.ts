@@ -69,7 +69,7 @@ export class Viewer {
 
   public setupCityChanger() {
     let self = this;
-    let lat_state_code = self.weather.getLastCityCode();
+    let lastCityName = self.weather.getLastCityName();
     let found = false;
 
     let select = $('<select>').attr({
@@ -79,23 +79,23 @@ export class Viewer {
 
     let label = $('<option>').attr({
       name: 'city',
-      value: -1,
-      disabled: 'disabled',
+      value: '地域を選択',
+      // disabled: 'disabled',
     });
 
     label.text('地域を選択');
 
     select.append(label);
 
-    this.weather.CITIES.forEach((city) => {
+    this.weather.newCities.forEach((city) => {
       let option = $('<option>').attr({
         name: 'city',
-        value: city.code,
+        value: city.name,
       });
 
-      option.text(city.title);
+      option.text(city.name);
 
-      if (!found && city.code === lat_state_code) {
+      if (!found && city.name === lastCityName) {
         option.attr({
           selected: true,
         });
@@ -114,12 +114,6 @@ export class Viewer {
 
     $('#city-selector-container').append(select);
     $('#city-selector-container').append(button);
-
-    if (!found) {
-      let tokyo = '130010';
-      select.val(tokyo);
-      return this.weather.setLastCityCode(tokyo);
-    }
   }
 
   public setupEvents() {
@@ -164,10 +158,9 @@ export class Viewer {
 
   public checkCurrentPositionIfNeeded() {
     let self = this;
-    let city_code = $('select#city-selector').val() || -1;
+    let cityName = $('select#city-selector').val() || '地域を選択';
 
-    // 地域を選択 = -1
-    if (+city_code === -1) {
+    if (cityName === '地域を選択') {
       return self.printFirstTimeGuide();
     } else {
       return this.printWeather();
@@ -191,11 +184,10 @@ export class Viewer {
     $('#result').hide();
 
     try {
-      const state_code: string = await self.weather.getCurrentStateCode();
-      let city = self.weather.getDefaultCityForState(state_code);
-      let city_code = city.code;
+      const city = await self.weather.getCurrentCity();
+      let cityName = city.name;
 
-      $('#city-selector').val(city_code);
+      $('#city-selector').val(cityName);
 
       return self.printWeather();
     } catch (error) {
@@ -213,13 +205,15 @@ export class Viewer {
     $('#indicator').show();
     $('#result').hide();
     let selected = $('select#city-selector option:selected');
-    let city_code: string = `${selected.val()}`;
-    let city_name = selected.text();
-    let city = this.weather.getCityByCityCode(city_code);
-    this.weather.setLastCityCode(city_code);
-
-    const report = await this.weather.getWeatherReportForCity(city);
-    self.printWeatherResult(city_name, report);
+    let cityName = selected.text();
+    let city = this.weather.getCityByCityName(cityName);
+    if (city) {
+      this.weather.setLastCityName(cityName);
+      const report = await this.weather.getWeatherReportForCity(city);
+      self.printWeatherResult(cityName, report);
+    } else {
+      self.printFirstTimeGuide();
+    }
   }
 
   public printWeatherResult(city_name: string, report: {date: string, description: string, min: number, max: number}) {
@@ -235,8 +229,8 @@ export class Viewer {
     $('#result #area').text(city_name);
     $('#result #date').text(self.convertDate(report.date));
     $('#result #description').text(report.description);
-    $('#result #max-temp').text(report.max);
-    $('#result #min-temp').text(report.min);
+    $('#result #max-temp').text(Math.floor(report.max));
+    $('#result #min-temp').text(Math.floor(report.min));
     self.printWeatherIcons(report.description);
 
     let wear_info = self.getWearInformationFromMinAndMax(report.min, report.max);
@@ -421,7 +415,7 @@ export class Viewer {
     container.empty();
 
     text = text.replace(/\(.*\)/, '');
-    let matched = text.match(/(晴|雷雨|雪|雨|雷|曇|霧|)/g);
+    let matched = text.match(/(晴|雷雨|雪|雨|雷|曇|雲|霧|)/g);
 
     if (!matched) return;
 
@@ -432,6 +426,7 @@ export class Viewer {
         雷: 'images/weather-thunder.png',
         雪: 'images/weather-snow.png',
         曇: 'images/weather-cloudy.png',
+        雲: 'images/weather-cloudy.png',
         霧: 'images/weather-mist.png',
         雷雨: 'images/weather-thunderstorm.png',
       };
