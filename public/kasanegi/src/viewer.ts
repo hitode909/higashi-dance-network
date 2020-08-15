@@ -233,8 +233,8 @@ export class Viewer {
     $('#result #area').text(city_name);
     $('#result #date').text(self.convertDate(report.date));
     $('#result #description').text(report.description);
-    $('#result #max-temp').text(report.max);
-    $('#result #min-temp').text(report.min);
+    $('#result #max-temp').text(Math.floor(report.max));
+    $('#result #min-temp').text(Math.floor(report.min));
     self.printWeatherIcons(report.description);
 
     let wear_info = self.getWearInformationFromMinAndMax(report.min, report.max);
