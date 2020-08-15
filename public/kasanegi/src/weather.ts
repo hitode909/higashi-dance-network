@@ -6,6 +6,14 @@ interface City {
   code: string;
 }
 
+interface NewCity {
+  name: string;
+  lat: number;
+  lon: number;
+};
+type NewCityList = NewCity[];
+const NewCities = require('./cities.json') as NewCityList;
+
 interface Report {
   date: string;
   description: string;
@@ -15,6 +23,7 @@ interface Report {
 export class Weather {
   readonly YAHOO_APPLICATION_ID = 'J17Tyuixg65goAW301d5vBkBWtO9gLQsJnC0Y7OyJJk96wumaSU2U3odNwj5PdIU1A--';
   readonly CITIES: Array<City> = Cities;
+  readonly newCities = NewCities;
 
   public getLastCityCode() {
     return localStorage.getItem('city_code');
@@ -30,7 +39,7 @@ export class Weather {
     })
   }
 
-  public async getCurrentStateCode() {
+  public async getCurrentStateCode(): Promise<string> {
     const position = await this.getCurrentPosition();
 
     const lat = position.coords.latitude;
@@ -46,6 +55,25 @@ export class Weather {
     return localStorage.setItem('last_page_id', last_page_id);
   }
 
+  public async getCityFromLatLon(lat: number, lon: number): Promise<NewCity> {
+    let self = this;
+    let params = $.param({
+      lat,
+      lon,
+      output: 'json',
+      appid: self.YAHOO_APPLICATION_ID,
+    });
+
+    const res = await self.ajaxByProxy(`http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?${params}`);
+
+    const nameGot = res.Feature[0].Property.AddressElement[0].Name;
+    const city = NewCities.find(c => c.name === nameGot);
+    if (!city) {
+      throw new Error(`Unexpected prefName: ${nameGot}`);
+    }
+    return city;
+  }
+
   public async getStatusCodeFromLatLon(lat: number, lon: number) {
     let self = this;
     let params = $.param({
@@ -56,7 +84,7 @@ export class Weather {
     });
 
     const res = await self.ajaxByProxy(`http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?${params}`);
-    return res.Feature[0].Property.AddressElement[0].Code;
+    return res.Feature[0].Property.AddressElement[0].Name;
   }
 
   public getCityByCityCode(city_code: string): City {

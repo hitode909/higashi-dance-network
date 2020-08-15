@@ -87,15 +87,15 @@ export class Viewer {
 
     select.append(label);
 
-    this.weather.CITIES.forEach((city) => {
+    this.weather.newCities.forEach((city) => {
       let option = $('<option>').attr({
         name: 'city',
-        value: city.code,
+        value: city.name,
       });
 
-      option.text(city.title);
+      option.text(city.name);
 
-      if (!found && city.code === lat_state_code) {
+      if (!found && city.name === lat_state_code) {
         option.attr({
           selected: true,
         });
