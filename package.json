@@ -1,0 +1,27 @@
+{
+  "name": "higashi-dance-network",
+  "version": "1.0.0",
+  "description": "higashi-dance-network",
+  "private": true,
+  "dependencies": {
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "@google-cloud/nodejs-repo-tools": "^3.3.0"
+  },
+  "scripts": {
+    "deploy": "gcloud app deploy",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hitode909/higashi-dance-network.git"
+  },
+  "author": "higashi-dance-network",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hitode909/higashi-dance-network/issues"
+  },
+  "homepage": "https://github.com/hitode909/higashi-dance-network#readme"
+}

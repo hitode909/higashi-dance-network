@@ -1,59 +1,6 @@
-runtime: python27
-api_version: 1
-threadsafe: no
+runtime: nodejs12
 
 default_expiration: "1m"
 
-skip_files:
-- ^(node_modules/.*)
-- ^(.git/.*)
-- ^(public/kasanegi/node_modules/.*)
-
-handlers:
-
-- url: /favicon.ico
-  static_files: public/favicon.ico
-  upload: public/favicon.ico
-  mime_type: image/x-icon
-
-- url: /proxy/.*
-  script: proxy/proxy.py
-
-- url: /kasanegi
-  script: fallback.py
-
-- url: /iromiru
-  script: fallback.py
-
-- url: /hanabi
-  script: fallback.py
-
-- url: /bon2/
-  script: fallback.py
-
-- url: /data/.*
-  script: data.py
-
-- url: /kasanegi/
-  static_files: public/kasanegi/index.html
-  upload: public/kasanegi/index.html
-  secure: always
-  redirect_http_response_code: 301
-  http_headers:
-    Feature-Policy: unsized-media 'none'
-
-- url: (.*)/
-  static_files: public\1/index.html
-  upload: public(.*)/index.html
-
-- url: /hanabi/uchiage/.*
-  static_files: public/hanabi/uchiage/index.html
-  upload: public/hanabi/uchiage/index.html
-
-- url: /sukimap/suita/.*
-  static_files: public/sukimap/suita/index.html
-  upload: public/sukimap/suita/index.html
-
-- url: /(.*)
-  static_files: public/\1
-  upload: public/(.*)
+includes:
+- secret.yaml
