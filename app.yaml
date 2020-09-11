@@ -1,6 +1,21 @@
 runtime: nodejs12
 
-default_expiration: "1m"
+default_expiration: "1h"
 
 includes:
 - secret.yaml
+
+handlers:
+- url: /weather
+  script: auto
+
+- url: /proxy/.*
+  script: auto
+
+- url: (.*)/
+  static_files: public\1/index.html
+  upload: public(.*)/index.html
+
+- url: /(.*)
+  static_files: public/\1
+  upload: public/(.*)
