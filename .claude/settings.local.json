@@ -1,5 +1,8 @@
 {
   "permissions": {
-    "defaultMode": "acceptEdits"
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "mcp__chrome-tabs__open_in_new_tab"
+    ]
   }
 }

@@ -211,7 +211,6 @@ class OneLiner {
     this.scriptNode.connect(this.gain);
     this.isPlaying = true;
     
-    console.log('OneLiner started, audioContext state:', this.audioContext.state);
   }
 
   stop() {
@@ -243,7 +242,7 @@ class FFTAnalyzer {
     
     this.analyser = this.oneLiner.audioContext.createAnalyser();
     this.analyser.fftSize = 512;
-    this.dataArray = new Float32Array(this.analyser.frequencyBinCount);
+    this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
     
     this.oneLiner.gain.connect(this.analyser);
   }
@@ -257,7 +256,7 @@ class FFTAnalyzer {
     const analyze = () => {
       if (!this.isAnalyzing) return;
       
-      this.analyser.getFloatFrequencyData(this.dataArray);
+      this.analyser.getByteFrequencyData(this.dataArray);
       
       if (this.onfft) {
         this.onfft(this.dataArray);
@@ -357,6 +356,7 @@ function main(sources) {
   const footerHeight = 70;
   
   let characterColor = randomColor();
+  let earthMovement = 0; // Track earth movement
   
   function setCharacterColor() {
     characterColor = randomColor();
@@ -383,15 +383,21 @@ function main(sources) {
     
     const chara = power < 0.2 ? characterImages[0] : choice(characterImagesRest);
     
+    // Increase jump height multiplier + account for earth movement
+    const jumpHeight = power * 200 + earthMovement;
+    
     ctx.fillStyle = characterColor;
-    ctx.fillRect(Math.floor(left), Math.floor(bottom - power * 50 - characterHeight), characterWidth, characterHeight);
-    ctx.drawImage(chara, Math.floor(left), Math.floor(bottom - power * 50 - characterHeight), characterWidth, characterHeight);
+    ctx.fillRect(Math.floor(left), Math.floor(bottom - jumpHeight - characterHeight), characterWidth, characterHeight);
+    ctx.drawImage(chara, Math.floor(left), Math.floor(bottom - jumpHeight - characterHeight), characterWidth, characterHeight);
+    
   }
   
   function drawEarth(power) {
-    const bottom = Math.min(canvasHeight * bottomRate, canvasHeight - footerHeight) - power * 50;
+    earthMovement = power * 500; // Store earth movement
+    const bottom = Math.min(canvasHeight * bottomRate, canvasHeight - footerHeight) - earthMovement;
     ctx.fillStyle = characterColor;
     ctx.fillRect(0, bottom, canvasWidth, canvasHeight);
+    
   }
   
   let zeroTimes = 0;
@@ -409,7 +415,8 @@ function main(sources) {
       const v = res[i];
       if (isNaN(v)) continue;
       
-      const absv = Math.abs(v + 140); // Adjust for frequency data range
+      // Use raw 0-255 values for stronger response
+      const absv = v;
       sum += absv;
       len++;
       
@@ -435,16 +442,17 @@ function main(sources) {
       zeroTimes = 0;
     }
     
-    segments[1] *= 1.5;
-    segments[2] *= 2;
-    segments[3] *= 3;
+    segments[0] *= 3;
+    segments[1] *= 5;
+    segments[2] *= 8;
+    segments[3] *= 12;
     
     // Draw
     clearStage();
-    drawEarth(sum / 20);
+    drawEarth(sum / 1000);
     
     for (let i = 0; i < 4; i++) {
-      drawCharacter(i, segments[i] / 20);
+      drawCharacter(i, segments[i] / 1000);
     }
   };
   
@@ -504,8 +512,6 @@ function main(sources) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM loaded');
-  
   // Check for Web Audio API support - most modern browsers support this
   if (!window.AudioContext && !window.webkitAudioContext) {
     const message = document.createElement('div');
@@ -516,8 +522,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
   
-  console.log('Web Audio API available');
-  
   loadImages([
     '/bon3/image/image1.png',
     '/bon3/image/image2.png', 
@@ -526,28 +530,22 @@ document.addEventListener('DOMContentLoaded', () => {
     '/bon3/image/image5.png',
     '/bon3/image/image6.png'
   ]).then((images) => {
-    console.log('Images loaded');
-    
     // Show tap to start for all browsers (modern requirement)
     document.getElementById('tap-to-start').style.display = 'block';
     document.getElementById('footer').classList.add('wait-touch');
     
     let hasStarted = false;
     document.addEventListener('click', () => {
-      console.log('Click detected, hasStarted:', hasStarted);
       if (hasStarted) return;
       hasStarted = true;
       
       document.getElementById('tap-to-start').style.display = 'none';
       document.getElementById('footer').classList.remove('wait-touch');
       
-      console.log('Starting main function');
       const app = main({ images });
-      console.log('Main function returned:', app);
       
       // Auto-start audio after user interaction
       setTimeout(() => {
-        console.log('Auto-starting audio');
         app.oneLiner.start();
         app.fft.start();
         document.getElementById('volume').classList.add('on');
