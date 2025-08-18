@@ -1,44 +1,36 @@
-var Oneliner, Shiki, choise, genColorValue, load_images, main, randomColor;
-var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
-  for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
-  function ctor() { this.constructor = child; }
-  ctor.prototype = parent.prototype;
-  child.prototype = new ctor;
-  child.__super__ = parent.prototype;
-  return child;
-};
-Shiki = (function() {
-  function Shiki(variable_name) {
-    this.variable_name = variable_name;
+// Shiki class for generating mathematical expressions
+class Shiki {
+  constructor(variableName) {
+    this.variableName = variableName;
     this.root = new Shiki.Operator('*');
-    this.root.left = new Shiki.Operand.Variable(this.variable_name);
+    this.root.left = new Shiki.Operand.Variable(this.variableName);
     this.root.right = new Shiki.Operand.Number(1);
   }
-  Shiki.prototype.getFunction = function() {
-    return eval(("(function(" + this.variable_name + "){return ") + this.getString() + ";})");
-  };
-  Shiki.prototype.getString = function() {
+
+  getFunction() {
+    return new Function(this.variableName, 'return ' + this.getString() + ';');
+  }
+
+  getString() {
     return this.root.getString();
-  };
-  Shiki.prototype.step = function() {
-    var after, before, i, node, _results;
-    i = 0;
-    before = this.root.getString();
-    after = before;
-    _results = [];
+  }
+
+  step() {
+    let i = 0;
+    const before = this.root.getString();
+    let after = before;
     while (i < 10 && before === after) {
-      node = this.getRandomOperator(this.root);
-      Shiki.choise([this.wrapNode, this.cutNode, this.bang]).apply(this, [node]);
+      const node = this.getRandomOperator(this.root);
+      Shiki.choice([this.wrapNode, this.cutNode, this.bang]).call(this, node);
       after = this.root.getString();
-      _results.push(i++);
+      i++;
     }
-    return _results;
-  };
-  Shiki.prototype.getRandomOperator = function(root) {
-    var current, index;
-    current = root;
+  }
+
+  getRandomOperator(root) {
+    let current = root;
     while (Math.random() < 0.3) {
-      index = current.randomIndex();
+      const index = current.randomIndex();
       if (current[index].isOperator) {
         current = current[index];
       } else {
@@ -46,72 +38,73 @@ Shiki = (function() {
       }
     }
     return current;
-  };
-  Shiki.prototype.getRandomNode = function(root) {
-    var current;
-    current = root;
+  }
+
+  getRandomNode(root) {
+    let current = root;
     while (current.isOperator && Math.random() < 0.8) {
       current = current[current.randomIndex()];
     }
     return current;
-  };
-  Shiki.prototype.getRandomOperand = function(root) {
-    var current;
-    current = root;
+  }
+
+  getRandomOperand(root) {
+    let current = root;
     while (current.isOperator) {
       current = current[current.randomIndex()];
     }
     return current;
-  };
-  Shiki.prototype.wrapNode = function(node) {
-    var index, lr, operator;
-    index = node.randomIndex();
-    operator = this.randomOperator();
-    lr = [node[index], this.randomInstance()];
-    if (Math.random() > 0.5) {
-      lr = [lr[1], lr[0]];
-    }
+  }
+
+  wrapNode(node) {
+    const index = node.randomIndex();
+    const operator = this.randomOperator();
+    let lr = [node[index], this.randomInstance()];
+    if (Math.random() > 0.5) lr = [lr[1], lr[0]];
     operator.left = lr[0];
     operator.right = lr[1];
-    return node[index] = operator;
-  };
-  Shiki.prototype.cutNode = function(node) {
-    var child, index;
-    index = node.randomIndex();
-    child = this.getRandomNode(node[index]);
-    return node[index] = child;
-  };
-  Shiki.prototype.bang = function(node) {
-    return node.bang();
-  };
-  Shiki.prototype.changeValue = function(node) {
-    return node[node.randomIndex()] = this.randomInstance();
-  };
-  Shiki.prototype.randomOperator = function() {
-    var r;
-    r = new Shiki.Operator(Shiki.choise(Shiki.Operator.operators));
+    node[index] = operator;
+  }
+
+  cutNode(node) {
+    const index = node.randomIndex();
+    const child = this.getRandomNode(node[index]);
+    node[index] = child;
+  }
+
+  bang(node) {
+    node.bang();
+  }
+
+  changeValue(node) {
+    node[node.randomIndex()] = this.randomInstance();
+  }
+
+  randomOperator() {
+    const r = new Shiki.Operator(Shiki.choice(Shiki.Operator.operators));
     r.left = this.randomInstance();
     r.right = this.randomInstance();
     return r;
-  };
-  Shiki.prototype.randomInstance = function() {
-    var rand;
-    rand = Math.random();
+  }
+
+  randomInstance() {
+    const rand = Math.random();
     if (rand > 0.7) {
       return this.randomOperator();
     } else if (rand > 0.4) {
-      return new Shiki.Operand.Number;
+      return new Shiki.Operand.Number();
     } else {
-      return new Shiki.Operand.Variable(this.variable_name);
+      return new Shiki.Operand.Variable(this.variableName);
     }
-  };
-  return Shiki;
-})();
-Shiki.choise = function(list) {
+  }
+}
+
+Shiki.choice = function(list) {
   return list[Math.floor(Math.random() * list.length)];
 };
-Shiki.Operator = (function() {
-  function Operator(operator) {
+
+Shiki.Operator = class {
+  constructor(operator) {
     if (operator != null) {
       this.operator = operator;
     } else {
@@ -120,333 +113,443 @@ Shiki.Operator = (function() {
     this.left = new Shiki.Operand(0);
     this.right = new Shiki.Operand(0);
   }
-  Operator.prototype.getString = function() {
-    return "(" + [this.left.getString(), this.operator, this.right.getString()].join('') + ")";
-  };
-  Operator.prototype.bang = function() {
-    this.operator = Shiki.choise(Shiki.Operator.operators);
-    if (this.left) {
-      this.left.bang();
-    }
-    if (this.right) {
-      return this.right.bang();
-    }
-  };
-  Operator.prototype.isOperator = true;
-  Operator.prototype.randomIndex = function() {
-    return Shiki.choise(['left', 'right']);
-  };
-  return Operator;
-})();
+
+  getString() {
+    return '(' + [this.left.getString(), this.operator, this.right.getString()].join('') + ')';
+  }
+
+  bang() {
+    this.operator = Shiki.choice(Shiki.Operator.operators);
+    if (this.left) this.left.bang();
+    if (this.right) this.right.bang();
+  }
+
+  get isOperator() {
+    return true;
+  }
+
+  randomIndex() {
+    return Shiki.choice(['left', 'right']);
+  }
+};
+
 Shiki.Operator.operators = '* % / + & | ^ << >>'.split(/\s+/);
-Shiki.Operand = (function() {
-  function Operand(value) {
+
+Shiki.Operand = class {
+  constructor(value) {
     this.value = value;
   }
-  Operand.prototype.getString = function() {
+
+  getString() {
     return this.value;
-  };
-  Operand.prototype.isOperator = false;
-  return Operand;
-})();
-Shiki.Operand.Variable = (function() {
-  __extends(Variable, Shiki.Operand);
-  function Variable() {
-    Variable.__super__.constructor.apply(this, arguments);
   }
-  Variable.prototype.bang = function() {};
-  return Variable;
-})();
-Shiki.Operand.Number = (function() {
-  __extends(Number, Shiki.Operand);
-  function Number() {
+
+  get isOperator() {
+    return false;
+  }
+};
+
+Shiki.Operand.Variable = class extends Shiki.Operand {
+  bang() {
+    // Variables don't change
+  }
+};
+
+Shiki.Operand.Number = class extends Shiki.Operand {
+  constructor() {
+    super();
     this.bang();
   }
-  Number.prototype.bang = function() {
-    return this.value = Math.floor(Math.random() * 10) + 1;
-  };
-  return Number;
-})();
-Oneliner = function(_args) {
-  this._ = {};
-  this._.func = function(t) {
-    return t;
-  };
-  return this._.phase = 0;
+
+  bang() {
+    this.value = Math.floor(Math.random() * 10) + 1;
+  }
 };
-Oneliner.prototype.seq = function(seq_id) {
-  var cell, i, len, _;
-  _ = this._;
-  cell = this.cell;
-  if (this.seq_id !== seq_id) {
-    this.seq_id = seq_id;
-    i = 0;
-    len = cell.length;
-    while (i < len) {
-      cell[i] = (((_.func(_.phase | 0) % 256) / 128.0) - 1.0) * _.mul + _.add;
-      _.phase += 8000 / timbre.samplerate;
-      i++;
+
+// Web Audio API based oneliner
+class OneLiner {
+  constructor() {
+    this.audioContext = null;
+    this.phase = 0;
+    this.func = (t) => t;
+    this.isPlaying = false;
+    this.gain = null;
+    this.scriptNode = null;
+  }
+
+  initialize() {
+    if (!this.audioContext) {
+      this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      this.gain = this.audioContext.createGain();
+      this.gain.gain.value = 0.3;
+      this.gain.connect(this.audioContext.destination);
     }
   }
-  return cell;
-};
-Object.defineProperty(Oneliner.prototype, "func", {
-  set: function(value) {
-    if (typeof value === "function") {
-      return this._.func = value;
+
+  start() {
+    if (this.isPlaying) return;
+    
+    this.initialize();
+    
+    // Resume audio context if suspended
+    if (this.audioContext.state === 'suspended') {
+      this.audioContext.resume();
     }
-  },
-  get: function() {
-    return this._.func;
-  }
-});
-timbre.fn.register("oneliner", Oneliner);
-choise = function(array) {
-  return array[Math.floor(Math.random() * array.length)];
-};
-genColorValue = function() {
-  if (Math.random() > 0.5) {
-    return 255;
-  } else {
-    return 0;
-  }
-};
-randomColor = function() {
-  return "hsl(" + (Math.random() * 360) + ", 100% ,50%)";
-};
-load_images = function(srces) {
-  var dfd, img, imgs, loaded_count, src, _i, _len;
-  dfd = $.Deferred();
-  imgs = [];
-  loaded_count = 0;
-  for (_i = 0, _len = srces.length; _i < _len; _i++) {
-    src = srces[_i];
-    img = new Image;
-    img.src = src;
-    imgs.push(img);
-    img.onload = function() {
-      loaded_count++;
-      if (loaded_count === srces.length) {
-        return dfd.resolve(imgs);
+    
+    const bufferSize = 1024;
+    this.scriptNode = this.audioContext.createScriptProcessor(bufferSize, 0, 1);
+    
+    this.scriptNode.onaudioprocess = (event) => {
+      const output = event.outputBuffer.getChannelData(0);
+      for (let i = 0; i < output.length; i++) {
+        const t = this.phase | 0;
+        output[i] = (((this.func(t) % 256) / 128.0) - 1.0) * 0.3;
+        this.phase += 8000 / this.audioContext.sampleRate;
       }
     };
+    
+    this.scriptNode.connect(this.gain);
+    this.isPlaying = true;
+    
   }
-  return dfd.promise();
-};
-main = function(sources) {
-  var baseThreshold, bottomRate, canvas, canvasHeight, canvasWidth, characterColor, characterHeight, characterWidth, character_images, character_images_rest, clearStage, ctx, dac, drawCharacter, drawEarth, fft, footerHeight, indexes, oneliner, resetStage, resizeCanvas, setCharacterColor, setIndexes, setTracks, timer, tracks, zeroTimes;
-  character_images = sources.images;
-  character_images_rest = character_images.slice(1, (character_images.length + 1) || 9e9);
-  oneliner = T("oneliner");
-  tracks = [];
-  setTracks = function() {
-    var t, _i, _ref, _results;
-    tracks = [];
-    _results = [];
-    for (_i = 0, _ref = 8 - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; 0 <= _ref ? _i++ : _i--) {
-      t = new Shiki('t');
-      t.step();
-      t.step();
-      _results.push(tracks.push(t));
+
+  stop() {
+    if (this.scriptNode) {
+      this.scriptNode.disconnect();
+      this.scriptNode = null;
     }
-    return _results;
-  };
-  setTracks();
-  indexes = [];
-  setIndexes = function() {
-    var i;
-    return indexes = (function() {
-      var _ref, _results;
-      _results = [];
-      for (i = 0, _ref = tracks.length * 2 - 1; 0 <= _ref ? i <= _ref : i >= _ref; 0 <= _ref ? i++ : i--) {
-        _results.push(Math.floor((i / 2) % tracks.length));
+    this.isPlaying = false;
+  }
+
+  setFunction(func) {
+    this.func = func;
+  }
+}
+
+// FFT analyzer using Web Audio API
+class FFTAnalyzer {
+  constructor(oneLiner) {
+    this.oneLiner = oneLiner;
+    this.analyser = null;
+    this.dataArray = null;
+    this.interval = 25;
+    this.isAnalyzing = false;
+    this.onfft = null;
+  }
+
+  initialize() {
+    if (!this.oneLiner.audioContext) return;
+    
+    this.analyser = this.oneLiner.audioContext.createAnalyser();
+    this.analyser.fftSize = 512;
+    this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+    
+    this.oneLiner.gain.connect(this.analyser);
+  }
+
+  start() {
+    if (this.isAnalyzing) return;
+    
+    this.initialize();
+    this.isAnalyzing = true;
+    
+    const analyze = () => {
+      if (!this.isAnalyzing) return;
+      
+      this.analyser.getByteFrequencyData(this.dataArray);
+      
+      if (this.onfft) {
+        this.onfft(this.dataArray);
       }
-      return _results;
-    })();
-  };
-  setIndexes();
-  canvas = $('canvas')[0];
-  canvasWidth = 0;
-  canvasHeight = 0;
-  ctx = canvas.getContext('2d');
-  resizeCanvas = _.throttle(function() {
-    canvasWidth = $(window).width();
-    if (canvasWidth < 1040) {
-      canvasWidth = 1040;
+      
+      setTimeout(analyze, this.interval);
+    };
+    
+    analyze();
+  }
+
+  stop() {
+    this.isAnalyzing = false;
+  }
+}
+
+// Utility functions
+function choice(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
+function randomColor() {
+  return `hsl(${Math.random() * 360}, 100%, 50%)`;
+}
+
+function loadImages(srcs) {
+  return new Promise((resolve) => {
+    const imgs = [];
+    let loadedCount = 0;
+    
+    srcs.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+      imgs.push(img);
+      
+      img.onload = () => {
+        loadedCount++;
+        if (loadedCount === srcs.length) {
+          resolve(imgs);
+        }
+      };
+    });
+  });
+}
+
+function main(sources) {
+  const characterImages = sources.images;
+  const characterImagesRest = characterImages.slice(1);
+  
+  const oneLiner = new OneLiner();
+  const fft = new FFTAnalyzer(oneLiner);
+  
+  let tracks = [];
+  function setTracks() {
+    tracks = [];
+    for (let i = 0; i < 8; i++) {
+      const t = new Shiki('t');
+      t.step();
+      t.step();
+      tracks.push(t);
     }
-    canvasHeight = $(window).height();
+  }
+  
+  let indexes = [];
+  function setIndexes() {
+    indexes = [];
+    for (let i = 0; i < tracks.length * 2; i++) {
+      indexes.push(Math.floor((i / 2) % tracks.length));
+    }
+  }
+  
+  setTracks();
+  setIndexes();
+  
+  // Canvas setup
+  const canvas = document.querySelector('canvas');
+  let canvasWidth = 0;
+  let canvasHeight = 0;
+  const ctx = canvas.getContext('2d');
+  
+  function resizeCanvas() {
+    canvasWidth = Math.max(window.innerWidth, 1040);
+    canvasHeight = window.innerHeight;
     canvas.width = canvasWidth;
-    return canvas.height = canvasHeight;
+    canvas.height = canvasHeight;
+  }
+  
+  window.addEventListener('resize', () => {
+    resizeCanvas();
   });
-  $(window).resize(function() {
-    return resizeCanvas();
-  });
+  
   resizeCanvas();
-  characterWidth = 250;
-  characterHeight = 400;
-  baseThreshold = 0.2;
-  bottomRate = 0.9;
-  footerHeight = 70;
-  characterColor = randomColor();
-  setCharacterColor = function() {
-    return characterColor = randomColor();
-  };
-  resetStage = function() {
+  
+  const characterWidth = 250;
+  const characterHeight = 400;
+  const bottomRate = 0.9;
+  const footerHeight = 70;
+  
+  let characterColor = randomColor();
+  let earthMovement = 0; // Track earth movement
+  
+  function setCharacterColor() {
+    characterColor = randomColor();
+  }
+  
+  function resetStage() {
     setTracks();
     setIndexes();
-    return setCharacterColor();
-  };
-  clearStage = function() {
+    setCharacterColor();
+  }
+  
+  function clearStage() {
     ctx.fillStyle = 'white';
-    return ctx.fillRect(0, 0, canvas.width, canvas.height);
-  };
-  drawCharacter = function(index, power) {
-    var bottom, chara, left, offsetOne, offsetTotal;
-    offsetTotal = canvasWidth - characterWidth * 4;
-    if (offsetTotal < 0) {
-      offsetTotal = 0;
-    }
-    offsetOne = offsetTotal / 5;
-    left = offsetOne + (characterWidth + offsetOne) * index;
-    bottom = _.min([canvasHeight * bottomRate, canvasHeight - footerHeight]);
-    chara = choise(character_images_rest);
-    if (power < 0.2) {
-      chara = character_images[0];
-    }
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+  
+  function drawCharacter(index, power) {
+    let offsetTotal = canvasWidth - characterWidth * 4;
+    if (offsetTotal < 0) offsetTotal = 0;
+    const offsetOne = offsetTotal / 5;
+    
+    const left = offsetOne + (characterWidth + offsetOne) * index;
+    const bottom = Math.min(canvasHeight * bottomRate, canvasHeight - footerHeight);
+    
+    const chara = power < 0.2 ? characterImages[0] : choice(characterImagesRest);
+    
+    // Increase jump height multiplier + account for earth movement
+    const jumpHeight = power * 200 + earthMovement;
+    
     ctx.fillStyle = characterColor;
-    ctx.fillRect(Math.floor(left), Math.floor(bottom - power * 50 - characterHeight), characterWidth, characterHeight);
-    return ctx.drawImage(chara, Math.floor(left), Math.floor(bottom - power * 50 - characterHeight), characterWidth, characterHeight);
-  };
-  drawEarth = function(power) {
-    var bottom;
-    bottom = _.min([canvasHeight * bottomRate, canvasHeight - footerHeight]) - power * 50;
+    ctx.fillRect(Math.floor(left), Math.floor(bottom - jumpHeight - characterHeight), characterWidth, characterHeight);
+    ctx.drawImage(chara, Math.floor(left), Math.floor(bottom - jumpHeight - characterHeight), characterWidth, characterHeight);
+    
+  }
+  
+  function drawEarth(power) {
+    earthMovement = power * 500; // Store earth movement
+    const bottom = Math.min(canvasHeight * bottomRate, canvasHeight - footerHeight) - earthMovement;
     ctx.fillStyle = characterColor;
-    return ctx.fillRect(0, bottom, canvasWidth, canvasHeight);
-  };
-  fft = T("fft").listen(oneliner).off();
-  fft.interval = 25;
-  fft.noSpectrum = true;
-  zeroTimes = 0;
-  fft.onfft = function(res) {
-    var absv, half, i, len, segments, sum, v, _len, _ref, _results;
-    len = 0;
-    sum = 0;
-    segments = [0, 0, 0, 0];
-    half = res.length / 2;
-    for (i = 0, _len = res.length; i < _len; i++) {
-      v = res[i];
-      if (i < 2) {
-        continue;
-      }
-      if (i > half) {
-        break;
-      }
-      if (isNaN(v)) {
-        continue;
-      }
-      absv = Math.abs(v);
+    ctx.fillRect(0, bottom, canvasWidth, canvasHeight);
+    
+  }
+  
+  let zeroTimes = 0;
+  
+  fft.onfft = (res) => {
+    let len = 0;
+    let sum = 0;
+    const segments = [0, 0, 0, 0];
+    const half = res.length / 2;
+    
+    for (let i = 0; i < res.length; i++) {
+      if (i < 2) continue;
+      if (i > half) break;
+      
+      const v = res[i];
+      if (isNaN(v)) continue;
+      
+      // Use raw 0-255 values for stronger response
+      const absv = v;
       sum += absv;
       len++;
+      
       segments[Math.floor(i * segments.length / half)] += absv;
     }
+    
     if (len > 0) {
       sum /= len;
-      for (i = 0, _ref = segments.length - 1; 0 <= _ref ? i <= _ref : i >= _ref; 0 <= _ref ? i++ : i--) {
+      for (let i = 0; i < segments.length; i++) {
         segments[i] = segments[i] / len * segments.length;
       }
     }
+    
+    // Zero check
     if (zeroTimes * fft.interval > 1000) {
       resetStage();
       zeroTimes = 0;
     }
+    
     if (sum < 1.0) {
       zeroTimes++;
     } else if (zeroTimes > 0) {
       zeroTimes = 0;
     }
-    segments[1] *= 3;
-    segments[2] *= 4;
-    segments[3] *= 8;
+    
+    segments[0] *= 3;
+    segments[1] *= 5;
+    segments[2] *= 8;
+    segments[3] *= 12;
+    
+    // Draw
     clearStage();
-    drawEarth(sum);
-    _results = [];
-    for (i = 0; i <= 3; i++) {
-      _results.push(drawCharacter(i, segments[i]));
+    drawEarth(sum / 1000);
+    
+    for (let i = 0; i < 4; i++) {
+      drawCharacter(i, segments[i] / 1000);
     }
-    return _results;
   };
-  dac = T("*", oneliner, 1.0);
-  dac.play();
-  fft.on();
-  timer = null;
-  timer = T("interval", 125, function() {
-    var i, track;
-    i = timer.count;
-    track = tracks[indexes[i % indexes.length]];
-    oneliner.func = track.getFunction();
+  
+  let timerCount = 0;
+  const timer = setInterval(() => {
+    const i = timerCount;
+    
+    const track = tracks[indexes[i % indexes.length]];
+    oneLiner.setFunction(track.getFunction());
+    
     if (Math.random() < 0.05) {
       track.step();
-      oneliner.func = track.getFunction();
+      oneLiner.setFunction(track.getFunction());
     }
+    
     if (Math.random() < 0.1) {
       indexes[i % indexes.length] = Math.floor(Math.random() * tracks.length);
     }
+    
     if (Math.random() < 0.1) {
       indexes[i % indexes.length] = indexes[(i + indexes.length - 1) % indexes.length];
     }
+    
     if (i % indexes.length === indexes.length - 1) {
       if (Math.random() < 0.5 && indexes.length > 2) {
-        return indexes = indexes.slice(0, indexes.length / 2);
+        indexes = indexes.slice(0, indexes.length / 2);
       } else if (Math.random() < 0.5) {
-        return indexes = indexes.concat(indexes);
+        indexes = indexes.concat(indexes);
       }
     }
+    
+    timerCount++;
+  }, 125);
+  
+  document.body.addEventListener('click', (e) => {
+    if (e.target.tagName === 'A') return;
+    resetStage();
   });
-  timer.on();
-  $('body').click(function() {
-    if ($(this).is('a')) {
-      return;
-    }
-    return resetStage();
-  });
-  $('.sound-off').click(function() {
-    dac.play();
-    $('#volume').toggleClass('on');
+  
+  document.querySelector('.sound-off').addEventListener('click', (e) => {
+    e.preventDefault();
+    oneLiner.start();
+    fft.start();
+    document.getElementById('volume').classList.toggle('on');
     return false;
   });
-  return $('.sound-on').click(function() {
-    dac.pause();
-    $('#volume').toggleClass('on');
+  
+  document.querySelector('.sound-on').addEventListener('click', (e) => {
+    e.preventDefault();
+    oneLiner.stop();
+    fft.stop();
+    document.getElementById('volume').classList.toggle('on');
     return false;
   });
-};
-$(function() {
-  var message;
-  if (!timbre.env) {
-    message = $('<div>');
-    message.addClass('sorry');
-    message.text('Google ChromeかFirefoxで見てください');
-    $('body').append(message);
-    $('#footer').css({
-      background: 'black'
-    });
+  
+  return { oneLiner, fft };
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Check for Web Audio API support - most modern browsers support this
+  if (!window.AudioContext && !window.webkitAudioContext) {
+    const message = document.createElement('div');
+    message.className = 'sorry';
+    message.textContent = 'このブラウザはWeb Audio APIに対応していません。Chrome、Firefox、Safari、Edgeなどのモダンブラウザでお試しください。';
+    document.body.appendChild(message);
+    document.getElementById('footer').style.background = 'black';
     return;
   }
-  return load_images(['/bon3/image/image1.png', '/bon3/image/image2.png', '/bon3/image/image3.png', '/bon3/image/image4.png', '/bon3/image/image5.png', '/bon3/image/image6.png']).then(function(images) {
-    if (navigator.userAgent.match(/(iPhone|iPad)/)) {
-      $('#tap-to-start').show();
-      $('#footer').addClass('wait-touch');
-      return $(document).click(_.once(function() {
-        $('#tap-to-start').hide();
-        $('#footer').removeClass('wait-touch');
-        return main({
-          images: images
-        });
-      }));
-    } else {
-      return main({
-        images: images
-      });
-    }
+  
+  loadImages([
+    '/bon3/image/image1.png',
+    '/bon3/image/image2.png', 
+    '/bon3/image/image3.png',
+    '/bon3/image/image4.png',
+    '/bon3/image/image5.png',
+    '/bon3/image/image6.png'
+  ]).then((images) => {
+    // Show tap to start for all browsers (modern requirement)
+    document.getElementById('tap-to-start').style.display = 'block';
+    document.getElementById('footer').classList.add('wait-touch');
+    
+    let hasStarted = false;
+    document.addEventListener('click', () => {
+      if (hasStarted) return;
+      hasStarted = true;
+      
+      document.getElementById('tap-to-start').style.display = 'none';
+      document.getElementById('footer').classList.remove('wait-touch');
+      
+      const app = main({ images });
+      
+      // Auto-start audio after user interaction
+      setTimeout(() => {
+        app.oneLiner.start();
+        app.fft.start();
+        document.getElementById('volume').classList.add('on');
+      }, 100);
+    }, { once: true });
   });
 });
