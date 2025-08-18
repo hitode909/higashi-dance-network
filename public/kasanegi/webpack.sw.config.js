@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  mode: 'production',
   entry: {
     'kasanegi-service-worker': './src/ServiceWorker.ts',
   },
@@ -13,14 +14,13 @@ module.exports = {
       }
     ]
   },
-
   target: 'webworker',
-
   resolve: {
-    extensions: [ '.ts']
+    extensions: ['.ts', '.js']
   },
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, '../')
+    path: path.resolve(__dirname, '../'),
+    clean: false
   }
 };

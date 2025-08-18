@@ -1,6 +1,7 @@
 const path = require('path');
 
 module.exports = {
+  mode: 'production',
   entry: {
     'bundle': './src/main.ts',
   },
@@ -13,14 +14,13 @@ module.exports = {
       }
     ]
   },
-
   target: 'web',
-
   resolve: {
-    extensions: [ '.ts']
+    extensions: ['.ts', '.js']
   },
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, 'js')
+    path: path.resolve(__dirname, 'js'),
+    clean: true
   }
 };
