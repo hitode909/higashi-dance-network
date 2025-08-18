@@ -1,6 +1,10 @@
-runtime: nodejs12
+runtime: nodejs20
 
 default_expiration: "1h"
+
+automatic_scaling:
+  max_instances: 2
+  min_instances: 0
 
 includes:
 - secret.yaml
@@ -15,6 +19,8 @@ handlers:
 - url: (.*)/
   static_files: public\1/index.html
   upload: public(.*)/index.html
+  secure: always
+  redirect_http_response_code: 301
 
 - url: /(.*)
   static_files: public/\1

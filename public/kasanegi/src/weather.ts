@@ -45,7 +45,7 @@ export class Weather {
     return localStorage.setItem('pref_name', city_code);
   }
 
-  public async getCurrentPosition(): Promise<Position> {
+  public async getCurrentPosition(): Promise<GeolocationPosition> {
     return new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resolve, reject)
     })
